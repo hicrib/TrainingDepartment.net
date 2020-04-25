@@ -1,0 +1,71 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="ExamsMaster.master.cs" Inherits="AviaTrain.Masters.ExamsMaster" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <script>
+        function confirmation_LOGOUT() {
+            if (confirm('Are you sure you want to LogOut ?')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+    <style>
+         body {background-color: #ebebeb;}
+        .tbl_master_user {
+            width: 1000px;
+            height: 80px;
+            border: 2px solid #b63838	;
+        }
+
+            .tbl_master_user td:first-child {
+                width: 100px;
+                border: 1px solid #b63838	;
+                font-weight : bold;
+                font-size : large;
+                padding : 10px;
+            }
+
+            .tbl_master_user td:nth-child(2) {
+                width: 700px;
+                border: 1px solid #b63838	;
+            }
+
+            .tbl_master_user td:last-child {
+                width: 200px;
+                border: 1px solid #b63838	;
+            }
+    </style>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <table class="tbl_master_user">
+                <tr>
+                    <td>
+                        <asp:Label ID="lbl_username" runat="server"></asp:Label>
+                    </td>
+                    <td></td>
+                    <td>
+                        <asp:ImageButton ID="btn_mainpage" runat="server" style="margin:10px;" OnClick="btn_mainpage_Click" ImageUrl="~/images/main.png" />
+
+                        <asp:ImageButton ID="btn_log_out" runat="server"  OnClientClick="return confirmation_LOGOUT();" style="margin : 10px;  float :right;" OnClick="btn_log_out_Click" ImageUrl="~/images/logout.png" />
+                        
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../emergency.css" type="text/css">
+<script language="JavaScript">
+<!--
+var images = new Array(12);
+
+for (var i =0; i<12; i++){
+	images[i] = new Image();
+	}
+	
+function cache_images(){
+
+images[0].src = "../../images/annunciator/topic_context.gif";
+images[1].src = "../../images/annunciator/topic_cause_over.gif";
+images[2].src = "../../images/annunciator/topic_expect.gif";
+images[3].src = "../../images/annunciator/topic_effect_over.gif";
+images[4].src = "../../images/annunciator/topic_checklist.gif";
+images[5].src = "../../images/annunciator/topic_checklist_over.gif";
+images[6].src = "../../images/annunciator/topic_remember.gif";
+images[7].src = "../../images/annunciator/topic_repercussion_over.gif";
+images[8].src = "../../images/annunciator/topic_ifneeded.gif";
+images[9].src = "../../images/annunciator/topic_atcaction_over.gif";
+images[10].src = "../../images/annunciator/topic_blank.gif";
+images[11].src = "../../images/Delete.jpg";
+}
+
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && document.getElementById) x=document.getElementById(n); return x;
+}
+
+function MM_nbGroup(event, grpName) { //v3.0
+  var i,img,nbArr,args=MM_nbGroup.arguments;
+  if (event == "init" && args.length > 2) {
+    if ((img = MM_findObj(args[2])) != null && !img.MM_init) {
+      img.MM_init = true; img.MM_up = args[3]; img.MM_dn = img.src;
+      if ((nbArr = document[grpName]) == null) nbArr = document[grpName] = new Array();
+      nbArr[nbArr.length] = img;
+      for (i=4; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
+        if (!img.MM_up) img.MM_up = img.src;
+        img.src = img.MM_dn = args[i+1];
+        nbArr[nbArr.length] = img;
+    } }
+  } else if (event == "over") {
+    document.MM_nbOver = nbArr = new Array();
+    for (i=1; i < args.length-1; i+=3) if ((img = MM_findObj(args[i])) != null) {
+      if (!img.MM_up) img.MM_up = img.src;
+      img.src = (img.MM_dn && args[i+2]) ? args[i+2] : args[i+1];
+      nbArr[nbArr.length] = img;
+    }
+  } else if (event == "out" ) {
+    for (i=0; i < document.MM_nbOver.length; i++) {
+      img = document.MM_nbOver[i]; img.src = (img.MM_dn) ? img.MM_dn : img.MM_up; }
+  } else if (event == "down") {
+    if ((nbArr = document[grpName]) != null)
+      for (i=0; i < nbArr.length; i++) { img=nbArr[i]; img.src = img.MM_up; img.MM_dn = 0; }
+    document[grpName] = nbArr = new Array();
+    for (i=2; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
+      if (!img.MM_up) img.MM_up = img.src;
+      img.src = img.MM_dn = args[i+1];
+      nbArr[nbArr.length] = img;
+  } }
+}
+//-->
+</script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" topmargin="1" onLoad="cache_images();MM_preloadImages('../../images/annunciator/birdstrike_over.gif','../../images/annunciator/emergency_descent_link.gif','../../images/annunciator/fuel_status_link.gif','../../images/annunciator/unlawful_interference_link.gif','../../images/annunciator/icing_link.gif','../../images/annunciator/brake_prob_over.gif','../../images/annunciator/bomb_warning_over.gif','../../images/annunciator/comms_failure_over.gif','../../images/annunciator/electrical_prob_over.gif','../../images/annunciator/emergency_descent_over.gif','../../images/annunciator/engine_failure_over.gif','../../images/annunciator/engine_apu_fire_over.gif','../../images/annunciator/fuel_status_over.gif','../../images/annunciator/gear_problems_over.gif','../../images/annunciator/unlawful_interference_over.gif','../../images/annunciator/pressurisation_over.gif','../../images/annunciator/hydraulic_problems_over.gif','../../images/annunciator/brake_prob_link.gif','../../images/annunciator/gear_problems_link.gif','../../images/annunciator/icing_over.gif','../../images/annunciator/fire_smoke_over.gif','../../images/annunciator/birdstrike_over.gif','../../images/annunciator/brake_prob_over.gif','../../images/annunciator/bomb_warning_over.gif','../../images/annunciator/comms_failure_over.gif','../../images/annunciator/electrical_prob_over.gif','../../images/annunciator/emergency_descent_over.gif','../../images/annunciator/engine_failure_over.gif','../../images/annunciator/engine_apu_fire_over.gif','../../images/annunciator/fuel_status_over.gif','../../images/annunciator/gear_problems_over.gif','../../images/annunciator/unlawful_interference_over.gif','../../images/annunciator/pressurisation_over.gif','../../images/annunciator/hydraulic_problems_over.gif','../../images/annunciator/brake_prob_link.gif','../../images/annunciator/gear_problems_link.gif','../../images/annunciator/icing_over.gif','../../images/annunciator/fire_smoke_over.gif','../../images/annunciator/electrical_prob_link.gif','../../images/annunciator/engine_failure_link.gif','../../images/annunciator/hydraulic_problems_link.gif','../../images/annunciator/comms_failure_link.gif','../../images/annunciator/pressurisation_link.gif')">
+<br>
+<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" STYLE="background-image:                   url(../../images/plane_fade.jpg); background-repeat:no-repeat; background-position:center">
+  <tr valign="top"> 
+    <td height="85" colspan="3"> 
+      <p class="unit_contents"><b><a href="../splash/intro1.htm" target="_top"><img src="images/button_splash.gif" width="93" height="26" border="0"></a> 
+        <a href="aims.htm" target="_self"><img src="images/button_aims.gif" width="93" height="26" border="0"></a> 
+        <img src="images/button_how_to_use_on.gif" width="93" height="26"> </b></p>
+      <p class="unit_contents" align="left"><b>HOW TO USE: Emergency topics</b></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="30%" valign="top" height="373"> 
+      <table width="10%" border="0" cellspacing="0" cellpadding="0" height="10">
+        <tr> 
+          <td colspan="5"><img src="../../images/annunciator/top_bar.gif" width="235" height="5"></td>
+        </tr>
+        <tr> 
+          <td><img src="../../images/annunciator/left_bar.gif" width="4" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','birdstrike','../../images/annunciator/birdstrike_over.gif','pressurisation','../../images/annunciator/pressurisation_link.gif','electricalprob','../../images/annunciator/electrical_prob_link.gif','enginefailure','../../images/annunciator/engine_failure_link.gif','hydraulicprob','../../images/annunciator/hydraulic_problems_link.gif',1)" onMouseOver="MM_nbGroup('over','birdstrike','../../images/annunciator/birdstrike_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="birdstrike" src="../../images/annunciator/birdstrike.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_01birdstrike/birdstrike_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_01birdstrike/birdstrike_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/middle.gif" width="6" height="38"></td>
+          <td width="0" height="0"><a href="#" onClick="MM_nbGroup('down','group1','brakeproblems','../../images/annunciator/brake_prob_over.gif',1)" onMouseOver="MM_nbGroup('over','brakeproblems','../../images/annunciator/brake_prob_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="brakeproblems" src="../../images/annunciator/brake_prob.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_02brakeproblems/brakeproblems_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_02brakeproblems/brakeproblems_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/right.gif" width="5" height="38"></td>
+        </tr>
+        <tr> 
+          <td colspan="5"><img src="../../images/annunciator/cross_bar.gif" width="235" height="6"></td>
+        </tr>
+        <tr> 
+          <td><img src="../../images/annunciator/left_bar.gif" width="4" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','bombwarning','../../images/annunciator/bomb_warning_over.gif',1)" onMouseOver="MM_nbGroup('over','bombwarning','../../images/annunciator/bomb_warning_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="bombwarning" src="../../images/annunciator/bomb_warning.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_03bombwarning/bomb_warn_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_03bombwarning/bombwarning_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/middle.gif" width="6" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','commfailure','../../images/annunciator/comms_failure_over.gif',1)" onMouseOver="MM_nbGroup('over','commfailure','../../images/annunciator/comms_failure_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="commfailure" src="../../images/annunciator/comms_failure.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_04communicationfailure/comm_failure_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_04communicationfailure/comm_failure_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/right.gif" width="5" height="38"></td>
+        </tr>
+        <tr> 
+          <td colspan="5"><img src="../../images/annunciator/cross_bar.gif" width="235" height="6"></td>
+        </tr>
+        <tr> 
+          <td><img src="../../images/annunciator/left_bar.gif" width="4" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','electricalprob','../../images/annunciator/electrical_prob_over.gif','commfailure','../../images/annunciator/comms_failure_link.gif','gearproblems','../../images/annunciator/gear_problems_link.gif',1)" onMouseOver="MM_nbGroup('over','electricalprob','../../images/annunciator/electrical_prob_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="electricalprob" src="../../images/annunciator/electrical_prob.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_05electricalproblems/elecprob_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_05electricalproblems/elecproblems_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/middle.gif" width="6" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','emergencydescent','../../images/annunciator/emergency_descent_over.gif',
+	'birdstrike','../../images/annunciator/birdstrike_link.gif',
+	'enginefailure','../../images/annunciator/engine_failure_link.gif',
+	'engineapu','../../images/annunciator/engine_apu_fire_link.gif',
+	'unlawfulint','../../images/annunciator/unlawful_interference_link.gif',
+	'pressurisation','../../images/annunciator/pressurisation_link.gif',
+	'smokefire','../../images/annunciator/fire_smoke_link.gif',1)" onMouseOver="MM_nbGroup('over','emergencydescent','../../images/annunciator/emergency_descent_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="emergencydescent" src="../../images/annunciator/emergency_descent.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_06emergencydescent/emergdescent_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_06emergencydescent/emergdescent_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/right.gif" width="5" height="38"></td>
+        </tr>
+        <tr> 
+          <td colspan="5"><img src="../../images/annunciator/cross_bar.gif" width="235" height="6"></td>
+        </tr>
+        <tr> 
+          <td><img src="../../images/annunciator/left_bar.gif" width="4" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','enginefailure','../../images/annunciator/engine_failure_over.gif','pressurisation','../../images/annunciator/pressurisation_link.gif',1)" onMouseOver="MM_nbGroup('over','enginefailure','../../images/annunciator/engine_failure_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="enginefailure" src="../../images/annunciator/engine_failure.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_07enginefailure/eng_fail_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_07enginefailure/eng_fail_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/middle.gif" width="6" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','engineapu','../../images/annunciator/engine_apu_fire_over.gif',1)" onMouseOver="MM_nbGroup('over','engineapu','../../images/annunciator/engine_apu_fire_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="engineapu" src="../../images/annunciator/engine_apu_fire.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_08engineapuonfire/enginefire_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_08engineapuonfire/enginefire_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/right.gif" width="5" height="38"></td>
+        </tr>
+        <tr> 
+          <td colspan="5"><img src="../../images/annunciator/cross_bar.gif" width="235" height="6"></td>
+        </tr>
+        <tr> 
+          <td><img src="../../images/annunciator/left_bar.gif" width="4" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','fuelstatus','../../images/annunciator/fuel_status_over.gif','enginefailure','../../images/annunciator/engine_failure_link.gif',1)" onMouseOver="MM_nbGroup('over','fuelstatus','../../images/annunciator/fuel_status_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="fuelstatus" src="../../images/annunciator/fuel_status.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_09fuelstatuscritical/fuel_prob_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_09fuelstatuscritical/fuel_prob_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/middle.gif" width="6" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','gearproblems','../../images/annunciator/gear_problems_over.gif',1)" onMouseOver="MM_nbGroup('over','gearproblems','../../images/annunciator/gear_problems_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="gearproblems" src="../../images/annunciator/gear_problems.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_10gearproblems/gearproblems_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_10gearproblems/gearproblems_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/right.gif" width="5" height="38"></td>
+        </tr>
+        <tr> 
+          <td colspan="5"><img src="../../images/annunciator/cross_bar.gif" width="235" height="6"></td>
+        </tr>
+        <tr> 
+          <td><img src="../../images/annunciator/left_bar.gif" width="4" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','unlawfulint','../../images/annunciator/unlawful_interference_over.gif',1)" onMouseOver="MM_nbGroup('over','unlawfulint','../../images/annunciator/unlawful_interference_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="unlawfulint" src="../../images/annunciator/unlawful_interference.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_11unlawfulinterference/hijack_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_11unlawfulinterference/hijack_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/middle.gif" width="6" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','pressurisation','../../images/annunciator/pressurisation_over.gif',
+	'birdstrike','../../images/annunciator/birdstrike_link.gif',
+	'emergencydescent','../../images/annunciator/emergency_descent_link.gif',
+	'engineapu','../../images/annunciator/engine_apu_fire_link.gif',
+	1)" onMouseOver="MM_nbGroup('over','pressurisation','../../images/annunciator/pressurisation_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="pressurisation" src="../../images/annunciator/pressurisation.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_12pressurisation/press_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_12pressurisation/press_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/right.gif" width="5" height="38"></td>
+        </tr>
+        <tr> 
+          <td colspan="5"><img src="../../images/annunciator/cross_bar.gif" width="235" height="6"></td>
+        </tr>
+        <tr> 
+          <td><img src="../../images/annunciator/left_bar.gif" width="4" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','hydraulicprob','../../images/annunciator/hydraulic_problems_over.gif','brakeproblems','../../images/annunciator/brake_prob_link.gif','gearproblems','../../images/annunciator/gear_problems_link.gif',1)" onMouseOver="MM_nbGroup('over','hydraulicprob','../../images/annunciator/hydraulic_problems_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="hydraulicprob" src="../../images/annunciator/hydraulic_problems.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_13hydraulicproblems/hydraulic_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_13hydraulicproblems/hydraulic_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/middle.gif" width="6" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','icing','../../images/annunciator/icing_over.gif',1)" onMouseOver="MM_nbGroup('over','icing','../../images/annunciator/icing_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="icing" src="../../images/annunciator/icing.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_14icing/icing_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_14icing/icing_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/right.gif" width="5" height="38"></td>
+        </tr>
+        <tr> 
+          <td colspan="5"><img src="../../images/annunciator/cross_bar.gif" width="235" height="6"></td>
+        </tr>
+        <tr> 
+          <td><img src="../../images/annunciator/left_bar.gif" width="4" height="38"></td>
+          <td><a href="#" onClick="MM_nbGroup('down','group1','smokefire','../../images/annunciator/fire_smoke_over.gif',1)" onMouseOver="MM_nbGroup('over','smokefire','../../images/annunciator/fire_smoke_over.gif','',1)" onMouseOut="MM_nbGroup('out')"><img name="smokefire" src="../../images/annunciator/fire_smoke.gif" border="0" onLoad="" width="110" height="38" onClick="MM_goToURL('parent.frames[\'topic_title\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_15smokefireincockpit/smokefire_within_topic_nav.htm','parent.frames[\'topic\']','../../../emergency_for_LMS_main_16jan03/intro/about_course/5_15smokefireincockpit/smokefire_context1.htm');return document.MM_returnValue"></a></td>
+          <td><img src="../../images/annunciator/middle.gif" width="6" height="38"></td>
+          <td><img src="../../images/annunciator/blank.gif" width="110" height="38"></td>
+          <td><img src="../../images/annunciator/right.gif" width="5" height="38"></td>
+        </tr>
+        <tr> 
+          <td colspan="5"><img src="../../images/annunciator/bottom.gif" width="235" height="5"></td>
+        </tr>
+        <tr> 
+          <td colspan="5">&nbsp; </td>
+        </tr>
+      </table>
+    </td>
+    <td valign="top" height="373" colspan="2"> 
+      <blockquote> 
+        <p><br>
+          <span class="unit_contents">Emergencies are complex in nature. When 
+          one emergency occurs it may trigger other emergencies. The current emergency 
+          may in turn have been triggered by another emergency.</span></p>
+        <p><span class="unit_contents">Use the panel on the left to select one 
+          of the 15 emergency topics to study. Try clicking on the buttons now! 
+          You will see how clicking on one emergency may also highlight others.</span></p>
+        <p class="unit_contents"><span class="unit_contents">To illustrate this, 
+          when you select an emergency, any other related emergencies will light 
+          up . By 'related' we mean other emergencies which ATC can expect as 
+          a result of the current one.</span></p>
+        <p class="unit_contents"><span class="unit_contents">When you click an 
+          emergency topic, the lesson content will be loaded into this right hand 
+          panel, with a button bar at the top to help you navigate within that 
+          particular topic.</span></p>
+        <p class="unit_contents"><span class="unit_contents">Now press NEXT to 
+          learn how to navigate within a topic:</span></p>
+        <p class="unit_contents" align="right"><span class="unit_contents"><a href="how_to_use2.htm" target="_self">NEXT&gt;&gt;&gt;</a></span></p>
+      </blockquote>
+    </td>
+  </tr>
+</table>
+<p class="unit_contents" align="center">&nbsp;</p>
+</body>
+</html>
