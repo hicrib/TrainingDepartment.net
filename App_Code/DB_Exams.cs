@@ -223,12 +223,13 @@ namespace AviaTrain.App_Code
 
         public static bool delete_EXAM(string examid)
         {
+            // we removed this upon request: UPDATE EXM_EXAM_ASSIGNMENT SET STATUS='EXAM_DELETED' WHERE EXAM_ID=@EXAMID
+            // todo : find another good way to handle 
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(@"
                                UPDATE EXM_EXAM_DEFINITION SET ISACTIVE=0 WHERE ID=@EXAMID  
-                               UPDATE EXM_EXAM_ASSIGNMENT SET STATUS='EXAM_DELETED' WHERE EXAM_ID=@EXAMID
                                 ", connection))
                 {
                     connection.Open();
@@ -472,6 +473,58 @@ namespace AviaTrain.App_Code
             return null;
         }
 
+        public static DataTable get_ALL_questions_sector_withAnswer(string sector)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                {
+                    using (SqlCommand command = new SqlCommand(
+                                @"
+                                    SELECT TBL.ID, ISNULL(TBL.SECTOR,'') AS SECTOR , QUESTION , Answer 
+                                    FROM
+                                     (
+                                        SELECT OPS.ID, Q AS QUESTION , EQ.SECTOR ,
+                                        CASE WHEN OPS.ANSWER = 'A' THEN OPS.OPA
+	                                         WHEN OPS.ANSWER = 'B' THEN OPS.OPB
+	                                         WHEN OPS.ANSWER = 'C' THEN OPS.OPC
+	                                         WHEN OPS.ANSWER = 'D' THEN OPS.OPD END AS 'Answer'
+                                        FROM EXM_QUESTIONS_OPS OPS
+                                        JOIN EXM_QUESTIONS EQ ON EQ.ID = OPS.ID AND  EQ.SECTOR = @SECTOR AND EQ.ISACTIVE=1
+                                        UNION
+                                        SELECT FILL.ID ,
+                                            TEXT1 + ' ((BLANK)) ' + ISNULL(TEXT2,'') + ' ((BLANK)) ' + ISNULL(TEXT3,'') + ' ((BLANK)) ' + ISNULL(TEXT4,'') AS QUESTION,
+	                                        EQ.SECTOR ,
+                                            '((' + 
+                                            FILL1_ANS1 +','+FILL1_ANS2+','+FILL1_ANS3+')) - ((' + 
+                                            FILL2_ANS1 +','+FILL2_ANS2+','+FILL2_ANS3+')) - ((' +
+                                            FILL3_ANS1 +','+FILL3_ANS2+','+FILL3_ANS3+'))' AS 'Answer'
+                                        FROM EXM_QUESTIONS_FILL FILL
+                                        JOIN EXM_QUESTIONS EQ ON EQ.ID = FILL.ID AND  EQ.SECTOR = @SECTOR  AND EQ.ISACTIVE=1
+                                     ) TBL
+                                     ORDER BY TBL.ID DESC", connection))
+                    {
+                        connection.Open();
+                        command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
+                        command.CommandType = CommandType.Text;
+
+                        SqlDataAdapter da = new SqlDataAdapter(command);
+                        da.Fill(res);
+
+                        if (res == null || res.Rows.Count == 0)
+                            return null;
+
+                        return res;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
 
 
 

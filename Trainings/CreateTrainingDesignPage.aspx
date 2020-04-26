@@ -105,9 +105,7 @@
             }
         }
         function TransferDivContent() {
-            var div = document.getElementById("ContentPlaceHolder1_lower_div").innerHTML;
-            document.getElementById("txt_lower_div_holder").value = div;
-
+            
             var div = document.getElementById("ContentPlaceHolder1_upper_div").innerHTML;
             document.getElementById("txt_upper_div_holder").value = div;
         }
@@ -159,6 +157,10 @@
                 <div style="vertical-align:bottom; margin-bottom : 20px;">
                      <asp:Button ID="btn_create_question" CssClass="btn_create btn_belows" runat="server" OnClientClick="return ShowModalPopup()" Style="margin: auto;" Text="Create Question" OnClick="btn_create_question_Click" />
                     <asp:Button ID="btn_chose_question" CssClass="btn_create btn_belows" runat="server" OnClientClick="return ShowModalPopup2()" Style="margin: auto;" Text="Choose Questions" OnClick="btn_chose_question_Click" />
+                
+                    <asp:Button ID="btn_prev" runat="server" CssClass="btn_belows btn_prev" OnClientClick="TransferDivContent()" Style="float: left;" Text="Previous" OnClick="btn_prev_Click" />
+                <asp:Button ID="btn_next" runat="server" CssClass="btn_belows btn_forw" OnClientClick="TransferDivContent()" Style="float: right;" Text="Save & Next" OnClick="btn_next_Click" />
+            
                 </div>
 
                 <asp:Panel ID="panel_question" runat="server" Visible="true">
@@ -218,8 +220,6 @@
     <table style="width: 800px;">
         <tr>
             <td>
-                <asp:Button ID="btn_prev" runat="server" CssClass="btn_belows btn_prev" OnClientClick="TransferDivContent()" Style="float: left;" Text="Previous" OnClick="btn_prev_Click" />
-                <asp:Button ID="btn_next" runat="server" CssClass="btn_belows btn_forw" OnClientClick="TransferDivContent()" Style="float: right;" Text="Save & Next" OnClick="btn_next_Click" />
             </td>
         </tr>
         <tr>

@@ -28,6 +28,7 @@ namespace AviaTrain.Exams
                     dt.Columns.Add("ID");
                     dt.Columns.Add("SECTOR");
                     dt.Columns.Add("QUESTION");
+                    dt.Columns.Add("Answer");
                 }
 
 
@@ -57,13 +58,14 @@ namespace AviaTrain.Exams
 
         protected DataTable Fill_Grid_AllQuestions(string sector = "GEN")
         {
-            DataTable dt = DB_Exams.get_ALL_questions_sector(sector);
+            DataTable dt = DB_Exams.get_ALL_questions_sector_withAnswer(sector);
             if (dt == null || dt.Rows.Count == 0)
             {
                 dt = new DataTable();
                 dt.Columns.Add("ID");
                 dt.Columns.Add("SECTOR");
                 dt.Columns.Add("QUESTION");
+                dt.Columns.Add("Answer");
             }
 
             grid_all_questions.DataSource = dt;
@@ -98,6 +100,7 @@ namespace AviaTrain.Exams
                     row["ID"] = selectedRow.Cells[2].Text.Trim();
                     row["SECTOR"] = selectedRow.Cells[3].Text.Trim();
                     row["QUESTION"] = selectedRow.Cells[4].Text.Trim();
+                    row["Answer"] = selectedRow.Cells[5].Text.Trim();
                     dt.Rows.Add(row);
                     Session["chosen_questions"] = dt;
                 }
@@ -136,7 +139,7 @@ namespace AviaTrain.Exams
             grid_all_questions.PageIndex = e.NewPageIndex;
 
             // Tekrar kayıtların gridview'e aktarılması sağlanır.
-            grid_all_questions.DataSource = DB_Exams.get_ALL_questions_sector(ddl_sector.SelectedValue);
+            grid_all_questions.DataSource = DB_Exams.get_ALL_questions_sector_withAnswer(ddl_sector.SelectedValue);
             grid_all_questions.DataBind();
         }
 
@@ -165,6 +168,7 @@ namespace AviaTrain.Exams
                 dt.Columns.Add("ID");
                 dt.Columns.Add("SECTOR");
                 dt.Columns.Add("QUESTION");
+                dt.Columns.Add("Answer");
 
                 Session["chosen_questions"] = dt;
 
@@ -307,7 +311,6 @@ namespace AviaTrain.Exams
                 {
                     questions.Add(item["ID"].ToString(), q_point);
                 }
-
             }
 
 

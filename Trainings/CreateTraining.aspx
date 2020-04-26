@@ -11,7 +11,7 @@
         }
 
         .trn_info_tbl {
-            width: 1200px;
+            width: 1000px;
             border-collapse: collapse;
         }
 
@@ -21,6 +21,11 @@
                 font-size: large;
                 background-color: indianred;
                 color: white;
+            }
+            .trn_info_tbl td:first-child {
+                width : 300px;
+                padding :5px;
+                font-weight : bold;
             }
 
         .page_design_table_uppers {
@@ -46,21 +51,28 @@
          
                 <table class="trn_info_tbl">
                     <tr>
-                        <th>CREATE TRAINING PACKAGE
+                        <th colspan="2">CREATE TRAINING PACKAGE
                         </th>
                     </tr>
                     <tr>
-                        <td>NAME  : 
+                        <td>NAME  : </td>
+                        <td>
                             <asp:TextBox ID="txt_examname" Width="200" runat="server"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
-                        <td>EFFECTIVE DATE : 
+                        <td>
+                            EFFECTIVE DATE :
+                        </td>
+                        <td> 
                             <asp:TextBox ID="txt_effective" Width="200" runat="server" TextMode="Date"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
-                        <td>SECTOR : 
+                        <td>
+                            SECTOR : 
+                        </td>
+                        <td>
                             <asp:DropDownList ID="ddl_sectors" runat="server" Width="200">
                                 <asp:ListItem Value="GEN" Text=" General "></asp:ListItem>
                                 <asp:ListItem Value="TWR" Text=" Tower General "></asp:ListItem>
@@ -77,10 +89,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                             <asp:Label ID="lbl_info_error" runat="server" Visible="false"></asp:Label>
-                            <asp:Button ID="btn_create_trn" runat="server" OnClick="btn_create_trn_Click"
-                                Style="width: 400px; background-color: indianred; font-size: medium; font-weight: bold;" />
+                            <asp:Button ID="btn_create_trn" runat="server" OnClick="btn_create_trn_Click" Text="Start Designing Training"
+                                Style="width: 400px; background-color: indianred;color : white; font-size: medium; font-weight: bold;" />
                         </td>
                     </tr>
                 </table>
