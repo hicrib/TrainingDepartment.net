@@ -66,7 +66,7 @@
         </tr>
         <tr>
             <td>
-                    <asp:Button ID="btn_create_questions" runat="server" CssClass="admin_buttons"  OnClick="btn_create_questions_Click" Text="Create Questions" />
+                    <asp:Button ID="btn_create_questions" runat="server" CssClass="admin_buttons"  OnClick="btn_create_questions_Click" Text="Create/Delete Questions" />
             </td>
             <td>
                     <asp:Button ID="btn_create_exam" runat="server" CssClass="admin_buttons"  OnClick="btn_create_exam_Click" Text="Create Exam" />
@@ -78,6 +78,22 @@
             </td>
             <td>
                  <asp:Button ID="btn_view_exam_result" runat="server" CssClass="admin_buttons"  OnClick="btn_view_exam_result_Click" Text="View Exam Results" />
+            </td>
+        </tr>
+    </table>
+
+    <br />
+    <br />
+
+    <table class="admin_actions_tbl">
+        <tr>
+            <th colspan="4">
+                TRAINING FUNCTIONS
+            </th>
+        </tr>
+        <tr>
+            <td>
+                    <asp:Button ID="btn_create_training" runat="server" CssClass="admin_buttons"  OnClick="btn_create_training_Click" Text="Create Training" />
             </td>
         </tr>
     </table>

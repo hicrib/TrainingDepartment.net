@@ -209,7 +209,7 @@
                 <!-- EVAULUATIONS -->
                 <div id="evaluation_div">
                     <br />
-                    <asp:ScriptManager ID="ScriptManager1" runat="server" />
+                    
                     <asp:UpdatePanel runat="server" ID="uppanel_evaluation" UpdateMode="Always">
                         <Triggers>
                             <asp:PostBackTrigger ControlID="UploadButton" />
