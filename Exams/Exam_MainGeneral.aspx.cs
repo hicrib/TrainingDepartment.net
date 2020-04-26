@@ -39,7 +39,7 @@ namespace AviaTrain.Exams
         protected void fill_grid_assignments()
         {
             UserSession user = (UserSession)Session["usersession"];
-            DataTable dt = DB_Trainings.get_Assignments_Open(user.employeeid);
+            DataTable dt = DB_Exams.get_Assignments_Open(user.employeeid);
 
             if (dt == null || dt.Rows.Count == 0)
                 return;
@@ -50,7 +50,7 @@ namespace AviaTrain.Exams
         protected void fill_grid_completed()
         {
             UserSession user = (UserSession)Session["usersession"];
-            DataTable dt = DB_Trainings.get_Assignments_Completed(user.employeeid);
+            DataTable dt = DB_Exams.get_Assignments_Completed(user.employeeid);
 
             if (dt == null || dt.Rows.Count == 0)
                 return;

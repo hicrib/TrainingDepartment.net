@@ -29,7 +29,7 @@ namespace AviaTrain.Exams
         protected void Fill_Exam_Names()
         {
             //only active exams or not
-            filter_examname.DataSource = DB_Trainings.get_Exams(chk_active_exams.Checked);
+            filter_examname.DataSource = DB_Exams.get_Exams(chk_active_exams.Checked);
             filter_examname.DataTextField = "NAME";
             filter_examname.DataValueField = "ID";
             filter_examname.DataBind();
@@ -37,7 +37,7 @@ namespace AviaTrain.Exams
         protected void Fill_Trainees()
         {
             //only active exams or not
-            filter_trainee.DataSource = DB_Trainings.get_EXAM_TRAINEES(chk_active_trainee.Checked);
+            filter_trainee.DataSource = DB_Exams.get_EXAM_TRAINEES(chk_active_trainee.Checked);
             filter_trainee.DataTextField = "NAME";
             filter_trainee.DataValueField = "ID";
             filter_trainee.DataBind();
@@ -74,7 +74,7 @@ namespace AviaTrain.Exams
                 finish_date = filter_finish.Text + " 23:59:59";
 
 
-            DataTable dt = DB_Trainings.View_Training_Results(exam_id, chk_active_exams.Checked,
+            DataTable dt = DB_Exams.View_Training_Results(exam_id, chk_active_exams.Checked,
                                                             start_date, finish_date, traineeid, chk_active_trainee.Checked,
                                                             filter_passed.SelectedValue,
                                                             filter_grd_start.Text, filter_grd_finish.Text);

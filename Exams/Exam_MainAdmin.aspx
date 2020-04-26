@@ -48,7 +48,7 @@
         </tr>
         <tr>
             <td>
-                <asp:Button ID="btn_create_questions" runat="server" CssClass="admin_buttons" OnClick="btn_create_questions_Click" Text="Create Questions" />
+                <asp:Button ID="btn_create_questions" runat="server" CssClass="admin_buttons" OnClick="btn_create_questions_Click" Text="Create/Delete Questions" />
             </td>
             <td>
                 <asp:Button ID="btn_create_exam" runat="server" CssClass="admin_buttons" OnClick="btn_create_exam_Click" Text="Create Exam" />

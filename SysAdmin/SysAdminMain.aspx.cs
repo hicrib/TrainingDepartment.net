@@ -69,5 +69,10 @@ namespace AviaTrain.SysAdmin
         {
             Response.Redirect("~/SysAdmin/EditRoles.aspx");
         }
+
+        protected void btn_create_training_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Trainings/CreateTraining.aspx");
+        }
     }
 }

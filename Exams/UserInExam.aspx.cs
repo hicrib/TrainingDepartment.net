@@ -24,14 +24,14 @@ namespace AviaTrain.Exams
                     RedirectWithCode("UNAUTHORIZED!");
 
                 lbl_assignid.Text = assignid;
-                lbl_examname.Text = DB_Trainings.get_Exam_Name_by_assignid(assignid);
+                lbl_examname.Text = DB_Exams.get_Exam_Name_by_assignid(assignid);
 
                 if (!user.isAdmin)
                     if (!Is_My_Assignment(assignid))
                         RedirectWithCode("NOT ASIGNED TO CURRENT USER");
 
                 //check time within limits and user finished etc
-                string problem = DB_Trainings.is_DOABLE_Exam_Assignment(assignid, user.employeeid);
+                string problem = DB_Exams.is_DOABLE_Exam_Assignment(assignid, user.employeeid);
                 if (!user.isAdmin)
                     if (problem != "OK")
                         RedirectWithCode(problem);
@@ -39,8 +39,8 @@ namespace AviaTrain.Exams
 
 
 
-                DB_Trainings.update_Exam_Assignment_USERSTART(assignid);
-                DB_Trainings.update_Exam_Assignment_STATUS(assignid, "USER_STARTED");
+                DB_Exams.update_Exam_Assignment_USERSTART(assignid);
+                DB_Exams.update_Exam_Assignment_STATUS(assignid, "USER_STARTED");
 
 
                 Fill_grid_questions_map();
@@ -52,7 +52,7 @@ namespace AviaTrain.Exams
 
         protected bool Is_My_Assignment(string assignid)
         {
-            string traineeid = DB_Trainings.whose_Assignment(lbl_assignid.Text);
+            string traineeid = DB_Exams.whose_Assignment(lbl_assignid.Text);
 
             UserSession user = (UserSession)Session["usersession"];
             if (traineeid == user.employeeid)
@@ -72,8 +72,27 @@ namespace AviaTrain.Exams
 
             string nextorderby = (Convert.ToInt32(lbl_current_orderby.Text) + 1).ToString();
 
+
+
+            //might be possible if a question is deleted , works upto 2 deletions
             DataRow[] dr = dt.Select("Question = " + nextorderby);
-            return dr[0]["Q_ID"].ToString();
+            if (dr == null || dr.Length == 0) 
+            {
+                nextorderby = (Convert.ToInt32(lbl_current_orderby.Text) + 2).ToString();
+                dr = dt.Select("Question = " + nextorderby);
+
+                if (dr == null || dr.Length == 0)
+                {
+                    nextorderby = (Convert.ToInt32(lbl_current_orderby.Text) + 3).ToString();
+                    dr = dt.Select("Question = " + nextorderby);
+                    return dr[0]["Q_ID"].ToString();
+                }
+                else
+                    return dr[0]["Q_ID"].ToString();
+
+            }
+            else
+                return dr[0]["Q_ID"].ToString();
         }
 
         protected string get_orderby_of_qid(string qid)
@@ -86,7 +105,7 @@ namespace AviaTrain.Exams
 
         protected void Fill_grid_questions_map()
         {
-            DataTable dt = DB_Trainings.get_EXAM_QUESTIONS_by_assignid(lbl_assignid.Text);
+            DataTable dt = DB_Exams.get_EXAM_QUESTIONS_by_assignid(lbl_assignid.Text);
             if (dt == null || dt.Rows.Count == 0)
                 RedirectWithCode();
 
@@ -125,7 +144,7 @@ namespace AviaTrain.Exams
             string solved = selectedRow.Cells[3].Text;
             if (solved == "1")
             {
-                DataTable dt = DB_Trainings.get_USER_ANSWER_of_Question(lbl_assignid.Text, qid);
+                DataTable dt = DB_Exams.get_USER_ANSWER_of_Question(lbl_assignid.Text, qid);
                 if (dt == null || dt.Rows.Count == 0)
                     return;
 
@@ -175,7 +194,7 @@ namespace AviaTrain.Exams
 
 
 
-            DataTable dt = DB_Trainings.get_ONE_question(next_qid);
+            DataTable dt = DB_Exams.get_ONE_question(next_qid);
 
             if (dt == null || dt.Rows.Count == 0)
                 return; //why what?
@@ -357,7 +376,7 @@ namespace AviaTrain.Exams
                 if (fill_fill_1.Text.Trim() == "" && fill_fill_2.Text.Trim() == "" && fill_fill_3.Text.Trim() == "")
                     pushed = false;
                 else
-                    pushed = DB_Trainings.push_Exam_Answer(lbl_assignid.Text, lbl_current_qid.Text, fill_fill_1.Text.Trim().ToUpper(), fill_fill_2.Text.Trim().ToUpper(), fill_fill_3.Text.Trim().ToUpper());
+                    pushed = DB_Exams.push_Exam_Answer(lbl_assignid.Text, lbl_current_qid.Text, fill_fill_1.Text.Trim().ToUpper(), fill_fill_2.Text.Trim().ToUpper(), fill_fill_3.Text.Trim().ToUpper());
 
             }
             else if (lbl_q_type.Text == "2" || lbl_q_type.Text == "3" || lbl_q_type.Text == "4")
@@ -373,7 +392,7 @@ namespace AviaTrain.Exams
                     ans = "D";
 
                 if (ans != "")
-                    pushed = DB_Trainings.push_Exam_Answer(lbl_assignid.Text, lbl_current_qid.Text, ans, "", "");
+                    pushed = DB_Exams.push_Exam_Answer(lbl_assignid.Text, lbl_current_qid.Text, ans, "", "");
                 else
                     pushed = false;
             }
@@ -423,7 +442,7 @@ namespace AviaTrain.Exams
             //todo : implement
 
             //get db :   q_id, q_type , q_point -- userANS1,ANS2, ANS3,  --REAL ANS1, ANS2,ANS3
-            DataTable questions = DB_Trainings.get_ALL_USER_ANSWERS_of_ASSIGNMENT(lbl_assignid.Text);
+            DataTable questions = DB_Exams.get_ALL_USER_ANSWERS_of_ASSIGNMENT(lbl_assignid.Text);
 
             float total_exam_points = 0;
             float total_user_points = 0;
@@ -491,13 +510,13 @@ namespace AviaTrain.Exams
                 passfail = "PASSED";
 
 
-                if (!DB_Trainings.update_Exam_Assignment_STATUS(lbl_assignid.Text, passfail))
+            if (!DB_Exams.update_Exam_Assignment_STATUS(lbl_assignid.Text, passfail))
                 RedirectWithCode("System Error : Exam Status can't be updated");
 
-            if (!DB_Trainings.update_Exam_Assignment_USERFINISH(lbl_assignid.Text))
+            if (!DB_Exams.update_Exam_Assignment_USERFINISH(lbl_assignid.Text))
                 RedirectWithCode("System Error : Exam Finish time can't be updated");
 
-            if (!DB_Trainings.update_Exam_Assignment_GRADE(lbl_assignid.Text, grade.ToString("0.00")))
+            if (!DB_Exams.update_Exam_Assignment_GRADE(lbl_assignid.Text, grade.ToString("0.00")))
                 RedirectWithCode("System Error : Exam grade can't be updated");
 
             //send the results to result page

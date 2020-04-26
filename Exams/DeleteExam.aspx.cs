@@ -19,7 +19,7 @@ namespace AviaTrain.Exams
                 if (!user.isAdmin)
                     RedirectWithCode("UNAUTHORIZED !");
 
-                DataTable exams = DB_Trainings.get_Exams();
+                DataTable exams = DB_Exams.get_Exams();
                 if (exams != null)
                 {
                     ddl_exams.DataSource = exams;
@@ -42,7 +42,7 @@ namespace AviaTrain.Exams
             }
             else
             {
-                string status = DB_Trainings.is_examid_assigned_and_open(examid);
+                string status = DB_Exams.is_examid_assigned_and_open(examid);
                 if(status != "")
                 {
                     lbl_result.Text = "THIS EXAM IS ASSIGNED TO A USER ! Deleting will cause it to be unassigned! Or malfunctions if user is currently in exam";
@@ -56,7 +56,7 @@ namespace AviaTrain.Exams
 
 
                 btn_delete.Enabled = true;
-                DataTable dt = DB_Trainings.get_EXAM_QUESTIONS_by_examid(examid);
+                DataTable dt = DB_Exams.get_EXAM_QUESTIONS_by_examid(examid);
                 grid_exam_questions.DataSource = dt;
                 grid_exam_questions.DataBind();
                 grid_exam_questions.Visible = true;
@@ -70,7 +70,7 @@ namespace AviaTrain.Exams
                 return;
             }
 
-            bool ok = DB_Trainings.delete_EXAM(ddl_exams.SelectedValue);
+            bool ok = DB_Exams.delete_EXAM(ddl_exams.SelectedValue);
             if(!ok)
             {
                 lbl_result.Text = "System Error ! ";
@@ -81,7 +81,7 @@ namespace AviaTrain.Exams
                 lbl_result.Text = "Exam Deleted ";
                 lbl_result.Visible = true;
 
-                DataTable exams = DB_Trainings.get_Exams();
+                DataTable exams = DB_Exams.get_Exams();
                 if (exams != null)
                 {
                     ddl_exams.DataSource = exams;

@@ -76,42 +76,60 @@
         .grid_questions {
             width: 100%;
             background-color: #d2d5d9;
+            font-size : small;
+        }
+        .grid_questions td{
+            padding : 5px;
         }
 
             .grid_questions th:first-child {
-                width: 10%;
+                width: 5%;
                 background-color: #d2d5d9;
                 color: black;
+                text-align : center;
             }
 
             .grid_questions th:nth-child(2) {
-                width: 45%;
+                width: 10% ;
+                background-color: #d2d5d9;
+                color: black;
+                text-align : center;
+            }
+            .grid_questions th:nth-child(3) {
+                width: 50% ;
                 background-color: #d2d5d9;
                 color: black;
             }
 
             .grid_questions th:last-child {
-                width: 45%;
+                width: 35%;
                 background-color: #d2d5d9;
                 color: black;
             }
 
             .grid_questions td:first-child {
-                width: 10%;
                 background-color: #edeff7;
                 text-align: left !important;
                 font-weight: normal !important;
+                text-align : center;
             }
 
             .grid_questions td:nth-child(2) {
-                width: 45%;
+  
+                background-color: #edeff7;
+                text-align: left !important;
+                font-weight: normal !important;
+                text-align :center;
+            }
+            .grid_questions td:nth-child(3) {
+      
                 background-color: #edeff7;
                 text-align: left !important;
                 font-weight: normal !important;
             }
 
             .grid_questions td:last-child {
-                width: 45%;
+         
                 background-color: #edeff7;
                 text-align: left !important;
                 font-weight: normal !important;
@@ -129,6 +147,11 @@
             width : 100%;
         }
     </style>
+    <script type="text/javascript">
+        function Remove_Info()() {
+            alert("IF Question belongs to an exam. It can't be deleted!");
+        }
+    </script>
 
 </asp:Content>
 
@@ -319,7 +342,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <asp:GridView ID="grid_questions" runat="server" CssClass="grid_questions" >
+                            NOTE : Questions belonging to an Exam can not be deleted.
+                            <asp:GridView ID="grid_questions" runat="server" CssClass="grid_questions" 
+                                OnRowDeleting="grid_questions_RowDeleting"
+                                OnRowDataBound="grid_questions_RowDataBound" OnRowCommand="grid_questions_RowCommand1">
+                                <Columns>
+                                    <asp:ButtonField  ButtonType="Image" ImageUrl="~/images/delete.png" CommandName="Delete" />
+                                </Columns>
                             </asp:GridView>
 
                         </td>
@@ -336,6 +365,6 @@
 
 
 
-
+    <asp:Label ID="lbl_mode" runat="server" Visible="false"></asp:Label>
 
 </asp:Content>

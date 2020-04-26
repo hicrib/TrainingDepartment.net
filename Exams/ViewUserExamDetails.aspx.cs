@@ -22,7 +22,7 @@ namespace AviaTrain.Exams
 
                 //if admin, examadmin, any trainee
                 UserSession user = (UserSession)Session["usersession"];
-                if(!(user.employeeid == DB_Trainings.whose_Assignment(assignid) || user.isAdmin || user.isExamAdmin))
+                if(!(user.employeeid == DB_Exams.whose_Assignment(assignid) || user.isAdmin || user.isExamAdmin))
                     RedirectWithCode("UNAUTHORIZED!");
                
 
@@ -41,9 +41,9 @@ namespace AviaTrain.Exams
 
 
             // EDQ.ORDERBY as 'Question' , EDQ.Q_ID , '0' as SOLVED
-            DataTable exam_questions = DB_Trainings.get_EXAM_QUESTIONS_by_assignid(assignid);
+            DataTable exam_questions = DB_Exams.get_EXAM_QUESTIONS_by_assignid(assignid);
 
-            DataTable user_answers = DB_Trainings.get_ALL_USER_ANSWERS_of_ASSIGNMENT(assignid);
+            DataTable user_answers = DB_Exams.get_ALL_USER_ANSWERS_of_ASSIGNMENT(assignid);
 
 
 
@@ -53,7 +53,7 @@ namespace AviaTrain.Exams
 
                 //@TYPE as [TYPE] , Q , OPA , OPB, ISNULL(OPC,'') as [OPC], ISNULL(OPD,'') AS [OPD], ANSWER  
                 //FILL : SAME AS DB
-                DataRow q_definition = DB_Trainings.get_ONE_question(q["Q_ID"].ToString()).Rows[0];
+                DataRow q_definition = DB_Exams.get_ONE_question(q["Q_ID"].ToString()).Rows[0];
 
                 //q_id, type, point, real_ans1_acc1 .... ,  user_ans1 ...
                 DataRow answer = (user_answers.Select("Q_ID = " + q["Q_ID"])[0]);

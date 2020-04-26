@@ -22,7 +22,7 @@ namespace AviaTrain.Exams
                     RedirectWithCode("UNAUTHORIZED !");
 
 
-                DataTable exams = DB_Trainings.get_Exams();
+                DataTable exams = DB_Exams.get_Exams();
                 if (exams != null)
                 {
                     ddl_exams.DataSource = exams;
@@ -31,7 +31,7 @@ namespace AviaTrain.Exams
                     ddl_exams.DataBind();
                 }
 
-                DataTable dt = DB_Trainings.get_EXAM_TRAINEES();
+                DataTable dt = DB_Exams.get_EXAM_TRAINEES();
                 if (dt != null)
                 {
                     ddl_trainee.DataSource = dt;
@@ -71,7 +71,7 @@ namespace AviaTrain.Exams
             string start = Calendar_start.SelectedDate.ToString("dd.MM.yyyy");
             string finish = Calendar_finish.SelectedDate.ToString("dd.MM.yyyy");
 
-            bool ok = DB_Trainings.push_EXAM_Assignment(ddl_exams.SelectedValue, ddl_trainee.SelectedValue, start, finish);
+            bool ok = DB_Exams.push_EXAM_Assignment(ddl_exams.SelectedValue, ddl_trainee.SelectedValue, start, finish);
 
             return ok;
         }
@@ -135,7 +135,7 @@ namespace AviaTrain.Exams
 
         protected void ddl_exams_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataTable dt = DB_Trainings.get_EXAM_QUESTIONS_by_examid(ddl_exams.SelectedValue);
+            DataTable dt = DB_Exams.get_EXAM_QUESTIONS_by_examid(ddl_exams.SelectedValue);
             if (dt == null || dt.Rows.Count == 0)
                 return;
 

@@ -37,16 +37,6 @@ namespace AviaTrain.Exams
             }
             else
             {
-
-                //todo : find a way to get QID and Point at the same time
-                Control c = GetControlThatCausedPostBack(Page);
-                if (c is TextBox && ((TextBox)c).ID == "txt_points")
-                {
-                    TextBox txt = ((TextBox)c);
-                    string a = txt.Text;
-                    string b = txt.ID;
-                }
-
             }
 
         }
@@ -67,7 +57,7 @@ namespace AviaTrain.Exams
 
         protected DataTable Fill_Grid_AllQuestions(string sector = "GEN")
         {
-            DataTable dt = DB_Trainings.get_ALL_questions_sector(sector);
+            DataTable dt = DB_Exams.get_ALL_questions_sector(sector);
             if (dt == null || dt.Rows.Count == 0)
             {
                 dt = new DataTable();
@@ -146,7 +136,7 @@ namespace AviaTrain.Exams
             grid_all_questions.PageIndex = e.NewPageIndex;
 
             // Tekrar kayıtların gridview'e aktarılması sağlanır.
-            grid_all_questions.DataSource = DB_Trainings.get_ALL_questions_sector(ddl_sector.SelectedValue);
+            grid_all_questions.DataSource = DB_Exams.get_ALL_questions_sector(ddl_sector.SelectedValue);
             grid_all_questions.DataBind();
         }
 
@@ -321,7 +311,7 @@ namespace AviaTrain.Exams
             }
 
 
-            bool ok = DB_Trainings.push_EXAM_DEF(name, passpercent, questions);
+            bool ok = DB_Exams.push_EXAM_DEF(name, passpercent, questions);
 
             return ok;
 

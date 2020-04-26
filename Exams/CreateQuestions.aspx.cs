@@ -1,4 +1,5 @@
-﻿using AviaTrain.App_Code;
+﻿using AjaxControlToolkit;
+using AviaTrain.App_Code;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -17,13 +18,22 @@ namespace AviaTrain.Exams
             if (!IsPostBack)
             {
                 UserSession user = (UserSession)Session["usersession"];
-                if (! (user.isAdmin || user.isExamAdmin) )
+                if (!(user.isAdmin || user.isExamAdmin))
                     RedirectWithCode("UNAUTHORIZED !");
+
+                get_my_last_fill_grid();
             }
             else
             {
-                 
+
+
             }
+        }
+
+        protected void get_my_last_fill_grid()
+        {
+            grid_questions.DataSource = DB_Exams.get_Questions_MY_LAST_("20");
+            grid_questions.DataBind();
         }
 
         protected void btn_fill_submit_Click(object sender, EventArgs e)
@@ -41,7 +51,8 @@ namespace AviaTrain.Exams
 
 
             //put in grid
-            Renew_Qestions_Grid_for_FILL();
+            // Renew_Qestions_Grid_for_FILL();
+            get_my_last_fill_grid();
 
 
             //clean-up
@@ -118,10 +129,9 @@ namespace AviaTrain.Exams
             lbl_fill_result.Text = error == "" ? "Fill Necessary Fields!" : error;
             lbl_fill_result.Visible = true;
         }
-
         protected bool push_FILL_question()
         {
-            bool pushed = DB_Trainings.push_Question_FILL(ddl_sector.SelectedValue,
+            bool pushed = DB_Exams.push_Question_FILL(ddl_sector.SelectedValue,
                 txt_Text1.Text, fill_1_ans1.Text.Trim().ToUpper(), fill_1_ans2.Text.Trim().ToUpper(), fill_1_ans3.Text.Trim().ToUpper(),
                 txt_Text2.Text, fill_2_ans1.Text.Trim().ToUpper(), fill_2_ans2.Text.Trim().ToUpper(), fill_2_ans3.Text.Trim().ToUpper(),
                 txt_Text3.Text, fill_3_ans1.Text.Trim().ToUpper(), fill_3_ans2.Text.Trim().ToUpper(), fill_3_ans3.Text.Trim().ToUpper(),
@@ -130,7 +140,6 @@ namespace AviaTrain.Exams
 
             return pushed;
         }
-
         protected bool Renew_Qestions_Grid_for_FILL()
         {
             DataTable dt = (DataTable)Session["grid_questions"];
@@ -239,22 +248,21 @@ namespace AviaTrain.Exams
 
 
             //put in grid
-            bool in_grid = Renew_Qestions_Grid_for_OPS();
+            //bool in_grid = Renew_Qestions_Grid_for_OPS();
+            get_my_last_fill_grid();
 
             //clean eveything
-            if (in_grid)
-            {
-                txt_question_ops.Text = "";
-                txt_ops_a.Text = "";
-                txt_ops_b.Text = "";
-                txt_ops_c.Text = "";
-                txt_ops_d.Text = "";
 
-                OPS_page_result("Question added !");
+            txt_question_ops.Text = "";
+            txt_ops_a.Text = "";
+            txt_ops_b.Text = "";
+            txt_ops_c.Text = "";
+            txt_ops_d.Text = "";
 
-                //ddl_qtypes.SelectedValue = "-";
+            OPS_page_result("Question added !");
 
-            }
+            //ddl_qtypes.SelectedValue = "-";
+
         }
         protected bool push_OPS_question()
         {
@@ -270,7 +278,7 @@ namespace AviaTrain.Exams
 
             string ops = ddl_qtypes.SelectedValue;
 
-            bool pushed = DB_Trainings.push_Question_OPS(ddl_sector.SelectedValue, ops, txt_question_ops.Text, ans,
+            bool pushed = DB_Exams.push_Question_OPS(ddl_sector.SelectedValue, ops, txt_question_ops.Text, ans,
                                                 txt_ops_a.Text,
                                                 txt_ops_b.Text,
                                                 (ops == "3" || ops == "4") ? txt_ops_c.Text : null,
@@ -432,9 +440,38 @@ namespace AviaTrain.Exams
             }
         }
 
-        protected void grid_questions_RowCommand(object sender, GridViewCommandEventArgs e)
+        
+        
+        protected void grid_questions_RowDataBound(object sender, GridViewRowEventArgs e)
         {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                //Assuming that the buttonField is at 1st cell, if it is diferent then change the index number accordngly
+                Button btnDelete = e.Row.Cells[0].Controls[0] as Button;
+                if (btnDelete != null)
+                {
+                    btnDelete.Attributes.Add("onclick", "Remove_Info()");
+                }
+            }
+        }
 
+        protected void grid_questions_RowCommand1(object sender, GridViewCommandEventArgs e)
+        {
+            //only DELETE Command
+            int index = Convert.ToInt32(e.CommandArgument);
+            GridViewRow selectedRow = grid_questions.Rows[index];
+            string q_id = selectedRow.Cells[1].Text.Trim(); //Q_ID
+
+            bool deleted = DB_Exams.delete_question_unless_assigned(q_id);
+            if(deleted)
+                get_my_last_fill_grid();
+            else
+            {
+                lbl_fill_result.Text = "Can't DELETE : Question belongs to an exam";
+                lbl_ops_result.Text = "Can't DELETE : Question belongs to an exam";
+                lbl_fill_result.Visible = true;
+                lbl_ops_result.Visible = true;
+            }
         }
 
         protected void grid_questions_RowDeleting(object sender, GridViewDeleteEventArgs e)
