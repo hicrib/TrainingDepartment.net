@@ -15,15 +15,6 @@ namespace AviaTrain.Trainings
     {
 
         /// <summary>
-        /// txt_upper_div_holder control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txt_upper_div_holder;
-
-        /// <summary>
         /// upper_div control.
         /// </summary>
         /// <remarks>
@@ -31,6 +22,15 @@ namespace AviaTrain.Trainings
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl upper_div;
+
+        /// <summary>
+        /// txt_upper_div_holder control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_upper_div_holder;
 
         /// <summary>
         /// img1 control.
@@ -112,15 +112,6 @@ namespace AviaTrain.Trainings
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panel_question;
-
-        /// <summary>
-        /// ScriptManager1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
         /// lnkFake control.

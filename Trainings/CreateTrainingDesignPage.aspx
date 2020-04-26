@@ -5,6 +5,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link rel="stylesheet" href="../Scripts/trumbowyg/trumbowyg.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/plugins/table/ui/trumbowyg.table.min.css">
     <style>
         .modalBackground {
             background-color: Black;
@@ -138,9 +139,9 @@
         <tr>
             <td>
                 <div style="float: left; width: 1000px; height: 500px !important;">
-                    <asp:TextBox ID="txt_upper_div_holder" runat="server" Style="display: none;" ClientIDMode="Static"></asp:TextBox>
-                    <div id="upper_div" style="height: 500px; border: 1px solid indianred;" runat="server"></div>
+                    <div id="upper_div" style="height: 500px; background-color:white; border: 1px solid indianred;" runat="server"></div>
                 </div>
+                <asp:TextBox ID="txt_upper_div_holder" runat="server" Style="display: none;" ClientIDMode="Static"></asp:TextBox>
             </td>
             <td>
                 <div style="margin-left: auto; margin-right: auto; max-height: 400px; max-width: 400px;">
@@ -167,7 +168,7 @@
                     <table class="add_question_table">
                         <tr>
                             <td>
-                                <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+                                
 
                                 <asp:LinkButton ID="lnkFake" runat="server"></asp:LinkButton>
                                 <cc1:ModalPopupExtender ID="mpShow" BehaviorID="mpe" runat="server" PopupControlID="pnlPopUp" X="10" Y="0"

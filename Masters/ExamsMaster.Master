@@ -17,6 +17,42 @@
         }
     </script>
     <style>
+        #overlay {
+            position: fixed;
+            z-index: 99;
+            top: 0px;
+            left: 0px;
+            background-color: #f8f8f8;
+            width: 100%;
+            height: 100%;
+            filter: Alpha(Opacity=90);
+            opacity: 0.6;
+            -moz-opacity: 0.6;
+        }
+
+        #theprogress {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 300px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            filter: Alpha(Opacity=100);
+            opacity: 1;
+            -moz-opacity: 1;
+        }
+
+        #modalprogress {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            margin: -11px 0 0 -150px;
+            color: #990000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
         body {
             background-color: #ebebeb;
         }
@@ -50,6 +86,20 @@
 </head>
 <body>
     <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server" />
+        <asp:UpdateProgress ID="prgLoadingStatus" runat="server" DynamicLayout="true">
+            <ProgressTemplate>
+                <div id="overlay">
+                    <div id="modalprogress">
+                        <div id="theprogress">
+                            <asp:Image ID="imgWaitIcon" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/wait.gif" />
+                            Please wait...
+                        </div>
+                    </div>
+                </div>
+            </ProgressTemplate>
+        </asp:UpdateProgress>
+
         <div>
             <table class="tbl_master_user">
                 <tr>
