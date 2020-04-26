@@ -59,7 +59,7 @@
 
         .tbl_master_user {
             width: 1000px;
-            height: 80px;
+            height: 60px;
             border: 2px solid #b63838;
         }
 
