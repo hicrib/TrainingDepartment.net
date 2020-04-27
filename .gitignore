@@ -170,6 +170,10 @@ DocProject/Help/html
 
 # Click-Once directory
 publish/
+images/
+Trainings/T_Images/
+CommentImages/
+FlashTraining/
 
 # Publish Web Output
 *.[Pp]ublish.xml
