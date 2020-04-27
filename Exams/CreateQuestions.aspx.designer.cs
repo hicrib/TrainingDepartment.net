@@ -321,6 +321,60 @@ namespace AviaTrain.Exams
         protected global::System.Web.UI.WebControls.Button btn_fill_submit;
 
         /// <summary>
+        /// chk_createexam control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chk_createexam;
+
+        /// <summary>
+        /// panel_create_exam control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel panel_create_exam;
+
+        /// <summary>
+        /// txt_examname control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_examname;
+
+        /// <summary>
+        /// btn_createexam control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_createexam;
+
+        /// <summary>
+        /// txt_passpercent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_passpercent;
+
+        /// <summary>
+        /// lbl_createexamresult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_createexamresult;
+
+        /// <summary>
         /// grid_questions control.
         /// </summary>
         /// <remarks>
@@ -330,6 +384,15 @@ namespace AviaTrain.Exams
         protected global::System.Web.UI.WebControls.GridView grid_questions;
 
         /// <summary>
+        /// lbl_lastqid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_lastqid;
+
+        /// <summary>
         /// lbl_mode control.
         /// </summary>
         /// <remarks>
@@ -337,5 +400,14 @@ namespace AviaTrain.Exams
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbl_mode;
+
+        /// <summary>
+        /// lbl_use_lastadded control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_use_lastadded;
     }
 }

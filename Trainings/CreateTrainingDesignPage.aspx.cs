@@ -114,16 +114,6 @@ namespace AviaTrain.Trainings
         }
 
 
-        // todo : implement
-        protected void btn_finish_Click(object sender, EventArgs e)
-        {
-            //put everythin in db
-
-            //clean session chosen questions
-
-            //send to success page
-        }
-
 
 
         protected bool push_step_in_db()
@@ -171,7 +161,18 @@ namespace AviaTrain.Trainings
         }
 
 
+        protected void btn_finish_Click(object sender, EventArgs e)
+        {
+            //put everything in db , step and questions if there are
+            bool pushed = push_step_in_db();
+            if (!pushed)
+                return; //Page Error 
 
+            //cleanup
+            Session["chosen_questions_training"] = null;
+
+            Response.Redirect("~/Trainings/CreateTrainingFinish.aspx?T=" + lbl_trn_id.Text + "&S=" + lbl_step_db_id.Text);
+        }
 
 
         protected void btn_chose_question_Click(object sender, EventArgs e)

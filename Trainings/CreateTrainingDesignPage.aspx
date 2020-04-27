@@ -1,27 +1,47 @@
 ﻿<%@ Page Title="" ValidateRequest="false" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="CreateTrainingDesignPage.aspx.cs" Inherits="AviaTrain.Trainings.CreateTrainingDesignPage" %>
 
-<%@ Register TagPrefix="FTB" Namespace="FreeTextBoxControls" Assembly="FreeTextBox" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link rel="stylesheet" href="../Scripts/trumbowyg/trumbowyg.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.20.0/plugins/table/ui/trumbowyg.table.min.css">
     <style>
+        .modalBackgroundempty {
+            background-color: lightgray;
+            filter: alpha(opacity=50);
+            opacity: 0.2;
+        }
+
+        .modalPopupempty {
+            background-color: lightgray;
+            width: 100%;
+            height: 100%;
+        }
+
+            .modalPopupempty .body {
+                min-height: 50px;
+                line-height: 30px;
+                text-align: center;
+                padding: 5px;
+                height: 99%;
+            }
+
         .modalBackground {
             background-color: Black;
             filter: alpha(opacity=40);
-            opacity: 0.4;
+            opacity: 0.2;
         }
 
         .modalPopup {
-            background-color: #FFFFFF;
-            width: 95%;
-            border: 3px solid #0DA9D0;
+            background-color: lightgray;
+            width: 90%;
+            border: 3px solid indianred;
+            height: 99%;
         }
 
             .modalPopup .header {
                 background-color: #2FBDF1;
-                height: 95%;
+                height: 99%;
                 color: White;
                 line-height: 30px;
                 text-align: center;
@@ -33,7 +53,7 @@
                 line-height: 30px;
                 text-align: center;
                 padding: 5px;
-                height: 95%;
+                height: 99%;
             }
 
             .modalPopup .footer {
@@ -106,27 +126,31 @@
             }
         }
         function TransferDivContent() {
-            
+
             var div = document.getElementById("ContentPlaceHolder1_upper_div").innerHTML;
             document.getElementById("txt_upper_div_holder").value = div;
+
+            ShowEmptyModal();
         }
 
         $(document).ready(function () {
 
-
-
-
         });
 
         function ShowModalPopup() {
+            $("#iFramePersonal").attr('src', "../Exams/CreateQuestions.aspx");
             $find("mpe").show();
             return false;
         }
         function ShowModalPopup2() {
+            $("#iFramePersonal2").attr('src', "../Exams/ChooseQuestions_Mini.aspx");
             $find("mpe2").show();
             return false;
         }
-
+        function ShowEmptyModal() {
+            $find("mpeempty").show();
+            return true;
+        }
     </script>
 
 </asp:Content>
@@ -138,8 +162,8 @@
     <table class="page_design_table_uppers">
         <tr>
             <td>
-                <div style="float: left; width: 1000px; height: 500px !important;">
-                    <div id="upper_div" style="height: 500px; background-color:white; border: 1px solid indianred;" runat="server"></div>
+                <div style="float: left; width: 1000px; height: 480px !important;">
+                    <div id="upper_div" style="height: 500px; background-color: white; border: 1px solid indianred;" runat="server"></div>
                 </div>
                 <asp:TextBox ID="txt_upper_div_holder" runat="server" Style="display: none;" ClientIDMode="Static"></asp:TextBox>
             </td>
@@ -148,86 +172,71 @@
                     <asp:Image ID="img1" runat="server" Style="display: none; max-height: 400px !important; max-width: 400px !important;" />
                 </div>
                 <div>
-                    <asp:FileUpload ID="file_upload" runat="server" accept=".png,.jpg,.jpeg,.gif" />
-                    <br />
-                    <asp:Button runat="server" ID="UploadButton" Text="Upload" OnClick="UploadButton_Click" />
-                    <br />
-                    <asp:Label ID="lbl_step_image1" runat="server" Visible="true"></asp:Label>
                     You can use this address to post images 
+                    <br />
+                    <asp:FileUpload ID="file_upload" runat="server" accept=".png,.jpg,.jpeg,.gif" />
+                    <asp:Button runat="server" ID="UploadButton" Text="Upload" OnClick="UploadButton_Click" />
+                    <div style="max-width: 150px;">
+                        <asp:Label ID="lbl_step_image1" runat="server" Visible="true"></asp:Label>
+                    </div>
+
                 </div>
-                <div style="vertical-align:bottom; margin-bottom : 20px;">
-                     <asp:Button ID="btn_create_question" CssClass="btn_create btn_belows" runat="server" OnClientClick="return ShowModalPopup()" Style="margin: auto;" Text="Create Question" OnClick="btn_create_question_Click" />
+                <br />
+                <div style="vertical-align: bottom; margin-bottom: 20px;">
+                    <asp:Button ID="btn_create_question" CssClass="btn_create btn_belows" runat="server" OnClientClick="return ShowModalPopup()" Style="margin: auto;" Text="Create Question" OnClick="btn_create_question_Click" />
                     <asp:Button ID="btn_chose_question" CssClass="btn_create btn_belows" runat="server" OnClientClick="return ShowModalPopup2()" Style="margin: auto;" Text="Choose Questions" OnClick="btn_chose_question_Click" />
-                
+                </div>
+                <div style="height: 200px;"></div>
+                <div style="display: block; float: right;">
                     <asp:Button ID="btn_prev" runat="server" CssClass="btn_belows btn_prev" OnClientClick="TransferDivContent()" Style="float: left;" Text="Previous" OnClick="btn_prev_Click" />
-                <asp:Button ID="btn_next" runat="server" CssClass="btn_belows btn_forw" OnClientClick="TransferDivContent()" Style="float: right;" Text="Save & Next" OnClick="btn_next_Click" />
-            
-                </div>
-
-                <asp:Panel ID="panel_question" runat="server" Visible="true">
-                    <table class="add_question_table">
-                        <tr>
-                            <td>
-                                
-
-                                <asp:LinkButton ID="lnkFake" runat="server"></asp:LinkButton>
-                                <cc1:ModalPopupExtender ID="mpShow" BehaviorID="mpe" runat="server" PopupControlID="pnlPopUp" X="10" Y="0"
-                                    TargetControlID="lnkFake" BackgroundCssClass="modalBackground" CancelControlID="btnClosePopup">
-                                </cc1:ModalPopupExtender>
-                                <asp:Panel ID="pnlPopUp" runat="server" CssClass="modalPopup" Style="display: none">
-                                    <div class="body">
-
-                                        <asp:ImageButton ID="btnClosePopup" runat="server" Style="float: right" ImageUrl="~/images/cross_red.png" />
-                                        <iframe id="iFramePersonal" src="../Exams/CreateQuestions.aspx" style='height: 550px; width: 1050px;'></iframe>
-                                    </div>
-                                </asp:Panel>
-
-
-                                <asp:LinkButton ID="lnkFake2" runat="server"></asp:LinkButton>
-                                <cc1:ModalPopupExtender ID="mpShow2" BehaviorID="mpe2" runat="server" PopupControlID="pnlPopUp2" X="10" Y="0"
-                                    TargetControlID="lnkFake2" BackgroundCssClass="modalBackground" CancelControlID="btnClosePopup2">
-                                </cc1:ModalPopupExtender>
-                                <asp:Panel ID="pnlPopUp2" runat="server" CssClass="modalPopup" Style="display: none">
-                                    <div class="body">
-
-                                        <asp:ImageButton ID="btnClosePopup2" runat="server" Style="float: right" ImageUrl="~/images/cross_red.png" />
-                                        <iframe id="iFramePersonal2" src="../Exams/ChooseQuestions_Mini.aspx" style='height: 550px; width: 1050px;'></iframe>
-                                    </div>
-                                </asp:Panel>
-
-                            </td>
-                            <td style="text-align: center; width: 800px;"></td>
-                        </tr>
-                    </table>
-                </asp:Panel>
-
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div style="float: right;">
+                    <asp:Button ID="btn_next" runat="server" CssClass="btn_belows btn_forw" OnClientClick="TransferDivContent()" Style="float: right; margin-left: 10px !important;" Text="Save & Next" OnClick="btn_next_Click" />
                 </div>
             </td>
         </tr>
-
     </table>
 
+    <asp:Button ID="btn_finish" runat="server" CssClass="btn_belows btn_finish" Text="Finish Designing Training" OnClientClick="TransferDivContent(); " OnClick="btn_finish_Click" />
 
 
 
+    <asp:LinkButton ID="lnkFake" runat="server"></asp:LinkButton>
+    <cc1:ModalPopupExtender ID="mpShow" BehaviorID="mpe" runat="server" PopupControlID="pnlPopUp" X="10" Y="0"
+        TargetControlID="lnkFake" BackgroundCssClass="modalBackground" CancelControlID="btnClosePopup">
+    </cc1:ModalPopupExtender>
+    <asp:Panel ID="pnlPopUp" runat="server" CssClass="modalPopup" Style="display: none">
+        <div class="body">
+
+            <asp:ImageButton ID="btnClosePopup" runat="server" Style="float: right;" ImageUrl="~/images/cross_red.png" />
+            <iframe id="iFramePersonal" src="about:blank" style='height: 99%; width: 95%;'></iframe>
+        </div>
+    </asp:Panel>
 
 
-    <table style="width: 800px;">
-        <tr>
-            <td>
-            </td>
-        </tr>
-        <tr>
-            <td style="align-content: center; text-align: center;"></td>
-        </tr>
-    </table>
-    <asp:Button ID="btn_finish" runat="server" CssClass="btn_belows btn_finish" Text="Finish Designing Training" OnClientClick="TransferDivContent(); return confirmation_LOGOUT();" OnClick="btn_finish_Click" />
+    <asp:LinkButton ID="lnkFake2" runat="server"></asp:LinkButton>
+    <cc1:ModalPopupExtender ID="mpShow2" BehaviorID="mpe2" runat="server" PopupControlID="pnlPopUp2" X="10" Y="0"
+        TargetControlID="lnkFake2" BackgroundCssClass="modalBackground" CancelControlID="btnClosePopup2">
+    </cc1:ModalPopupExtender>
+    <asp:Panel ID="pnlPopUp2" runat="server" CssClass="modalPopup" Style="display: none">
+        <div class="body">
+
+            <asp:ImageButton ID="btnClosePopup2" runat="server" Style="float: right;" ImageUrl="~/images/cross_red.png" />
+            <iframe id="iFramePersonal2" src="about:blank" style='height: 99%; width: 95%;'></iframe>
+        </div>
+    </asp:Panel>
+
+
+    <asp:LinkButton ID="lnkFakeempty" runat="server"></asp:LinkButton>
+    <cc1:ModalPopupExtender ID="mpshowempty" BehaviorID="mpeempty" runat="server" PopupControlID="pnlPopUpempty" X="0" Y="0"
+        TargetControlID="lnkFakeempty" BackgroundCssClass="modalBackgroundempty" CancelControlID="btnClosePopupempty">
+    </cc1:ModalPopupExtender>
+    <asp:Panel ID="pnlPopUpempty" runat="server" CssClass="modalPopupempty" Style="display: none">
+        <div class="body">
+            <asp:ImageButton ID="btnClosePopupempty" runat="server" Style="display: block; margin: auto; margin: auto; width: 10%;vertical-align:middle; " ImageUrl="~/images/wait.gif" />
+        </div>
+    </asp:Panel>
+
+
+
 
 
 
@@ -281,13 +290,11 @@
                     ['formatting'],
                     ['fontsize'],
                     ['strong', 'em', 'del'],
-                    ['superscript', 'subscript'],
                     ['link'],
                     ['image'], // Our fresh created dropdown
                     ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
                     ['unorderedList', 'orderedList'],
                     ['horizontalRule'],
-                    ['removeformat'],
                     ['fullscreen']
                 ],
                 plugins: {

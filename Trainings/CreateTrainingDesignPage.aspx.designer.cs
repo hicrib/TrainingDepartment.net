@@ -105,13 +105,13 @@ namespace AviaTrain.Trainings
         protected global::System.Web.UI.WebControls.Button btn_next;
 
         /// <summary>
-        /// panel_question control.
+        /// btn_finish control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel panel_question;
+        protected global::System.Web.UI.WebControls.Button btn_finish;
 
         /// <summary>
         /// lnkFake control.
@@ -186,13 +186,40 @@ namespace AviaTrain.Trainings
         protected global::System.Web.UI.WebControls.ImageButton btnClosePopup2;
 
         /// <summary>
-        /// btn_finish control.
+        /// lnkFakeempty control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_finish;
+        protected global::System.Web.UI.WebControls.LinkButton lnkFakeempty;
+
+        /// <summary>
+        /// mpshowempty control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpshowempty;
+
+        /// <summary>
+        /// pnlPopUpempty control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlPopUpempty;
+
+        /// <summary>
+        /// btnClosePopupempty control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton btnClosePopupempty;
 
         /// <summary>
         /// lbl_trn_id control.

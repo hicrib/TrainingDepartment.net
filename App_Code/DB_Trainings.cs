@@ -26,7 +26,7 @@ namespace AviaTrain.App_Code
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
                         @"  INSERT INTO TRN_TRAINING_DEF 
-                            VALUES ( @NAME , @SECTOR , @EFFECTIVE  , @USERID , CONVERT(VARCHAR , GETUTCDATE(), 20 ), 1)
+                            VALUES ( @NAME , @SECTOR , @EFFECTIVE  , @USERID , CONVERT(VARCHAR , GETUTCDATE(), 20 ),'DESIGN_STARTED' ,NULL,1)
 
                             SELECT SCOPE_IDENTITY()        ", connection))
                 {
@@ -55,6 +55,43 @@ namespace AviaTrain.App_Code
             return "";
         }
 
+        public static bool update_TRAINING_DEF(string trnid, string last_modify="", string last_modif_date="", string status ="",string extra ="", string isactive="" )
+        {
+            UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                     @"UPDATE TRN_TRAINING_DEF 
+                       SET    
+                              LAST_MODIFY=  CASE WHEN '' = @LAST_MODIFY THEN LAST_MODIFY ELSE @LAST_MODIFY END , 
+                              LAST_MODIFY_DATE= CASE WHEN '' = @LAST_MODIFY_DATE THEN LAST_MODIFY_DATE ELSE  CONVERT(VARCHAR , GETUTCDATE(), 20 ) END  , 
+                              STATUS=    CASE WHEN '' = @STATUS THEN STATUS ELSE @STATUS END , 
+                              EXTRA=     CASE WHEN '' = @EXTRA THEN EXTRA ELSE @EXTRA END " +
+                                (isactive != "" ? " , ISACTIVE= " + isactive : "") +
+                      " WHERE ID=@TRNID ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@TRNID", SqlDbType.Int).Value = trnid;
+                    command.Parameters.Add("@LAST_MODIFY", SqlDbType.Int).Value = last_modify;
+                    command.Parameters.Add("@LAST_MODIFY_DATE", SqlDbType.NVarChar).Value = last_modif_date;
+                    command.Parameters.Add("@STATUS", SqlDbType.NVarChar).Value = status;
+                    command.Parameters.Add("@EXTRA", SqlDbType.NVarChar).Value = extra;
+                    command.CommandType = CommandType.Text;
+
+                    if (Convert.ToInt32(command.ExecuteNonQuery()) > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
+
+
         public static bool push_Step(string trnid, string stepid, string steptype, string texthtml, string fileaddress)
         {
             try
@@ -65,7 +102,7 @@ namespace AviaTrain.App_Code
                             WHERE TRN_ID = @TRN_ID AND STEP_ID = @STEP_ID  ", connection))
                 {
                     connection.Open();
-                    command.Parameters.Add("@STEP_TYPE", SqlDbType.VarChar).Value = steptype ;
+                    command.Parameters.Add("@STEP_TYPE", SqlDbType.VarChar).Value = steptype;
                     command.Parameters.Add("@TEXTHTML", SqlDbType.VarChar).Value = texthtml;
                     command.Parameters.Add("@FILEADRESS", SqlDbType.VarChar).Value = fileaddress;
                     command.Parameters.Add("@TRN_ID", SqlDbType.Int).Value = trnid;
@@ -93,7 +130,7 @@ namespace AviaTrain.App_Code
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand( insert, connection))
+                using (SqlCommand command = new SqlCommand(insert, connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
@@ -118,7 +155,7 @@ namespace AviaTrain.App_Code
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
                         @" INSERT INTO TRN_STEP 
-                            VALUES( @TRN_ID , null , null , null )
+                            VALUES( @TRN_ID , null , null , null, NULL , NULL, 1 )
 
                             SELECT SCOPE_IDENTITY()  ", connection))
                 {
@@ -138,6 +175,41 @@ namespace AviaTrain.App_Code
             return "";
         }
 
+        public static bool update_STEP(string stepid, string steptype = "", string texthtml = "", string fileadress = "", string status = "", string extra = "", string isactive = "")
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                     @"UPDATE TRN_STEP 
+                             SET     STEPTYPE = CASE WHEN '' = @STEPTYPE THEN STEPTYPE ELSE @STEPTYPE END , 
+                                     TEXTHTML=  CASE WHEN '' = @TEXTHTML THEN TEXTHTML ELSE @TEXTHTML END , 
+                                     FILEADRESS=CASE WHEN '' = @FILEADRESS THEN FILEADRESS ELSE @FILEADRESS END , 
+                                     STATUS=    CASE WHEN '' = @STATUS THEN STATUS ELSE @STATUS END , 
+                                     EXTRA=     CASE WHEN '' = @EXTRA THEN EXTRA ELSE @EXTRA END  " +
+                                   (isactive != "" ? " , ISACTIVE= " + isactive : "") +
+                "            WHERE STEP_ID = @STEPID", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
+                    command.Parameters.Add("@STEPTYPE", SqlDbType.NVarChar).Value = steptype;
+                    command.Parameters.Add("@TEXTHTML", SqlDbType.NVarChar).Value = texthtml;
+                    command.Parameters.Add("@FILEADRESS", SqlDbType.NVarChar).Value = fileadress;
+                    command.Parameters.Add("@STATUS", SqlDbType.NVarChar).Value = status;
+                    command.Parameters.Add("@EXTRA", SqlDbType.NVarChar).Value = extra;
+                    command.CommandType = CommandType.Text;
+
+                    if (Convert.ToInt32(command.ExecuteNonQuery()) > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
         public static string get_prev_next_STEPID(string trn_id, string current_stepid, bool next = true)
         {
             string select = "";
@@ -149,7 +221,7 @@ namespace AviaTrain.App_Code
                     select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID < @STEP_ID ORDER BY STEP_ID DESC";
 
                 using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(select , connection))
+                using (SqlCommand command = new SqlCommand(select, connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@TRN_ID", SqlDbType.Int).Value = trn_id;

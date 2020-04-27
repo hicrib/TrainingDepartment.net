@@ -43,5 +43,10 @@ namespace AviaTrain
             Response.Redirect("~/Exams/Exam_ErrorPage.aspx?Code=" + message);//todo : error message for authorization
         }
 
+        protected void SuccessWithCode(string message = "SUCCESS !")
+        {
+            Response.Redirect("~/Pages/SuccessPage.aspx?Code=" + message);
+        }
+
     }
 }

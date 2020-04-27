@@ -21,7 +21,12 @@ namespace AviaTrain.Exams
                 if (!(user.isAdmin || user.isExamAdmin))
                     RedirectWithCode("UNAUTHORIZED !");
 
-                get_my_last_fill_grid();
+                string last_mode = Convert.ToString(Request.QueryString["NoLast"]);
+                if (!String.IsNullOrEmpty(last_mode))
+                    lbl_use_lastadded.Text = "0";
+
+                if (lbl_use_lastadded.Text == "1") //means normal mode, this is 1 default
+                    get_my_last_fill_grid();
             }
             else
             {
@@ -32,8 +37,16 @@ namespace AviaTrain.Exams
 
         protected void get_my_last_fill_grid()
         {
-            grid_questions.DataSource = DB_Exams.get_Questions_MY_LAST_("20");
-            grid_questions.DataBind();
+            if (lbl_use_lastadded.Text == "1")
+            {
+                grid_questions.DataSource = DB_Exams.get_Questions_MY_LAST_("20");
+                grid_questions.DataBind();
+            }
+            else
+            {
+                grid_questions.DataSource = (DataTable)Session["grid_questions"];
+                grid_questions.DataBind();
+            }
         }
 
         protected void btn_fill_submit_Click(object sender, EventArgs e)
@@ -43,16 +56,21 @@ namespace AviaTrain.Exams
                 return;
 
             //push db
-            if (!push_FILL_question())
+            string last_qid = push_FILL_question();
+            if (last_qid == "")
             {
                 FILL_page_result("DB Error : Try Again Later !");
                 return;
             }
+            lbl_lastqid.Text = last_qid;
 
 
             //put in grid
             // Renew_Qestions_Grid_for_FILL();
-            get_my_last_fill_grid();
+            if (lbl_use_lastadded.Text == "1")
+                get_my_last_fill_grid();
+            else
+                Renew_Qestions_Grid_for_FILL();
 
 
             //clean-up
@@ -129,9 +147,9 @@ namespace AviaTrain.Exams
             lbl_fill_result.Text = error == "" ? "Fill Necessary Fields!" : error;
             lbl_fill_result.Visible = true;
         }
-        protected bool push_FILL_question()
+        protected string push_FILL_question()
         {
-            bool pushed = DB_Exams.push_Question_FILL(ddl_sector.SelectedValue,
+            string pushed = DB_Exams.push_Question_FILL(ddl_sector.SelectedValue,
                 txt_Text1.Text, fill_1_ans1.Text.Trim().ToUpper(), fill_1_ans2.Text.Trim().ToUpper(), fill_1_ans3.Text.Trim().ToUpper(),
                 txt_Text2.Text, fill_2_ans1.Text.Trim().ToUpper(), fill_2_ans2.Text.Trim().ToUpper(), fill_2_ans3.Text.Trim().ToUpper(),
                 txt_Text3.Text, fill_3_ans1.Text.Trim().ToUpper(), fill_3_ans2.Text.Trim().ToUpper(), fill_3_ans3.Text.Trim().ToUpper(),
@@ -146,6 +164,7 @@ namespace AviaTrain.Exams
             if (dt == null)
             {
                 dt = new DataTable();
+                dt.Columns.Add("ID");
                 dt.Columns.Add("SECTOR");
                 dt.Columns.Add("QUESTION");
                 dt.Columns.Add("ANSWER");
@@ -166,6 +185,7 @@ namespace AviaTrain.Exams
             // QUESTION , ANSWER
 
             DataRow row = dt.NewRow();
+            row["ID"] = lbl_lastqid.Text;
             row["SECTOR"] = ddl_sector.SelectedValue;
             row["QUESTION"] = q;
             row["ANSWER"] = ans;
@@ -240,16 +260,22 @@ namespace AviaTrain.Exams
 
 
             //write to DB
-            if (!push_OPS_question())
+            string lastqid = push_OPS_question();
+            if (lastqid == "")
             {
                 OPS_page_result("DB Error : Try Again Later !");
                 return;
             }
+            lbl_lastqid.Text = lastqid;
 
 
             //put in grid
             //bool in_grid = Renew_Qestions_Grid_for_OPS();
-            get_my_last_fill_grid();
+            if (lbl_use_lastadded.Text == "1")
+                get_my_last_fill_grid();
+            else
+                Renew_Qestions_Grid_for_OPS();
+
 
             //clean eveything
 
@@ -264,7 +290,7 @@ namespace AviaTrain.Exams
             //ddl_qtypes.SelectedValue = "-";
 
         }
-        protected bool push_OPS_question()
+        protected string push_OPS_question()
         {
             string ans = "";
             if (chk_a.Checked)
@@ -278,7 +304,7 @@ namespace AviaTrain.Exams
 
             string ops = ddl_qtypes.SelectedValue;
 
-            bool pushed = DB_Exams.push_Question_OPS(ddl_sector.SelectedValue, ops, txt_question_ops.Text, ans,
+            string pushed = DB_Exams.push_Question_OPS(ddl_sector.SelectedValue, ops, txt_question_ops.Text, ans,
                                                 txt_ops_a.Text,
                                                 txt_ops_b.Text,
                                                 (ops == "3" || ops == "4") ? txt_ops_c.Text : null,
@@ -343,6 +369,7 @@ namespace AviaTrain.Exams
             if (dt == null)
             {
                 dt = new DataTable();
+                dt.Columns.Add("ID");
                 dt.Columns.Add("SECTOR");
                 dt.Columns.Add("QUESTION");
                 dt.Columns.Add("ANSWER");
@@ -363,6 +390,7 @@ namespace AviaTrain.Exams
             // QUESTION , ANSWER
 
             DataRow row = dt.NewRow();
+            row["ID"] = lbl_lastqid.Text;
             row["SECTOR"] = ddl_sector.SelectedValue;
             row["QUESTION"] = txt_question_ops.Text;
             row["ANSWER"] = ans;
@@ -440,8 +468,8 @@ namespace AviaTrain.Exams
             }
         }
 
-        
-        
+
+
         protected void grid_questions_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -463,8 +491,23 @@ namespace AviaTrain.Exams
             string q_id = selectedRow.Cells[1].Text.Trim(); //Q_ID
 
             bool deleted = DB_Exams.delete_question_unless_assigned(q_id);
-            if(deleted)
+            if (deleted)
+            {
+                //update the session table because item deleted
+                if (lbl_use_lastadded.Text != "1")
+                {
+                    DataTable dt = (DataTable)Session["grid_questions"];
+                    DataTable temp = dt;
+                    if (dt != null && dt.Rows.Count > 0)
+                        foreach (DataRow row in temp.Rows)
+                            if (row["ID"].ToString() == q_id)
+                                dt.Rows.Remove(row);
+
+                    Session["grid_questions"] = dt;
+                }
+
                 get_my_last_fill_grid();
+            }
             else
             {
                 lbl_fill_result.Text = "Can't DELETE : Question belongs to an exam";
@@ -477,6 +520,48 @@ namespace AviaTrain.Exams
         protected void grid_questions_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
 
+        }
+
+        protected void chk_createexam_CheckedChanged(object sender, EventArgs e)
+        {
+            panel_create_exam.Visible = chk_createexam.Checked;
+        }
+
+        protected void btn_createexam_Click(object sender, EventArgs e)
+        {
+            //check elements
+            if (txt_examname.Text.Trim() == "")
+            {
+                lbl_createexamresult.Text = "Exam Name can't be empty"; return;
+            }
+            if (txt_passpercent.Text.Trim() == "" || Convert.ToInt32(txt_passpercent.Text) < 0 || Convert.ToInt32(txt_passpercent.Text) > 100)
+            {
+                lbl_createexamresult.Text = "Pass Percent must be between 0-100"; return;
+            }
+
+            DataTable dt =  lbl_use_lastadded.Text == "1" ? DB_Exams.get_Questions_MY_LAST_() : (DataTable)Session["grid_questions"];
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                lbl_createexamresult.Text = "First Create Questions ";
+                return;
+            }
+
+            float q_count = dt.Rows.Count;
+            float q_point_float = 100 / q_count;
+            string q_point = q_point_float.ToString("0.00");
+            Dictionary<string, string> questions = new Dictionary<string, string>();
+            foreach (DataRow item in dt.Rows)
+                questions.Add(item["ID"].ToString(), q_point);
+
+            if (DB_Exams.push_EXAM_DEF(txt_examname.Text, txt_passpercent.Text, questions))
+            {
+                lbl_createexamresult.Text = "Exam Created";
+                txt_examname.Text = "";
+                txt_passpercent.Text = "";
+            }
+
+
+            //create
         }
     }
 }

@@ -16,7 +16,7 @@ namespace AviaTrain.App_Code
         public static string con_str = ConfigurationManager.ConnectionStrings["dbconn_hosting"].ConnectionString;
 
 
-        public static bool push_Question_OPS(string sector, string op, string q, string answer, string a, string b, string c = null, string d = null)
+        public static string push_Question_OPS(string sector, string op, string q, string answer, string a, string b, string c = null, string d = null)
         {
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
 
@@ -29,7 +29,8 @@ namespace AviaTrain.App_Code
                             DECLARE @Q_ID INT = ( SELECT SCOPE_IDENTITY() )
 
                             INSERT INTO EXM_QUESTIONS_OPS 
-                            VALUES ( @Q_ID , @OPS , @Q , @OPA , @OPB , @OPC, @OPD, @ANSWER  )  ", connection))
+                            VALUES ( @Q_ID , @OPS , @Q , @OPA , @OPB , @OPC, @OPD, @ANSWER  )  
+                            select @Q_ID", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@TYPE", SqlDbType.VarChar).Value = op;
@@ -44,8 +45,9 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@ANSWER", SqlDbType.VarChar).Value = answer;
                     command.CommandType = CommandType.Text;
 
-                    if (command.ExecuteNonQuery() > 0)
-                        return true;
+                    string qid=Convert.ToString(command.ExecuteScalar());
+                    if (qid !="")
+                        return qid;
                 }
             }
             catch (Exception e)
@@ -54,10 +56,10 @@ namespace AviaTrain.App_Code
             }
 
             //something went wrong
-            return false;
+            return "";
         }
 
-        public static bool push_Question_FILL(string sector, string TEXT1, string FILL1_ANS1, string FILL1_ANS2, string FILL1_ANS3,
+        public static string push_Question_FILL(string sector, string TEXT1, string FILL1_ANS1, string FILL1_ANS2, string FILL1_ANS3,
                                                              string TEXT2, string FILL2_ANS1, string FILL2_ANS2, string FILL2_ANS3,
                                                              string TEXT3, string FILL3_ANS1, string FILL3_ANS2, string FILL3_ANS3,
                                                              string TEXT4)
@@ -73,7 +75,7 @@ namespace AviaTrain.App_Code
 
                             INSERT INTO EXM_QUESTIONS_FILL
                             VALUES (@Q_ID , @TEXT1, @FILL1_ANS1, @FILL1_ANS2, @FILL1_ANS3, @TEXT2, @FILL2_ANS1, @FILL2_ANS2, @FILL2_ANS3, @TEXT3, @FILL3_ANS1, @FILL3_ANS2, @FILL3_ANS3, @TEXT4)
-                             ", connection))
+                             select @Q_ID", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@SECTOR", SqlDbType.VarChar).Value = sector;
@@ -93,8 +95,9 @@ namespace AviaTrain.App_Code
 
                     command.CommandType = CommandType.Text;
 
-                    if (command.ExecuteNonQuery() > 0)
-                        return true;
+                    string qid = Convert.ToString(command.ExecuteScalar());
+                    if (qid != "")
+                        return qid;
                 }
             }
             catch (Exception e)
@@ -103,7 +106,7 @@ namespace AviaTrain.App_Code
             }
 
             //something went wrong
-            return false;
+            return "";
         }
 
         public static bool push_EXAM_DEF(string name, string passpercent, Dictionary<string, string> questions)
@@ -751,7 +754,7 @@ namespace AviaTrain.App_Code
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT TOP " +howmany + @" * FROM (
                                                     SELECT  
-                                                    OPS.ID AS 'Q_ID' ,  OPS.Q AS 'Question' ,
+                                                    OPS.ID AS 'ID' , Q.SECTOR, OPS.Q AS 'Question' , 
                                                     CASE WHEN OPS.ANSWER = 'A' THEN OPS.OPA
                                                          WHEN OPS.ANSWER = 'B' THEN OPS.OPB
                                                          WHEN OPS.ANSWER = 'C' THEN OPS.OPC
@@ -761,7 +764,7 @@ namespace AviaTrain.App_Code
                                                     WHERE Q.ISACTIVE = 1 AND (Q.TYPE='2' OR Q.TYPE='3' OR Q.TYPE='4' ) AND Q.[BY] = @USERID
                                                     UNION
                                                     SELECT 
-                                                    FILL.ID AS 'Q_ID' ,  
+                                                    FILL.ID AS 'ID' ,  Q.SECTOR,
                                                     FILL.TEXT1 + ' ((blank)) ' + FILL.TEXT2 + ' ((blank)) '+ FILL.TEXT3 + ' ((blank)) ' + FILL.TEXT4  AS 'Question',
                                                     '((' + 
                                                     FILL1_ANS1 +','+FILL1_ANS2+','+FILL1_ANS3+')) - ((' + 
@@ -771,7 +774,7 @@ namespace AviaTrain.App_Code
                                                     JOIN EXM_QUESTIONS_FILL FILL ON FILL.ID = Q.ID
                                                     WHERE Q.ISACTIVE = 1 AND (Q.TYPE='FILL' ) AND Q.[BY] = @USERID
                                 ) A
-                                ORDER BY 'Q_ID' DESC
+                                ORDER BY ID DESC
                                                     ", connection))
                     {
                         connection.Open();

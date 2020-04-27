@@ -1702,6 +1702,7 @@
     <Content Include="MasterPage.aspx" />
     <Content Include="Pages\InstructorMain.aspx" />
     <Content Include="Pages\login.aspx" />
+    <Content Include="Pages\SuccessPage.aspx" />
     <Content Include="Pages\UserMain.aspx" />
     <Content Include="Pages\TraineeMain.aspx" />
     <Content Include="Pages\TrainingTree.aspx" />
@@ -1952,6 +1953,13 @@
     </Compile>
     <Compile Include="Pages\login.aspx.designer.cs">
       <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SuccessPage.aspx.cs">
+      <DependentUpon>SuccessPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SuccessPage.aspx.designer.cs">
+      <DependentUpon>SuccessPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\UserMain.aspx.cs">
       <DependentUpon>UserMain.aspx</DependentUpon>

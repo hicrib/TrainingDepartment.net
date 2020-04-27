@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AviaTrain.App_Code;
+using Microsoft.Ajax.Utilities;
 
 namespace AviaTrain.Trainings
 {
@@ -30,11 +31,13 @@ namespace AviaTrain.Trainings
             {
                 lbl_info_error.Text = "Training Name is empty";
                 lbl_info_error.Visible = true;
+                return;
             }
             if (txt_effective.Text.Trim() == "")
             {//todo : this doesnt work properly
                 lbl_info_error.Text = "Effective Date is empty";
                 lbl_info_error.Visible = true;
+                return;
             }
 
 

@@ -116,7 +116,7 @@
                 </tr>
             </table>
         </div>
-        <br />
+        <div style="height : 1px;"></div>
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
             </asp:ContentPlaceHolder>
