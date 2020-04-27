@@ -59,7 +59,7 @@
 
         .tbl_master_user {
             width: 1000px;
-            height: 80px;
+            height: 60px;
             border: 2px solid #b63838;
         }
 
@@ -116,7 +116,7 @@
                 </tr>
             </table>
         </div>
-        <br />
+        <div style="height : 1px;"></div>
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
             </asp:ContentPlaceHolder>

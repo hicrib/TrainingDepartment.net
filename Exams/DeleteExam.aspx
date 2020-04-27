@@ -45,8 +45,12 @@
         .grid_exam_questions td:first-child {
             width : 20px;
         }
+        .grid_exam_questions td:nth-child(2) {
+            width : 55%;
+            text-align:left;
+        }
         .grid_exam_questions td:last-child {
-            width : 100%;
+            width : 40%;
             text-align:left;
         }
 

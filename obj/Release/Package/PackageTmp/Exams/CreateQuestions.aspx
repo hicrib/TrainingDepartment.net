@@ -7,7 +7,7 @@
             border-collapse: collapse;
             padding: 10px;
             margin: 0px;
-            border: 3px solid #b63838	;
+            border: 3px solid #b63838;
         }
 
             .tbl_create_question th {
@@ -15,7 +15,7 @@
                 font-size: large;
                 font-weight: bold;
                 color: white;
-                background-color: #b63838	;
+                background-color: #b63838;
             }
 
             .tbl_create_question td:first-child {
@@ -56,8 +56,8 @@
         .ops_submit {
             width: 100%;
             font-weight: bold;
-            border: 1px solid #b63838	;
-            background-color: #b63838	;
+            border: 1px solid #b63838;
+            background-color: #b63838;
             color: white;
             height: 30px;
         }
@@ -76,33 +76,41 @@
         .grid_questions {
             width: 100%;
             background-color: #d2d5d9;
-            font-size : small;
+            font-size: small;
         }
-        .grid_questions td{
-            padding : 5px;
-        }
+
+            .grid_questions td {
+                padding: 5px;
+            }
 
             .grid_questions th:first-child {
                 width: 5%;
                 background-color: #d2d5d9;
                 color: black;
-                text-align : center;
+                text-align: center;
             }
 
             .grid_questions th:nth-child(2) {
-                width: 10% ;
+                width: 5%;
                 background-color: #d2d5d9;
                 color: black;
-                text-align : center;
+                text-align: center;
             }
+
             .grid_questions th:nth-child(3) {
-                width: 50% ;
+                width: 10%;
+                background-color: #d2d5d9;
+                color: black;
+            }
+
+            .grid_questions th:nth-child(4) {
+                width: 55%;
                 background-color: #d2d5d9;
                 color: black;
             }
 
             .grid_questions th:last-child {
-                width: 35%;
+                width: 25%;
                 background-color: #d2d5d9;
                 color: black;
             }
@@ -111,25 +119,29 @@
                 background-color: #edeff7;
                 text-align: left !important;
                 font-weight: normal !important;
-                text-align : center;
+                text-align: center;
             }
 
             .grid_questions td:nth-child(2) {
-  
                 background-color: #edeff7;
                 text-align: left !important;
                 font-weight: normal !important;
-                text-align :center;
+                text-align: center;
             }
+
             .grid_questions td:nth-child(3) {
-      
+                background-color: #edeff7;
+                text-align: left !important;
+                font-weight: normal !important;
+            }
+
+            .grid_questions td:nth-child(4) {
                 background-color: #edeff7;
                 text-align: left !important;
                 font-weight: normal !important;
             }
 
             .grid_questions td:last-child {
-         
                 background-color: #edeff7;
                 text-align: left !important;
                 font-weight: normal !important;
@@ -141,10 +153,11 @@
             resize: none;
             height: 30px;
         }
+
         .tbl_fill {
-            border-collapse : collapse ;
-            border : 1px solid #b63838	;
-            width : 100%;
+            border-collapse: collapse;
+            border: 1px solid #b63838;
+            width: 100%;
         }
     </style>
     <script type="text/javascript">
@@ -173,7 +186,7 @@
                     <tr>
 
                         <td>
-                            <table style="border: 1px solid #b63838	; width: 100%;">
+                            <table style="border: 1px solid #b63838; width: 100%;">
                                 <tr>
                                     <td style="width: 200px; padding: 5px; font-weight: bold; font-size: medium; text-align: center;">Question Type :
                                     </td>
@@ -225,7 +238,7 @@
                                             <asp:TextBox ID="txt_ops_a" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:CheckBox ID="chk_a" runat="server" AutoPostBack="true"  OnCheckedChanged="chk_a_CheckedChanged1" />
+                                            <asp:CheckBox ID="chk_a" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -234,7 +247,7 @@
                                             <asp:TextBox ID="txt_ops_b" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:CheckBox ID="chk_b" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1"  />
+                                            <asp:CheckBox ID="chk_b" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -243,7 +256,7 @@
                                             <asp:TextBox ID="txt_ops_c" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:CheckBox ID="chk_c" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1"  />
+                                            <asp:CheckBox ID="chk_c" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -252,7 +265,7 @@
                                             <asp:TextBox ID="txt_ops_d" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                         <td>
-                                            <asp:CheckBox ID="chk_d" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1"  />
+                                            <asp:CheckBox ID="chk_d" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -325,10 +338,12 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td> <asp:Label ID="lbl_fill_result" CssClass="errorbox" runat="server" Visible="false"></asp:Label></td>
+                                        <td>
+                                            <asp:Label ID="lbl_fill_result" CssClass="errorbox" runat="server" Visible="false"></asp:Label></td>
                                     </tr>
                                     <tr>
-                                        <td>    <asp:Button ID="btn_fill_submit" CssClass="ops_submit" runat="server" Text="Submit Question" OnClick="btn_fill_submit_Click" />
+                                        <td>
+                                            <asp:Button ID="btn_fill_submit" CssClass="ops_submit" runat="server" Text="Submit Question" OnClick="btn_fill_submit_Click" />
                                         </td>
                                     </tr>
                                 </table>
@@ -341,12 +356,43 @@
                     </tr>
                     <tr>
                         <td>
-                            NOTE : Questions belonging to an Exam can not be deleted.
-                            <asp:GridView ID="grid_questions" runat="server" CssClass="grid_questions" 
+                            <asp:CheckBox ID="chk_createexam" runat="server" AutoPostBack="true" Text="Create Exam With These Questions" OnCheckedChanged="chk_createexam_CheckedChanged" />
+                            <asp:Panel ID="panel_create_exam" Visible="false" style="text-align: center;" runat="server">
+                                <div style="display: inline-block;">
+                                    <table style="border: 1px solid indianred;">
+                                        <tr>
+                                            <td style="width: 100px;">Exam Name</td>
+                                            <td>
+                                                <asp:TextBox ID="txt_examname" runat="server" Width="200"></asp:TextBox></td>
+                                            <td>
+                                                <asp:Button ID="btn_createexam" runat="server" Text="Create Exam With These Questions" CssClass="ops_submit" OnClick="btn_createexam_Click" />
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 100px;">Pass Percent</td>
+                                            <td>
+                                                <asp:TextBox ID="txt_passpercent" runat="server" Width="25"></asp:TextBox></td>
+                                            <td>
+                                                <asp:Label ID="lbl_createexamresult" runat="server"></asp:Label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+
+                            </asp:Panel>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NOTE : Questions belonging to an Exam can not be deleted.
+                            <asp:GridView ID="grid_questions" runat="server" CssClass="grid_questions"
                                 OnRowDeleting="grid_questions_RowDeleting"
                                 OnRowDataBound="grid_questions_RowDataBound" OnRowCommand="grid_questions_RowCommand1">
                                 <Columns>
-                                    <asp:ButtonField  ButtonType="Image" ImageUrl="~/images/delete.png" CommandName="Delete" />
+                                    <asp:ButtonField ButtonType="Image" ImageUrl="~/images/delete.png" CommandName="Delete" />
                                 </Columns>
                             </asp:GridView>
 
@@ -363,7 +409,7 @@
 
 
 
-
+    <asp:Label ID="lbl_lastqid" runat="server" Visible="false"></asp:Label>
     <asp:Label ID="lbl_mode" runat="server" Visible="false"></asp:Label>
-
+    <asp:Label ID="lbl_use_lastadded" runat="server" Text="1" Visible="false"></asp:Label>
 </asp:Content>

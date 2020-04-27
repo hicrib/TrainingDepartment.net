@@ -58,7 +58,7 @@
             border: 2px solid black;
             width: 100%;
             border-collapse: collapse;
-            height: 100px;
+            height: 60px;
         }
 
             #user_info_tbl td:first-child {
