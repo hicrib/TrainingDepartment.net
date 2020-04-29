@@ -95,6 +95,9 @@
             <td>
                     <asp:Button ID="btn_create_training" runat="server" CssClass="admin_buttons"  OnClick="btn_create_training_Click" Text="Create Training" />
             </td>
+            <td>
+                    <asp:Button ID="btn_assign_training" runat="server" CssClass="admin_buttons"  OnClick="btn_assign_training_Click" Text="Assign Training" />
+            </td>
         </tr>
     </table>
 

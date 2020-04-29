@@ -447,16 +447,18 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-        public static DataTable get_ALL_Users(bool isactive = true)
+        public static DataTable get_ALL_Users(bool with_empty = true ,  bool isactive = true)
         {
             DataTable res = new DataTable();
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
+                            @"" + 
+                            (with_empty ?
                             @"SELECT '-' AS [ID], ' --- ' AS [NAME]
-                            UNION
-                            SELECT EMPLOYEEID AS ID ,  INITIAL + ' - ' + FIRSTNAME +' '+ SURNAME AS [NAME] 
+                            UNION" : "" ) +
+                         @" SELECT EMPLOYEEID AS ID ,  INITIAL + ' - ' + FIRSTNAME +' '+ SURNAME AS [NAME] 
                             FROM USERS " + (isactive ? " WHERE ISACTIVE = 1 " : " ") +
                             "ORDER BY NAME"
                                    , connection))

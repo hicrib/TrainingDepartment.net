@@ -82,8 +82,6 @@ C:\Users\hicri\source\repos\AviaTrain\obj\Debug\AviaTrain.csproj.CopyComplete
 C:\Users\hicri\source\repos\AviaTrain\obj\Debug\AviaTrain.dll
 C:\Users\hicri\source\repos\AviaTrain\obj\Debug\AviaTrain.pdb
 C:\Users\hicri\source\repos\AviaTrain\obj\Debug\AviaTrain.csprojAssemblyReference.cache
-C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.dll.licenses
-C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.csproj.CoreCompileInputs.cache
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\AviaTrain.dll.config
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\AviaTrain.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\AviaTrain.pdb
@@ -136,6 +134,7 @@ C:\Users\hicri\source\repos\TrainingDepartment.net\bin\roslyn\vbc.exe.config
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\roslyn\vbc.rsp
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\roslyn\VBCSCompiler.exe
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\hicri\source\repos\TrainingDepartment.net\bin\AjaxControlToolkit.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Antlr3.Runtime.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\AspNet.ScriptManager.bootstrap.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\AspNet.ScriptManager.jQuery.dll
@@ -163,8 +162,8 @@ C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.AspNet.Friendly
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\de\PdfSharp.resources.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\de\PdfSharp.Charting.resources.dll
+C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.dll.licenses
+C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.csproj.CoreCompileInputs.cache
 C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.csproj.CopyComplete
 C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.pdb
-C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.csprojAssemblyReference.cache
-C:\Users\hicri\source\repos\TrainingDepartment.net\bin\AjaxControlToolkit.dll

@@ -1139,9 +1139,11 @@
     <Content Include="SysAdmin\__CreateUser.aspx" />
     <Content Include="SysAdmin\SysAdminMain.aspx" />
     <Content Include="SysAdmin\ViewTrainingFolder.aspx" />
+    <Content Include="Trainings\AssignTraining.aspx" />
     <Content Include="Trainings\CreateTraining.aspx" />
     <Content Include="Trainings\CreateTrainingDesignPage.aspx" />
     <Content Include="Trainings\CreateTrainingFinish.aspx" />
+    <Content Include="Trainings\UserInTraining.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -1427,6 +1429,13 @@
     <Compile Include="SysAdmin\ViewTrainingFolder.aspx.designer.cs">
       <DependentUpon>ViewTrainingFolder.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Trainings\AssignTraining.aspx.cs">
+      <DependentUpon>AssignTraining.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Trainings\AssignTraining.aspx.designer.cs">
+      <DependentUpon>AssignTraining.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Trainings\CreateTraining.aspx.cs">
       <DependentUpon>CreateTraining.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1447,6 +1456,13 @@
     </Compile>
     <Compile Include="Trainings\CreateTrainingFinish.aspx.designer.cs">
       <DependentUpon>CreateTrainingFinish.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Trainings\UserInTraining.aspx.cs">
+      <DependentUpon>UserInTraining.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Trainings\UserInTraining.aspx.designer.cs">
+      <DependentUpon>UserInTraining.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
