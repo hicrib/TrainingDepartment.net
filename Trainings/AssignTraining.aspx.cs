@@ -16,12 +16,17 @@ namespace AviaTrain.Trainings
             if (!IsPostBack)
             {
                 //admin kontrol
-
+                ddl_trainings.DataSource = DB_Trainings.get_TrainingNames();
+                ddl_trainings.DataTextField = "NAME";
+                ddl_trainings.DataValueField = "ID";
+                ddl_trainings.DataBind();
 
                 list_allusers.DataSource = DB_System.get_ALL_Users(with_empty: false);
                 list_allusers.DataTextField = "NAME";
                 list_allusers.DataValueField = "ID";
                 list_allusers.DataBind();
+
+                Session["selected_users"] = null;
             }
         }
 
@@ -65,7 +70,55 @@ namespace AviaTrain.Trainings
             foreach (int i in list_chosens.GetSelectedIndices())
             {
                 DataRow[] d = dt.Select("ID = " + list_chosens.Items[i].Value);
+                if (!(d == null || d.Length == 0))
+                    dt.Rows.Remove(d[0]);
+            }
+            Session["selected_users"] = dt;
+            list_chosens.DataSource = dt;
+            list_chosens.DataTextField = "NAME";
+            list_chosens.DataValueField = "ID";
+            list_chosens.DataBind();
+        }
 
+        protected void btn_submit_Click(object sender, EventArgs e)
+        {
+            if(ddl_trainings.SelectedValue == "0")
+            {
+                lbl_pageresult.Text = "Chose a Training";
+                lbl_pageresult.Visible = true;
+                return;
+            }
+            DataTable dt = (DataTable)Session["selected_users"];
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                lbl_pageresult.Text = "Chose Trainees to assign";
+                lbl_pageresult.Visible = true;
+                return;
+            }
+            if(chk_timelimit.Checked && (txt_finishtime.Text == "" || txt_starttime.Text == ""))
+            {
+                lbl_pageresult.Text = "Chose Start&Finish Time";
+                lbl_pageresult.Visible = true;
+                return;
+            }
+
+
+            bool ok = DB_Trainings.Assign_Training(ddl_trainings.SelectedValue, txt_starttime.Text, txt_finishtime.Text, (DataTable)Session["selected_users"]);
+
+            if (ok)
+            {
+                lbl_pageresult.Text = "SUCCESS : Training is Assigned";
+                lbl_pageresult.Visible = true;
+
+                int[] itemsSelected = list_allusers.GetSelectedIndices();
+                for (int i = 0; i < itemsSelected.Length; i++)
+                    list_chosens.Items.RemoveAt(i);
+
+                ddl_trainings.SelectedValue = "0";
+
+                chk_timelimit.Checked = false;
+                txt_finishtime.Text = "";
+                txt_starttime.Text = "";
             }
         }
     }

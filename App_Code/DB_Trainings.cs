@@ -91,6 +91,42 @@ namespace AviaTrain.App_Code
             return false;
         }
 
+        public static bool Assign_Training (string trnid, string start, string finish, DataTable users)
+        {
+            UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
+
+            string insert = @"DECLARE @EXAMID INT = (SELECT EXTRA FROM TRN_STEP WHERE TRN_ID = @TRNID AND STEPTYPE ='EXAM_STEP')";
+
+           
+            foreach (DataRow row in users.Rows)
+            {
+                insert += @"
+                        INSERT INTO TRN_ASSIGNMENT 
+                        VALUES (@TRNID, "+ row["ID"].ToString() +" , 'ASSIGNED', '" + start + "', '" + finish + "' , NULL,NULL,NULL,@EXAMID, @BY, CONVERT(VARCHAR , GETUTCDATE(), 20 ),1 )";
+            }
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(insert, connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@TRNID", SqlDbType.Int).Value = trnid;
+                    command.Parameters.Add("@BY", SqlDbType.Int).Value = user.employeeid;
+                    command.CommandType = CommandType.Text;
+
+                    if (Convert.ToInt32(command.ExecuteNonQuery()) > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
+
 
         public static bool push_Step(string trnid, string stepid, string steptype, string texthtml, string fileaddress)
         {
@@ -321,5 +357,38 @@ namespace AviaTrain.App_Code
             return null;
         }
 
+
+        public static DataTable get_TrainingNames()
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                {
+                    using (SqlCommand command = new SqlCommand(
+                                @" 
+                                SELECT 0 AS ID, '---' AS [NAME]
+                                UNION 
+                                SELECT ID , NAME FROM TRN_TRAINING_DEF WHERE ISACTIVE = 1 ORDER BY NAME 
+                               ", connection))
+                    {
+                        connection.Open();
+                        SqlDataAdapter da = new SqlDataAdapter(command);
+                        da.Fill(res);
+
+                        if (res == null || res.Rows.Count == 0)
+                            return null;
+
+                        return res;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+
+        }
     }
 }
