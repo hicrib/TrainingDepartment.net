@@ -65,7 +65,8 @@ namespace AviaTrain.Trainings
             foreach (int i in list_chosens.GetSelectedIndices())
             {
                 DataRow[] d = dt.Select("ID = " + list_chosens.Items[i].Value);
-                if(d != null )
+
             }
+        }
     }
 }

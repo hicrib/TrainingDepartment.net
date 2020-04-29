@@ -167,3 +167,4 @@ C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.csproj.Co
 C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.csproj.CopyComplete
 C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.pdb
+C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.csprojAssemblyReference.cache
