@@ -24,22 +24,31 @@ namespace AviaTrain.Exams
         protected global::System.Web.UI.UpdatePanel update_panel;
 
         /// <summary>
-        /// grid_assignments control.
+        /// grid_examassignments control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grid_assignments;
+        protected global::System.Web.UI.WebControls.GridView grid_examassignments;
 
         /// <summary>
-        /// grid_completed control.
+        /// grid_examcompleted control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grid_completed;
+        protected global::System.Web.UI.WebControls.GridView grid_examcompleted;
+
+        /// <summary>
+        /// grid_assigned_training control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_assigned_training;
 
         /// <summary>
         /// btn_unusual control.

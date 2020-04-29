@@ -13,30 +13,32 @@ namespace AviaTrain.Exams
     {
         protected new void Page_Load(object sender, EventArgs e)
         {
-            //clean-up
-            Session["direct_dictionary"] = null;
-            Session["grid_questions"] = null; 
-            Session["chosen_questions"] = null; 
-            Session["current_exam_questions"] = null; 
-            Session["exam_result"] = null;
-            Session["exam_result_details"] = null;
-
-
-            //todo : if not instructor, if not system admin -> Trainee
-            // or came here as Trainee
-            UserSession user = (UserSession)Session["usersession"];
-
-            if (user.isAdmin)
-                Response.Redirect("~/SysAdmin/SysAdminMain.aspx");
-
             if (!IsPostBack)
             {
-                fill_grid_assignments();
-                fill_grid_completed();
+                //clean-up
+                Session["direct_dictionary"] = null;
+                Session["grid_questions"] = null;
+                Session["chosen_questions"] = null;
+                Session["current_exam_questions"] = null;
+                Session["exam_result"] = null;
+                Session["exam_result_details"] = null;
+
+
+                //todo : if not instructor, if not system admin -> Trainee
+                // or came here as Trainee
+                UserSession user = (UserSession)Session["usersession"];
+
+                if (user.isAdmin)
+                    Response.Redirect("~/SysAdmin/SysAdminMain.aspx");
+
+
+                fill_grid_examassignments();
+                fill_grid_examcompleted();
+                fill_grid_trainingassignments();
             }
         }
 
-        protected void fill_grid_assignments()
+        protected void fill_grid_examassignments()
         {
             UserSession user = (UserSession)Session["usersession"];
             DataTable dt = DB_Exams.get_Assignments_Open(user.employeeid);
@@ -44,10 +46,10 @@ namespace AviaTrain.Exams
             if (dt == null || dt.Rows.Count == 0)
                 return;
 
-            grid_assignments.DataSource = dt;
-            grid_assignments.DataBind();
+            grid_examassignments.DataSource = dt;
+            grid_examassignments.DataBind();
         }
-        protected void fill_grid_completed()
+        protected void fill_grid_examcompleted()
         {
             UserSession user = (UserSession)Session["usersession"];
             DataTable dt = DB_Exams.get_Assignments_Completed(user.employeeid);
@@ -55,28 +57,54 @@ namespace AviaTrain.Exams
             if (dt == null || dt.Rows.Count == 0)
                 return;
 
-            grid_completed.DataSource = dt;
-            grid_completed.DataBind();
+            grid_examcompleted.DataSource = dt;
+            grid_examcompleted.DataBind();
         }
 
-        protected void grid_assignments_RowCommand(object sender, GridViewCommandEventArgs e)
+        protected void fill_grid_trainingassignments()
         {
-            //todo : implement
+            UserSession user = (UserSession)Session["usersession"];
+            DataTable dt = DB_Trainings.get_Assigned_Trainings_open(user.employeeid);
+
+            if (dt == null || dt.Rows.Count == 0)
+                return;
+
+            grid_assigned_training.DataSource = dt;
+            grid_assigned_training.DataBind();
+        }
+
+        protected void grid_examassignments_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
             int index = Convert.ToInt32(e.CommandArgument);
-            GridViewRow selectedRow = grid_assignments.Rows[index];
+            GridViewRow selectedRow = grid_examassignments.Rows[index];
 
             string assignid = selectedRow.Cells[5].Text;
             Response.Redirect("~/Exams/UserInExam.aspx?AsID=" + assignid);
         }
 
-        protected void grid_assignments_RowDataBound(object sender, GridViewRowEventArgs e)
+        protected void grid_examassignments_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             e.Row.Cells[5].Visible = false; // hide ASSIGN_ID
         }
 
-        protected void grid_completed_RowDataBound(object sender, GridViewRowEventArgs e)
+        protected void grid_examcompleted_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             e.Row.Cells[4].Visible = false; // hide ASSIGN_ID
+        }
+
+
+        protected void grid_assigned_training_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            e.Row.Cells[5].Visible = false; // hide ASSIGN_ID
+        }
+
+        protected void grid_assigned_training_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            int index = Convert.ToInt32(e.CommandArgument);
+            GridViewRow selectedRow = grid_assigned_training.Rows[index];
+
+            string assignid = selectedRow.Cells[5].Text;
+            Response.Redirect("~/Trainings/UserInTraining.aspx?AsID=" + assignid);
         }
     }
 }

@@ -37,11 +37,12 @@ namespace AviaTrain.Exams
                         RedirectWithCode(problem);
 
 
-
-
-                DB_Exams.update_Exam_Assignment_USERSTART(assignid);
-                DB_Exams.update_Exam_Assignment_STATUS(assignid, "USER_STARTED");
-
+                string status = DB_Exams.get_Assignment_STATUS(assignid);
+                if (status == "USER_STARTED")
+                {
+                    DB_Exams.update_Exam_Assignment_USERSTART(assignid);
+                    DB_Exams.update_Exam_Assignment_STATUS(assignid, "USER_STARTED");
+                }
 
                 Fill_grid_questions_map();
 

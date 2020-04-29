@@ -55,7 +55,7 @@ namespace AviaTrain.App_Code
             return "";
         }
 
-        public static bool update_TRAINING_DEF(string trnid, string last_modify="", string last_modif_date="", string status ="",string extra ="", string isactive="" )
+        public static bool update_TRAINING_DEF(string trnid, string last_modify = "", string last_modif_date = "", string status = "", string extra = "", string isactive = "")
         {
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
             try
@@ -91,18 +91,19 @@ namespace AviaTrain.App_Code
             return false;
         }
 
-        public static bool Assign_Training (string trnid, string start, string finish, DataTable users)
+        public static bool Assign_Training(string trnid, string start, string finish, DataTable users)
         {
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
 
             string insert = @"DECLARE @EXAMID INT = (SELECT EXTRA FROM TRN_STEP WHERE TRN_ID = @TRNID AND STEPTYPE ='EXAM_STEP')";
 
-           
+            start = start == "" ? "2000-01-01" : start;
+            finish = finish == "" ? "2099-01-01" : finish;
             foreach (DataRow row in users.Rows)
             {
                 insert += @"
                         INSERT INTO TRN_ASSIGNMENT 
-                        VALUES (@TRNID, "+ row["ID"].ToString() +" , 'ASSIGNED', '" + start + "', '" + finish + "' , NULL,NULL,NULL,@EXAMID, @BY, CONVERT(VARCHAR , GETUTCDATE(), 20 ),1 )";
+                        VALUES (@TRNID, " + row["ID"].ToString() + " , 'ASSIGNED', '" + start + "', '" + finish + "' , NULL,NULL,NULL,@EXAMID, @BY, CONVERT(VARCHAR , GETUTCDATE(), 20 ),1 )";
             }
 
             try
@@ -357,6 +358,57 @@ namespace AviaTrain.App_Code
             return null;
         }
 
+        public static DataTable get_Assigned_Trainings_open(string employeeid)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @" 
+                                SELECT	DEF.NAME AS 'Training' ,
+		                                ASS.SCHEDULE_START as 'Starts',
+		                                ASS.SCHEDULE_FINISH AS 'Finishes',
+		                                CASE WHEN EXAMID IS NULL THEN 'No' ELSE 'Yes' END AS 'Exam?' ,
+		                                ASS.ASSIGNID,
+                                        ASS.STATUS AS 'Status'
+                                FROM TRN_ASSIGNMENT ASS 
+                                JOIN TRN_TRAINING_DEF DEF ON ASS.TRNID = DEF.ID 
+                                WHERE  ASS.STATUS = 'ASSIGNED' 
+                                AND ASS.ISACTIVE = 1 AND DEF.ISACTIVE = 1 AND ASS.USERID = @USERID
+                                AND convert(datetime, DEF.EFFECTIVE, 20) <= convert(datetime, GETUTCDATE(), 20)
+                                AND  convert(datetime, ASS.SCHEDULE_FINISH, 20) >= 
+							                                ( 
+							                                CASE WHEN ASS.SCHEDULE_FINISH <> '' THEN  convert(datetime, getutcdate(), 104)
+							                                ELSE  convert(datetime, ASS.SCHEDULE_FINISH, 20) END
+							                                )
+                                AND  convert(datetime, ASS.SCHEDULE_START, 20) <= 
+							                                ( 
+							                                CASE WHEN ASS.SCHEDULE_START <> '' THEN  convert(datetime, getutcdate(), 20)
+							                                ELSE  convert(datetime, ASS.SCHEDULE_START, 20) END
+							                                ) 
+                               ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = employeeid;
+                    command.CommandType = CommandType.Text;
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
+
+                    return res;
+
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
 
         public static DataTable get_TrainingNames()
         {

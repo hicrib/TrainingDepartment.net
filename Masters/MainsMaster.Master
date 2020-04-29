@@ -5,6 +5,8 @@
 <html>
 <head runat="server">
     <title></title>
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.7.3/jquery-ui.min.js" integrity="sha256-pYKd3m/N09PCc1/MM/f1Nk4PnaHrShF5ehtyZ0kdDds=" crossorigin="anonymous"></script>
     <script>
         function confirmation_Log_out() {
             if (confirm('Are you sure you want to Log Out?')) {

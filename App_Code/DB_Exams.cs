@@ -969,8 +969,6 @@ namespace AviaTrain.App_Code
                 using (SqlCommand command = new SqlCommand(@"
                                 SELECT 
                                 CASE 
-	                                WHEN [STATUS] = 'USER_STARTED' 
-			                                THEN 'EXAM IS STARTED BEFORE'
 	                                WHEN [STATUS] = 'FAILED' OR [STATUS] = 'PASSED'
 			                                THEN 'EXAM ALREADY FINISHED'
 	                                WHEN convert(datetime, getutcdate(), 104) < convert(datetime, SCHEDULE_START, 104) 
@@ -1053,17 +1051,17 @@ namespace AviaTrain.App_Code
                 using (SqlCommand command = new SqlCommand(
                             @" 
                                   SELECT EDEF.NAME AS 'Exam Name' , 
-                                     CASE 
-	                                    WHEN convert(datetime, getutcdate(), 104) < convert(datetime, ASS.SCHEDULE_START, 104) 
-		                                    THEN 'Waiting for Start'  
-	                                    WHEN convert(datetime, getutcdate(), 104) > convert(datetime, SCHEDULE_FINISH, 104)
-		                                    THEN 'No Show'
-	                                    ELSE ASS.STATUS 
-                                     END AS 'Status' ,
-                                        ASS.SCHEDULE_START as 'Starts' , ASS.SCHEDULE_FINISH as 'Finishes', ASS.ASSIGN_ID 
+                                      STATUS AS 'Status' ,
+                                      ASS.SCHEDULE_START as 'Starts' , 
+                                      ASS.SCHEDULE_FINISH as 'Finishes', 
+                                      ASS.ASSIGN_ID 
                                    FROM EXM_EXAM_ASSIGNMENT ASS
                                    JOIN EXM_EXAM_DEFINITION EDEF ON EDEF.ID = ASS.EXAM_ID
-                                   WHERE ASS.TRAINEE_ID = @TRAINEE_ID AND ASS.STATUS = 'ASSIGNED' AND EDEF.ISACTIVE=1
+                                   WHERE ASS.TRAINEE_ID = @TRAINEE_ID 
+                                    AND ( ASS.STATUS = 'ASSIGNED' OR ASS.STATUS = 'USER_STARTED')
+                                    AND EDEF.ISACTIVE=1 
+                                    AND convert(datetime, getutcdate(), 104) <= convert(datetime, SCHEDULE_FINISH, 104)
+                                    AND convert(datetime, getutcdate(), 104) >= convert(datetime, ASS.SCHEDULE_START, 104)
                                 ", connection))
                 {
                     connection.Open();
@@ -1110,7 +1108,30 @@ namespace AviaTrain.App_Code
             //something went wrong
             return "";
         }
-        
+        public static string get_Assignment_STATUS(string assignid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(@"
+                               SELECT STATUS  FROM EXM_EXAM_ASSIGNMENT WHERE ASSIGN_ID = @ASSIGNID  ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@ASSIGNID", SqlDbType.Int).Value = assignid;
+                    command.CommandType = CommandType.Text;
+
+                    return Convert.ToString(command.ExecuteScalar());
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            //something went wrong
+            return "";
+        }
+
 
 
 
