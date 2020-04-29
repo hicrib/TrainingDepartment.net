@@ -24,14 +24,6 @@ namespace AviaTrain.Exams
                 Session["exam_result_details"] = null;
 
 
-                //todo : if not instructor, if not system admin -> Trainee
-                // or came here as Trainee
-                UserSession user = (UserSession)Session["usersession"];
-
-                if (user.isAdmin)
-                    Response.Redirect("~/SysAdmin/SysAdminMain.aspx");
-
-
                 fill_grid_examassignments();
                 fill_grid_examcompleted();
                 fill_grid_trainingassignments();

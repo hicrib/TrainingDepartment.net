@@ -11,7 +11,7 @@ namespace AviaTrain.Exams
 {
 
 
-    public partial class Exam_ErrorPage
+    public partial class ErrorPage
     {
 
         /// <summary>

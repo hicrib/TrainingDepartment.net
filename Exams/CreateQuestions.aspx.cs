@@ -17,10 +17,6 @@ namespace AviaTrain.Exams
         {
             if (!IsPostBack)
             {
-                UserSession user = (UserSession)Session["usersession"];
-                if (!(user.isAdmin || user.isExamAdmin))
-                    RedirectWithCode("UNAUTHORIZED !");
-
                 string last_mode = Convert.ToString(Request.QueryString["NoLast"]);
                 if (!String.IsNullOrEmpty(last_mode))
                     lbl_use_lastadded.Text = "0";

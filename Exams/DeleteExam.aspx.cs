@@ -15,10 +15,6 @@ namespace AviaTrain.Exams
         {
             if(!IsPostBack)
             {
-                UserSession user = (UserSession)Session["usersession"];
-                if (!user.isAdmin)
-                    RedirectWithCode("UNAUTHORIZED !");
-
                 DataTable exams = DB_Exams.get_Exams();
                 if (exams != null)
                 {

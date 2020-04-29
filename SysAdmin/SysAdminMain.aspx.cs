@@ -18,10 +18,7 @@ namespace AviaTrain.SysAdmin
                 Session["direct_dictionary"] = null; //clean-up
                 Session["chosen_questions"] = null; //clean-up
                 Session["exam_result_details"] = null;
-
-                UserSession user = (UserSession)Session["usersession"];
-                if (!user.isAdmin)
-                    RedirectWithCode("UNAUTHORIZED !");
+                 
             }
         }
 

@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 
 using System.Data;
 using System.IO;
+using Microsoft.Ajax.Utilities;
 
 namespace AviaTrain
 {
@@ -15,24 +16,31 @@ namespace AviaTrain
     {
         protected override void OnPreInit(EventArgs e)
         {
-            Page.MaintainScrollPositionOnPostBack = true;
 
-            UserSession user = (UserSession)Session["usersession"];
-            if (user == null)
+            if (!IsPostBack)
             {
-                Response.Redirect("~/Pages/login.aspx");
+                Page.MaintainScrollPositionOnPostBack = true;
+
+                UserSession user = (UserSession)Session["usersession"];
+                if (user == null)
+                    Response.Redirect("~/Pages/login.aspx");
+
+
+                RoleControlForPage();
+
+                DB_System.log_pages(user.employeeid, HttpContext.Current.Request.Url.AbsoluteUri);
             }
 
-            DB_System.log_pages(user.employeeid, HttpContext.Current.Request.Url.AbsoluteUri);
+
 
             base.OnPreInit(e);
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            Page.MaintainScrollPositionOnPostBack = true;
+
         }
 
-        public virtual void ClientMessage(Label sender , string message, System.Drawing.Color color)
+        public virtual void ClientMessage(Label sender, string message, System.Drawing.Color color)
         {
             sender.Text = message;
             sender.Visible = true;
@@ -40,12 +48,32 @@ namespace AviaTrain
 
         protected void RedirectWithCode(string message = "System Error : Try Again Later")
         {
-            Response.Redirect("~/Exams/Exam_ErrorPage.aspx?Code=" + message);//todo : error message for authorization
+            Response.Redirect("~/Exams/ErrorPage.aspx?Code=" + message);//todo : error message for authorization
         }
 
         protected void SuccessWithCode(string message = "SUCCESS !")
         {
             Response.Redirect("~/Pages/SuccessPage.aspx?Code=" + message);
+        }
+
+
+        protected void RoleControlForPage()
+        {
+            UserSession user = (UserSession)Session["usersession"];
+
+            //has every right 
+            if (user.isAdmin)
+                return;
+
+
+            string page = Server.MapPath(Page.AppRelativeVirtualPath);
+
+            DataRow[] alloweds = user.roles_pages.Select("ROLE_NAME = '" + page + "'");
+            if (alloweds != null && alloweds.Length > 0)
+                return; //allowed for this page
+            else
+                RedirectWithCode("UNAUTHORIZED !");
+
         }
 
     }

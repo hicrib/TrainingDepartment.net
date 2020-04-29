@@ -15,10 +15,7 @@ namespace AviaTrain.Exams
         {
             if (!IsPostBack)
             {
-                UserSession user = (UserSession)Session["usersession"];
-                if (!user.isAdmin)
-                    RedirectWithCode("UNAUTHORIZED !");
-
+                
                 Fill_Exam_Names();
                 Fill_Trainees();
             }

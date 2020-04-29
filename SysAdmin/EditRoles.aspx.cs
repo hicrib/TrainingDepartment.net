@@ -14,12 +14,7 @@ namespace AviaTrain.SysAdmin
         protected new void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
-            {
-                UserSession user = (UserSession)Session["usersession"];
-
-                if (!user.isAdmin)
-                    RedirectWithCode("UNAUTHORIZED !");
-
+            { 
                 //fill users
                 ddl_users.DataSource = DB_System.get_ALL_Users();
                 ddl_users.DataTextField = "NAME";

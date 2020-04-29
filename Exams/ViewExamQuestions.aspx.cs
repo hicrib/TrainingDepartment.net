@@ -7,11 +7,11 @@ using System.Web.UI.WebControls;
 
 namespace AviaTrain.Exams
 {
-    public partial class ViewExamQuestions : System.Web.UI.Page
+    public partial class ViewExamQuestions : MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            //todo : implement
         }
     }
 }

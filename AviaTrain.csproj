@@ -190,7 +190,7 @@
     <Content Include="Exams\CreateExam.aspx" />
     <Content Include="Exams\CreateQuestions.aspx" />
     <Content Include="Exams\DeleteExam.aspx" />
-    <Content Include="Exams\Exam_ErrorPage.aspx" />
+    <Content Include="Pages\ErrorPage.aspx" />
     <Content Include="Exams\Exam_MainAdmin.aspx" />
     <Content Include="Exams\Exam_MainGeneral.aspx" />
     <Content Include="Exams\Unusual\index.htm" />
@@ -1242,12 +1242,12 @@
     <Compile Include="Exams\DeleteExam.aspx.designer.cs">
       <DependentUpon>DeleteExam.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Exams\Exam_ErrorPage.aspx.cs">
-      <DependentUpon>Exam_ErrorPage.aspx</DependentUpon>
+    <Compile Include="Pages\ErrorPage.aspx.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Exams\Exam_ErrorPage.aspx.designer.cs">
-      <DependentUpon>Exam_ErrorPage.aspx</DependentUpon>
+    <Compile Include="Pages\ErrorPage.aspx.designer.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Exams\Exam_MainAdmin.aspx.cs">
       <DependentUpon>Exam_MainAdmin.aspx</DependentUpon>

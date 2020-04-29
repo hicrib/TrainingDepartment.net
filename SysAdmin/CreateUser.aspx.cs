@@ -15,12 +15,6 @@ namespace AviaTrain.SysAdmin
         {
             if (!IsPostBack)
             {
-                UserSession user = (UserSession)Session["usersession"];
-
-                if (!user.isAdmin)
-                    RedirectWithCode("UNAUTHORIZED !");
-
-
                 DataTable roles = DB_System.get_ALL_Roles();
                 if (roles != null && roles.Rows.Count != 0)
                 {

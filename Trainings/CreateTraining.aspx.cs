@@ -14,12 +14,7 @@ namespace AviaTrain.Trainings
         protected new void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
-            {
-                //admin kontrol
-                UserSession user = (UserSession)Session["usersession"];
-
-                if (!(user.isAdmin || user.isExamAdmin))
-                    RedirectWithCode("UNAUTHORIZED");
+            { 
 
             }
 

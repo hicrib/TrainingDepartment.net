@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace AviaTrain.Exams
 {
-    public partial class Exam_MainAdmin : System.Web.UI.Page
+    public partial class Exam_MainAdmin : MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {

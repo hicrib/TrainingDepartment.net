@@ -15,11 +15,6 @@ namespace AviaTrain.Exams
         {
             if (!IsPostBack)
             {
-                UserSession user = (UserSession)Session["usersession"];
-                if (!(user.isAdmin || !user.isExamAdmin))
-                    RedirectWithCode("UNAUTHORIZED !");
-
-
                 DataTable dt = (DataTable)Session["chosen_questions"];
                 if (dt == null)
                 {

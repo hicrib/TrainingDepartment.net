@@ -15,13 +15,7 @@ namespace AviaTrain.Trainings
         {
 
             if (!IsPostBack)
-            {
-                //admin kontrol
-                UserSession user = (UserSession)Session["usersession"];
-
-                if (!(user.isAdmin || user.isExamAdmin))
-                    RedirectWithCode("UNAUTHORIZED");
-
+            { 
                 string trn_id = Convert.ToString(Request.QueryString["T"]);
                 string step_id = Convert.ToString(Request.QueryString["S"]);
                 if (String.IsNullOrWhiteSpace(trn_id) || (String.IsNullOrWhiteSpace(step_id)))

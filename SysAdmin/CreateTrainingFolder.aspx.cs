@@ -15,10 +15,6 @@ namespace AviaTrain.SysAdmin
         {
             if (!IsPostBack)
             {
-                UserSession user = (UserSession)Session["usersession"];
-                if (!user.isAdmin)
-                    RedirectWithCode("UNAUTHORIZED !");
-
                 Fill_Page_Elements();
             }
         }

@@ -16,11 +16,7 @@ namespace AviaTrain.Trainings
             // querystring T , S(last_step_id must create new one"
 
             if (!IsPostBack)
-            {
-                UserSession user = (UserSession)Session["usersession"];
-                if (!(user.isAdmin || user.isExamAdmin))
-                    RedirectWithCode("UNAUTHORIZED");
-
+            { 
                 string t = Convert.ToString(Request.QueryString["T"]);
                 string s = Convert.ToString(Request.QueryString["S"]);
                 if (t == "" || s == "")

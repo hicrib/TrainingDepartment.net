@@ -638,5 +638,41 @@ namespace AviaTrain.App_Code
 
             return "0";
         }
+
+
+
+
+        public static DataTable get_ROLES_PAGES(string employeeid)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                           @"SELECT DISTINCT PAGE_NAME
+                                FROM ROLES_PAGES RP
+                                JOIN ROLE_DEFINITION RDEF ON RDEF.NAME = RP.ROLE_NAME
+                                JOIN USER_ROLES UR ON UR.ROLEID = RDEF.ID
+                                WHERE UR.EMPLOYEEID = @USERID"
+                                   , connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add(@"USERID", SqlDbType.Int).Value = employeeid;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
+
+                    return res;
+                }
+
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
     }
 }
