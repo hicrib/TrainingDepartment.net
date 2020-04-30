@@ -48,7 +48,7 @@ namespace AviaTrain
 
         protected void RedirectWithCode(string message = "System Error : Try Again Later")
         {
-            Response.Redirect("~/Exams/ErrorPage.aspx?Code=" + message);//todo : error message for authorization
+            Response.Redirect("~/Pages/ErrorPage.aspx?Code=" + message);//todo : error message for authorization
         }
 
         protected void SuccessWithCode(string message = "SUCCESS !")
@@ -66,9 +66,9 @@ namespace AviaTrain
                 return;
 
 
-            string page = Server.MapPath(Page.AppRelativeVirtualPath);
+            string page = (Page.AppRelativeVirtualPath.Split('.')[0]).Split('/')[2];
 
-            DataRow[] alloweds = user.roles_pages.Select("ROLE_NAME = '" + page + "'");
+            DataRow[] alloweds = user.roles_pages.Select("PAGE_NAME = '" + page + "'");
             if (alloweds != null && alloweds.Length > 0)
                 return; //allowed for this page
             else

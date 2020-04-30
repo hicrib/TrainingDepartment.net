@@ -17,6 +17,11 @@ namespace AviaTrain.Exams
 
             if (!IsPostBack)
             {
+                //flag for training exam
+                string trn_assignid = (string)Session["from_training"];
+                if (trn_assignid != null)
+                    lbl_trn_assignid.Text = trn_assignid;
+
                 UserSession user = (UserSession)Session["usersession"];
 
                 string assignid = Convert.ToString(Request.QueryString["AsID"]);
@@ -38,11 +43,9 @@ namespace AviaTrain.Exams
 
 
                 string status = DB_Exams.get_Assignment_STATUS(assignid);
-                if (status == "USER_STARTED")
-                {
-                    DB_Exams.update_Exam_Assignment_USERSTART(assignid);
-                    DB_Exams.update_Exam_Assignment_STATUS(assignid, "USER_STARTED");
-                }
+                if (status == "ASSIGNED")
+                    DB_Exams.update_Exam_Assignment(assignid, userstart: "now", status: "USER_STARTED");
+
 
                 Fill_grid_questions_map();
 
@@ -77,7 +80,7 @@ namespace AviaTrain.Exams
 
             //might be possible if a question is deleted , works upto 2 deletions
             DataRow[] dr = dt.Select("Question = " + nextorderby);
-            if (dr == null || dr.Length == 0) 
+            if (dr == null || dr.Length == 0)
             {
                 nextorderby = (Convert.ToInt32(lbl_current_orderby.Text) + 2).ToString();
                 dr = dt.Select("Question = " + nextorderby);
@@ -448,59 +451,61 @@ namespace AviaTrain.Exams
             float total_exam_points = 0;
             float total_user_points = 0;
 
-            foreach (DataRow row in questions.Rows)
-            {
-                string q_id = row["Q_ID"].ToString();
-                string q_type = row["TYPE"].ToString();
-                float q_point = Convert.ToInt32(row["POINT"]);
-
-                string user_ans1 = row["user_ans1"].ToString().ToUpper(); //ops uses only this
-                string user_ans2 = row["user_ans2"].ToString().ToUpper();
-                string user_ans3 = row["user_ans3"].ToString().ToUpper();
-
-                string real_ans1_acc1 = row["real_ans1_acc1"].ToString().ToUpper(); //ops uses only this
-                string real_ans1_acc2 = row["real_ans1_acc2"].ToString().ToUpper();
-                string real_ans1_acc3 = row["real_ans1_acc3"].ToString().ToUpper();
-
-                string real_ans2_acc1 = row["real_ans2_acc1"].ToString().ToUpper();
-                string real_ans2_acc2 = row["real_ans2_acc2"].ToString().ToUpper();
-                string real_ans2_acc3 = row["real_ans2_acc3"].ToString().ToUpper();
-
-                string real_ans3_acc1 = row["real_ans3_acc1"].ToString().ToUpper();
-                string real_ans3_acc2 = row["real_ans3_acc2"].ToString().ToUpper();
-                string real_ans3_acc3 = row["real_ans3_acc3"].ToString().ToUpper();
-
-                total_exam_points += q_point; //maybe total isn't 100
-
-                if (q_type == "2" || q_type == "3" || q_type == "4")
+            bool empty = questions == null || questions.Rows.Count == 0;
+            if (!empty)
+                foreach (DataRow row in questions.Rows)
                 {
-                    if (real_ans1_acc1 == user_ans1)
-                        total_user_points += q_point;
-                }
-                else if (q_type == "FILL")
-                {
-                    //howmany blanks to be filled in question definition
-                    int howmany_blank = 0;
-                    if (real_ans1_acc1 + real_ans1_acc2 + real_ans1_acc3 != "")
-                        howmany_blank++;
-                    if (real_ans2_acc1 + real_ans2_acc2 + real_ans2_acc3 != "")
-                        howmany_blank++;
-                    if (real_ans3_acc1 + real_ans3_acc2 + real_ans3_acc3 != "")
-                        howmany_blank++;
+                    string q_id = row["Q_ID"].ToString();
+                    string q_type = row["TYPE"].ToString();
+                    float q_point = Convert.ToInt32(row["POINT"]);
 
-                    if (howmany_blank > 0)
-                        if (user_ans1 == real_ans1_acc1 || user_ans1 == real_ans1_acc2 || user_ans1 == real_ans1_acc3)
-                            total_user_points += (q_point / (float)howmany_blank);
-                    if (howmany_blank > 1)
-                        if (user_ans2 == real_ans2_acc1 || user_ans2 == real_ans2_acc2 || user_ans2 == real_ans2_acc3)
-                            total_user_points += (q_point / (float)howmany_blank);
-                    if (howmany_blank > 2)
-                        if (user_ans3 == real_ans3_acc1 || user_ans3 == real_ans3_acc2 || user_ans3 == real_ans3_acc3)
-                            total_user_points += (q_point / (float)howmany_blank);
-                }
-            }
+                    string user_ans1 = row["user_ans1"].ToString().ToUpper(); //ops uses only this
+                    string user_ans2 = row["user_ans2"].ToString().ToUpper();
+                    string user_ans3 = row["user_ans3"].ToString().ToUpper();
 
-            float grade = ((total_user_points / total_exam_points) * 100);
+                    string real_ans1_acc1 = row["real_ans1_acc1"].ToString().ToUpper(); //ops uses only this
+                    string real_ans1_acc2 = row["real_ans1_acc2"].ToString().ToUpper();
+                    string real_ans1_acc3 = row["real_ans1_acc3"].ToString().ToUpper();
+
+                    string real_ans2_acc1 = row["real_ans2_acc1"].ToString().ToUpper();
+                    string real_ans2_acc2 = row["real_ans2_acc2"].ToString().ToUpper();
+                    string real_ans2_acc3 = row["real_ans2_acc3"].ToString().ToUpper();
+
+                    string real_ans3_acc1 = row["real_ans3_acc1"].ToString().ToUpper();
+                    string real_ans3_acc2 = row["real_ans3_acc2"].ToString().ToUpper();
+                    string real_ans3_acc3 = row["real_ans3_acc3"].ToString().ToUpper();
+
+                    total_exam_points += q_point; //maybe total isn't 100
+
+                    if (q_type == "2" || q_type == "3" || q_type == "4")
+                    {
+                        if (real_ans1_acc1 == user_ans1)
+                            total_user_points += q_point;
+                    }
+                    else if (q_type == "FILL")
+                    {
+                        //howmany blanks to be filled in question definition
+                        int howmany_blank = 0;
+                        if (real_ans1_acc1 + real_ans1_acc2 + real_ans1_acc3 != "")
+                            howmany_blank++;
+                        if (real_ans2_acc1 + real_ans2_acc2 + real_ans2_acc3 != "")
+                            howmany_blank++;
+                        if (real_ans3_acc1 + real_ans3_acc2 + real_ans3_acc3 != "")
+                            howmany_blank++;
+
+                        if (howmany_blank > 0)
+                            if (user_ans1 == real_ans1_acc1 || user_ans1 == real_ans1_acc2 || user_ans1 == real_ans1_acc3)
+                                total_user_points += (q_point / (float)howmany_blank);
+                        if (howmany_blank > 1)
+                            if (user_ans2 == real_ans2_acc1 || user_ans2 == real_ans2_acc2 || user_ans2 == real_ans2_acc3)
+                                total_user_points += (q_point / (float)howmany_blank);
+                        if (howmany_blank > 2)
+                            if (user_ans3 == real_ans3_acc1 || user_ans3 == real_ans3_acc2 || user_ans3 == real_ans3_acc3)
+                                total_user_points += (q_point / (float)howmany_blank);
+                    }
+                }
+
+            float grade = empty ? 0 : ((total_user_points / total_exam_points) * 100);
 
             string dummy = (lbl_examname.Text.Split('%')[0]);
             string passpercent = dummy.Substring(dummy.Length - 2, 2);
@@ -511,31 +516,31 @@ namespace AviaTrain.Exams
                 passfail = "PASSED";
 
 
-            if (!DB_Exams.update_Exam_Assignment_STATUS(lbl_assignid.Text, passfail))
-                RedirectWithCode("System Error : Exam Status can't be updated");
-
-            if (!DB_Exams.update_Exam_Assignment_USERFINISH(lbl_assignid.Text))
-                RedirectWithCode("System Error : Exam Finish time can't be updated");
-
-            if (!DB_Exams.update_Exam_Assignment_GRADE(lbl_assignid.Text, grade.ToString("0.00")))
-                RedirectWithCode("System Error : Exam grade can't be updated");
+            if (!DB_Exams.update_Exam_Assignment(lbl_assignid.Text, status: passfail, userfinish: "now", grade: grade.ToString("0.00")))
+                RedirectWithCode("System Error : Exam Assignment can't be updated");
 
             //send the results to result page
             Dictionary<string, string> exam_result = new Dictionary<string, string>();
             exam_result.Add("assignid", lbl_assignid.Text);
-            exam_result.Add("total_exam_points", Convert.ToInt32(total_exam_points).ToString());
+            exam_result.Add("total_exam_points", empty ? "100" : Convert.ToInt32(total_exam_points).ToString());
             exam_result.Add("total_user_points", Convert.ToInt32(total_user_points).ToString());
             exam_result.Add("grade", grade.ToString("0.00"));
             exam_result.Add("exam_name", lbl_examname.Text);
 
-            Session["exam_result"] = exam_result;
-            Response.Redirect("~/Exams/UserExamResult.aspx");
 
+            if (lbl_trn_assignid.Text != "") //coming from a training 
+            {
+                exam_result.Add("trn_assignid", lbl_trn_assignid.Text);
+                Session["exam_result"] = exam_result;
+                //send back to training result, do everything there
+                Response.Redirect("~/Trainings/UserTrainingResult.aspx");
+            }
+            else
+            {
+                Session["exam_result"] = exam_result;
+                Response.Redirect("~/Exams/UserExamResult.aspx");
+            }
         }
-
-
-
-
 
     }
 }

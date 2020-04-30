@@ -45,8 +45,8 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@ANSWER", SqlDbType.VarChar).Value = answer;
                     command.CommandType = CommandType.Text;
 
-                    string qid=Convert.ToString(command.ExecuteScalar());
-                    if (qid !="")
+                    string qid = Convert.ToString(command.ExecuteScalar());
+                    if (qid != "")
                         return qid;
                 }
             }
@@ -152,7 +152,7 @@ namespace AviaTrain.App_Code
 
         }
 
-        public static bool push_EXAM_Assignment(string examid, string traineeid, string schedule_start, string schedule_finish)
+        public static string push_EXAM_Assignment(string examid, string traineeid, string schedule_start, string schedule_finish)
         {
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
 
@@ -160,7 +160,15 @@ namespace AviaTrain.App_Code
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(@"
-                      INSERT INTO EXM_EXAM_ASSIGNMENT VALUES (@EXAM_ID, @TRAINEE_ID, 'ASSIGNED', @START, @FINISH, NULL, NULL, NULL, @BY , convert(varchar, getutcdate(), 20)  )  ", connection))
+                        IF NOT EXISTS  (SELECT ASSIGN_ID FROM EXM_EXAM_ASSIGNMENT WHERE EXAM_ID = @EXAM_ID AND TRAINEE_ID = @TRAINEE_ID AND (STATUS = 'ASSIGNED' OR STATUS ='USER_STARTED') )
+                        BEGIN
+		                        INSERT INTO EXM_EXAM_ASSIGNMENT VALUES (@EXAM_ID, @TRAINEE_ID, 'ASSIGNED', @START, @FINISH, NULL, NULL, NULL, @BY , convert(varchar, getutcdate(), 20)  )  
+                                SELECT SCOPE_IDENTITY() 
+                        END
+                        ELSE
+                        BEGIN
+		                         SELECT ASSIGN_ID FROM EXM_EXAM_ASSIGNMENT WHERE EXAM_ID = @EXAM_ID AND TRAINEE_ID = @TRAINEE_ID AND (STATUS = 'ASSIGNED' OR STATUS ='USER_STARTED')
+                        END", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@EXAM_ID", SqlDbType.Int).Value = examid;
@@ -171,8 +179,8 @@ namespace AviaTrain.App_Code
 
                     command.CommandType = CommandType.Text;
 
-                    if (command.ExecuteNonQuery() > 0)
-                        return true;
+                    string assignid = Convert.ToString(command.ExecuteScalar());
+                    return assignid;
                 }
             }
             catch (Exception e)
@@ -181,7 +189,7 @@ namespace AviaTrain.App_Code
             }
 
             //something went wrong
-            return false;
+            return "";
         }
 
         public static bool push_Exam_Answer(string assignid, string qid, string ans1, string ans2, string ans3)
@@ -252,95 +260,24 @@ namespace AviaTrain.App_Code
             return false;
         }
 
-        public static bool update_Exam_Assignment_STATUS(string assignid, string status)
+        public static bool update_Exam_Assignment(string assignid, string status ="",string userstart ="",string userfinish= "", string grade="")
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
-                    @" UPDATE EXM_EXAM_ASSIGNMENT SET STATUS = @STATUS WHERE ASSIGN_ID = @ASSIGN_ID ", connection))
+                    @" UPDATE EXM_EXAM_ASSIGNMENT 
+                                        SET STATUS = CASE WHEN  @STATUS = '' THEN STATUS ELSE @STATUS END,
+                                            USER_START = CASE WHEN @USERSTART = '' THEN USER_START ELSE CONVERT(VARCHAR, GETUTCDATE(),20) END,
+                                            USER_FINISH = CASE WHEN @USERFINISH = '' THEN USER_FINISH ELSE CONVERT(VARCHAR, GETUTCDATE(),20) END,
+                                            GRADE = CASE WHEN @GRADE = '' THEN GRADE ELSE @GRADE END
+                        WHERE ASSIGN_ID = @ASSIGN_ID ", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@ASSIGN_ID", SqlDbType.Int).Value = assignid;
                     command.Parameters.Add("@STATUS", SqlDbType.NVarChar).Value = status;
-
-                    command.CommandType = CommandType.Text;
-
-                    if (command.ExecuteNonQuery() > 0)
-                        return true;
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-            }
-
-            //something went wrong
-            return false;
-        }
-
-        public static bool update_Exam_Assignment_USERSTART(string assignid)
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(
-                    @" UPDATE EXM_EXAM_ASSIGNMENT SET USER_START =convert(varchar, getutcdate(), 20) WHERE ASSIGN_ID = @ASSIGN_ID ", connection))
-                {
-                    connection.Open();
-                    command.Parameters.Add("@ASSIGN_ID", SqlDbType.Int).Value = assignid;
-
-                    command.CommandType = CommandType.Text;
-
-                    if (command.ExecuteNonQuery() > 0)
-                        return true;
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-            }
-
-            //something went wrong
-            return false;
-        }
-
-        public static bool update_Exam_Assignment_USERFINISH(string assignid)
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(
-                    @" UPDATE EXM_EXAM_ASSIGNMENT SET USER_FINISH =convert(varchar, getutcdate(), 20)  WHERE ASSIGN_ID = @ASSIGN_ID ", connection))
-                {
-                    connection.Open();
-                    command.Parameters.Add("@ASSIGN_ID", SqlDbType.Int).Value = assignid;
-
-                    command.CommandType = CommandType.Text;
-
-                    if (command.ExecuteNonQuery() > 0)
-                        return true;
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-            }
-
-            //something went wrong
-            return false;
-        }
-
-        public static bool update_Exam_Assignment_GRADE(string assignid, string grade)
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(
-                    @" UPDATE EXM_EXAM_ASSIGNMENT SET GRADE = @GRADE WHERE ASSIGN_ID = @ASSIGN_ID ", connection))
-                {
-                    connection.Open();
-                    command.Parameters.Add("@ASSIGN_ID", SqlDbType.Int).Value = assignid;
+                    command.Parameters.Add("@USERSTART", SqlDbType.NVarChar).Value = userstart;
+                    command.Parameters.Add("@USERFINISH", SqlDbType.NVarChar).Value = userfinish;
                     command.Parameters.Add("@GRADE", SqlDbType.NVarChar).Value = grade;
 
                     command.CommandType = CommandType.Text;
@@ -532,7 +469,7 @@ namespace AviaTrain.App_Code
 
 
         //THIS FUNCTION DOESNT LOOK FOR ISACTIVE QUESTIONS, BRINGS THEM ALL
-        //gets type and question itself without answer
+        //gets type and question definition without useranswer
         public static DataTable get_ONE_question(string id)
         {
             DataTable res = new DataTable();
@@ -576,7 +513,7 @@ namespace AviaTrain.App_Code
 
 
 
-       //gets exams for assignment creation
+        //gets exams for assignment creation
         public static DataTable get_Exams(bool onlyisactive = true)
         {
             DataTable res = new DataTable();
@@ -612,7 +549,7 @@ namespace AviaTrain.App_Code
 
 
         }
-        
+
         //gets exam trainees for assignment creation
         public static DataTable get_EXAM_TRAINEES(bool onlyisactive = true)
         {
@@ -650,9 +587,9 @@ namespace AviaTrain.App_Code
         }
 
 
-       
 
-        
+
+
         //gets ORDERBY , id, SOLVED
         public static DataTable get_EXAM_QUESTIONS_by_assignid(string assignid)
         {
@@ -752,7 +689,7 @@ namespace AviaTrain.App_Code
                 using (SqlConnection connection = new SqlConnection(con_str))
                 {
                     using (SqlCommand command = new SqlCommand(
-                                @"SELECT TOP " +howmany + @" * FROM (
+                                @"SELECT TOP " + howmany + @" * FROM (
                                                     SELECT  
                                                     OPS.ID AS 'ID' , Q.SECTOR, OPS.Q AS 'Question' , 
                                                     CASE WHEN OPS.ANSWER = 'A' THEN OPS.OPA
@@ -828,7 +765,7 @@ namespace AviaTrain.App_Code
         }
 
 
-        
+
 
 
         //THIS FUNCTION DOESNT LOOK FOR ISACTIVE QUESTIONS, BRINGS THEM ALL BECAUSE USER HAS ALREADY ANSWERED
@@ -971,9 +908,9 @@ namespace AviaTrain.App_Code
                                 CASE 
 	                                WHEN [STATUS] = 'FAILED' OR [STATUS] = 'PASSED'
 			                                THEN 'EXAM ALREADY FINISHED'
-	                                WHEN convert(datetime, getutcdate(), 104) < convert(datetime, SCHEDULE_START, 104) 
+	                                WHEN convert(datetime, getutcdate(), 20) < convert(datetime, SCHEDULE_START, 20) 
 			                                THEN 'EXAM SCHEDULED TO A LATER DATE'
-	                                 WHEN convert(datetime, getutcdate(), 104) > convert(datetime, SCHEDULE_FINISH, 104)
+	                                 WHEN convert(datetime, getutcdate(), 20) > convert(datetime, SCHEDULE_FINISH, 20)
 			                                THEN 'EXAM TIME IS EXPIRED'
 	                                 WHEN TRAINEE_ID <> @TRAINEE_ID
 			                                THEN 'NOT ASSIGNED TO THIS USER' 
@@ -1137,7 +1074,7 @@ namespace AviaTrain.App_Code
 
 
 
-        public static DataTable View_Training_Results(string examid, bool onlyactiveexam,  string start_date, string finish_date,
+        public static DataTable View_Training_Results(string examid, bool onlyactiveexam, string start_date, string finish_date,
                                                         string traineeid, bool onlyactivetrainee,
                                                         string passfailnoshow, string grade_start, string grade_finish)
         {
@@ -1181,7 +1118,7 @@ U.ISACTIVE = CASE WHEN @ONLYACTIVETRAINEE = 1 THEN 1 ELSE U.ISACTIVE END
                 {
                     connection.Open();
                     command.Parameters.Add("@USE_EXAMID", SqlDbType.Int).Value = examid == "" ? 0 : 1;
-                    command.Parameters.Add("@EXAMID", SqlDbType.Int).Value = examid == "" ? "123456" : examid ;
+                    command.Parameters.Add("@EXAMID", SqlDbType.Int).Value = examid == "" ? "123456" : examid;
                     command.Parameters.Add("@STARTDATE", SqlDbType.NVarChar).Value = start_date;
                     command.Parameters.Add("@FINISHDATE", SqlDbType.NVarChar).Value = finish_date;
 
@@ -1216,10 +1153,10 @@ U.ISACTIVE = CASE WHEN @ONLYACTIVETRAINEE = 1 THEN 1 ELSE U.ISACTIVE END
 
 
         }
-    
-        
-        
-    
-    
+
+
+
+
+
     }
 }

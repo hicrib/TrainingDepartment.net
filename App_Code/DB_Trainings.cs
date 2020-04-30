@@ -95,7 +95,10 @@ namespace AviaTrain.App_Code
         {
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
 
-            string insert = @"DECLARE @EXAMID INT = (SELECT EXTRA FROM TRN_STEP WHERE TRN_ID = @TRNID AND STEPTYPE ='EXAM_STEP')";
+            string insert = @"DECLARE @EXAMID INT = (SELECT EXTRA FROM TRN_STEP WHERE TRN_ID = @TRNID AND STEPTYPE ='EXAM_STEP')
+                              DECLARE @LASTSTEPID INT = (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRNID ORDER BY STEP_ID ASC)    
+                            ";
+            
 
             start = start == "" ? "2000-01-01" : start;
             finish = finish == "" ? "2099-01-01" : finish;
@@ -103,7 +106,7 @@ namespace AviaTrain.App_Code
             {
                 insert += @"
                         INSERT INTO TRN_ASSIGNMENT 
-                        VALUES (@TRNID, " + row["ID"].ToString() + " , 'ASSIGNED', '" + start + "', '" + finish + "' , NULL,NULL,NULL,@EXAMID, @BY, CONVERT(VARCHAR , GETUTCDATE(), 20 ),1 )";
+                        VALUES (@TRNID, " + row["ID"].ToString() + " , 'ASSIGNED', '" + start + "', '" + finish + "' , NULL,NULL,@LASTSTEPID,@EXAMID, @BY, CONVERT(VARCHAR , GETUTCDATE(), 20 ),1 )";
             }
 
             try
@@ -128,6 +131,38 @@ namespace AviaTrain.App_Code
             return false;
         }
 
+        public static bool update_Assignment(string assignid, string laststepid ="0" , string status = "", string userstart = "", string userfinish ="")
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                        @" UPDATE TRN_ASSIGNMENT 
+                            SET LASTSTEPID = CASE WHEN @LASTSTEPID = '0' THEN LASTSTEPID ELSE @LASTSTEPID END ,
+	                            [STATUS] = CASE WHEN @STATUS = '' THEN [STATUS] ELSE @STATUS END,
+                                USER_START = CASE WHEN @USERSTART = '' THEN USER_START ELSE CONVERT(VARCHAR , GETUTCDATE(), 20 ) END,
+                                USER_FINISH = CASE WHEN @USERFINISH = '' THEN USER_FINISH ELSE CONVERT(VARCHAR , GETUTCDATE(), 20 ) END
+                            WHERE ASSIGNID = @ASSIGNID", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@LASTSTEPID", SqlDbType.Int).Value = laststepid;
+                    command.Parameters.Add("@ASSIGNID", SqlDbType.Int).Value = assignid;
+                    command.Parameters.Add("@STATUS", SqlDbType.NVarChar).Value = status;
+                    command.Parameters.Add("@USERSTART", SqlDbType.NVarChar).Value = userstart;
+                    command.Parameters.Add("@USERFINISH", SqlDbType.NVarChar).Value = userfinish;
+                    command.CommandType = CommandType.Text;
+
+                    if (Convert.ToInt32(command.ExecuteNonQuery()) > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
 
         public static bool push_Step(string trnid, string stepid, string steptype, string texthtml, string fileaddress)
         {
@@ -162,7 +197,11 @@ namespace AviaTrain.App_Code
         {
             string insert = "";
             foreach (string q_id in q_ids)
-                insert += "INSERT INTO TRN_STEP_QUESTIONS VALUES (@STEPID , " + q_id + ")";
+                insert += @"
+                     IF NOT EXISTS (SELECT TOP 1 * FROM TRN_STEP_QUESTIONS WHERE STEP_ID = @STEPID AND Q_ID =" + q_id + @"  )
+                     BEGIN
+                          INSERT INTO TRN_STEP_QUESTIONS VALUES (@STEPID , " + q_id + @")
+                     END ";
 
             try
             {
@@ -173,8 +212,10 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
                     command.CommandType = CommandType.Text;
 
-                    if (Convert.ToInt32(command.ExecuteNonQuery()) > 0)
-                        return true;
+                    //TODO  : IF EXISTS CLAUSE PREVENTS ROWS_AFFECTED VALUE TO BE > 0
+                    //FIND A SOLUTION FOR ERROR CHECK
+                    command.ExecuteNonQuery();
+                    return true;
                 }
             }
             catch (Exception e)
@@ -265,7 +306,7 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@STEP_ID", SqlDbType.Int).Value = current_stepid;
                     command.CommandType = CommandType.Text;
 
-                    return Convert.ToString(command.ExecuteScalar());
+                    return Convert.ToString(command.ExecuteScalar() as object); //so that it returns empty
                 }
             }
             catch (Exception e)
@@ -277,7 +318,44 @@ namespace AviaTrain.App_Code
             return "";
         }
 
-        public static DataTable get_STEP_info(string stepid)
+        //ROW_NUMBER()  OVER (ORDER BY s.step_id) as 'ORDERBY',  S.STEP_ID, S.STEPTYPE , S.TEXTHTML , ISNULL(SQ.Q_ID ,'') AS 'QID'
+        public static DataTable get_STEP_INFO_with_questions(string trnid, string stepid)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @"      SELECT ROW_NUMBER() OVER (ORDER BY s.step_id) as 'ORDERBY', 
+                                            S.STEP_ID, S.STEPTYPE , S.TEXTHTML , ISNULL(SQ.Q_ID ,'0') AS 'QID' , ISNULL(S.EXTRA,'0') AS EXAMID
+                                    FROM TRN_STEP S
+                                    LEFT JOIN TRN_STEP_QUESTIONS SQ ON SQ.STEP_ID = S.STEP_ID
+                                    WHERE S.TRN_ID = @TRNID AND S.STEP_ID = @STEPID 
+                               ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@TRNID", SqlDbType.Int).Value = trnid;
+                    command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
+                    command.CommandType = CommandType.Text;
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
+
+                    return res;
+
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+
+         public static DataTable get_STEP_info(string stepid)
         {
             DataTable res = new DataTable();
             try
@@ -306,15 +384,15 @@ namespace AviaTrain.App_Code
             return null;
         }
 
+        //TBL.ID, ISNULL(TBL.SECTOR,'') AS SECTOR , QUESTION, Answer
         public static DataTable get_STEP_questions_withAnswers(string stepid)
         {
             DataTable res = new DataTable();
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
-                {
-                    using (SqlCommand command = new SqlCommand(
-                                @"
+                using (SqlCommand command = new SqlCommand(
+                            @"
                                 SELECT TBL.ID, ISNULL(TBL.SECTOR,'') AS SECTOR , QUESTION, Answer FROM
                                 (
                                    SELECT OPS.ID, Q AS QUESTION , EQ.SECTOR ,
@@ -338,17 +416,16 @@ namespace AviaTrain.App_Code
                                    JOIN TRN_STEP_QUESTIONS TSQ ON TSQ.Q_ID = EQ.ID AND TSQ.STEP_ID = @STEPID
                                 ) TBL
                                 ORDER BY TBL.ID DESC", connection))
-                    {
-                        connection.Open();
-                        command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
-                        SqlDataAdapter da = new SqlDataAdapter(command);
-                        da.Fill(res);
+                {
+                    connection.Open();
+                    command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
 
-                        if (res == null || res.Rows.Count == 0)
-                            return null;
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
 
-                        return res;
-                    }
+                    return res;
                 }
             }
             catch (Exception e)
@@ -371,10 +448,11 @@ namespace AviaTrain.App_Code
 		                                ASS.SCHEDULE_FINISH AS 'Finishes',
 		                                CASE WHEN EXAMID IS NULL THEN 'No' ELSE 'Yes' END AS 'Exam?' ,
 		                                ASS.ASSIGNID,
-                                        ASS.STATUS AS 'Status'
+                                        ASS.STATUS AS 'Status',
+                                        ASS.LASTSTEPID 
                                 FROM TRN_ASSIGNMENT ASS 
                                 JOIN TRN_TRAINING_DEF DEF ON ASS.TRNID = DEF.ID 
-                                WHERE  ASS.STATUS = 'ASSIGNED' 
+                                WHERE ( ASS.STATUS = 'ASSIGNED' OR ASS.STATUS = 'USER_STARTED' )
                                 AND ASS.ISACTIVE = 1 AND DEF.ISACTIVE = 1 AND ASS.USERID = @USERID
                                 AND convert(datetime, DEF.EFFECTIVE, 20) <= convert(datetime, GETUTCDATE(), 20)
                                 AND  convert(datetime, ASS.SCHEDULE_FINISH, 20) >= 
@@ -441,6 +519,100 @@ namespace AviaTrain.App_Code
             }
             return null;
 
+        }
+
+        public static string get_TrainingName_by_assignid(string assignid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                {
+                    using (SqlCommand command = new SqlCommand(
+                                @" 
+                                SELECT CONVERT(VARCHAR , DEF.ID) + ',' + DEF.NAME
+                                FROM TRN_ASSIGNMENT ASS
+                                JOIN TRN_TRAINING_DEF DEF ON DEF.ID = ASS.TRNID
+                                WHERE ASS.ASSIGNID = @ASSIGNID
+                               ", connection))
+                    {
+                        connection.Open();
+                        command.Parameters.Add("@ASSIGNID", SqlDbType.Int).Value = assignid;
+
+                        return Convert.ToString(command.ExecuteScalar());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return "";
+
+        }
+
+
+
+
+        public static string whose_Assignment(string assign_id)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                    @"  SELECT  USERID FROM TRN_ASSIGNMENT WHERE ASSIGNID = @ASSIGN_ID ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@ASSIGN_ID", SqlDbType.Int).Value = assign_id;
+                    command.CommandType = CommandType.Text;
+
+                    return Convert.ToString(command.ExecuteScalar());
+
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            //something went wrong
+            return "";
+        }
+        public static string is_DOABLE_Training_Assignment(string assignid, string traineeid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(@"
+                                SELECT 
+                                CASE 
+	                                WHEN [STATUS] = 'FAILED' OR [STATUS] = 'PASSED'
+			                                THEN 'TRAINING ALREADY FINISHED'
+	                                WHEN convert(datetime, getutcdate(), 20) < convert(datetime, SCHEDULE_START, 20) 
+			                                THEN 'TRAINING SCHEDULED TO A LATER DATE'
+	                                 WHEN convert(datetime, getutcdate(), 20) > convert(datetime, SCHEDULE_FINISH, 20)
+			                                THEN 'TRAINING TIME IS EXPIRED'
+	                                 WHEN USERID <> @TRAINEE_ID
+			                                THEN 'NOT ASSIGNED TO THIS USER' 
+	                                 ELSE 'OK' END AS PROBLEM
+		
+                                FROM TRN_ASSIGNMENT WHERE ASSIGNID = @ASSIGN_ID
+                      ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@ASSIGN_ID", SqlDbType.Int).Value = assignid;
+                    command.Parameters.Add("@TRAINEE_ID", SqlDbType.Int).Value = traineeid;
+                    command.CommandType = CommandType.Text;
+
+                    return Convert.ToString(command.ExecuteScalar()); //expecting ok
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            //something went wrong
+            return "";
         }
     }
 }

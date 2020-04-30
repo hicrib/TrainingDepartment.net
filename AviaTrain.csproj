@@ -1192,6 +1192,7 @@
     <Content Include="Trainings\CreateTrainingDesignPage.aspx" />
     <Content Include="Trainings\CreateTrainingFinish.aspx" />
     <Content Include="Trainings\UserInTraining.aspx" />
+    <Content Include="Trainings\UserTrainingResult.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -1511,6 +1512,13 @@
     </Compile>
     <Compile Include="Trainings\UserInTraining.aspx.designer.cs">
       <DependentUpon>UserInTraining.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Trainings\UserTrainingResult.aspx.cs">
+      <DependentUpon>UserTrainingResult.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Trainings\UserTrainingResult.aspx.designer.cs">
+      <DependentUpon>UserTrainingResult.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>

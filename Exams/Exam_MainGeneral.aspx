@@ -207,16 +207,6 @@
             </div>
             <!-- container -->
 
-
-
-
-
-
-
-
-
-
-
         </ContentTemplate>
     </asp:UpdatePanel>
 

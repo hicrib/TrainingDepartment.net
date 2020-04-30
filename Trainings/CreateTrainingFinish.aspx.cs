@@ -69,7 +69,6 @@ namespace AviaTrain.Trainings
 
                 //make status=EXAM_STEP , EXTRA=EXAMID
                 bool step_updated = DB_Trainings.update_STEP(stepid, "EXAM_STEP", "", "", "", ddl_exams.SelectedValue, "");
-
                 if (!step_updated)
                 {
                     lbl_pageresult.Text = "System Error : Exam can't be added (Your Training is NOT LOST. You can continue later.";

@@ -64,12 +64,12 @@ namespace AviaTrain.Exams
 
         protected bool push_assignment()
         {
-            string start = Calendar_start.SelectedDate.ToString("dd.MM.yyyy");
-            string finish = Calendar_finish.SelectedDate.ToString("dd.MM.yyyy");
+            string start = Calendar_start.SelectedDate.ToString("yyyy-MM-dd");
+            string finish = Calendar_finish.SelectedDate.ToString("yyyy-MM-dd");
 
-            bool ok = DB_Exams.push_EXAM_Assignment(ddl_exams.SelectedValue, ddl_trainee.SelectedValue, start, finish);
+            string assignid = DB_Exams.push_EXAM_Assignment(ddl_exams.SelectedValue, ddl_trainee.SelectedValue, start, finish);
 
-            return ok;
+            return assignid != "";
         }
 
         protected bool Check_Page_Elements()

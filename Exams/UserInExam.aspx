@@ -235,7 +235,7 @@
 
 
 
-
+            <asp:Label ID="lbl_trn_assignid" runat="server"  Visible="false"></asp:Label>
         </ContentTemplate>
     </asp:UpdatePanel>
 
