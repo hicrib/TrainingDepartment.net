@@ -69,13 +69,13 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.CheckBox chk_RemAss;
 
         /// <summary>
-        /// chk_PreOJT control.
+        /// chk_PRELEVEL1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chk_PreOJT;
+        protected global::System.Web.UI.WebControls.CheckBox chk_PRELEVEL1;
 
         /// <summary>
         /// chk_ProgAss control.

@@ -68,7 +68,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="width: 170px;">
-                                                            <asp:CheckBox ID="chk_PreOJT" Text="Pre-OJT" runat="server" />
+                                                            <asp:CheckBox ID="chk_PRELEVEL1" Text="Pre-Level1" runat="server" />
                                                         </td>
                                                         <td style="width: 170px;">
                                                             <asp:CheckBox ID="chk_ProgAss" Text="Progress Assessment" runat="server" />

@@ -78,7 +78,7 @@ namespace AviaTrain.Reports
             ddl_ojtis.Items.Add(new ListItem(meta.Rows[0]["CREATER_NAME"].ToString(), meta.Rows[0]["CREATER"].ToString()));
 
             chk_OJT.Checked = form.Rows[0]["CHK_OJT"].ToString() == "True";
-            chk_PreOJT.Checked = form.Rows[0]["CHK_PREOJT"].ToString() == "True";
+            chk_PRELEVEL1.Checked = form.Rows[0]["CHK_PRELEVEL1"].ToString() == "True";
             chk_Sim.Checked = form.Rows[0]["CHK_SIM"].ToString() == "True";
             chk_LvlAss.Checked = form.Rows[0]["CHK_LVLASS"].ToString() == "True";
             chk_ProgAss.Checked = form.Rows[0]["CHK_PROGASS"].ToString() == "True";
@@ -233,7 +233,7 @@ namespace AviaTrain.Reports
             //ddl_positions.SelectedValue = directed["position"] + "-" + directed["sector"];
             //ddl_positions.Enabled = false;
 
-            //todo: ojt-preojt-assess etc can be filled here as well
+            //todo: ojt-PRELEVEL1-assess etc can be filled here as well
         }
 
         protected string push_into_db()
@@ -243,7 +243,7 @@ namespace AviaTrain.Reports
             data.Add("TRAINEE_ID", ddl_trainees.SelectedValue);
             data.Add("OJTI_ID", ddl_ojtis.SelectedValue);
             data.Add("CHK_OJT", chk_OJT.Checked ? "1" : "0");
-            data.Add("CHK_PREOJT", chk_PreOJT.Checked ? "1" : "0");
+            data.Add("CHK_PRELEVEL1", chk_PRELEVEL1.Checked ? "1" : "0");
             data.Add("CHK_SIM", chk_Sim.Checked ? "1" : "0");
             data.Add("CHK_LVLASS", chk_LvlAss.Checked ? "1" : "0");
             data.Add("CHK_PROGASS", chk_ProgAss.Checked ? "1" : "0");
@@ -391,7 +391,7 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose the Trainee before signing!", System.Drawing.Color.Red);
                 return false;
             }
-            if (!chk_OJT.Checked && !chk_PreOJT.Checked && !chk_Sim.Checked &&
+            if (!chk_OJT.Checked && !chk_PRELEVEL1.Checked && !chk_Sim.Checked &&
                 !chk_LvlAss.Checked && !chk_ProgAss.Checked && !chk_CocAss.Checked &&
                 !chk_RemAss.Checked && !chk_OST.Checked)
             {

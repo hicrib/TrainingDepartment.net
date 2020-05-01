@@ -52,15 +52,15 @@ namespace AviaTrain.App_Code
                 {
 
                     string insertstr = @"INSERT INTO REPORT_TR_ARE_APP_RAD
-                                               ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_PREOJT],[CHK_SIM],[CHK_LVLASS],[CHK_PROGASS],[CHK_COCASS],[CHK_REMASS],[CHK_OTS],[DATE],[POSITION],[POSITION_EXTRA],[TIMEON],[TIMEOFF],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[NOTES],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS] )
-                                        VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_PREOJT,@CHK_SIM,@CHK_LVLASS,@CHK_PROGASS,@CHK_COCASS,@CHK_REMASS,@CHK_OTS,@DATE,@POSITION,@POSITION_EXTRA,@TIMEON,@TIMEOFF,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@NOTES,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS)";
+                                               ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_PRELEVEL1],[CHK_SIM],[CHK_LVLASS],[CHK_PROGASS],[CHK_COCASS],[CHK_REMASS],[CHK_OTS],[DATE],[POSITION],[POSITION_EXTRA],[TIMEON],[TIMEOFF],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[NOTES],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS] )
+                                        VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_PRELEVEL1,@CHK_SIM,@CHK_LVLASS,@CHK_PROGASS,@CHK_COCASS,@CHK_REMASS,@CHK_OTS,@DATE,@POSITION,@POSITION_EXTRA,@TIMEON,@TIMEOFF,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@NOTES,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS)";
                     using (SqlCommand command = new SqlCommand(insertstr, connection))
                     {
                         command.Parameters.Add("@ID", SqlDbType.Int).Value = reportid;
                         command.Parameters.Add("@OJTI_ID", SqlDbType.Int).Value = data["OJTI_ID"];
                         command.Parameters.Add("@TRAINEE_ID", SqlDbType.Int).Value = data["TRAINEE_ID"];
                         command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
-                        command.Parameters.Add("@CHK_PREOJT", SqlDbType.Bit).Value = data["CHK_PREOJT"] == "1";
+                        command.Parameters.Add("@CHK_PRELEVEL1", SqlDbType.Bit).Value = data["CHK_PRELEVEL1"] == "1";
                         command.Parameters.Add("@CHK_SIM", SqlDbType.Bit).Value = data["CHK_SIM"] == "1";
                         command.Parameters.Add("@CHK_LVLASS", SqlDbType.Bit).Value = data["CHK_LVLASS"] == "1";
                         command.Parameters.Add("@CHK_PROGASS", SqlDbType.Bit).Value = data["CHK_PROGASS"] == "1";
@@ -241,15 +241,15 @@ namespace AviaTrain.App_Code
                 {
 
                     string insertstr = @"INSERT INTO REPORT_TOWERTR_GMC_ADC
-                                               ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_PREOJT],[CHK_SIM],[CHK_LVLASS],[CHK_PROGASS],[CHK_COCASS],[CHK_REMASS],[CHK_OTS],[DATE],[POSITION],[TIMEON],[TIMEOFF],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS] )
-                                        VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_PREOJT,@CHK_SIM,@CHK_LVLASS,@CHK_PROGASS,@CHK_COCASS,@CHK_REMASS,@CHK_OTS,@DATE,@POSITION,@TIMEON,@TIMEOFF,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS)";
+                                               ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_PRELEVEL1],[CHK_SIM],[CHK_LVLASS],[CHK_PROGASS],[CHK_COCASS],[CHK_REMASS],[CHK_OTS],[DATE],[POSITION],[TIMEON],[TIMEOFF],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS] )
+                                        VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_PRELEVEL1,@CHK_SIM,@CHK_LVLASS,@CHK_PROGASS,@CHK_COCASS,@CHK_REMASS,@CHK_OTS,@DATE,@POSITION,@TIMEON,@TIMEOFF,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS)";
                     using (SqlCommand command = new SqlCommand(insertstr, connection))
                     {
                         command.Parameters.Add("@ID", SqlDbType.Int).Value = reportid;
                         command.Parameters.Add("@OJTI_ID", SqlDbType.Int).Value = data["OJTI_ID"];
                         command.Parameters.Add("@TRAINEE_ID", SqlDbType.Int).Value = data["TRAINEE_ID"];
                         command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
-                        command.Parameters.Add("@CHK_PREOJT", SqlDbType.Bit).Value = data["CHK_PREOJT"] == "1";
+                        command.Parameters.Add("@CHK_PRELEVEL1", SqlDbType.Bit).Value = data["CHK_PRELEVEL1"] == "1";
                         command.Parameters.Add("@CHK_SIM", SqlDbType.Bit).Value = data["CHK_SIM"] == "1";
                         command.Parameters.Add("@CHK_LVLASS", SqlDbType.Bit).Value = data["CHK_LVLASS"] == "1";
                         command.Parameters.Add("@CHK_PROGASS", SqlDbType.Bit).Value = data["CHK_PROGASS"] == "1";
@@ -1251,8 +1251,6 @@ namespace AviaTrain.App_Code
         public static Dictionary<string, DataTable> pull_DAILYTR_ASS_RAD(string reportid)
         {
             Dictionary<string, DataTable> result = new Dictionary<string, DataTable>();
-
-
 
             // get the meta information
             try

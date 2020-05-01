@@ -574,7 +574,7 @@ namespace AviaTrain.App_Code
 
         public static string get_TOTALHOURS(string employeeid, string position, string sector, string phase)
         {
-            //todo : now, it's getting cumulative total_hours of the sector,  starting from ASSIST training, PREOJT, OJT Levels
+            //todo : now, it's getting cumulative total_hours of the sector,  starting from ASSIST training, PRELEVEL1, OJT Levels
 
             // gets the last report and take the total_hours field
             try
