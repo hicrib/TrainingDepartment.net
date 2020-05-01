@@ -261,7 +261,8 @@
                                     <td>
                                         <asp:Label ID="lbl_date" runat="server" Text="Date"> </asp:Label></td>
                                     <td>
-                                        <asp:DropDownList ID="ddl_DAY" runat="server">
+                                        <asp:TextBox ID="txt_date" runat="server" TextMode="DateTime"></asp:TextBox>
+                                        <%--<asp:DropDownList ID="ddl_DAY" runat="server">
                                             <asp:ListItem Value="1"></asp:ListItem>
                                             <asp:ListItem Value="2"></asp:ListItem>
                                             <asp:ListItem Value="3"></asp:ListItem>
@@ -327,7 +328,7 @@
                                             <asp:ListItem Value="2027"></asp:ListItem>
                                             <asp:ListItem Value="2028"></asp:ListItem>
                                             <asp:ListItem Value="2029"></asp:ListItem>
-                                        </asp:DropDownList>
+                                        </asp:DropDownList>--%>
                                     </td>
                                 </tr>
                                 <tr>

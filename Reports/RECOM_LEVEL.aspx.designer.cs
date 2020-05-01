@@ -159,31 +159,13 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.Label lbl_date;
 
         /// <summary>
-        /// ddl_DAY control.
+        /// txt_date control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddl_DAY;
-
-        /// <summary>
-        /// ddl_MONTH control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddl_MONTH;
-
-        /// <summary>
-        /// ddl_YEAR control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddl_YEAR;
+        protected global::System.Web.UI.WebControls.TextBox txt_date;
 
         /// <summary>
         /// lbl_traineeinitials control.

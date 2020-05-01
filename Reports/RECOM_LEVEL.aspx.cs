@@ -87,10 +87,10 @@ namespace AviaTrain.Reports
             if (meta.Rows[0]["OJTI_SIGNED"].ToString() == "True")
                 btn_ojtisign_Click(new object(), new EventArgs());
 
-            string date = form.Rows[0]["DATE"].ToString();
-            ddl_DAY.Items.Add(date.Split('.')[0]);
-            ddl_MONTH.SelectedValue = date.Split('.')[1];
-            ddl_YEAR.SelectedValue = date.Split('.')[2];
+            txt_date.Text = form.Rows[0]["DATE"].ToString();
+            //ddl_DAY.Items.Add(date.Split('.')[0]);
+            //ddl_MONTH.SelectedValue = date.Split('.')[1];
+            //ddl_YEAR.SelectedValue = date.Split('.')[2];
 
             txt_comments.Text = form.Rows[0]["COMMENTS"].ToString();
 
@@ -168,10 +168,11 @@ namespace AviaTrain.Reports
             ddl_sectors.DataValueField = "CODE";
             ddl_sectors.DataBind();
 
-            string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
-            ddl_DAY.SelectedValue = today.Split('.')[0];
-            ddl_MONTH.SelectedValue = Convert.ToInt32(today.Split('.')[1]).ToString();
-            ddl_YEAR.SelectedValue = today.Split('.')[2];
+            txt_date.Text = DateTime.UtcNow.ToString("yyyy-MM-dd");
+            //string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
+            //ddl_DAY.SelectedValue = today.Split('.')[0];
+            //ddl_MONTH.SelectedValue = Convert.ToInt32(today.Split('.')[1]).ToString();
+            //ddl_YEAR.SelectedValue = today.Split('.')[2];
 
             lbl_MER.Text = "( MER : " + DB_System.get_MER(ddl_trainee.SelectedValue, ddl_sectors.Text.Split('-')[0], ddl_sectors.Text.Split('-')[1], ddl_Level.SelectedValue) + ")";
 
@@ -341,7 +342,7 @@ namespace AviaTrain.Reports
             data.Add("OBJECTIVES_SIGNED", "1");
             data.Add("FOLDER_COMPLETE", "1");
             data.Add("TRAINEE_SIGNED", lbl_traineesigned.Text);
-            data.Add("DATE", ddl_DAY.SelectedValue +"."+ddl_MONTH.SelectedValue + "."+ddl_YEAR.SelectedValue);
+            data.Add("DATE", txt_date.Text);
             data.Add("DEPARTMENT_SIGNED",  lbl_departmentsigned.Text);
             data.Add("DEPARTMENT_EMPLOYEEID", lbl_departmentsigned.Text == "1" ? ((UserSession)Session["usersession"]).employeeid : ""      );
             data.Add("COMMENTS", txt_comments.Text);
