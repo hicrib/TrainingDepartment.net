@@ -997,8 +997,8 @@ namespace AviaTrain.App_Code
                                    WHERE ASS.TRAINEE_ID = @TRAINEE_ID 
                                     AND ( ASS.STATUS = 'ASSIGNED' OR ASS.STATUS = 'USER_STARTED')
                                     AND EDEF.ISACTIVE=1 
-                                    AND convert(datetime, getutcdate(), 104) <= convert(datetime, SCHEDULE_FINISH, 104)
-                                    AND convert(datetime, getutcdate(), 104) >= convert(datetime, ASS.SCHEDULE_START, 104)
+                                    AND convert(datetime, getutcdate(), 20) <= convert(datetime, SCHEDULE_FINISH, 20)
+                                    AND convert(datetime, getutcdate(), 20) >= convert(datetime, ASS.SCHEDULE_START, 20)
                                 ", connection))
                 {
                     connection.Open();
@@ -1028,7 +1028,7 @@ namespace AviaTrain.App_Code
                 using (SqlCommand command = new SqlCommand(@"
                                SELECT TOP 1 STATUS  FROM EXM_EXAM_ASSIGNMENT 
                                 WHERE EXAM_ID = @EXAMID and [STATUS] = 'ASSIGNED' AND ISNULL(USER_START,'') = '' AND  
-                                convert(datetime, getutcdate(), 104) < convert(datetime, SCHEDULE_FINISH, 104)  ", connection))
+                                convert(datetime, getutcdate(), 20) < convert(datetime, SCHEDULE_FINISH, 20)  ", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@EXAMID", SqlDbType.Int).Value = examid;

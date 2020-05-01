@@ -457,7 +457,7 @@ namespace AviaTrain.App_Code
                                 AND convert(datetime, DEF.EFFECTIVE, 20) <= convert(datetime, GETUTCDATE(), 20)
                                 AND  convert(datetime, ASS.SCHEDULE_FINISH, 20) >= 
 							                                ( 
-							                                CASE WHEN ASS.SCHEDULE_FINISH <> '' THEN  convert(datetime, getutcdate(), 104)
+							                                CASE WHEN ASS.SCHEDULE_FINISH <> '' THEN  convert(datetime, getutcdate(), 20)
 							                                ELSE  convert(datetime, ASS.SCHEDULE_FINISH, 20) END
 							                                )
                                 AND  convert(datetime, ASS.SCHEDULE_START, 20) <= 

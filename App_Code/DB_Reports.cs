@@ -1625,7 +1625,7 @@ namespace AviaTrain.App_Code
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT RM.ID AS 'Rpt No', RT.[NAME] AS 'Type' ,  
-		                                    convert(varchar, CREATE_TIME, 0) AS 'Created' , 
+		                                    convert(varchar, CREATE_TIME, 20) AS 'Created' , 
 		                                    [STATUS] AS 'Status', 
                                             U.FIRSTNAME + ' '  + U.SURNAME AS 'Trainee',
 		                                    TRAINEE_SIGNED AS 'Tr. Sign' 
