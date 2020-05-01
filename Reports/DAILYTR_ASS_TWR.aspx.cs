@@ -77,9 +77,10 @@ namespace AviaTrain.Reports
             chk_Ass.Checked = form.Rows[0]["CHK_ASS"].ToString() == "True";
 
             string date = form.Rows[0]["DATE"].ToString();
-            ddl_DAY.Items.Add(date.Split('.')[0]);
-            ddl_MONTH.SelectedValue = date.Split('.')[1];
-            ddl_YEAR.SelectedValue = date.Split('.')[2];
+            txt_date.Text = date;
+            //ddl_DAY.Items.Add(date.Split('.')[0]);
+            //ddl_MONTH.SelectedValue = date.Split('.')[1];
+            //ddl_YEAR.SelectedValue = date.Split('.')[2];
 
 
             ddl_positions.Items.Add("ASSIST");
@@ -307,6 +308,11 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose Position!", System.Drawing.Color.Red);
                 return false;
             }
+            if (txt_date.Text == "")
+            {
+                ClientMessage(lbl_pageresult, "Choose Date", System.Drawing.Color.Red);
+                return false;
+            }
             if (txt_timeon.Text == "")
             {
                 ClientMessage(lbl_pageresult, "Choose TIME ON!", System.Drawing.Color.Red);
@@ -354,8 +360,8 @@ namespace AviaTrain.Reports
             data.Add("OJTI_SIGNED", lbl_ojti_signed.Text == "1" ? "1" : "0");
             data.Add("TRAINEE_SIGNED", lbl_trainee_signed.Text == "1" ? "1" : "0");
 
-            string date = ddl_DAY.SelectedValue + "." + ddl_MONTH.SelectedValue + "." + ddl_YEAR.SelectedValue;
-            data.Add("DATE", date);
+            //string date = ddl_DAY.SelectedValue + "." + ddl_MONTH.SelectedValue + "." + ddl_YEAR.SelectedValue;
+            data.Add("DATE", txt_date.Text);
             data.Add("POSITION", ddl_positions.SelectedValue);
             data.Add("TIMEON", txt_timeon.Text);
             data.Add("TIMEOFF", txt_timeoff.Text);

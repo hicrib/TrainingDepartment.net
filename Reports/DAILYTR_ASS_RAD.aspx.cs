@@ -383,6 +383,11 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose Position!", System.Drawing.Color.Red);
                 return false;
             }
+            if(txt_date.Text == "")
+            {
+                ClientMessage(lbl_pageresult, "Choose Date!", System.Drawing.Color.Red);
+                return false;
+            }
             if (txt_timeon.Text == "")
             {
                 ClientMessage(lbl_pageresult, "Choose TIME ON!", System.Drawing.Color.Red);
