@@ -168,7 +168,7 @@ namespace AviaTrain.Reports
             ddl_sectors.DataValueField = "CODE";
             ddl_sectors.DataBind();
 
-            string today = DateTime.UtcNow.ToString("dd.MM.yyyy");
+            string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
             ddl_DAY.SelectedValue = today.Split('.')[0];
             ddl_MONTH.SelectedValue = Convert.ToInt32(today.Split('.')[1]).ToString();
             ddl_YEAR.SelectedValue = today.Split('.')[2];

@@ -181,7 +181,7 @@ namespace AviaTrain.Reports
             ddl_sectors.DataValueField = "CODE";
             ddl_sectors.DataBind();
 
-            string today = DateTime.UtcNow.ToString("dd.MM.yyyy");
+            string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
             ddl_DAY_controller.SelectedValue = today.Split('.')[0];
             ddl_MONTH_controller.SelectedValue = Convert.ToInt32(today.Split('.')[1]).ToString();
             ddl_YEAR_controller.SelectedValue = today.Split('.')[2];
@@ -343,12 +343,12 @@ namespace AviaTrain.Reports
             data.Add("FOLDER_COMPLETE", "1");
 
             data.Add("TRAINEE_SIGNED", lbl_recom_trainee_signed.Text);
-            data.Add("TRAINEE_SIGN_DATE", lbl_recom_trainee_signed.Text == "1" ? DateTime.UtcNow.ToString("yyyy.MM.dd HH:mm") : "");
+            data.Add("TRAINEE_SIGN_DATE", lbl_recom_trainee_signed.Text == "1" ? DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm") : "");
 
             data.Add("DATE", ddl_DAY_controller.SelectedValue + "." + ddl_MONTH_controller.SelectedValue + "." + ddl_YEAR_controller.SelectedValue);
 
             data.Add("REVIEW_TEAM_APPROVAL", rad_NO.Checked ? "0" : "1");
-            data.Add("REVIEW_TEAM_APPROVAL_SIGN_DATE", rad_NO.Checked ? DateTime.UtcNow.ToString("yyyy.MM.dd HH:mm") : "");
+            data.Add("REVIEW_TEAM_APPROVAL_SIGN_DATE", rad_NO.Checked ? DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm") : "");
 
             data.Add("COMMENTS", txt_comments.Text);
 
