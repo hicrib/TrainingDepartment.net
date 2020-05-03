@@ -101,6 +101,8 @@
                         <td style="text-align: center; font-weight: bold; font-size: medium; height: 40px;">Question Sector : 
                             <asp:DropDownList ID="ddl_sector" runat="server" Height="30" Width="150" Font-Bold="true" AutoPostBack="true" OnSelectedIndexChanged="ddl_sector_SelectedIndexChanged">
                                 <asp:ListItem Value="GEN" Text=" General "></asp:ListItem>
+                                <asp:ListItem Value="LATSI" ></asp:ListItem>
+                                <asp:ListItem Value="AIP" ></asp:ListItem>
                                 <asp:ListItem Value="TWR" Text=" Tower General "></asp:ListItem>
                                 <asp:ListItem Value="ACC" Text=" ACC General "></asp:ListItem>
                                 <asp:ListItem Value="APP" Text=" APP General "></asp:ListItem>

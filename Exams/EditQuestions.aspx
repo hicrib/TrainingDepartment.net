@@ -183,11 +183,12 @@
                 }
 
                 .grid_all_questions td :nth-child(4) {
-                    text-align : center !important;
+                    text-align: center !important;
                 }
+
                 .grid_all_questions td :nth-child(5) {
                     width: 30px;
-                    text-align:left !important;
+                    text-align: left !important;
                 }
 
         .fill_textarea {
@@ -248,6 +249,8 @@
                                         <asp:DropDownList ID="ddl_sector" Width="200" Font-Bold="true" runat="server">
                                             <asp:ListItem Value="ALL" Text="ALL"></asp:ListItem>
                                             <asp:ListItem Value="GEN" Text="General "></asp:ListItem>
+                                            <asp:ListItem Value="LATSI"></asp:ListItem>
+                                            <asp:ListItem Value="AIP"></asp:ListItem>
                                             <asp:ListItem Value="TWR" Text="Tower General "></asp:ListItem>
                                             <asp:ListItem Value="ACC" Text="ACC General "></asp:ListItem>
                                             <asp:ListItem Value="APP" Text="APP General "></asp:ListItem>
@@ -267,7 +270,7 @@
                                         <asp:CheckBox ID="chk_active" runat="server" />
                                     </td>
                                     <td>
-                                        <asp:Button ID="btn_search" runat="server" Text="Search" style="width:100px; font-weight:bold; height:25px; background-color:indianred; color:white; border:1px solid black;" OnClick="btn_search_Click" />
+                                        <asp:Button ID="btn_search" runat="server" Text="Search" Style="width: 100px; font-weight: bold; height: 25px; background-color: indianred; color: white; border: 1px solid black;" OnClick="btn_search_Click" />
                                     </td>
                                 </tr>
                             </table>
@@ -391,12 +394,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <asp:Button ID="btn_push_question" runat="server" Text="Save"  Visible="false" CssClass="ops_submit" OnClick="btn_push_question_Click" />
+                            <asp:Button ID="btn_push_question" runat="server" Text="Save" Visible="false" CssClass="ops_submit" OnClick="btn_push_question_Click" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <asp:GridView ID="grid_questions" runat="server" CssClass="grid_all_questions" 
+                            <asp:GridView ID="grid_questions" runat="server" CssClass="grid_all_questions"
                                 OnRowDataBound="grid_questions_RowDataBound" OnRowCommand="grid_questions_RowCommand"
                                 PageSize="15" OnPageIndexChanged="grid_questions_PageIndexChanged" AllowPaging="true"
                                 OnPageIndexChanging="grid_questions_PageIndexChanging">
@@ -404,10 +407,10 @@
                                 <Columns>
                                     <asp:ButtonField ButtonType="Image" ControlStyle-CssClass="small_image" ImageUrl="~/images/edit.png" CommandName="EDIT_Q" />
                                     <asp:TemplateField HeaderText="Active">
-                                        <ItemTemplate >
-                                            <asp:hiddenfield runat="server" id="QID_hiddenfield" Value='<%# Eval("ID") %>' />
-                                            <asp:CheckBox ID="chk_q_active" runat="server" HeaderText="ISACTIVE" AutoPostBack="true" 
-                                                Checked='<%#Convert.ToBoolean(Eval("ISACTIVE")) %>'  OnCheckedChanged="chk_q_active_CheckedChanged"  />
+                                        <ItemTemplate>
+                                            <asp:HiddenField runat="server" ID="QID_hiddenfield" Value='<%# Eval("ID") %>' />
+                                            <asp:CheckBox ID="chk_q_active" runat="server" HeaderText="ISACTIVE" AutoPostBack="true"
+                                                Checked='<%#Convert.ToBoolean(Eval("ISACTIVE")) %>' OnCheckedChanged="chk_q_active_CheckedChanged" />
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                 </Columns>
