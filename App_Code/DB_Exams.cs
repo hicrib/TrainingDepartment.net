@@ -229,6 +229,104 @@ namespace AviaTrain.App_Code
             return false;
         }
 
+        public static bool update_Question_OPS(string qid ,string q, string answer, string a, string b, string c = null, string d = null)
+        {
+            UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
+
+            try
+            {
+
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                        @" UPDATE EXM_QUESTIONS SET [BY] = @USERID , BY_TIME =convert(varchar, getutcdate(), 20)   WHERE ID= @QID
+
+                           UPDATE EXM_QUESTIONS_OPS SET Q=@Q , OPA=@OPA, OPB=@OPB,OPC=@OPC , OPD=@OPD , ANSWER=@ANSWER  WHERE ID = @QID", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = user.employeeid;
+
+                    command.Parameters.Add("@QID", SqlDbType.Int).Value = qid;
+                    command.Parameters.Add("@Q", SqlDbType.VarChar).Value = q;
+                    command.Parameters.Add("@OPA", SqlDbType.VarChar).Value = a;
+                    command.Parameters.Add("@OPB", SqlDbType.VarChar).Value = b;
+                    command.Parameters.Add("@OPC", SqlDbType.VarChar).Value = c == null ? SqlString.Null : c;
+                    command.Parameters.Add("@OPD", SqlDbType.VarChar).Value = d == null ? SqlString.Null : d;
+                    command.Parameters.Add("@ANSWER", SqlDbType.VarChar).Value = answer;
+                    command.CommandType = CommandType.Text;
+
+                    if (Convert.ToInt32(command.ExecuteNonQuery()) > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            //something went wrong
+            return false;
+        }
+        public static bool update_Question_FILL( string qid,string TEXT1, string FILL1_ANS1, string FILL1_ANS2, string FILL1_ANS3,
+                                                              string TEXT2, string FILL2_ANS1, string FILL2_ANS2, string FILL2_ANS3,
+                                                              string TEXT3, string FILL3_ANS1, string FILL3_ANS2, string FILL3_ANS3,
+                                                              string TEXT4)
+        {
+            UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
+            try
+            {
+
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                        @"  UPDATE EXM_QUESTIONS SET [BY] = @USERID , BY_TIME =convert(varchar, getutcdate(), 20)   WHERE ID= @QID
+
+                            UPDATE EXM_QUESTIONS_FILL
+                            SET TEXT1        = @TEXT1     , 
+                                FILL1_ANS1   = @FILL1_ANS1, 
+                                FILL1_ANS2   = @FILL1_ANS2, 
+                                FILL1_ANS3   = @FILL1_ANS3, 
+                                TEXT2        = @TEXT2     , 
+                                FILL2_ANS1   = @FILL2_ANS1, 
+                                FILL2_ANS2   = @FILL2_ANS2, 
+                                FILL2_ANS3   = @FILL2_ANS3, 
+                                TEXT3        = @TEXT3     , 
+                                FILL3_ANS1   = @FILL3_ANS1, 
+                                FILL3_ANS2   = @FILL3_ANS2, 
+                                FILL3_ANS3   = @FILL3_ANS3, 
+                                TEXT4        = @TEXT4      
+                            WHERE ID = @QID                          ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@QID", SqlDbType.Int).Value = qid;
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = user.employeeid;
+
+                    command.Parameters.Add("@TEXT1", SqlDbType.VarChar).Value = TEXT1;
+                    command.Parameters.Add("@FILL1_ANS1", SqlDbType.VarChar).Value = FILL1_ANS1;
+                    command.Parameters.Add("@FILL1_ANS2", SqlDbType.VarChar).Value = FILL1_ANS2;
+                    command.Parameters.Add("@FILL1_ANS3", SqlDbType.VarChar).Value = FILL1_ANS3;
+                    command.Parameters.Add("@TEXT2", SqlDbType.VarChar).Value = TEXT2;
+                    command.Parameters.Add("@FILL2_ANS1", SqlDbType.VarChar).Value = FILL2_ANS1;
+                    command.Parameters.Add("@FILL2_ANS2", SqlDbType.VarChar).Value = FILL2_ANS2;
+                    command.Parameters.Add("@FILL2_ANS3", SqlDbType.VarChar).Value = FILL2_ANS3;
+                    command.Parameters.Add("@TEXT3", SqlDbType.VarChar).Value = TEXT3;
+                    command.Parameters.Add("@FILL3_ANS1", SqlDbType.VarChar).Value = FILL3_ANS1;
+                    command.Parameters.Add("@FILL3_ANS2", SqlDbType.VarChar).Value = FILL3_ANS2;
+                    command.Parameters.Add("@FILL3_ANS3", SqlDbType.VarChar).Value = FILL3_ANS3;
+                    command.Parameters.Add("@TEXT4", SqlDbType.VarChar).Value = TEXT4;
+
+                    command.CommandType = CommandType.Text;
+
+                    if (Convert.ToInt32(command.ExecuteNonQuery()) > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            //something went wrong
+            return false;
+        }
 
 
 
@@ -260,7 +358,7 @@ namespace AviaTrain.App_Code
             return false;
         }
 
-        public static bool update_Exam_Assignment(string assignid, string status ="",string userstart ="",string userfinish= "", string grade="")
+        public static bool update_Exam_Assignment(string assignid, string status = "", string userstart = "", string userfinish = "", string grade = "")
         {
             try
             {
@@ -296,19 +394,24 @@ namespace AviaTrain.App_Code
         }
 
         //delete question unless in an exam or in an trainingstep
-        public static bool delete_question_unless_assigned(string qid)
+        public static bool delete_question_unless_assigned(string qid, bool undelete = false)
         {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(
-                    @"  declare @exist INT= (SELECT top 1 Q_ID  FROM EXM_EXAM_DEF_QUESTIONS where Q_ID = @QID)
+
+            string update = @"  declare @exist INT= (SELECT top 1 Q_ID  FROM EXM_EXAM_DEF_QUESTIONS where Q_ID = @QID)
                         declare @exist2  INT= (SELECT top 1 Q_ID  FROM TRN_STEP_QUESTIONS where Q_ID = @QID)
 
                         IF ISNULL(@exist,'') = '' AND ISNULL(@exist2, '') = ''
                         BEGIN
 		                        UPDATE EXM_QUESTIONS SET ISACTIVE=0 WHERE ID= @QID
-                        END", connection))
+                        END";
+
+            if (undelete)
+                update = " UPDATE EXM_QUESTIONS SET ISACTIVE=1 WHERE ID= @QID";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand( update, connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@QID", SqlDbType.Int).Value = qid;
@@ -370,8 +473,7 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-        //gets all sector questions for exam creation
-        public static DataTable get_ALL_questions_sector(string sector)
+        public static DataTable get_questions_withAnswer(string sector = "", string creater = "0", string text = "", bool onlyactive = true)
         {
             DataTable res = new DataTable();
             try
@@ -379,74 +481,44 @@ namespace AviaTrain.App_Code
                 using (SqlConnection connection = new SqlConnection(con_str))
                 {
                     using (SqlCommand command = new SqlCommand(
-                                @"
-                                    SELECT EQ.ID, ISNULL(EQ.SECTOR,'') AS SECTOR , QUESTION FROM
-                                     (
-                                     SELECT ID, Q AS QUESTION FROM EXM_QUESTIONS_OPS
-                                     UNION
-                                     SELECT ID ,
-                                         TEXT1 + ' ((BLANK)) ' + ISNULL(TEXT2,'') + ' ((BLANK)) ' + ISNULL(TEXT3,'') + ' ((BLANK)) ' + ISNULL(TEXT4,'') AS QUESTION
-                                     FROM EXM_QUESTIONS_FILL
-                                     ) TBL
-                                     JOIN EXM_QUESTIONS EQ ON EQ.ID = TBL.ID
-                                     WHERE EQ.SECTOR = @SECTOR AND EQ.ISACTIVE=1
-                                     ORDER BY TBL.ID DESC", connection))
+                                @"SELECT TBL.ISACTIVE , TBL.ID, ISNULL(TBL.SECTOR,'') AS SECTOR , QUESTION , Answer 
+                                FROM
+                                (
+                                   SELECT EQ.ISACTIVE , OPS.ID, EQ.SECTOR , Q AS QUESTION , 
+                                   CASE WHEN OPS.ANSWER = 'A' THEN OPS.OPA
+                                        WHEN OPS.ANSWER = 'B' THEN OPS.OPB
+                                        WHEN OPS.ANSWER = 'C' THEN OPS.OPC
+                                        WHEN OPS.ANSWER = 'D' THEN OPS.OPD END AS 'Answer'
+                                   FROM EXM_QUESTIONS_OPS OPS
+                                   JOIN EXM_QUESTIONS EQ ON EQ.ID = OPS.ID 
+		                                AND  EQ.SECTOR = CASE WHEN @SECTOR = '' THEN EQ.SECTOR ELSE @SECTOR END
+		                                AND  ( OPS.Q + OPS.OPA + OPS.OPB + ISNULL(OPS.OPC,'') + ISNULL(OPS.OPD,'') LIKE '%' + @TEXT + '%' )
+		                                AND EQ.[BY] = CASE WHEN @BY = 0 THEN EQ.[BY] ELSE @BY END
+                                   UNION
+                                   SELECT EQ.ISACTIVE , FILL.ID , EQ.SECTOR ,
+                                       TEXT1 + ' ((BLANK)) ' + ISNULL(TEXT2,'') + ' ((BLANK)) ' + ISNULL(TEXT3,'') + ' ((BLANK)) ' + ISNULL(TEXT4,'') AS 'QUESTION',
+                                       '((' + 
+                                       FILL1_ANS1 +','+FILL1_ANS2+','+FILL1_ANS3+')) - ((' + 
+                                       FILL2_ANS1 +','+FILL2_ANS2+','+FILL2_ANS3+')) - ((' +
+                                       FILL3_ANS1 +','+FILL3_ANS2+','+FILL3_ANS3+'))' AS 'Answer'
+                                   FROM EXM_QUESTIONS_FILL FILL
+                                   JOIN EXM_QUESTIONS EQ ON EQ.ID = FILL.ID 
+		                                AND  EQ.SECTOR = CASE WHEN @SECTOR = '' THEN EQ.SECTOR ELSE @SECTOR END
+		                                AND ( ISNULL(FILL.TEXT1,'') + ISNULL(FILL.TEXT2,'') +ISNULL(FILL.TEXT3,'') +ISNULL(FILL.TEXT4,'') 
+			                                  + ISNULL(FILL.FILL1_ANS1,'') + ISNULL(FILL.FILL1_ANS2,'') + ISNULL(FILL.FILL1_ANS3,'')	
+			                                  + ISNULL(FILL.FILL2_ANS1,'') + ISNULL(FILL.FILL2_ANS2,'') + ISNULL(FILL.FILL2_ANS3,'')
+			                                  + ISNULL(FILL.FILL3_ANS1,'') + ISNULL(FILL.FILL3_ANS2,'') + ISNULL(FILL.FILL3_ANS3,'')
+			                                     LIKE '%' + @TEXT + '%'
+			                                )
+                                        AND EQ.[BY] = CASE WHEN @BY = 0 THEN EQ.[BY] ELSE @BY END
+                                ) TBL
+                               " + (onlyactive ? "WHERE TBL.ISACTIVE = 1 " : "")
+                                 + " ORDER BY TBL.ID DESC", connection))
                     {
                         connection.Open();
                         command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
-                        command.CommandType = CommandType.Text;
-
-                        SqlDataAdapter da = new SqlDataAdapter(command);
-                        da.Fill(res);
-
-                        if (res == null || res.Rows.Count == 0)
-                            return null;
-
-                        return res;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-            }
-            return null;
-        }
-
-        public static DataTable get_ALL_questions_sector_withAnswer(string sector)
-        {
-            DataTable res = new DataTable();
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                {
-                    using (SqlCommand command = new SqlCommand(
-                                @"
-                                    SELECT TBL.ID, ISNULL(TBL.SECTOR,'') AS SECTOR , QUESTION , Answer 
-                                    FROM
-                                     (
-                                        SELECT OPS.ID, Q AS QUESTION , EQ.SECTOR ,
-                                        CASE WHEN OPS.ANSWER = 'A' THEN OPS.OPA
-	                                         WHEN OPS.ANSWER = 'B' THEN OPS.OPB
-	                                         WHEN OPS.ANSWER = 'C' THEN OPS.OPC
-	                                         WHEN OPS.ANSWER = 'D' THEN OPS.OPD END AS 'Answer'
-                                        FROM EXM_QUESTIONS_OPS OPS
-                                        JOIN EXM_QUESTIONS EQ ON EQ.ID = OPS.ID AND  EQ.SECTOR = @SECTOR AND EQ.ISACTIVE=1
-                                        UNION
-                                        SELECT FILL.ID ,
-                                            TEXT1 + ' ((BLANK)) ' + ISNULL(TEXT2,'') + ' ((BLANK)) ' + ISNULL(TEXT3,'') + ' ((BLANK)) ' + ISNULL(TEXT4,'') AS QUESTION,
-	                                        EQ.SECTOR ,
-                                            '((' + 
-                                            FILL1_ANS1 +','+FILL1_ANS2+','+FILL1_ANS3+')) - ((' + 
-                                            FILL2_ANS1 +','+FILL2_ANS2+','+FILL2_ANS3+')) - ((' +
-                                            FILL3_ANS1 +','+FILL3_ANS2+','+FILL3_ANS3+'))' AS 'Answer'
-                                        FROM EXM_QUESTIONS_FILL FILL
-                                        JOIN EXM_QUESTIONS EQ ON EQ.ID = FILL.ID AND  EQ.SECTOR = @SECTOR  AND EQ.ISACTIVE=1
-                                     ) TBL
-                                     ORDER BY TBL.ID DESC", connection))
-                    {
-                        connection.Open();
-                        command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
+                        command.Parameters.Add("@BY", SqlDbType.Int).Value = creater;
+                        command.Parameters.Add("@TEXT", SqlDbType.NVarChar).Value = text;
                         command.CommandType = CommandType.Text;
 
                         SqlDataAdapter da = new SqlDataAdapter(command);

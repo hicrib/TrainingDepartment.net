@@ -42,6 +42,15 @@ namespace AviaTrain.SysAdmin
         protected global::System.Web.UI.WebControls.Button btn_create_questions;
 
         /// <summary>
+        /// btn_edit_questions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_edit_questions;
+
+        /// <summary>
         /// btn_create_exam control.
         /// </summary>
         /// <remarks>

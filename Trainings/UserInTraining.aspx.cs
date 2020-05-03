@@ -124,6 +124,22 @@ namespace AviaTrain.Trainings
             chk_b.Checked = false;
             chk_c.Checked = false;
             chk_d.Checked = false;
+
+            //make all options visible because previous question shouldnt affect
+            row_a.Visible = true;
+            row_b.Visible = true;
+            row_c.Visible = true;
+            row_d.Visible = true;
+
+            fill_text1.Visible = false;
+            fill_text2.Visible = false;
+            fill_text3.Visible = false;
+            fill_text4.Visible = false;
+
+            fill_fill_1.Visible = false;
+            fill_fill_2.Visible = false;
+            fill_fill_3.Visible = false;
+
         }
         protected void fill_question(DataRow ro)
         {
@@ -154,6 +170,7 @@ namespace AviaTrain.Trainings
             lbl_c.Text = n_question["OPC"].ToString();
             lbl_d.Text = n_question["OPD"].ToString();
             lbl_current_answers.Text = n_question["ANSWER"].ToString();
+
 
             if (n_question["TYPE"].ToString() == "3")
                 row_d.Visible = false;

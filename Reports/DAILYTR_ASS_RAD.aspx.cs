@@ -96,7 +96,7 @@ namespace AviaTrain.Reports
             txt_totalhours.Text = form.Rows[0]["TOTAL_HOURS"].ToString();
 
 
-            img_file.ImageUrl = "~/CommentImages/" + form.Rows[0]["PREBRIEF_COMMENTS_FILENAME"].ToString();
+            img_file.ImageUrl = AzureCon.general_container_url + form.Rows[0]["PREBRIEF_COMMENTS_FILENAME"].ToString();
             if (form.Rows[0]["PREBRIEF_COMMENTS_FILENAME"].ToString() != "")
                 img_file.Visible = true;
             txt_prebrief_comment.Text = form.Rows[0]["PREBRIEF_COMMENTS"].ToString();
@@ -234,12 +234,12 @@ namespace AviaTrain.Reports
             data.Add("OJTI_ID", ddl_ojtis.SelectedValue);
             data.Add("CHK_OJT", chk_OJT.Checked ? "1" : "0");
             data.Add("CHK_ASS", chk_Ass.Checked ? "1" : "0");
-            
+
 
             data.Add("OJTI_SIGNED", lbl_ojti_signed.Text == "1" ? "1" : "0");
             data.Add("TRAINEE_SIGNED", lbl_trainee_signed.Text == "1" ? "1" : "0");
 
-           //string date = ddl_DAY.SelectedValue + "." + ddl_MONTH.SelectedValue + "." + ddl_YEAR.SelectedValue;
+            //string date = ddl_DAY.SelectedValue + "." + ddl_MONTH.SelectedValue + "." + ddl_YEAR.SelectedValue;
             data.Add("DATE", txt_date.Text);
 
             string pos = ddl_positions.SelectedValue;
@@ -247,8 +247,8 @@ namespace AviaTrain.Reports
                 pos = pos.Substring(0, 2);
             data.Add("POSITION", pos);
             data.Add("POSITION_EXTRA", ddl_positions.SelectedItem.Text);
-            
-            
+
+
             data.Add("TIMEON", txt_timeon.Text);
             data.Add("TIMEOFF", txt_timeoff.Text);
 
@@ -323,21 +323,23 @@ namespace AviaTrain.Reports
             {
                 try
                 {
-                    //todo: file type control
-                    // if(file_prebrief_comment.PostedFile.ContentType == "image/jpeg")
-                    // { 
                     string filename = Utility.getRandomFileName();
                     string newfilename = filename + "_" + file_prebrief_comment.PostedFile.FileName;
-                    string file_address = Server.MapPath("~/CommentImages/") + filename + "_" + file_prebrief_comment.PostedFile.FileName;
+                    string file_address = Server.MapPath("~/AzureBlobs/Uploads/") + filename + "_" + file_prebrief_comment.PostedFile.FileName;
                     file_prebrief_comment.SaveAs(file_address);
-                    //file_prebrief_comment.SaveAs("~/CommentImages/" + filename);
-                    //} 
-                    // statuslabel.Text = "Upload status: File uploaded!";
+
+                    //will be pushed to db
                     uploadedfilename.Text = newfilename;
 
-                    //show the image
+                    //show the image , no need to read it from azure now
                     img_file.Visible = true;
-                    img_file.ImageUrl = "~/CommentImages/" + filename + "_" + file_prebrief_comment.PostedFile.FileName;
+                    img_file.ImageUrl = "~/AzureBlobs/Uploads/" + filename + "_" + file_prebrief_comment.PostedFile.FileName;
+
+                    if (!AzureCon.upload_ToBlob_fromFile(file_address))
+                    {
+                        //todo : what to do when error
+                        throw new Exception();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -373,7 +375,7 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose the Trainee before signing!", System.Drawing.Color.Red);
                 return false;
             }
-            if (!chk_OJT.Checked && !chk_Ass.Checked )
+            if (!chk_OJT.Checked && !chk_Ass.Checked)
             {
                 ClientMessage(lbl_pageresult, "Choose the type of training!", System.Drawing.Color.Red);
                 return false;
@@ -383,7 +385,7 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose Position!", System.Drawing.Color.Red);
                 return false;
             }
-            if(txt_date.Text == "")
+            if (txt_date.Text == "")
             {
                 ClientMessage(lbl_pageresult, "Choose Date!", System.Drawing.Color.Red);
                 return false;
@@ -502,7 +504,7 @@ namespace AviaTrain.Reports
                 return;
             }
             UserSession user = (UserSession)Session["usersession"];
-            if(user.employeeid != ddl_trainees.SelectedValue)
+            if (user.employeeid != ddl_trainees.SelectedValue)
             {
                 ClientMessage(lbl_pageresult, "Only Trainee can sign for trainee", System.Drawing.Color.Red);
                 return;

@@ -57,7 +57,10 @@ namespace AviaTrain.SysAdmin
                 { "firstname", txt_firstName.Text  },
                 { "surname",  txt_surName.Text },
                 { "password",  txt_password.Text },
-                    {"initial", txt_initial.Text.ToUpper() }
+                {"initial", txt_initial.Text.ToUpper() },
+                {"email", "" },
+                {"photo", "" },
+                {"signature", "" }
              };
 
             List<string> roles = new List<string>();

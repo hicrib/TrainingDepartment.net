@@ -43,7 +43,7 @@ namespace AviaTrain.App_Code
                     });
                 }
 
-                //reading file name & file extention    
+                //reading file name & file extension    
                 file_extension = Path.GetExtension(fileToUpload);
                 filename_withExtension = Path.GetFileName(fileToUpload);
 

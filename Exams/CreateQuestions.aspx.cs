@@ -410,59 +410,12 @@ namespace AviaTrain.Exams
 
         protected void chk_a_CheckedChanged1(object sender, EventArgs e)
         {
-            //uncheck others
-            string id = ((CheckBox)sender).ID;
-            if (id == "chk_a")
+            foreach (CheckBox item in new CheckBox[] { chk_a, chk_b, chk_c, chk_d })
             {
-                if (chk_a.Checked)
-                {
-                    chk_b.Checked = false;
-                    chk_c.Checked = false;
-                    chk_d.Checked = false;
-                }
-                else
-                {
-                    chk_a.Checked = true;
-                }
-            }
-            else if (id == "chk_b")
-            {
-                if (chk_b.Checked)
-                {
-                    chk_a.Checked = false;
-                    chk_c.Checked = false;
-                    chk_d.Checked = false;
-                }
-                else
-                {
-                    chk_b.Checked = true;
-                }
-            }
-            else if (id == "chk_c")
-            {
-                if (chk_c.Checked)
-                {
-                    chk_a.Checked = false;
-                    chk_b.Checked = false;
-                    chk_d.Checked = false;
-                }
-                else
-                {
-                    chk_c.Checked = true;
-                }
-            }
-            else if (id == "chk_d")
-            {
-                if (chk_d.Checked)
-                {
-                    chk_a.Checked = false;
-                    chk_b.Checked = false;
-                    chk_c.Checked = false;
-                }
-                else
-                {
-                    chk_d.Checked = true;
-                }
+                item.Checked = false;
+                
+                if (item.ID == ((CheckBox)sender).ID)
+                    item.Checked = true;
             }
         }
 
@@ -537,7 +490,7 @@ namespace AviaTrain.Exams
                 lbl_createexamresult.Text = "Pass Percent must be between 0-100"; return;
             }
 
-            DataTable dt =  lbl_use_lastadded.Text == "1" ? DB_Exams.get_Questions_MY_LAST_() : (DataTable)Session["grid_questions"];
+            DataTable dt = lbl_use_lastadded.Text == "1" ? DB_Exams.get_Questions_MY_LAST_() : (DataTable)Session["grid_questions"];
             if (dt == null || dt.Rows.Count == 0)
             {
                 lbl_createexamresult.Text = "First Create Questions ";

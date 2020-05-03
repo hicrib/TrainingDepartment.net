@@ -97,7 +97,7 @@ namespace AviaTrain.Reports
             txt_totalhours.Text = form.Rows[0]["TOTAL_HOURS"].ToString();
 
 
-            img_file.ImageUrl = "~/CommentImages/" + form.Rows[0]["PREBRIEF_COMMENTS_FILENAME"].ToString();
+            img_file.ImageUrl = AzureCon.general_container_url + form.Rows[0]["PREBRIEF_COMMENTS_FILENAME"].ToString();
             if (form.Rows[0]["PREBRIEF_COMMENTS_FILENAME"].ToString() != "")
                 img_file.Visible = true;
             txt_prebrief_comment.Text = form.Rows[0]["PREBRIEF_COMMENTS"].ToString();
@@ -201,21 +201,23 @@ namespace AviaTrain.Reports
             {
                 try
                 {
-                    //todo: file type control
-                    // if(file_prebrief_comment.PostedFile.ContentType == "image/jpeg")
-                    // { 
                     string filename = Utility.getRandomFileName();
                     string newfilename = filename + "_" + file_prebrief_comment.PostedFile.FileName;
-                    string file_address = Server.MapPath("~/CommentImages/") + filename + "_" + file_prebrief_comment.PostedFile.FileName;
+                    string file_address = Server.MapPath("~/AzureBlobs/Uploads/") + filename + "_" + file_prebrief_comment.PostedFile.FileName;
                     file_prebrief_comment.SaveAs(file_address);
-                    //file_prebrief_comment.SaveAs("~/CommentImages/" + filename);
-                    //} 
-                    // statuslabel.Text = "Upload status: File uploaded!";
+
+                    //will be pushed to db
                     uploadedfilename.Text = newfilename;
 
-                    //show the image
+                    //show the image , no need to read it from azure now
                     img_file.Visible = true;
-                    img_file.ImageUrl = "~/CommentImages/" + filename + "_" + file_prebrief_comment.PostedFile.FileName;
+                    img_file.ImageUrl = "~/AzureBlobs/Uploads/" + filename + "_" + file_prebrief_comment.PostedFile.FileName;
+
+                    if (!AzureCon.upload_ToBlob_fromFile(file_address))
+                    {
+                        //todo : what to do when error
+                        throw new Exception();
+                    }
                 }
                 catch (Exception ex)
                 {

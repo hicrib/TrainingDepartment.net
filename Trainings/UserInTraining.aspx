@@ -269,7 +269,7 @@
                                         </tr>
                                         <tr>
                                             <td style="text-align: center;">
-                                                <asp:Panel ID="panel_q_btn" runat="server" style="width:30% !important; display:inline-block;">
+                                                <asp:Panel ID="panel_q_btn" runat="server" style="width:60% !important; display:inline-block;">
                                                     <asp:Button ID="btn_prev_q" runat="server" CssClass="btn btn_q prev" Text="Previous Question" OnClick="btn_prev_q_Click" />
                                                     <asp:Button ID="btn_show_answer" runat="server" CssClass="btn btn_q show" Text="Show Answer" OnClick="btn_show_answer_Click" />
                                                     <asp:Button ID="btn_next_q" runat="server" CssClass="btn btn_q next" Text="Next Question" OnClick="btn_next_q_Click" />

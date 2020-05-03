@@ -525,14 +525,17 @@ namespace AviaTrain.App_Code
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
-                            @"INSERT INTO USERS VALUES ( @EMPLOYEEID, @NAME, @SURNAME, @PASSWORD, @INITIAL ,1) ", connection))
+                            @"INSERT INTO USERS VALUES ( @EMPLOYEEID, @NAME, @SURNAME, @PASSWORD, @INITIAL ,1, @EMAIL, @PHOTO, @SIGNATURE) ", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = userinfo["employeeid"];
                     command.Parameters.Add("@NAME", SqlDbType.NVarChar).Value = userinfo["firstname"];
-                    command.Parameters.Add("@SURNAME", SqlDbType.NVarChar).Value = userinfo["surname"]; ;
-                    command.Parameters.Add("@PASSWORD", SqlDbType.NVarChar).Value = userinfo["password"]; ;
-                    command.Parameters.Add("@INITIAL", SqlDbType.NVarChar).Value = userinfo["initial"]; ;
+                    command.Parameters.Add("@SURNAME", SqlDbType.NVarChar).Value = userinfo["surname"]; 
+                    command.Parameters.Add("@PASSWORD", SqlDbType.NVarChar).Value = userinfo["password"] ;
+                    command.Parameters.Add("@INITIAL", SqlDbType.NVarChar).Value = userinfo["initial"]; 
+                    command.Parameters.Add("@EMAIL", SqlDbType.NVarChar).Value = userinfo["email"]; 
+                    command.Parameters.Add("@PHOTO", SqlDbType.NVarChar).Value = userinfo["photo"]; 
+                    command.Parameters.Add("@SIGNATURE", SqlDbType.NVarChar).Value = userinfo["signature"]; 
 
                     command.CommandType = CommandType.Text;
                     int rows = command.ExecuteNonQuery();

@@ -53,7 +53,7 @@ namespace AviaTrain.Exams
 
         protected DataTable Fill_Grid_AllQuestions(string sector = "GEN")
         {
-            DataTable dt = DB_Exams.get_ALL_questions_sector_withAnswer(sector);
+            DataTable dt = DB_Exams.get_questions_withAnswer(sector:sector);
             if (dt == null || dt.Rows.Count == 0)
             {
                 dt = new DataTable();
@@ -72,7 +72,8 @@ namespace AviaTrain.Exams
 
         protected void grid_all_questions_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-
+            if (e.Row.Cells.Count > 2)
+                e.Row.Cells[2].Visible = false;
         }
 
         protected void grid_all_questions_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -87,15 +88,15 @@ namespace AviaTrain.Exams
                 DataTable dt = (DataTable)Session["chosen_questions"];
 
                 //add if not exist
-                DataRow[] result = dt.Select("ID = '" + selectedRow.Cells[2].Text.Trim() + "'");
+                DataRow[] result = dt.Select("ID = '" + selectedRow.Cells[3].Text.Trim() + "'");
 
                 if (result == null || result.Length == 0)
                 {
                     DataRow row = dt.NewRow();
-                    row["ID"] = selectedRow.Cells[2].Text.Trim();
-                    row["SECTOR"] = selectedRow.Cells[3].Text.Trim();
-                    row["QUESTION"] = selectedRow.Cells[4].Text.Trim();
-                    row["Answer"] = selectedRow.Cells[5].Text.Trim();
+                    row["ID"] = selectedRow.Cells[3].Text.Trim();
+                    row["SECTOR"] = selectedRow.Cells[4].Text.Trim();
+                    row["QUESTION"] = selectedRow.Cells[5].Text.Trim();
+                    row["Answer"] = selectedRow.Cells[6].Text.Trim();
                     dt.Rows.Add(row);
                     Session["chosen_questions"] = dt;
                 }
@@ -109,7 +110,7 @@ namespace AviaTrain.Exams
                 //remove that row containing selected id
                 if (dt != null && dt.Rows.Count > 0)
                 {
-                    DataRow[] result = dt.Select("ID = '" + selectedRow.Cells[2].Text.Trim() + "'");
+                    DataRow[] result = dt.Select("ID = '" + selectedRow.Cells[3].Text.Trim() + "'");
                     foreach (DataRow row in result)
                     {
                         dt.Rows.Remove(row);
@@ -134,7 +135,7 @@ namespace AviaTrain.Exams
             grid_all_questions.PageIndex = e.NewPageIndex;
 
             // Tekrar kayıtların gridview'e aktarılması sağlanır.
-            grid_all_questions.DataSource = DB_Exams.get_ALL_questions_sector_withAnswer(ddl_sector.SelectedValue);
+            grid_all_questions.DataSource = DB_Exams.get_questions_withAnswer(sector:ddl_sector.SelectedValue);
             grid_all_questions.DataBind();
         }
 

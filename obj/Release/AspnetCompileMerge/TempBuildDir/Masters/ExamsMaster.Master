@@ -128,7 +128,7 @@
                 <tr>
                     <td>
                         <div style="display: inline; float: left; margin-right: 10px;">
-                            <asp:Image ID="img_userphoto" runat="server" Style="max-width: 40px; max-height: 40px;" />
+                            <asp:Image ID="img_userphoto" runat="server" ImageUrl="~/images/genericprofile.png" Style="max-width: 40px; max-height: 40px;" />
                         </div>
                         <div style="display: inline;">
                             <asp:Label ID="lbl_username" runat="server"></asp:Label>

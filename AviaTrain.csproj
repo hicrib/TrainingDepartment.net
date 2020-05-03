@@ -196,6 +196,7 @@
     <Content Include="Exams\CreateExam.aspx" />
     <Content Include="Exams\CreateQuestions.aspx" />
     <Content Include="Exams\DeleteExam.aspx" />
+    <Content Include="Exams\EditQuestions.aspx" />
     <Content Include="images\create.png" />
     <Content Include="images\cross_red.png" />
     <Content Include="images\cross_red_small.png" />
@@ -1272,6 +1273,13 @@
     <Compile Include="Exams\DeleteExam.aspx.designer.cs">
       <DependentUpon>DeleteExam.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Exams\EditQuestions.aspx.cs">
+      <DependentUpon>EditQuestions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Exams\EditQuestions.aspx.designer.cs">
+      <DependentUpon>EditQuestions.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ErrorPage.aspx.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1576,7 +1584,6 @@
     <Folder Include="App_Themes\Theme1\" />
     <Folder Include="AzureBlobs\Downloads\" />
     <Folder Include="AzureBlobs\Uploads\" />
-    <Folder Include="CommentImages\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\5_03bombwarning - Copy %282%29\docs\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\5_03bombwarning - Copy %282%29\images\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\5_03bombwarning - Copy %282%29\swf\" />
@@ -1586,7 +1593,6 @@
     <Folder Include="Signatures\" />
     <Folder Include="Trainings\T_Images\" />
     <Folder Include="UserCertificates\" />
-    <Folder Include="UserPhotos\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

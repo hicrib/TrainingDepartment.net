@@ -18,7 +18,8 @@ namespace AviaTrain.Masters
                 UserSession user = (UserSession)Session["usersession"];
                 lbl_username.Text = user.initial + " - " + user.name_surname;
                 lbl_userid.Text = user.employeeid;
-                img_userphoto.ImageUrl = "~/UserPhotos/" + user.photo;
+                if (user.photo != "")
+                    img_userphoto.ImageUrl = AzureCon.general_container_url + user.photo;
             }
         }
 
@@ -34,13 +35,13 @@ namespace AviaTrain.Masters
         {
             UserSession user = (UserSession)Session["usersession"];
 
-            if(user.isAdmin)
+            if (user.isAdmin)
                 Response.Redirect("~/SysAdmin/SysAdminMain.aspx");
             else if (user.isExamAdmin)
                 Response.Redirect("~/Exams/Exam_MainAdmin.aspx");
             else if (user.isExamTrainee)
                 Response.Redirect("~/Exams/Exam_MainGeneral.aspx");
-            
+
         }
 
         protected void btn_user_details_Click(object sender, ImageClickEventArgs e)
