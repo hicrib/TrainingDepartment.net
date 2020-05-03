@@ -76,5 +76,10 @@ namespace AviaTrain.SysAdmin
         {
             Response.Redirect("~/Trainings/AssignTraining.aspx");
         }
+
+        protected void btn_view_trainingdesigns_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Trainings/ViewTrainings.aspx");
+        }
     }
 }

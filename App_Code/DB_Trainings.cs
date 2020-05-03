@@ -64,8 +64,8 @@ namespace AviaTrain.App_Code
                 using (SqlCommand command = new SqlCommand(
                      @"UPDATE TRN_TRAINING_DEF 
                        SET    
-                              LAST_MODIFY=  CASE WHEN '' = @LAST_MODIFY THEN LAST_MODIFY ELSE @LAST_MODIFY END , 
-                              LAST_MODIFY_DATE= CASE WHEN '' = @LAST_MODIFY_DATE THEN LAST_MODIFY_DATE ELSE  CONVERT(VARCHAR , GETUTCDATE(), 20 ) END  , 
+" + (last_modify == "" ? "" : "LAST_MODIFY=  CASE WHEN '' = @LAST_MODIFY THEN LAST_MODIFY ELSE @LAST_MODIFY END , ") +
+                           @" LAST_MODIFY_DATE= CASE WHEN '' = @LAST_MODIFY_DATE THEN LAST_MODIFY_DATE ELSE  CONVERT(VARCHAR , GETUTCDATE(), 20 ) END  , 
                               STATUS=    CASE WHEN '' = @STATUS THEN STATUS ELSE @STATUS END , 
                               EXTRA=     CASE WHEN '' = @EXTRA THEN EXTRA ELSE @EXTRA END " +
                                 (isactive != "" ? " , ISACTIVE= " + isactive : "") +
@@ -73,10 +73,12 @@ namespace AviaTrain.App_Code
                 {
                     connection.Open();
                     command.Parameters.Add("@TRNID", SqlDbType.Int).Value = trnid;
-                    command.Parameters.Add("@LAST_MODIFY", SqlDbType.Int).Value = last_modify;
                     command.Parameters.Add("@LAST_MODIFY_DATE", SqlDbType.NVarChar).Value = last_modif_date;
                     command.Parameters.Add("@STATUS", SqlDbType.NVarChar).Value = status;
                     command.Parameters.Add("@EXTRA", SqlDbType.NVarChar).Value = extra;
+                    if (last_modify != "")
+                        command.Parameters.Add("@LAST_MODIFY", SqlDbType.Int).Value = user.employeeid;
+
                     command.CommandType = CommandType.Text;
 
                     if (Convert.ToInt32(command.ExecuteNonQuery()) > 0)
@@ -98,7 +100,7 @@ namespace AviaTrain.App_Code
             string insert = @"DECLARE @EXAMID INT = (SELECT EXTRA FROM TRN_STEP WHERE TRN_ID = @TRNID AND STEPTYPE ='EXAM_STEP')
                               DECLARE @LASTSTEPID INT = (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRNID ORDER BY STEP_ID ASC)    
                             ";
-            
+
 
             start = start == "" ? "2000-01-01" : start;
             finish = finish == "" ? "2099-01-01" : finish;
@@ -106,7 +108,7 @@ namespace AviaTrain.App_Code
             {
                 insert += @"
                         INSERT INTO TRN_ASSIGNMENT 
-                        VALUES (@TRNID, " + row["ID"].ToString() + " , 'ASSIGNED', '" + start + "', '" + finish + "' , NULL,NULL,@LASTSTEPID,@EXAMID, @BY, CONVERT(VARCHAR , GETUTCDATE(), 20 ),1 )";
+                        VALUES (@TRNID, " + row["ID"].ToString() + " , 'ASSIGNED', '" + start + "', '" + finish + "' , NULL,NULL,@LASTSTEPID,@EXAMID, @BY, CONVERT(VARCHAR , GETUTCDATE(), 20 ),1 , NULL)";
             }
 
             try
@@ -131,7 +133,7 @@ namespace AviaTrain.App_Code
             return false;
         }
 
-        public static bool update_Assignment(string assignid, string laststepid ="0" , string status = "", string userstart = "", string userfinish ="")
+        public static bool update_Assignment(string assignid, string laststepid = "0", string status = "", string userstart = "", string userfinish = "",string examassignid="0")
         {
             try
             {
@@ -141,7 +143,8 @@ namespace AviaTrain.App_Code
                             SET LASTSTEPID = CASE WHEN @LASTSTEPID = '0' THEN LASTSTEPID ELSE @LASTSTEPID END ,
 	                            [STATUS] = CASE WHEN @STATUS = '' THEN [STATUS] ELSE @STATUS END,
                                 USER_START = CASE WHEN @USERSTART = '' THEN USER_START ELSE CONVERT(VARCHAR , GETUTCDATE(), 20 ) END,
-                                USER_FINISH = CASE WHEN @USERFINISH = '' THEN USER_FINISH ELSE CONVERT(VARCHAR , GETUTCDATE(), 20 ) END
+                                USER_FINISH = CASE WHEN @USERFINISH = '' THEN USER_FINISH ELSE CONVERT(VARCHAR , GETUTCDATE(), 20 ) END,
+                                EXAM_ASSIGNID = CASE WHEN @EXAM_ASSIGNID = 0 THEN EXAM_ASSIGNID ELSE @EXAM_ASSIGNID END
                             WHERE ASSIGNID = @ASSIGNID", connection))
                 {
                     connection.Open();
@@ -150,6 +153,7 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@STATUS", SqlDbType.NVarChar).Value = status;
                     command.Parameters.Add("@USERSTART", SqlDbType.NVarChar).Value = userstart;
                     command.Parameters.Add("@USERFINISH", SqlDbType.NVarChar).Value = userfinish;
+                    command.Parameters.Add("@EXAM_ASSIGNID", SqlDbType.Int).Value = examassignid;
                     command.CommandType = CommandType.Text;
 
                     if (Convert.ToInt32(command.ExecuteNonQuery()) > 0)
@@ -288,22 +292,27 @@ namespace AviaTrain.App_Code
 
             return false;
         }
-        public static string get_prev_next_STEPID(string trn_id, string current_stepid, bool next = true)
+        public static string get_prev_next_first_last_STEPID(string trn_id, string current_stepid, string which)
         {
             string select = "";
             try
             {
-                if (next)
+                if (which == "next")
                     select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID > @STEP_ID ORDER BY STEP_ID ASC";
-                else
+                else if (which == "prev")
                     select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID < @STEP_ID ORDER BY STEP_ID DESC";
+                else if (which == "last")
+                    select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='TRN'  ORDER BY STEP_ID DESC";
+                else if (which == "first")
+                    select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='TRN'  ORDER BY STEP_ID ASC";
 
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(select, connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@TRN_ID", SqlDbType.Int).Value = trn_id;
-                    command.Parameters.Add("@STEP_ID", SqlDbType.Int).Value = current_stepid;
+                    if (which == "next" || which == "prev")
+                        command.Parameters.Add("@STEP_ID", SqlDbType.Int).Value = current_stepid;
                     command.CommandType = CommandType.Text;
 
                     return Convert.ToString(command.ExecuteScalar() as object); //so that it returns empty
@@ -355,7 +364,7 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-         public static DataTable get_STEP_info(string stepid)
+        public static DataTable get_STEP_info(string stepid)
         {
             DataTable res = new DataTable();
             try
@@ -550,7 +559,49 @@ namespace AviaTrain.App_Code
 
         }
 
+        public static DataTable get_training_Designs()
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                {
+                    using (SqlCommand command = new SqlCommand(
+                                @" 
+                                SELECT 
+	                                CASE WHEN TDEF.ISACTIVE = 1 THEN 'Yes' Else 'No' END AS 'ACTIVE',
+	                                NAME , 
+	                                STATUS , 
+	                                SECTOR , 
+	                                EFFECTIVE , 
+	                                U.FIRSTNAME + ' ' + U.SURNAME AS LAST_MODIFY,
+	                                LAST_MODIFY_DATE,
+	                                CASE WHEN EXISTS (SELECT TOP 1 * FROM TRN_STEP WHERE STEPTYPE='EXAM_STEP' AND TRN_ID=TDEF.ID AND ISNULL(EXTRA,'') <> '' )
+					                                THEN 'Yes' ELSE 'No' END AS 'EXAM',
+	                                TDEF.ID AS 'TRNID' , 
+	                                (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = TDEF.ID ORDER BY STEP_ID DESC) AS 'LASTSTEPID',
+                                    (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = TDEF.ID ORDER BY STEP_ID ASC) AS 'FIRSTSTEP'
+                                from TRN_TRAINING_DEF TDEF 
+                                JOIN USERS U ON U.EMPLOYEEID = TDEF.LAST_MODIFY
+                               ", connection))
+                    {
+                        connection.Open();
+                        SqlDataAdapter da = new SqlDataAdapter(command);
+                        da.Fill(res);
 
+                        if (res == null || res.Rows.Count == 0)
+                            return null;
+
+                        return res;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
 
 
         public static string whose_Assignment(string assign_id)
@@ -613,6 +664,46 @@ namespace AviaTrain.App_Code
 
             //something went wrong
             return "";
+        }
+
+        public static DataTable get_Completed_Trainings(string userid)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                {
+                    using (SqlCommand command = new SqlCommand(
+                                @" 
+                               SELECT DEF.NAME , ASS.STATUS , ASS.USER_START , ASS.USER_FINISH , 
+		                                CASE WHEN ISNULL(ASS.EXAMID,'') = '' THEN 'No' 
+			                                 ELSE (SELECT EA.GRADE + ' ' + EA.STATUS FROM EXM_EXAM_ASSIGNMENT EA WHERE EA.ASSIGN_ID = ASS.EXAM_ASSIGNID )
+			                                 END AS 'EXAM'
+                                FROM TRN_ASSIGNMENT ASS
+                                JOIN TRN_TRAINING_DEF DEF ON DEF.ID = ASS.TRNID 
+                                WHERE ASS.USERID = @USERID  AND  ASS.STATUS IN ('PASSED','FAILED', 'FINISHED')
+                                order by ass.USER_FINISH desc
+                               ", connection))
+                    {
+                        connection.Open();
+                        command.Parameters.AddWithValue("@USERID", userid);
+                        command.CommandType = CommandType.Text;
+                        SqlDataAdapter da = new SqlDataAdapter(command);
+                        da.Fill(res);
+
+                        if (res == null || res.Rows.Count == 0)
+                            return null;
+
+                        return res;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+
         }
     }
 }

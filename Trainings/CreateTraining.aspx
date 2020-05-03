@@ -19,7 +19,7 @@
                 text-align: center;
                 font-weight: bold;
                 font-size: large;
-                background-color: indianred;
+                background-color: #a52a2a;
                 color: white;
             }
             .trn_info_tbl td:first-child {
@@ -91,7 +91,7 @@
                         <td colspan="2">
                             <asp:Label ID="lbl_info_error" runat="server" Visible="false"></asp:Label>
                             <asp:Button ID="btn_create_trn" runat="server" OnClick="btn_create_trn_Click" Text="Start Designing Training"
-                                Style="width: 400px; background-color: indianred;color : white; font-size: medium; font-weight: bold;" />
+                                Style="width: 400px; background-color: #a52a2a;color : white; font-size: medium; font-weight: bold;" />
                         </td>
                     </tr>
                 </table>

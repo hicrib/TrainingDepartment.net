@@ -16,7 +16,7 @@
             border-collapse: collapse;
             padding: 10px;
             margin: 0px;
-            border: 3px solid #b63838	;
+            border: 3px solid #a52a2a	;
         }
 
             .tbl_exam_info th {
@@ -24,7 +24,7 @@
                 font-size: large;
                 font-weight: bold;
                 color: white;
-                background-color: #b63838	;
+                background-color: #a52a2a	;
             }
 
             .tbl_exam_info td {
@@ -45,8 +45,12 @@
         .grid_exam_questions td:first-child {
             width : 20px;
         }
+        .grid_exam_questions td:nth-child(2) {
+            width : 55%;
+            text-align:left;
+        }
         .grid_exam_questions td:last-child {
-            width : 100%;
+            width : 40%;
             text-align:left;
         }
 
@@ -54,8 +58,8 @@
             width: 100%;
             float: left;
             font-weight: bold;
-            border: 1px solid #b63838	;
-            background-color: #b63838	;
+            border: 1px solid #a52a2a	;
+            background-color: #a52a2a	;
             color: white;
             height: 25px;
         }

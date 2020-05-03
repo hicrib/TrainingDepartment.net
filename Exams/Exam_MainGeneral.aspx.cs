@@ -27,6 +27,7 @@ namespace AviaTrain.Exams
                 fill_grid_examassignments();
                 fill_grid_examcompleted();
                 fill_grid_trainingassignments();
+                fill_grid_completed_trainings();
             }
         }
 
@@ -108,5 +109,22 @@ namespace AviaTrain.Exams
 
             Response.Redirect("~/Trainings/UserInTraining.aspx?AsID=" + assignid + "&StepID=" + laststepid);
         }
+
+
+
+
+        protected void fill_grid_completed_trainings()
+        {
+            UserSession user = (UserSession)Session["usersession"];
+            DataTable dt = DB_Trainings.get_Completed_Trainings(user.employeeid);
+
+            if (dt == null || dt.Rows.Count == 0)
+                return;
+
+            grid_completed_trainings.DataSource = dt;
+            grid_completed_trainings.DataBind();
+
+        }
+
     }
 }

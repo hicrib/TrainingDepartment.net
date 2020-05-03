@@ -35,7 +35,7 @@
         .modalPopup {
             background-color: lightgray;
             width: 90%;
-            border: 3px solid indianred;
+            border: 3px solid #a52a2a;
             height: 99%;
         }
 
@@ -67,7 +67,7 @@
                 text-align: center;
                 font-weight: bold;
                 cursor: pointer;
-                background-color: indianred;
+                background-color: #a52a2a;
                 border: 1px solid black;
             }
 
@@ -100,12 +100,12 @@
 
         .btn_create {
             margin: auto;
-            background-color: indianred !important;
+            background-color: #a52a2a !important;
             width: 150px !important;
         }
 
         .btn_finish {
-            background-color: indianred;
+            background-color: #a52a2a;
             color: white;
             width: 300px !important;
             height: 30px !important;
@@ -163,7 +163,7 @@
         <tr>
             <td>
                 <div style="float: left; width: 1000px; height: 480px !important;">
-                    <div id="upper_div" style="height: 500px; background-color: white; border: 1px solid indianred;" runat="server"></div>
+                    <div id="upper_div" style="height: 500px; background-color: white; border: 1px solid #a52a2a;" runat="server"></div>
                 </div>
                 <asp:TextBox ID="txt_upper_div_holder" runat="server" Style="display: none;" ClientIDMode="Static"></asp:TextBox>
             </td>
@@ -271,8 +271,11 @@
 
 
     <script>
+        //$.trumbowyg.svgPath = '~\Scripts\trumbowyg\ui\icons.svg';
+
         $('#ContentPlaceHolder1_upper_div')
             .trumbowyg({
+                svgPath: '/Scripts/trumbowyg/ui/icons.svg' ,// or a path like '/assets/my-custom-path/icons.svg',
                 btnsDef: {
                     // Create a new dropdown
                     image: {

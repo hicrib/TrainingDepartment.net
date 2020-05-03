@@ -7,7 +7,7 @@
             border-collapse: collapse;
             padding: 0px;
             margin: 0px;
-            border: 3px solid #b63838;
+            border: 3px solid #a52a2a;
         }
 
             .awaiting_assignments th {
@@ -15,7 +15,7 @@
                 font-size: large;
                 font-weight: bold;
                 color: white;
-                background-color: #b63838;
+                background-color: #a52a2a;
             }
 
             .awaiting_assignments td {
@@ -48,7 +48,7 @@
 
         .container {
             width: 1000px;
-            /*border: 2px solid indianred;*/
+            /*border: 2px solid #a52a2a;*/
         }
 
 
@@ -182,6 +182,22 @@
                                     OnRowDataBound="grid_assigned_training_RowDataBound" >
                                     <Columns>
                                         <asp:ButtonField ButtonType="Image" CommandName="GO" ImageUrl="~/images/exam.png" Text="Do Training" />
+                                    </Columns>
+                                </asp:GridView>
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <br />
+                     <table class="awaiting_assignments">
+                        <tr>
+                            <th>COMPLETED TRAININGS
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <asp:GridView ID="grid_completed_trainings" runat="server"  CssClass="grid_assignments" >
+                                    <Columns>
                                     </Columns>
                                 </asp:GridView>
                             </td>

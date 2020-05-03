@@ -1,13 +1,109 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="CreateQuestions.aspx.cs" Inherits="AviaTrain.Exams.CreateQuestions" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
+        .ops_table {
+            width: 100%;
+            min-height: 300px;
+        }
+
+            .ops_table td {
+                height: 40px;
+                padding: 5px;
+                font-weight: bold;
+                font-size: medium;
+            }
+
+                .ops_table td:first-child {
+                    width: 20px;
+                }
+
+                .ops_table td:nth-child(2) {
+                    width: 20px;
+                    font-size: large;
+                    font-weight: bold;
+                }
+
+                .ops_table td:last-child {
+                    width: 500px;
+                }
+
+        .modalBackgroundempty {
+            background-color: lightgray;
+            filter: alpha(opacity=50);
+            opacity: 0.2;
+        }
+
+        .modalPopupempty {
+            background-color: lightgray;
+            width: 50%;
+            height: 50%;
+        }
+
+            .modalPopupempty .body {
+                min-height: 50px;
+                line-height: 30px;
+                text-align: center;
+                padding: 5px;
+                height: 99%;
+            }
+
+        .modalBackground {
+            background-color: Black;
+            filter: alpha(opacity=40);
+            opacity: 0.2;
+        }
+
+        .modalPopup {
+            background-color: lightgray;
+            width: 50%;
+            border: 3px solid #a52a2a;
+            height: 50%;
+        }
+
+            .modalPopup .header {
+                background-color: #2FBDF1;
+                height: 99%;
+                color: White;
+                line-height: 30px;
+                text-align: center;
+                font-weight: bold;
+            }
+
+            .modalPopup .body {
+                min-height: 50px;
+                line-height: 30px;
+                text-align: center;
+                padding: 5px;
+                height: 99%;
+            }
+
+            .modalPopup .footer {
+                padding: 3px;
+            }
+
+            .modalPopup .button {
+                height: 23px;
+                color: White;
+                line-height: 23px;
+                text-align: center;
+                font-weight: bold;
+                cursor: pointer;
+                background-color: #a52a2a;
+                border: 1px solid black;
+            }
+
+            .modalPopup td {
+                text-align: left;
+            }
+
         .tbl_create_question {
             width: 1000px;
             border-collapse: collapse;
             padding: 10px;
             margin: 0px;
-            border: 3px solid #b63838;
+            border: 3px solid #a52a2a;
         }
 
             .tbl_create_question th {
@@ -15,7 +111,7 @@
                 font-size: large;
                 font-weight: bold;
                 color: white;
-                background-color: #b63838;
+                background-color: #a52a2a;
             }
 
             .tbl_create_question td:first-child {
@@ -56,8 +152,8 @@
         .ops_submit {
             width: 100%;
             font-weight: bold;
-            border: 1px solid #b63838;
-            background-color: #b63838;
+            border: 1px solid #a52a2a;
+            background-color: #a52a2a;
             color: white;
             height: 30px;
         }
@@ -156,12 +252,12 @@
 
         .tbl_fill {
             border-collapse: collapse;
-            border: 1px solid #b63838;
+            border: 1px solid #a52a2a;
             width: 100%;
         }
     </style>
     <script type="text/javascript">
-        function Remove_Info()() {
+        function Remove_Info() {
             alert("IF Question belongs to an exam. It can't be deleted!");
         }
     </script>
@@ -177,16 +273,11 @@
 
 
             <table class="tbl_create_question">
-                <thead>
-                    <tr>
-                        <th>CREATE QUESTION</th>
-                    </tr>
-                </thead>
                 <tbody>
                     <tr>
 
                         <td>
-                            <table style="border: 1px solid #b63838; width: 100%;">
+                            <table style="border: 1px solid #a52a2a; width: 100%;">
                                 <tr>
                                     <td style="width: 200px; padding: 5px; font-weight: bold; font-size: medium; text-align: center;">Question Type :
                                     </td>
@@ -229,13 +320,13 @@
                                 <table class="tbl_ops_question">
                                     <tr>
                                         <td colspan="3">Question : 
-                                            <asp:TextBox ID="txt_question_ops" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                            <asp:TextBox ID="txt_question_ops" ClientIDMode="Static" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>A-)</td>
                                         <td>
-                                            <asp:TextBox ID="txt_ops_a" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                            <asp:TextBox ID="txt_ops_a" ClientIDMode="Static" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                         <td>
                                             <asp:CheckBox ID="chk_a" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1" />
@@ -244,7 +335,7 @@
                                     <tr>
                                         <td>B-)</td>
                                         <td>
-                                            <asp:TextBox ID="txt_ops_b" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                            <asp:TextBox ID="txt_ops_b" ClientIDMode="Static" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                         <td>
                                             <asp:CheckBox ID="chk_b" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1" />
@@ -253,7 +344,7 @@
                                     <tr>
                                         <td>C-) </td>
                                         <td>
-                                            <asp:TextBox ID="txt_ops_c" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                            <asp:TextBox ID="txt_ops_c" CssClass="ops_textarea" ClientIDMode="Static" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                         <td>
                                             <asp:CheckBox ID="chk_c" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1" />
@@ -262,7 +353,7 @@
                                     <tr>
                                         <td>D-)</td>
                                         <td>
-                                            <asp:TextBox ID="txt_ops_d" CssClass="ops_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                            <asp:TextBox ID="txt_ops_d" CssClass="ops_textarea" ClientIDMode="Static" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                         <td>
                                             <asp:CheckBox ID="chk_d" runat="server" AutoPostBack="true" OnCheckedChanged="chk_a_CheckedChanged1" />
@@ -275,6 +366,8 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3">
+                                            <asp:Button ID="btn_ops_preview" ClientIDMode="Static" CssClass="" runat="server" OnClientClick="return ShowModalPopup()" Style="margin: auto;" Text="PreView Question" />
+
                                             <asp:Button ID="btn_questionOPS_submit" CssClass="ops_submit" runat="server" Text="Submit Question" OnClick="btn_questionOPS_submit_Click" />
                                         </td>
                                     </tr>
@@ -292,49 +385,49 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:TextBox ID="txt_Text1" CssClass="fill_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                            <asp:TextBox ID="txt_Text1" ClientIDMode="Static" CssClass="fill_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <asp:TextBox ID="blank1" Enabled="false" PlaceHolder="Blank 1" runat="server"></asp:TextBox>
                                             Acceptable Answers :
-                                            <asp:TextBox ID="fill_1_ans1" runat="server" CssClass="acceptables"></asp:TextBox>
-                                            <asp:TextBox ID="fill_1_ans2" runat="server" CssClass="acceptables"></asp:TextBox>
-                                            <asp:TextBox ID="fill_1_ans3" runat="server" CssClass="acceptables"></asp:TextBox>
+                                            <asp:TextBox ID="fill_1_ans1" ClientIDMode="Static" runat="server" CssClass="acceptables"></asp:TextBox>
+                                            <asp:TextBox ID="fill_1_ans2" ClientIDMode="Static" runat="server" CssClass="acceptables"></asp:TextBox>
+                                            <asp:TextBox ID="fill_1_ans3" ClientIDMode="Static" runat="server" CssClass="acceptables"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:TextBox ID="txt_Text2" CssClass="fill_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                            <asp:TextBox ID="txt_Text2" ClientIDMode="Static" CssClass="fill_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <asp:TextBox ID="blank2" Enabled="false" PlaceHolder="Blank 2" runat="server"></asp:TextBox>
                                             Acceptable Answers :
-                                            <asp:TextBox ID="fill_2_ans1" runat="server" CssClass="acceptables"></asp:TextBox>
-                                            <asp:TextBox ID="fill_2_ans2" runat="server" CssClass="acceptables"></asp:TextBox>
-                                            <asp:TextBox ID="fill_2_ans3" runat="server" CssClass="acceptables"></asp:TextBox>
+                                            <asp:TextBox ID="fill_2_ans1" ClientIDMode="Static" runat="server" CssClass="acceptables"></asp:TextBox>
+                                            <asp:TextBox ID="fill_2_ans2" ClientIDMode="Static" runat="server" CssClass="acceptables"></asp:TextBox>
+                                            <asp:TextBox ID="fill_2_ans3" ClientIDMode="Static" runat="server" CssClass="acceptables"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:TextBox ID="txt_Text3" CssClass="fill_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                            <asp:TextBox ID="txt_Text3" ClientIDMode="Static" CssClass="fill_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <asp:TextBox ID="blank3" Enabled="false" PlaceHolder="Blank 3" runat="server"></asp:TextBox>
                                             Acceptable Answers :
-                                            <asp:TextBox ID="fill_3_ans1" runat="server" CssClass="acceptables"></asp:TextBox>
-                                            <asp:TextBox ID="fill_3_ans2" runat="server" CssClass="acceptables"></asp:TextBox>
-                                            <asp:TextBox ID="fill_3_ans3" runat="server" CssClass="acceptables"></asp:TextBox>
+                                            <asp:TextBox ID="fill_3_ans1" runat="server" ClientIDMode="Static" CssClass="acceptables"></asp:TextBox>
+                                            <asp:TextBox ID="fill_3_ans2" runat="server" ClientIDMode="Static" CssClass="acceptables"></asp:TextBox>
+                                            <asp:TextBox ID="fill_3_ans3" runat="server" ClientIDMode="Static" CssClass="acceptables"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:TextBox ID="txt_Text4" CssClass="fill_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
+                                            <asp:TextBox ID="txt_Text4" ClientIDMode="Static" CssClass="fill_textarea" runat="server" TextMode="MultiLine"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
@@ -343,6 +436,9 @@
                                     </tr>
                                     <tr>
                                         <td>
+
+                                            <asp:Button ID="btn_fill_preview" ClientIDMode="Static" CssClass="" runat="server" OnClientClick="return ShowModalPopup2()" Style="margin: auto;" Text="Preview Question" />
+
                                             <asp:Button ID="btn_fill_submit" CssClass="ops_submit" runat="server" Text="Submit Question" OnClick="btn_fill_submit_Click" />
                                         </td>
                                     </tr>
@@ -357,9 +453,9 @@
                     <tr>
                         <td>
                             <asp:CheckBox ID="chk_createexam" runat="server" AutoPostBack="true" Text="Create Exam With These Questions" OnCheckedChanged="chk_createexam_CheckedChanged" />
-                            <asp:Panel ID="panel_create_exam" Visible="false" style="text-align: center;" runat="server">
+                            <asp:Panel ID="panel_create_exam" Visible="false" Style="text-align: center;" runat="server">
                                 <div style="display: inline-block;">
-                                    <table style="border: 1px solid indianred;">
+                                    <table style="border: 1px solid #a52a2a;">
                                         <tr>
                                             <td style="width: 100px;">Exam Name</td>
                                             <td>
@@ -404,7 +500,144 @@
         </ContentTemplate>
     </asp:UpdatePanel>
 
+    <script>
+        function ShowModalPopup() {
+            $('#lbl_ops_question').text($('#txt_question_ops').val());
+            $('#lbl_a').text($('#txt_ops_a').val());
+            $('#lbl_b').text($('#txt_ops_b').val());
+            $('#lbl_c').text($('#txt_ops_c').val());
+            $('#lbl_d').text($('#txt_ops_d').val());
+            $find("mpe").show();
+            return false;
+        }
+        function ShowModalPopup2() {
 
+            $('#fill_text1').text($('#txt_Text1').val());
+            $('#fill_text2').text($('#txt_Text2').val());
+            $('#fill_text3').text($('#txt_Text3').val());
+            $('#fill_text4').text($('#txt_Text4').val());
+
+            $('#fill_fill_1').text($('#fill_1_ans1').val());
+            $('#fill_fill_2').text($('#fill_2_ans1').val());
+            $('#fill_fill_3').text($('#fill_3_ans1').val());
+
+
+            if ($('#fill_1_ans1').val() == "")
+                $('#fill_fill_1').hide();
+
+            if ($('#fill_1_ans2').val() == "")
+                $('#fill_fill_2').hide();
+
+            if ($('#fill_1_ans3').val() == "")
+                $('#fill_fill_3').hide();
+
+
+            $find("mpe2").show();
+            return false;
+        }
+    </script>
+
+    <asp:LinkButton ID="lnkFake" runat="server"></asp:LinkButton>
+    <cc1:ModalPopupExtender ID="mpShow" BehaviorID="mpe" runat="server" PopupControlID="pnlPopUp" X="10" Y="0"
+        TargetControlID="lnkFake" BackgroundCssClass="modalBackground" CancelControlID="btnClosePopup">
+    </cc1:ModalPopupExtender>
+    <asp:Panel ID="pnlPopUp" runat="server" CssClass="modalPopup" Style="display: none">
+        <div class="body">
+
+            <asp:ImageButton ID="btnClosePopup" runat="server" Style="float: right;" ImageUrl="~/images/cross_red.png" />
+            <asp:Panel ID="panel_ops" runat="server">
+
+                <asp:Table ID="ops_table" runat="server" CssClass="ops_table">
+                    <asp:TableRow ID="row_q" runat="server">
+                        <asp:TableCell ColumnSpan="3">
+                            <asp:Label ID="lbl_ops_question" ClientIDMode="Static" CssClass="ops_lbl" runat="server" Text=" "></asp:Label>
+                        </asp:TableCell>
+                    </asp:TableRow>
+
+
+                    <asp:TableRow ID="row_a" runat="server">
+                        <asp:TableCell>
+                            <asp:CheckBox ID="CheckBox1" runat="server" CssClass="chk_ops" />
+                        </asp:TableCell>
+                        <asp:TableCell>A-)</asp:TableCell>
+                        <asp:TableCell>
+                            <asp:Label ID="lbl_a" runat="server" ClientIDMode="Static" CssClass="ops_lbl"></asp:Label>
+                        </asp:TableCell>
+                    </asp:TableRow>
+                    <asp:TableRow ID="row_b" runat="server">
+                        <asp:TableCell>
+                            <asp:CheckBox ID="CheckBox2" runat="server" CssClass="chk_ops" />
+                        </asp:TableCell>
+                        <asp:TableCell>B-)</asp:TableCell>
+                        <asp:TableCell>
+                            <asp:Label ID="lbl_b" runat="server" ClientIDMode="Static" CssClass="ops_lbl"></asp:Label>
+                        </asp:TableCell>
+                    </asp:TableRow>
+                    <asp:TableRow ID="row_c" runat="server">
+                        <asp:TableCell>
+                            <asp:CheckBox ID="CheckBox3" runat="server" CssClass="chk_ops" />
+                        </asp:TableCell>
+                        <asp:TableCell>C-)</asp:TableCell>
+                        <asp:TableCell>
+                            <asp:Label ID="lbl_c" runat="server" ClientIDMode="Static" CssClass="ops_lbl"></asp:Label>
+                        </asp:TableCell>
+                    </asp:TableRow>
+                    <asp:TableRow ID="row_d" runat="server">
+                        <asp:TableCell>
+                            <asp:CheckBox ID="CheckBox4" runat="server" ClientIDMode="Static" CssClass="chk_ops" />
+                        </asp:TableCell>
+                        <asp:TableCell>D-)</asp:TableCell>
+                        <asp:TableCell>
+                            <asp:Label ID="lbl_d" runat="server" CssClass="ops_lbl"></asp:Label>
+                        </asp:TableCell>
+                    </asp:TableRow>
+                </asp:Table>
+            </asp:Panel>
+        </div>
+    </asp:Panel>
+
+
+    <asp:LinkButton ID="lnkFake2" runat="server"></asp:LinkButton>
+    <cc1:ModalPopupExtender ID="mpShow2" BehaviorID="mpe2" runat="server" PopupControlID="pnlPopUp2" X="10" Y="0"
+        TargetControlID="lnkFake2" BackgroundCssClass="modalBackground" CancelControlID="btnClosePopup2">
+    </cc1:ModalPopupExtender>
+    <asp:Panel ID="pnlPopUp2" runat="server" CssClass="modalPopup" Style="display: none">
+        <div class="body">
+
+            <asp:ImageButton ID="btnClosePopup2" runat="server" Style="float: right;" ImageUrl="~/images/cross_red.png" />
+            <asp:Panel ID="panel_fill" runat="server">
+                <table class="ops_table">
+                    <tr>
+                        <td style="max-height: 40px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; font-size: medium; padding: 10px !important; text-align: left; vertical-align: top; margin-top: 20px;">
+                            <asp:Label CssClass="fill_elements" ClientIDMode="Static" ID="fill_text1" runat="server"></asp:Label>
+
+                            <asp:TextBox CssClass="fill_elements" ClientIDMode="Static" ID="fill_fill_1" runat="server"></asp:TextBox>
+
+                            <asp:Label CssClass="fill_elements" ClientIDMode="Static" ID="fill_text2" runat="server"></asp:Label>
+
+                            <asp:TextBox CssClass="fill_elements" ClientIDMode="Static" ID="fill_fill_2" runat="server"></asp:TextBox>
+
+                            <asp:Label CssClass="fill_elements" ClientIDMode="Static" ID="fill_text3" runat="server"></asp:Label>
+
+                            <asp:TextBox CssClass="fill_elements" ClientIDMode="Static" ID="fill_fill_3" runat="server"></asp:TextBox>
+
+                            <asp:Label CssClass="fill_elements" ClientIDMode="Static" ID="fill_text4" runat="server"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="max-height: 40px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="max-height: 40px;"></td>
+                    </tr>
+                </table>
+            </asp:Panel>
+
+        </div>
+    </asp:Panel>
 
 
 

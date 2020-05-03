@@ -43,11 +43,14 @@ namespace AviaTrain.Trainings
                 lbl_assignid.Text = assignid;
                 lbl_stepid.Text = stepid;
 
-                lbl_nextstepid.Text = DB_Trainings.get_prev_next_STEPID(lbl_trnid.Text, lbl_stepid.Text, true);
-                lbl_prevstepid.Text = DB_Trainings.get_prev_next_STEPID(lbl_trnid.Text, lbl_stepid.Text, false);
+                lbl_nextstepid.Text = DB_Trainings.get_prev_next_first_last_STEPID(lbl_trnid.Text, lbl_stepid.Text, "next");
+                lbl_prevstepid.Text = DB_Trainings.get_prev_next_first_last_STEPID(lbl_trnid.Text, lbl_stepid.Text, "prev");
 
                 if (lbl_nextstepid.Text == "")
+                {
                     btn_next_step.Visible = false;
+                    btn_finish_Training.Visible = true;
+                }
                 if (lbl_prevstepid.Text == "")
                     btn_prev_step.Visible = false;
 
@@ -86,6 +89,7 @@ namespace AviaTrain.Trainings
             {
                 //todo : what to do if exam_step
                 btn_trn_EXAM.Visible = true;
+                btn_finish_Training.Visible = false ;
             }
 
         }
@@ -494,9 +498,17 @@ namespace AviaTrain.Trainings
             //create assignmnet
             string examassignid= DB_Exams.push_EXAM_Assignment(dt.Rows[0]["EXAMID"].ToString(), user.employeeid, "1900-01-01", "2099-01-01");
 
+            DB_Trainings.update_Assignment(lbl_trnid.Text, examassignid: examassignid);
             //redirect with special flag
             Session["from_training"] = lbl_assignid.Text;
             Response.Redirect("~/Exams/UserInExam.aspx?AsID=" + examassignid);
+        }
+
+        protected void btn_finish_Training_Click(object sender, EventArgs e)
+        {
+            //update status 
+            DB_Trainings.update_Assignment(lbl_assignid.Text, status: "FINISHED", userfinish: "now");
+            SuccessWithCode("TRAINING FINISHED !");
         }
     }
 }

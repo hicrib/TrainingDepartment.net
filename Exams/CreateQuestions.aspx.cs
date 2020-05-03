@@ -17,6 +17,8 @@ namespace AviaTrain.Exams
         {
             if (!IsPostBack)
             {
+                Write_Page_Header_Low("CREATE QUESTION");
+
                 string last_mode = Convert.ToString(Request.QueryString["NoLast"]);
                 if (!String.IsNullOrEmpty(last_mode))
                     lbl_use_lastadded.Text = "0";

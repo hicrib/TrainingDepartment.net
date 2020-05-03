@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
         #createuser_tbl {
-            border: 2px solid #b63838;
+            border: 2px solid #a52a2a;
             border-collapse: collapse;
             width : 1000px;
         }
@@ -51,7 +51,7 @@
 
             <table id="createuser_tbl" style="">
                 <thead>
-                    <th colspan="3" style="border: 2px solid #b63838; background-color: #b63838; color: white; font-weight: bold; text-align: center;">EDIT USER ROLES</th>
+                    <th colspan="3" style="border: 2px solid #a52a2a; background-color: #a52a2a; color: white; font-weight: bold; text-align: center;">EDIT USER ROLES</th>
                 </thead>
                 <tbody>
                     <tr>

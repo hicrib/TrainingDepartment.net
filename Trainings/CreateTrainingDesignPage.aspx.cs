@@ -25,9 +25,21 @@ namespace AviaTrain.Trainings
                 lbl_trn_id.Text = trn_id;
 
                 fill_page();
+
+
+                if (Session["editable"] != null )
+                {
+                    bool editable = (bool)Session["editable"];
+                    if (!editable)
+                        Disable_Editing(); //todo : implement
+                }
+                
             }
         }
-
+        protected void Disable_Editing()
+        {
+            //todo : implement
+        }
         protected void fill_page()
         {
             //fill texthtml
@@ -137,7 +149,7 @@ namespace AviaTrain.Trainings
         {
             if (next)
             {
-                string stepid = DB_Trainings.get_prev_next_STEPID(lbl_trn_id.Text, lbl_step_db_id.Text, next);
+                string stepid = DB_Trainings.get_prev_next_first_last_STEPID(lbl_trn_id.Text, lbl_step_db_id.Text, "next");
                 if (stepid == "")
                     return DB_Trainings.create_NEXT_STEP(lbl_trn_id.Text);
                 else
@@ -145,7 +157,7 @@ namespace AviaTrain.Trainings
             }
 
             //then, asking for previous, returns "" if no prev
-            return DB_Trainings.get_prev_next_STEPID(lbl_trn_id.Text, lbl_step_db_id.Text, false);
+            return DB_Trainings.get_prev_next_first_last_STEPID(lbl_trn_id.Text, lbl_step_db_id.Text, "prev");
         }
 
         protected void go_to_training_page(string stepid)
@@ -165,7 +177,9 @@ namespace AviaTrain.Trainings
             //cleanup
             Session["chosen_questions_training"] = null;
 
-            Response.Redirect("~/Trainings/CreateTrainingFinish.aspx?T=" + lbl_trn_id.Text + "&S=" + lbl_step_db_id.Text);
+            //the following is done because they can finish the training after going back to previous pages of design
+            string laststepoftraining = DB_Trainings.get_prev_next_first_last_STEPID(lbl_trn_id.Text, "", "last");
+            Response.Redirect("~/Trainings/CreateTrainingFinish.aspx?T=" + lbl_trn_id.Text + "&S=" + laststepoftraining);
         }
 
 

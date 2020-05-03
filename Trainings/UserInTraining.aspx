@@ -10,7 +10,7 @@
         }
 
         .tab {
-            border: 2px solid indianred;
+            border: 2px solid #a52a2a;
             background-color: lightgray;
             background-repeat: repeat-x;
             color: White;
@@ -23,13 +23,13 @@
         }
 
         .selected {
-            background-color: indianred;
+            background-color: #a52a2a;
             background-repeat: repeat-x;
             color: black;
         }
 
         .tabcontents {
-            border: 2px solid indianred;
+            border: 2px solid #a52a2a;
             padding: 10px;
             width: 975px;
             height: 500px;
@@ -43,7 +43,7 @@
 
             .main_tbl th {
                 text-align: center;
-                background-color: indianred;
+                background-color: #a52a2a;
                 color: white;
                 font-size: large;
                 font-weight: bold;
@@ -91,7 +91,7 @@
         }
 
         .btn {
-            background-color: indianred;
+            background-color: #a52a2a;
             color: white;
             font-weight: bold;
         }
@@ -117,7 +117,7 @@
         .nav {
             height: 30px;
             width: 120px;
-            background-color : indianred !important;
+            background-color : #a52a2a !important;
             color : white !important;
             font-size : large;
             font-weight : bold;
@@ -289,6 +289,7 @@
                     <td>
                         <asp:Button ID="btn_prev_step" runat="server" CssClass="nav"  Text="Back" OnClick="btn_prev_step_Click" />
                         <asp:Button ID="btn_next_step" runat="server" CssClass="nav" Text="Continue" OnClick="btn_next_step_Click" />
+                        <asp:Button ID="btn_finish_Training" runat="server" CssClass="nav" Text="Finish Training" Visible="false" OnClick="btn_finish_Training_Click" />
                     </td>
                 </tr>
             </table>

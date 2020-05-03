@@ -9,7 +9,7 @@
             border-collapse: collapse;
             padding: 10px;
             margin: 0px;
-            border: 3px solid #b63838;
+            border: 3px solid #a52a2a;
         }
 
             .tbl_exam_info th {
@@ -17,7 +17,7 @@
                 font-size: large;
                 font-weight: bold;
                 color: white;
-                background-color: #b63838;
+                background-color: #a52a2a;
             }
 
             .tbl_exam_info td {
@@ -62,8 +62,8 @@
         .btn_submitexam {
             width: 100%;
             font-weight: bold;
-            border: 1px solid #b63838;
-            background-color: #b63838;
+            border: 1px solid #a52a2a;
+            background-color: #a52a2a;
             color: white;
             height: 40px;
         }

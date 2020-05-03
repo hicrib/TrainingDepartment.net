@@ -19,7 +19,7 @@
 
             .main_tbl th {
                 border-collapse: collapse;
-                background-color : #b63838	;
+                background-color : #a52a2a	;
                 color:white;
                 font-size : large;
                 font-weight : bold;
@@ -87,7 +87,7 @@
 
         .btn_important {
             width: 100%;
-            background-color: #b63838	;
+            background-color: #a52a2a	;
             color: white;
             font-size: medium;
             font-weight: bold;
@@ -235,7 +235,7 @@
 
 
 
-
+            <asp:Label ID="lbl_trn_assignid" runat="server"  Visible="false"></asp:Label>
         </ContentTemplate>
     </asp:UpdatePanel>
 

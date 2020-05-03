@@ -71,22 +71,26 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-        public static string getUserInfo(string employeeid)
+        public static DataRow getUserInfo(string employeeid)
         {
+            DataTable res = new DataTable();
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 {
                     using (SqlCommand command = new SqlCommand(
-                                 "SELECT FIRSTNAME + ' ' + SURNAME AS 'NAME' FROM USERS WHERE ISACTIVE=1 AND EMPLOYEEID =" + employeeid, connection))
+                                @"SELECT * FROM USERS WHERE EMPLOYEEID=@EMPLOYEEID", connection))
                     {
                         connection.Open();
-                        string result = Convert.ToString(command.ExecuteScalar());
-                        if (String.IsNullOrWhiteSpace(result))
-                            return null;
-                        else
-                            return result;
+                        command.Parameters.AddWithValue("@EMPLOYEEID", employeeid);
 
+                        SqlDataAdapter da = new SqlDataAdapter(command);
+                        da.Fill(res);
+
+                        if (res == null || res.Rows.Count == 0)
+                            return null;
+
+                        return res.Rows[0];
                     }
                 }
             }
@@ -94,9 +98,43 @@ namespace AviaTrain.App_Code
             {
                 string err = e.Message;
             }
-
             return null;
         }
+
+        public static bool update_UserInfo(string employeeid, string password = "" , string email = "" , string photo = "" , string signature = ""  )
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @" UPDATE USERS
+                                    SET PASSWORD = CASE WHEN @PASSWORD = '' THEN PASSWORD ELSE @PASSWORD END,
+                                        EMAIL = CASE WHEN @EMAIL = '' THEN EMAIL ELSE @EMAIL END,
+                                        PHOTO = CASE WHEN @PHOTO = '' THEN PHOTO ELSE @PHOTO END,
+                                        SIGNATURE = CASE WHEN @SIGNATURE = '' THEN SIGNATURE ELSE @SIGNATURE END
+                               WHERE EMPLOYEEID = @EMPLOYEEID
+                            ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+                    command.Parameters.Add("@PASSWORD", SqlDbType.NVarChar).Value = password;
+                    command.Parameters.Add("@EMAIL", SqlDbType.NVarChar).Value = email;
+                    command.Parameters.Add("@PHOTO", SqlDbType.NVarChar).Value = photo;
+                    command.Parameters.Add("@SIGNATURE", SqlDbType.NVarChar).Value = signature;
+                    command.CommandType = CommandType.Text;
+
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
+
 
         // returns null if there is a problem in connection
         // returns 0 rows if theres no role or privilege
@@ -674,5 +712,82 @@ namespace AviaTrain.App_Code
             }
             return null;
         }
+
+        public static bool update_User_Certificates(string userid, string academy = "",string ojtcourse = "",string supcourse = "",string ECT = "",string training = "", string equiptest = "",string ojtpermit = "")
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @"IF NOT EXISTS (SELECT TOP 1 * FROM USER_CERTIFICATES WHERE USERID = @USERID )
+                                BEGIN
+		                                INSERT INTO USER_CERTIFICATES 
+		                                VALUES (@USERID, @ACADEMY, @OJTCOURSE, @SUPCOURSE, @ECT, @TRAINING, @EQUIPTEST, @OJTPERMIT)
+                                END
+                                ELSE
+                                BEGIN
+		                                UPDATE USER_CERTIFICATES
+			                                SET ACADEMY_CERTIFICATE = CASE WHEN @ACADEMY = '' THEN ACADEMY_CERTIFICATE ELSE @ACADEMY END,
+				                                OJTCOURSE_CERTIFICATE = CASE WHEN @OJTCOURSE = '' THEN OJTCOURSE_CERTIFICATE ELSE @OJTCOURSE END,
+				                                SUPCOURSE_CERTIFICATE = CASE WHEN @SUPCOURSE = '' THEN SUPCOURSE_CERTIFICATE ELSE @SUPCOURSE END,
+				                                ECT_CERTIFICATE = CASE WHEN @ECT = '' THEN ECT_CERTIFICATE ELSE @ECT END,
+				                                TRAINING_CERTIFICATE = CASE WHEN @TRAINING = '' THEN TRAINING_CERTIFICATE ELSE @TRAINING END,
+				                                EQUIPTEST_CERTIFICATE = CASE WHEN @EQUIPTEST = '' THEN EQUIPTEST_CERTIFICATE ELSE @EQUIPTEST END,
+				                                OJT_PERMIT = CASE WHEN @OJTPERMIT = '' THEN OJT_PERMIT ELSE @OJTPERMIT END
+		                                WHERE USERID = @USERID
+                                END ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = userid;
+                    command.Parameters.Add("@ACADEMY", SqlDbType.NVarChar).Value = academy;
+                    command.Parameters.Add("@OJTCOURSE", SqlDbType.NVarChar).Value = ojtcourse;
+                    command.Parameters.Add("@SUPCOURSE", SqlDbType.NVarChar).Value = supcourse;
+                    command.Parameters.Add("@ECT", SqlDbType.NVarChar).Value = ECT;
+                    command.Parameters.Add("@TRAINING", SqlDbType.NVarChar).Value = training;
+                    command.Parameters.Add("@EQUIPTEST", SqlDbType.NVarChar).Value = equiptest;
+                    command.Parameters.Add("@OJTPERMIT", SqlDbType.NVarChar).Value = ojtpermit;
+
+                    command.CommandType = CommandType.Text;
+                    
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
+
+        public static DataTable get_User_Certificates(string employeeid)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                           @"SELECT TOP 1 * FROM USER_CERTIFICATES WHERE USERID = @USERID", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add(@"USERID", SqlDbType.Int).Value = employeeid;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
+
+                    return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+
+
     }
 }

@@ -124,7 +124,7 @@ namespace AviaTrain.App_Code
 
         public static string getRandomFileName()
         {
-            string date = System.DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+            string date = System.DateTime.UtcNow.ToString("yyyyMMdd_HHmmss" + "_" + (new Random().Next(100)).ToString());
             return date;
         }
 
@@ -243,6 +243,29 @@ namespace AviaTrain.App_Code
         }
 
 
+        public static string getExtension(string filename)
+        {
+            string[] arr = filename.Split('.');
+            return filename.Split('.')[arr.Length - 1];
+        }
+
+        public static bool deleteFile(string path, string filename)
+        {
+            try
+            {
+                // path = "~/images/" ; will work
+                if (System.IO.File.Exists(HttpContext.Current.Server.MapPath(path + filename)))
+                {
+                    System.IO.File.Delete(HttpContext.Current.Server.MapPath(path + filename));
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                //file in use
+            }
+            return false;
+        }
 
     }
 }

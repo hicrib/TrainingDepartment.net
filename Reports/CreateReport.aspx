@@ -14,7 +14,7 @@
                 font-size: large;
                 font-weight: bold;
                 color: white;
-                background-color: #b63838	;
+                background-color: #a52a2a	;
             }
 
             .create_tbl td:first-child {
@@ -41,14 +41,14 @@
         .dropdown {
             width: 100%;
             font-weight: bold;
-            border: 1px solid #b63838	;
+            border: 1px solid #a52a2a	;
             height : 30px;
         }
         .findbutton {
             width: 100%;
             font-weight: bold;
-            border: 1px solid #b63838	;
-            background-color : #b63838	 ;
+            border: 1px solid #a52a2a	;
+            background-color : #a52a2a	 ;
             color : white;
             height : 30px;
         }
@@ -60,7 +60,7 @@
         .grid_folder {
             width : 100%;
             border-collapse : collapse;
-            border : 1px solid #b63838	;
+            border : 1px solid #a52a2a	;
         }
         .grid_folder td {
             padding : 5px;

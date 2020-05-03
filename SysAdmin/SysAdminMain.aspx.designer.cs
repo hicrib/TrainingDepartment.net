@@ -87,6 +87,15 @@ namespace AviaTrain.SysAdmin
         protected global::System.Web.UI.WebControls.Button btn_create_training;
 
         /// <summary>
+        /// btn_view_trainingdesigns control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_view_trainingdesigns;
+
+        /// <summary>
         /// btn_assign_training control.
         /// </summary>
         /// <remarks>

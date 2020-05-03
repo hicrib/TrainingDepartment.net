@@ -51,6 +51,15 @@ namespace AviaTrain.Exams
         protected global::System.Web.UI.WebControls.GridView grid_assigned_training;
 
         /// <summary>
+        /// grid_completed_trainings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_completed_trainings;
+
+        /// <summary>
         /// btn_unusual control.
         /// </summary>
         /// <remarks>

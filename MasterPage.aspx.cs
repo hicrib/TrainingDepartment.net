@@ -56,6 +56,11 @@ namespace AviaTrain
             Response.Redirect("~/Pages/SuccessPage.aspx?Code=" + message);
         }
 
+        protected void Write_Page_Header_Low(string message)
+        {
+            Label lbl_masterhead_low = (Label)Master.FindControl("lbl_masterhead_low");
+            lbl_masterhead_low.Text = message;
+        }
 
         protected void RoleControlForPage()
         {
@@ -67,12 +72,18 @@ namespace AviaTrain
 
 
             string page = (Page.AppRelativeVirtualPath.Split('.')[0]).Split('/')[2];
-
-            DataRow[] alloweds = user.roles_pages.Select("PAGE_NAME = '" + page + "'");
-            if (alloweds != null && alloweds.Length > 0)
-                return; //allowed for this page
+            if (user.roles_pages != null && user.roles_pages.Rows.Count > 0)
+            {
+                DataRow[] alloweds = user.roles_pages.Select("PAGE_NAME = '" + page + "'");
+                if (alloweds != null && alloweds.Length > 0)
+                    return; //allowed for this page
+                else
+                    RedirectWithCode("UNAUTHORIZED !");
+            }
             else
-                RedirectWithCode("UNAUTHORIZED !");
+            {
+                RedirectWithCode("User Doesn't have necessary system roles !");
+            }
 
         }
 

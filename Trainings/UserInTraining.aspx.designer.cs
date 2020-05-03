@@ -456,6 +456,15 @@ namespace AviaTrain.Trainings
         protected global::System.Web.UI.WebControls.Button btn_next_step;
 
         /// <summary>
+        /// btn_finish_Training control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_finish_Training;
+
+        /// <summary>
         /// lbl_assignid control.
         /// </summary>
         /// <remarks>

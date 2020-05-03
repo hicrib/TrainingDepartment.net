@@ -14,7 +14,7 @@
 
         .submit_button {
             float: right;
-            background-color: #b63838	;
+            background-color: #a52a2a	;
             font-weight: bold;
             font-size: medium;
             color: white;
@@ -27,7 +27,7 @@
             float: right;
             font-weight : bold;
             
-            color : #b63838	;
+            color : #a52a2a	;
             border : 2px solid black;
         }
     </style>

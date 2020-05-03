@@ -16,7 +16,9 @@ namespace AviaTrain.Masters
             if (!IsPostBack)
             {
                 UserSession user = (UserSession)Session["usersession"];
-                lbl_username.Text = user.name_surname;
+                lbl_username.Text = user.initial + " - " + user.name_surname;
+                lbl_userid.Text = user.employeeid;
+                img_userphoto.ImageUrl = "~/UserPhotos/" + user.photo;
             }
         }
 
@@ -39,6 +41,11 @@ namespace AviaTrain.Masters
             else if (user.isExamTrainee)
                 Response.Redirect("~/Exams/Exam_MainGeneral.aspx");
             
+        }
+
+        protected void btn_user_details_Click(object sender, ImageClickEventArgs e)
+        {
+            Response.Redirect("~/Pages/UserDetails.aspx");
         }
     }
 }

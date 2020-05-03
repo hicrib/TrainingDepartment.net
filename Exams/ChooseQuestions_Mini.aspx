@@ -50,7 +50,7 @@
             }
 
             .grid_chosens th {
-                background-color: indianred;
+                background-color: #a52a2a;
                 color: white;
                 font-size: medium;
                 font-weight: bold;
@@ -67,10 +67,10 @@
         <Triggers>
         </Triggers>
         <ContentTemplate>
-            <table class="tbl_create_exam" style="border: 2px solid indianred !important;">
+            <table class="tbl_create_exam" style="border: 2px solid #a52a2a !important;">
                 <thead>
                     <tr>
-                        <th style="background-color: indianred !important; font-size: large !important; margin-top: 10px; margin-bottom: 10px !important; color: white !important;">Chosen Questions</th>
+                        <th style="background-color: #a52a2a !important; font-size: large !important; margin-top: 10px; margin-bottom: 10px !important; color: white !important;">Chosen Questions</th>
                     </tr>
                 </thead>
                 <tbody>

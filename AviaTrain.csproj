@@ -71,6 +71,9 @@
     <Reference Include="HtmlRenderer.PdfSharp, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\HtmlRenderer.PdfSharp.1.5.0.6\lib\net45\HtmlRenderer.PdfSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -78,6 +81,9 @@
       <HintPath>packages\Microsoft.Bcl.HashCode.1.1.0\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=9.3.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAzure.Storage.9.3.3\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
     <Reference Include="PdfSharp, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <HintPath>packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
     </Reference>
@@ -190,6 +196,26 @@
     <Content Include="Exams\CreateExam.aspx" />
     <Content Include="Exams\CreateQuestions.aspx" />
     <Content Include="Exams\DeleteExam.aspx" />
+    <Content Include="images\create.png" />
+    <Content Include="images\cross_red.png" />
+    <Content Include="images\cross_red_small.png" />
+    <Content Include="images\delete.png" />
+    <Content Include="images\empty.png" />
+    <Content Include="images\error.png" />
+    <Content Include="images\exam.png" />
+    <Content Include="images\fail.png" />
+    <Content Include="images\logout.png" />
+    <Content Include="images\main.png" />
+    <Content Include="images\pass.png" />
+    <Content Include="images\remove.png" />
+    <Content Include="images\sign.bmp" />
+    <Content Include="images\success.png" />
+    <Content Include="images\tick_green.png" />
+    <Content Include="images\tick_green_small.png" />
+    <Content Include="images\toleft.png" />
+    <Content Include="images\toright.png" />
+    <Content Include="images\view.png" />
+    <Content Include="images\wait.gif" />
     <Content Include="Pages\ErrorPage.aspx" />
     <Content Include="Exams\Exam_MainAdmin.aspx" />
     <Content Include="Exams\Exam_MainGeneral.aspx" />
@@ -1090,6 +1116,7 @@
     <Content Include="Pages\InstructorMain.aspx" />
     <Content Include="Pages\login.aspx" />
     <Content Include="Pages\SuccessPage.aspx" />
+    <Content Include="Pages\UserDetails.aspx" />
     <Content Include="Pages\UserMain.aspx" />
     <Content Include="Pages\TraineeMain.aspx" />
     <Content Include="Pages\TrainingTree.aspx" />
@@ -1193,12 +1220,14 @@
     <Content Include="Trainings\CreateTrainingFinish.aspx" />
     <Content Include="Trainings\UserInTraining.aspx" />
     <Content Include="Trainings\UserTrainingResult.aspx" />
+    <Content Include="Trainings\ViewTrainings.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\AzureCon.cs" />
     <Compile Include="App_Code\DB_Reports.cs" />
     <Compile Include="App_Code\DB_System.cs" />
     <Compile Include="App_Code\DB_Exams.cs" />
@@ -1350,6 +1379,13 @@
     </Compile>
     <Compile Include="Pages\SuccessPage.aspx.designer.cs">
       <DependentUpon>SuccessPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\UserDetails.aspx.cs">
+      <DependentUpon>UserDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\UserDetails.aspx.designer.cs">
+      <DependentUpon>UserDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\UserMain.aspx.cs">
       <DependentUpon>UserMain.aspx</DependentUpon>
@@ -1520,6 +1556,13 @@
     <Compile Include="Trainings\UserTrainingResult.aspx.designer.cs">
       <DependentUpon>UserTrainingResult.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Trainings\ViewTrainings.aspx.cs">
+      <DependentUpon>ViewTrainings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Trainings\ViewTrainings.aspx.designer.cs">
+      <DependentUpon>ViewTrainings.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1531,16 +1574,19 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="App_Themes\Theme1\" />
+    <Folder Include="AzureBlobs\Downloads\" />
+    <Folder Include="AzureBlobs\Uploads\" />
     <Folder Include="CommentImages\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\5_03bombwarning - Copy %282%29\docs\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\5_03bombwarning - Copy %282%29\images\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\5_03bombwarning - Copy %282%29\swf\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\acas\images\" />
-    <Folder Include="images\" />
     <Folder Include="javascripts\" />
     <Folder Include="OldTrainingFiles\" />
     <Folder Include="Signatures\" />
     <Folder Include="Trainings\T_Images\" />
+    <Folder Include="UserCertificates\" />
+    <Folder Include="UserPhotos\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
      <style>
         #createuser_tbl {
-            border: 2px solid #b63838	;
+            border: 2px solid #a52a2a	;
             border-collapse: collapse;
         }
 
@@ -16,7 +16,7 @@
         
 
         #ContentPlaceHolder1_lbl_result_adduser {
-            color : #b63838	;
+            color : #a52a2a	;
             font : bold;
         }
     </style>
@@ -30,7 +30,7 @@
             <ContentTemplate>
                 <table id="createuser_tbl" style="">
                     <thead>
-                        <th colspan="5" style="border: 2px solid #b63838	; background-color: #b63838	; color: white; font-weight: bold; text-align: center;">CREATE USER</th>
+                        <th colspan="5" style="border: 2px solid #a52a2a	; background-color: #a52a2a	; color: white; font-weight: bold; text-align: center;">CREATE USER</th>
                     </thead>
                     <thead>
                         <th>*Employee ID</th>

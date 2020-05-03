@@ -10,7 +10,7 @@
             border-collapse: collapse;
             height: 100px;
             width: 100%;
-            border: 2px solid #b63838	;
+            border: 2px solid #a52a2a	;
         }
 
         .ojtireports_tbl {
@@ -35,7 +35,7 @@
             font-weight: bold;
             font-size: medium;
             color: white;
-            border: 1px solid #b63838	;
+            border: 1px solid #a52a2a	;
         }
 
         #ContentPlaceHolder1_actionstbl td{
@@ -61,7 +61,7 @@
     <br />
     <asp:Table runat="server" ID="ojtireports_tbl" CssClass="ojtireports_tbl">
         <asp:TableHeaderRow>
-            <asp:TableHeaderCell ColumnSpan="4" Style="border: 3px solid #b63838	; background-color: #b63838	; color: white; font-weight: bold; align-content: center;">
+            <asp:TableHeaderCell ColumnSpan="4" Style="border: 3px solid #a52a2a	; background-color: #a52a2a	; color: white; font-weight: bold; align-content: center;">
                                                 REPORTS I CREATED
             </asp:TableHeaderCell>
 

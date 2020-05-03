@@ -735,6 +735,7 @@ namespace AviaTrain.App_Code
         }
 
 
+        // DOESNT CARE EXAM ISACTIVE OR NOT
         //gets exam name for assignment creation
         public static string get_Exam_Name_by_assignid(string assignid)
         {
@@ -745,7 +746,7 @@ namespace AviaTrain.App_Code
                       SELECT DEF.[NAME] + '  (' + convert(varchar, DEF.PASSPERCENT ) + '% required)' 
                         FROM EXM_EXAM_DEFINITION DEF
                         JOIN EXM_EXAM_ASSIGNMENT EA ON EA.EXAM_ID = DEF.ID 
-                        WHERE EA.ASSIGN_ID = @ASSIGN_ID AND DEF.ISACTIVE=1 ", connection))
+                        WHERE EA.ASSIGN_ID = @ASSIGN_ID", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@ASSIGN_ID", SqlDbType.Int).Value = assignid;

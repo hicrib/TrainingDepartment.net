@@ -7,7 +7,7 @@
             border-collapse: collapse;
             padding: 10px;
             margin: 0px;
-            border: 3px solid #b63838;
+            border: 3px solid #a52a2a;
         }
 
             .exam_results_tbl th {
@@ -15,7 +15,7 @@
                 font-size: large;
                 font-weight: bold;
                 color: white;
-                background-color: #b63838;
+                background-color: #a52a2a;
             }
 
             .exam_results_tbl td {
@@ -27,7 +27,7 @@
             width: 100%;
             border-collapse: collapse;
             align-content: center;
-            border: 1px solid #b63838;
+            border: 1px solid #a52a2a;
         }
 
             .filters_tbl td {
@@ -37,7 +37,7 @@
             }
 
         .btn_search {
-            background-color: indianred;
+            background-color: #a52a2a;
             color: white;
             font-weight: bold;
             font-size: large;

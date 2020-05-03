@@ -5,10 +5,10 @@
         .tbl_result{
             width : 1000px;
             border-collapse :collapse;
-            border : 3px solid #b63838	;
+            border : 3px solid #a52a2a	;
         }
         .tbl_result th{
-            background-color: #b63838	;
+            background-color: #a52a2a	;
             color : white;
             text-align : center;
             font-size : large;

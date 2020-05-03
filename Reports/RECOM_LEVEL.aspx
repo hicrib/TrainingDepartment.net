@@ -119,7 +119,7 @@
 
         .submit_button {
             float: left;
-            background-color: #b63838	;
+            background-color: #a52a2a	;
             font-weight: bold;
             font-size: medium;
             color: white;

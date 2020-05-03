@@ -13,7 +13,7 @@
         .modalPopup {
             background-color: lightgray;
             width: 90%;
-            border: 3px solid indianred;
+            border: 3px solid #a52a2a;
             height: 99%;
         }
 
@@ -45,7 +45,7 @@
                 text-align: center;
                 font-weight: bold;
                 cursor: pointer;
-                background-color: indianred;
+                background-color: #a52a2a;
                 border: 1px solid black;
             }
 
@@ -61,7 +61,7 @@
             width: 100%;
             font-size : large;
             font-weight:bold;
-            background-color : indianred;
+            background-color : #a52a2a;
             color : white;
         }
          .trn_info_tbl td {
@@ -70,14 +70,14 @@
         }
         .btn_exams {
             width: 200px;
-            background-color: indianred;
+            background-color: #a52a2a;
             color: white;
         }
 
         .exam_creation_tbl{
             width : 600px;
             display:inline-block;
-            border : 1px solid indianred;
+            border : 1px solid #a52a2a;
         }
         .exam_creation_panel {
             width : 1000px;
@@ -91,14 +91,14 @@
             height : 30px;
             margin : 10px;
             width : 80%;
-            background-color : indianred;
+            background-color : #a52a2a;
             color : white;
             font-weight : bold;
             font-size : large;
         }
         .pageresult {
             background-color : lightgray;
-            color : indianred;
+            color : #a52a2a;
             border : 1px solid black;
             font-size : large;
             font-weight : bold;

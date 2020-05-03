@@ -11,7 +11,7 @@
                 text-align: center;
                 font-weight: bold;
                 font-size: large;
-                background-color: indianred;
+                background-color: #a52a2a;
                 color: white;
             }
 
@@ -23,7 +23,7 @@
 
         .btn_submit {
             width: 50%;
-            background-color: indianred;
+            background-color: #a52a2a;
             color: white;
             font-size: medium;
             font-weight: bold;

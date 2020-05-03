@@ -55,32 +55,54 @@
         }
 
         body {
-            background-color: #ebebeb;
+            background-color: #EDEDED;
+        }
+
+        body, table {
+            border-collapse: collapse;
+            margin: 3px;
+            padding: 0px;
         }
 
         .tbl_master_user {
             width: 1000px;
-            height: 60px;
-            border: 2px solid #b63838;
+            height: 40px;
+            border: 2px solid #a52a2a;
         }
 
             .tbl_master_user td:first-child {
-                width: 100px;
-                border: 1px solid #b63838;
+                width: 200px;
+                border: 1px solid #a52a2a;
                 font-weight: bold;
-                font-size: large;
-                padding: 10px;
+                font-size: small;
+                padding: 5px;
             }
 
             .tbl_master_user td:nth-child(2) {
-                width: 700px;
-                border: 1px solid #b63838;
+                width: 600px;
+                border: 1px solid #a52a2a;
             }
 
             .tbl_master_user td:last-child {
                 width: 200px;
-                border: 1px solid #b63838;
+                border: 1px solid #a52a2a;
             }
+
+        .masterhead_up_div {
+            width: 100%;
+            height: 50%;
+        }
+
+        .masterhead_low_div {
+            width: 100%;
+            height: 50%;
+            border: 1px solid black;
+            background-color: #a52a2a;
+            color: white;
+            font-size: large;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
@@ -105,19 +127,34 @@
             <table class="tbl_master_user">
                 <tr>
                     <td>
-                        <asp:Label ID="lbl_username" runat="server"></asp:Label>
+                        <div style="display: inline; float: left; margin-right: 10px;">
+                            <asp:Image ID="img_userphoto" runat="server" Style="max-width: 40px; max-height: 40px;" />
+                        </div>
+                        <div style="display: inline;">
+                            <asp:Label ID="lbl_username" runat="server"></asp:Label>
+                            <br />
+                            ID# : 
+                            <asp:Label ID="lbl_userid" runat="server"></asp:Label>
+                            <asp:ImageButton ID="btn_user_details" runat="server" Style="margin: auto; max-width: 40px; max-height: 30px; float: right;" OnClick="btn_user_details_Click" ImageUrl="~/images/user_details.png" />
+
+                        </div>
                     </td>
-                    <td></td>
                     <td>
-                        <asp:ImageButton ID="btn_mainpage" runat="server" Style="margin: 10px;" OnClick="btn_mainpage_Click" ImageUrl="~/images/main.png" />
+                        <div id="masterhead_up_div" runat="server" class="masterhead_up_div">
+                        </div>
+                        <div id="masterhead_low_div" runat="server" class="masterhead_low_div">
+                            <asp:Label ID="lbl_masterhead_low" runat="server"></asp:Label>
+                        </div>
+                    </td>
+                    <td>
+                        <asp:ImageButton ID="btn_mainpage" runat="server" Style="margin-left: 5px; float: left;" OnClick="btn_mainpage_Click" ImageUrl="~/images/main.png" />
 
-                        <asp:ImageButton ID="btn_log_out" runat="server" OnClientClick="return confirmation_LOGOUT();" Style="margin: 10px; float: right;" OnClick="btn_log_out_Click" ImageUrl="~/images/logout.png" />
-
+                        <asp:ImageButton ID="btn_log_out" runat="server" OnClientClick="return confirmation_LOGOUT();" Style="margin-right: 5px; float: right;" OnClick="btn_log_out_Click" ImageUrl="~/images/logout.png" />
                     </td>
                 </tr>
             </table>
         </div>
-        <div style="height : 1px;"></div>
+        <div style="height: 1px;"></div>
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
             </asp:ContentPlaceHolder>

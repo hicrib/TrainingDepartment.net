@@ -8,7 +8,7 @@
             border-collapse: collapse;
             padding: 10px;
             margin: 0px;
-            border: 3px solid #b63838;
+            border: 3px solid #a52a2a;
         }
 
             .admin_actions_tbl th {
@@ -16,7 +16,7 @@
                 font-size: large;
                 font-weight: bold;
                 color: white;
-                background-color: #b63838;
+                background-color: #a52a2a;
             }
 
             .admin_actions_tbl td {

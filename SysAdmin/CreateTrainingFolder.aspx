@@ -3,7 +3,7 @@
 
     <style>
          #createuser_tbl {
-            border: 2px solid #b63838	;
+            border: 2px solid #a52a2a	;
             border-collapse: collapse;
             width: 100%;
         }
@@ -17,14 +17,14 @@
             }
 
         #ContentPlaceHolder1_lbl_availability {
-            color: #b63838	 !important;
+            color: #a52a2a	 !important;
             font-weight: bold;
             width : 100%;
             text-align:center;
         }
         #ContentPlaceHolder1_btn_chkavailable {
             width : 100%;
-            background-color : #b63838	;
+            background-color : #a52a2a	;
             font :bold;
             color : white;
         }
@@ -32,7 +32,7 @@
         .dropdown {
             width: 100%;
             font-weight: bold;
-            border: 1px solid #b63838	;
+            border: 1px solid #a52a2a	;
             height : 30px;
         }
     </style>
@@ -47,7 +47,7 @@
                 <div>
                     <table id="createuser_tbl" style="">
                         <thead>
-                            <th colspan="5" style="border: 2px solid #b63838	; background-color: #b63838	; color: white; font-weight: bold; text-align: center;">CREATE TRAINING FOLDER</th>
+                            <th colspan="5" style="border: 2px solid #a52a2a	; background-color: #a52a2a	; color: white; font-weight: bold; text-align: center;">CREATE TRAINING FOLDER</th>
                         </thead>
                         <tr>
                             <td>Trainee : </td>

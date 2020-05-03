@@ -6,7 +6,7 @@
             border-collapse: collapse;
             height: 100px;
             width: 100%;
-            border: 2px solid #b63838	;
+            border: 2px solid #a52a2a	;
         }
 
          #ContentPlaceHolder1_grid_trainee_reports {
@@ -29,7 +29,7 @@
     <asp:Label ID="lbl_traineeID" runat="server" Visible="false"></asp:Label>
     <asp:Table runat="server" ID="traineeports_tbl">
         <asp:TableHeaderRow>
-            <asp:TableHeaderCell ColumnSpan="4" Style="border: 3px solid #b63838	; background-color: #b63838	; color: white; font-weight: bold; align-content: center;">
+            <asp:TableHeaderCell ColumnSpan="4" Style="border: 3px solid #a52a2a	; background-color: #a52a2a	; color: white; font-weight: bold; align-content: center;">
                                                 MY TRAINING REPORTS
             </asp:TableHeaderCell>
 

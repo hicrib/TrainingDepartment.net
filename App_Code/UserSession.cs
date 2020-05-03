@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,9 @@ namespace AviaTrain.App_Code
         public string employeeid;
         public string initial;
         public string name_surname;
+        public string email;
+        public string photo;
+        public string signature;
         public bool isAdmin;
         public bool isOJTI;
         public bool isLCE;
@@ -19,14 +23,22 @@ namespace AviaTrain.App_Code
         public bool isExamTrainee;
         public bool isExamAdmin;
 
+        public DataRow info;
+
         DataTable role_priv;
         public DataTable roles_pages;
 
         public UserSession(string id)
         {
             employeeid = id;
+            info = DB_System.getUserInfo(employeeid);
+            initial = info["INITIAL"].ToString();
+            name_surname = info["FIRSTNAME"].ToString() + " " + info["SURNAME"].ToString();
+            email = info["EMAIL"].ToString();
+            photo = info["PHOTO"].ToString();
+            signature = info["SIGNATURE"].ToString();
+
             role_priv = DB_System.get_ALL_Privileges_of_Person(employeeid);
-            name_surname = DB_System.getUserInfo(employeeid);
             isAdmin = Utility.isAdmin(role_priv);
             isOJTI = Utility.isOJTI(role_priv);
             isLCE = Utility.isLCE(role_priv);

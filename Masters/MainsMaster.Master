@@ -66,19 +66,19 @@
             #user_info_tbl td:first-child {
                 width: 10%;
                 min-width: 100px;
-                border: 2px solid #b63838	;
+                border: 2px solid #a52a2a	;
             }
 
             #user_info_tbl td:nth-child(2) {
                 width: 50%;
                 min-width: 300px;
-                border: 2px solid #b63838	;
+                border: 2px solid #a52a2a	;
             }
 
             #user_info_tbl td:last-child {
                 width: 10%;
                 min-width: 100px;
-                border: 2px solid #b63838	;
+                border: 2px solid #a52a2a	;
             }
     </style>
     <asp:ContentPlaceHolder ID="head" runat="server">
