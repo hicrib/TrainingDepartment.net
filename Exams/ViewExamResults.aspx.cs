@@ -15,7 +15,7 @@ namespace AviaTrain.Exams
         {
             if (!IsPostBack)
             {
-                
+                Write_Page_Header_Low("VIEW EXAM RESULTS");
                 Fill_Exam_Names();
                 Fill_Trainees();
             }

@@ -31,6 +31,8 @@ namespace AviaTrain.Exams
                 lbl_assignid.Text = assignid;
                 lbl_examname.Text = DB_Exams.get_Exam_Name_by_assignid(assignid);
 
+                Write_Page_Header_Low(lbl_examname.Text);
+
                 if (!user.isAdmin)
                     if (!Is_My_Assignment(assignid))
                         RedirectWithCode("NOT ASIGNED TO CURRENT USER");

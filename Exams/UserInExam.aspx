@@ -112,13 +112,8 @@
         <Triggers>
         </Triggers>
         <ContentTemplate>
-
+            <asp:Label ID="lbl_examname" runat="server" Visible="false"></asp:Label>
             <table class="main_tbl">
-                <tr>
-                    <th colspan="2">
-                        <asp:Label ID="lbl_examname" runat="server"></asp:Label>
-                    </th>
-                </tr>
                 <tr>
                     <td style="width: 200px; align-content: center; text-align: center; vertical-align: top;">
                         <asp:GridView ID="grid_questions_map" runat="server" CssClass="grid_questions_map" OnRowDataBound="grid_questions_map_RowDataBound"

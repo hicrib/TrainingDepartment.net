@@ -297,6 +297,8 @@
                                     <td>
                                         <asp:DropDownList ID="ddl_sector" Width="200" Font-Bold="true" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddl_sector_SelectedIndexChanged">
                                             <asp:ListItem Value="GEN" Text=" General "></asp:ListItem>
+                                            <asp:ListItem Value="LATSI"></asp:ListItem>
+                                            <asp:ListItem Value="AIP"></asp:ListItem>
                                             <asp:ListItem Value="TWR" Text=" Tower General "></asp:ListItem>
                                             <asp:ListItem Value="ACC" Text=" ACC General "></asp:ListItem>
                                             <asp:ListItem Value="APP" Text=" APP General "></asp:ListItem>

@@ -228,7 +228,6 @@
             <table class="tbl_create_question">
                 <tbody>
                     <tr>
-
                         <td>
                             <table style="border: 1px solid #a52a2a; width: 100%;">
                                 <tr>

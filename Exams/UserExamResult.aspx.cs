@@ -22,6 +22,8 @@ namespace AviaTrain.Exams
                 UserSession user = (UserSession)Session["usersession"];
                 lbl_trainee_name.Text = user.name_surname;
 
+                Write_Page_Header_Low(lbl_exam_name.Text + " Result");
+
                 lbl_result.Text = exam_result["grade"] + "%";
 
                 string dummy = (lbl_exam_name.Text.Split('%')[0]);

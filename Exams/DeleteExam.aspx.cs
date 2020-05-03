@@ -15,6 +15,7 @@ namespace AviaTrain.Exams
         {
             if(!IsPostBack)
             {
+                Write_Page_Header_Low("DELETE EXAM");
                 DataTable exams = DB_Exams.get_Exams();
                 if (exams != null)
                 {

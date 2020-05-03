@@ -15,6 +15,8 @@ namespace AviaTrain.Exams
         {
             if (!IsPostBack)
             {
+                Write_Page_Header_Low("CREATE EXAM");
+
                 DataTable dt = (DataTable)Session["chosen_questions"];
                 if (dt == null)
                 {

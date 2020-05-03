@@ -2,8 +2,6 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
-        
-
         .tbl_exam_info {
             width: 1000px;
             border-collapse: collapse;
@@ -89,7 +87,7 @@
 
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-   
+
     <asp:UpdatePanel runat="server" ID="update_panel" UpdateMode="Always" ChildrenAsTriggers="true">
         <Triggers>
         </Triggers>
@@ -183,6 +181,8 @@
                         <td style="text-align: center; font-weight: bold; font-size: medium; height: 40px;">Question Sector : 
                             <asp:DropDownList ID="ddl_sector" runat="server" Height="30" Width="150" Font-Bold="true" AutoPostBack="true" OnSelectedIndexChanged="ddl_sector_SelectedIndexChanged">
                                 <asp:ListItem Value="GEN" Text=" General "></asp:ListItem>
+                                <asp:ListItem Value="LATSI"></asp:ListItem>
+                                <asp:ListItem Value="AIP"></asp:ListItem>
                                 <asp:ListItem Value="TWR" Text=" Tower General "></asp:ListItem>
                                 <asp:ListItem Value="ACC" Text=" ACC General "></asp:ListItem>
                                 <asp:ListItem Value="APP" Text=" APP General "></asp:ListItem>
