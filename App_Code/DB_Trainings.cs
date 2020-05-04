@@ -133,7 +133,7 @@ namespace AviaTrain.App_Code
             return false;
         }
 
-        public static bool update_Assignment(string assignid, string laststepid = "0", string status = "", string userstart = "", string userfinish = "",string examassignid="0")
+        public static bool update_Assignment(string assignid, string laststepid = "0", string status = "", string userstart = "", string userfinish = "", string examassignid = "0")
         {
             try
             {
@@ -497,7 +497,7 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-        public static DataTable get_TrainingNames()
+        public static DataTable get_TrainingNames(bool onlyactive = true)
         {
             DataTable res = new DataTable();
             try
@@ -508,8 +508,9 @@ namespace AviaTrain.App_Code
                                 @" 
                                 SELECT 0 AS ID, '---' AS [NAME]
                                 UNION 
-                                SELECT ID , NAME FROM TRN_TRAINING_DEF WHERE ISACTIVE = 1 ORDER BY NAME 
-                               ", connection))
+                                SELECT ID , NAME FROM TRN_TRAINING_DEF " +
+                                (onlyactive ? "WHERE ISACTIVE = 1  " : " ") +
+                               "ORDER BY NAME ", connection))
                     {
                         connection.Open();
                         SqlDataAdapter da = new SqlDataAdapter(command);
@@ -704,6 +705,96 @@ namespace AviaTrain.App_Code
             }
             return null;
 
+        }
+
+        public static DataTable View_Training_Results(string start_date, string finish_date,
+                                                      string training = "0", bool onlyactive_training = true,
+                                                      string trainee = "0", bool onlyactive_trainee = true,
+                                                      string status = ""
+                                                      )
+        {                       //only active exams will not be used
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                 @" SELECT	TOP 150
+		                    DEF.NAME AS 'Training' ,
+		                    U.INITIAL + ' - ' + U.FIRSTNAME + ' ' + U.SURNAME AS 'Trainee',
+		                    CASE WHEN ISNULL(ASS.USER_FINISH, '') = '' AND CONVERT(DATETIME, GETUTCDATE(), 20) > CONVERT(DATETIME, ASS.SCHEDULE_FINISH,20)
+				                    THEN 'NOSHOW'
+			                     ELSE ASS.[STATUS]
+			                     END AS 'Status', 
+		                    CASE WHEN Convert(varchar, ASS.SCHEDULE_FINISH, 104) = '2099-01-01'  THEN 'Timeless'
+			                     ELSE Convert(varchar, ASS.SCHEDULE_START, 104) + ' to ' + Convert(varchar, ASS.SCHEDULE_FINISH, 104) 
+			                     END AS 'Scheduled',
+		                    CASE WHEN ASS.[STATUS] IN ('PASSED', 'FAILED','FINISHED','COMPLETED') THEN 'Finished : ' + ASS.USER_FINISH 
+			                     WHEN ASS.[STATUS] IN ('ASSIGNED') THEN 'Assigned : ' + ASS.BY_TIME
+			                     WHEN ASS.[STATUS] IN ('USER_STARTED') THEN 'Started : ' + ASS.USER_START
+			                     ELSE '' 
+			                     END AS 'Time', 
+		                    CASE WHEN CAST(ISNULL(ASS.EXAMID , '') AS VARCHAR) = '' THEN 'No' 
+			                     ELSE (SELECT TOP 1 EDEF.[NAME] + ' Req:' + CAST(EDEF.PASSPERCENT AS VARCHAR) + '%' FROM EXM_EXAM_DEFINITION EDEF WHERE EDEF.ID = ASS.EXAMID)
+			                     END AS 'Exam',
+		                    CASE WHEN ISNULL(ASS.EXAM_ASSIGNID,'') = '' THEN '-'
+			                     ELSE (SELECT TOP 1 EASS.GRADE FROM EXM_EXAM_ASSIGNMENT EASS WHERE EASS.ASSIGN_ID = ASS.EXAM_ASSIGNID )
+			                     END AS 'Result',
+		                    DEF.ID , ASS.ASSIGNID 
+                    FROM TRN_TRAINING_DEF DEF 
+                    JOIN TRN_ASSIGNMENT ASS ON ASS.TRNID = DEF.ID
+                    JOIN USERS U ON ASS.USERID = U.EMPLOYEEID
+                    WHERE 
+                    ASS.TRNID = CASE WHEN @TRNID = 0 THEN ASS.TRNID ELSE @TRNID END
+                    AND
+                    ASS.[STATUS] = CASE WHEN @STATUS = '' THEN ASS.[STATUS] ELSE @STATUS END
+                    AND
+                    ASS.USERID = CASE WHEN @USERID = 0 THEN ASS.USERID ELSE @USERID END
+                    AND
+                    1 = CASE WHEN ASS.[STATUS] IN ('PASSED', 'FAILED','FINISHED','COMPLETED') /*HAS USERSTART-FINISH*/
+			                    THEN ( CASE WHEN  CONVERT(DATETIME, ASS.USER_FINISH, 20) >= CONVERT(DATETIME , @STARTTIME , 20) 
+							                      AND
+							                      CONVERT(DATETIME, ASS.USER_FINISH,20) <= CONVERT(DATETIME, @FINISHTIME,20)
+						                    THEN 1
+						                    ELSE 0 
+						                    END
+				                      )
+		                     WHEN ASS.STATUS = 'USER_STARTED' 
+			                    THEN ( CASE WHEN  CONVERT(DATETIME, ASS.USER_START, 20) >= CONVERT(DATETIME , @STARTTIME , 20) 
+							                      AND
+							                      CONVERT(DATETIME, ASS.USER_START,20) <= CONVERT(DATETIME, @FINISHTIME,20)
+						                    THEN 1
+						                    ELSE 0 
+						                    END
+				                      )
+		                    ELSE 1  /* NOSHOW, ASSIGNED ETC  :  NO-TIME-CONDITION FOR USER START OR FINISH*/
+		                    END  "
+                     + (onlyactive_trainee ? "AND U.ISACTIVE = 1" : " ")
+                     + (onlyactive_training ? "AND DEF.ISACTIVE = 1" : "")
+                     + " ORDER BY 'Time' Desc "
+                                                                                    , connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@TRNID", SqlDbType.Int).Value = training;
+                    command.Parameters.Add("@STATUS", SqlDbType.NVarChar).Value = status;
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = trainee;
+                    command.Parameters.Add("@STARTTIME", SqlDbType.NVarChar).Value = start_date;
+                    command.Parameters.Add("@FINISHTIME", SqlDbType.NVarChar).Value = finish_date;
+                    command.CommandType = CommandType.Text;
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
+
+                    return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
         }
     }
 }

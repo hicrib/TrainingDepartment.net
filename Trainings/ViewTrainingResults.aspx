@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="ViewExamResults.aspx.cs" Inherits="AviaTrain.Exams.ViewExamResults" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="ViewTrainingResults.aspx.cs" Inherits="AviaTrain.Trainings.ViewTrainingResults" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
@@ -64,11 +64,7 @@
             }
     </style>
 </asp:Content>
-
-
-
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-   
     <asp:UpdatePanel runat="server" ID="update_panel" UpdateMode="Always" ChildrenAsTriggers="true">
         <Triggers>
         </Triggers>
@@ -78,23 +74,38 @@
                     <td>
                         <table class="filters_tbl">
                             <tr>
-                                <th colspan="7">FILTERS
+                                <th colspan="5">FILTERS
                                 </th>
                             </tr>
                             <tr>
-                                <td colspan="7" style="height: 10px;"></td>
+                                <td colspan="5" style="height: 10px;"></td>
                             </tr>
                             <tr>
-                                <td>Exam Name</td>
-                                <td colspan="2">Between Dates</td>
+                                <td>Training </td>
                                 <td>Trainee</td>
-                                <td>Passed</td>
-                                <td colspan="2">Grade Between </td>
+                                <td>Status</td>
+                                <td colspan="2">Last Action<br />
+                                    Between Dates</td>
+                                <td>Exam </td>
                             </tr>
 
                             <tr>
                                 <td>
-                                    <asp:DropDownList ID="filter_examname" runat="server"></asp:DropDownList>
+                                    <asp:DropDownList ID="filter_training" runat="server"></asp:DropDownList>
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="filter_trainee" runat="server"></asp:DropDownList>
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="filter_status" runat="server">
+                                        <asp:ListItem Value="ALL"></asp:ListItem>
+                                        <asp:ListItem Value="ASSIGNED"></asp:ListItem>
+                                        <asp:ListItem Value="USER_STARTED"></asp:ListItem>
+                                        <asp:ListItem Value="FINISHED"></asp:ListItem>
+                                        <asp:ListItem Value="PASSED"></asp:ListItem>
+                                        <asp:ListItem Value="FAILED"></asp:ListItem>
+                                        <asp:ListItem Value="NOSHOW"></asp:ListItem>
+                                    </asp:DropDownList>
                                 </td>
                                 <td>
                                     <asp:TextBox TextMode="Date" ID="filter_start" runat="server"></asp:TextBox>
@@ -102,29 +113,10 @@
                                 <td>
                                     <asp:TextBox TextMode="Date" ID="filter_finish" runat="server"></asp:TextBox>
                                 </td>
-                                <td>
-                                    <asp:DropDownList ID="filter_trainee" runat="server"></asp:DropDownList>
-                                </td>
-                                <td>
-                                    <asp:DropDownList ID="filter_passed" runat="server">
-                                        <asp:ListItem Value="ALL"></asp:ListItem>
-                                        <asp:ListItem Value="PASSED"></asp:ListItem>
-                                        <asp:ListItem Value="FAILED"></asp:ListItem>
-                                        <asp:ListItem Value="NOSHOW"></asp:ListItem>
-                                    </asp:DropDownList>
-                                </td>
-                                <td>
-                                    <asp:TextBox ID="filter_grd_start" Width="30" Style="" runat="server" Text="0" TextMode="Number"></asp:TextBox>
-                                    <span style="float: right;">-</span>
-                                </td>
-                                <td>
-
-                                    <asp:TextBox ID="filter_grd_finish" Width="40" Style="float: left;" Text="100" runat="server" TextMode="Number"></asp:TextBox>
-                                </td>
                             </tr>
                             <tr>
-                                <td>Only Active Exams
-                                    <asp:CheckBox ID="chk_active_exams" OnCheckedChanged="chk_active_exams_CheckedChanged" AutoPostBack="true" runat="server" Checked="true" />
+                                <td>Only Active Trainings
+                                    <asp:CheckBox ID="chk_active_training" OnCheckedChanged="chk_active_training_CheckedChanged" AutoPostBack="true" runat="server" Checked="true" />
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -132,19 +124,17 @@
                                     <asp:CheckBox ID="chk_active_trainee" OnCheckedChanged="chk_active_trainee_CheckedChanged" AutoPostBack="true" runat="server" Checked="true" />
                                 </td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
                             </tr>
                             <tr>
-                                <td colspan="7" style="height: 10px;"></td>
+                                <td colspan="5" style="height: 10px;"></td>
                             </tr>
                             <tr>
-                                <td colspan="7">
+                                <td colspan="5">
                                     <asp:Label ID="lbl_result" runat="server" Visible="false"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="7">
+                                <td colspan="5">
                                     <asp:Button ID="btn_search" CssClass="btn_search" runat="server" Text="SEARCH" OnClick="btn_search_Click" />
                                 </td>
                             </tr>
@@ -162,10 +152,11 @@
                 </tr>
                 <tr>
                     <td>
-                        <asp:GridView ID="grid_results" runat="server" CssClass="grid_results" OnRowCommand="grid_results_RowCommand" OnRowDataBound="grid_results_RowDataBound">
-                            <Columns>
-                               <asp:ButtonField ButtonType="Image" CommandName="GO" ImageUrl="~/images/exam.png"  />
-                            </Columns>
+                        <asp:GridView ID="grid_results" runat="server" CssClass="grid_results" OnRowDataBound="grid_results_RowDataBound"
+                            AllowPaging="true" AllowSorting="true" OnSelectedIndexChanged="grid_results_SelectedIndexChanged" 
+                            OnPageIndexChanging="grid_results_PageIndexChanging" PageSize="30"
+                            OnSorting="grid_results_Sorting">
+                            <PagerSettings Mode="NumericFirstLast" PageButtonCount="10" FirstPageText="First" LastPageText="Last" />                            
                         </asp:GridView>
                     </td>
                 </tr>
@@ -175,4 +166,5 @@
 
         </ContentTemplate>
     </asp:UpdatePanel>
+
 </asp:Content>

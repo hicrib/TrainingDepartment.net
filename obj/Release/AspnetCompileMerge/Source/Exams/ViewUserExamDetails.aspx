@@ -9,14 +9,6 @@
             e1.style.width = 400;
         }
         window.onload = function () {
-
-            //alert(1);
-
-            //document.getElementById('blank1').style.width = document.getElementById('blank1').value.length * 10 + 'px';
-
-            //alert(document.getElementById('blank1').value);
-
-
         };
     </script>
 

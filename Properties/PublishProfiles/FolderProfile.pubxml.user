@@ -1993,16 +1993,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/10/2013 16:29:20</publishTime>
     </File>
     <File Include="bin/App_Code.compiled">
-      <publishTime>05/03/2020 23:50:12</publishTime>
+      <publishTime>05/04/2020 21:50:49</publishTime>
     </File>
     <File Include="bin/App_Code.dll">
-      <publishTime>05/03/2020 23:50:12</publishTime>
+      <publishTime>05/04/2020 21:50:49</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>05/03/2020 23:50:13</publishTime>
+      <publishTime>05/04/2020 21:50:50</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>05/03/2020 23:50:13</publishTime>
+      <publishTime>05/04/2020 21:50:50</publishTime>
     </File>
     <File Include="bin/AspNet.ScriptManager.bootstrap.dll">
       <publishTime>03/15/2019 11:59:54</publishTime>
@@ -2011,10 +2011,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/16/2019 12:33:30</publishTime>
     </File>
     <File Include="bin/AviaTrain.dll">
-      <publishTime>05/03/2020 23:50:04</publishTime>
+      <publishTime>05/04/2020 21:50:41</publishTime>
     </File>
     <File Include="bin/AviaTrain.pdb">
-      <publishTime>05/03/2020 23:50:04</publishTime>
+      <publishTime>05/04/2020 21:50:41</publishTime>
     </File>
     <File Include="bin/Carbon.Data.Protection.dll">
       <publishTime>04/19/2020 02:38:24</publishTime>
@@ -2320,7 +2320,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/01/2020 18:02:56</publishTime>
     </File>
     <File Include="Exams/AssignExam.aspx">
-      <publishTime>05/03/2020 21:42:55</publishTime>
+      <publishTime>05/04/2020 17:06:51</publishTime>
     </File>
     <File Include="Exams/ChooseQuestions_Mini.aspx">
       <publishTime>05/03/2020 21:12:16</publishTime>
@@ -2332,7 +2332,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/03/2020 21:43:45</publishTime>
     </File>
     <File Include="Exams/DeleteExam.aspx">
-      <publishTime>05/03/2020 21:49:49</publishTime>
+      <publishTime>05/04/2020 17:43:56</publishTime>
     </File>
     <File Include="Exams/EditQuestions.aspx">
       <publishTime>05/03/2020 21:44:18</publishTime>
@@ -7492,16 +7492,19 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/03/2020 21:46:21</publishTime>
     </File>
     <File Include="Exams/UserInExam.aspx">
-      <publishTime>05/03/2020 23:48:22</publishTime>
+      <publishTime>05/04/2020 14:40:29</publishTime>
+    </File>
+    <File Include="Exams/ViewExam.aspx">
+      <publishTime>05/04/2020 16:27:08</publishTime>
     </File>
     <File Include="Exams/ViewExamQuestions.aspx">
       <publishTime>04/25/2020 07:40:07</publishTime>
     </File>
     <File Include="Exams/ViewExamResults.aspx">
-      <publishTime>05/03/2020 21:49:48</publishTime>
+      <publishTime>05/04/2020 18:25:12</publishTime>
     </File>
     <File Include="Exams/ViewUserExamDetails.aspx">
-      <publishTime>05/03/2020 21:14:14</publishTime>
+      <publishTime>05/04/2020 16:26:23</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>03/17/2020 14:19:17</publishTime>
@@ -10234,7 +10237,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/09/2020 07:11:19</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>05/03/2020 23:50:07</publishTime>
+      <publishTime>05/04/2020 21:50:43</publishTime>
     </File>
     <File Include="Reports/CreateReport.aspx">
       <publishTime>05/01/2020 18:02:56</publishTime>
@@ -10543,7 +10546,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/01/2020 18:02:57</publishTime>
     </File>
     <File Include="SysAdmin/SysAdminMain.aspx">
-      <publishTime>05/03/2020 18:45:59</publishTime>
+      <publishTime>05/04/2020 20:56:32</publishTime>
     </File>
     <File Include="SysAdmin/ViewTrainingFolder.aspx">
       <publishTime>05/01/2020 18:02:57</publishTime>
@@ -10568,6 +10571,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Trainings/UserTrainingResult.aspx">
       <publishTime>05/01/2020 18:02:57</publishTime>
+    </File>
+    <File Include="Trainings/ViewTrainingResults.aspx">
+      <publishTime>05/04/2020 21:38:28</publishTime>
     </File>
     <File Include="Trainings/ViewTrainings.aspx">
       <publishTime>05/02/2020 17:40:50</publishTime>

@@ -71,7 +71,7 @@ namespace AviaTrain.Exams
                 finish_date = filter_finish.Text + " 23:59:59";
 
 
-            DataTable dt = DB_Exams.View_Training_Results(exam_id, chk_active_exams.Checked,
+            DataTable dt = DB_Exams.View_Exam_Results(exam_id, chk_active_exams.Checked,
                                                             start_date, finish_date, traineeid, chk_active_trainee.Checked,
                                                             filter_passed.SelectedValue,
                                                             filter_grd_start.Text, filter_grd_finish.Text);
@@ -121,8 +121,11 @@ namespace AviaTrain.Exams
 
         protected void grid_results_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            e.Row.Cells[7].Visible = false; // hide EXAMID
-            e.Row.Cells[8].Visible = false; // hide ASSIGNID
+            if (e.Row.Cells.Count > 7)
+            {
+                e.Row.Cells[7].Visible = false; // hide EXAMID
+                e.Row.Cells[8].Visible = false; // hide ASSIGNID
+            }
         }
 
         protected void grid_results_RowCommand(object sender, GridViewCommandEventArgs e)

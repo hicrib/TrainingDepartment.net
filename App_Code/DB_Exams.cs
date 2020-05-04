@@ -1198,7 +1198,7 @@ namespace AviaTrain.App_Code
 
 
 
-        public static DataTable View_Training_Results(string examid, bool onlyactiveexam, string start_date, string finish_date,
+        public static DataTable View_Exam_Results(string examid, bool onlyactiveexam, string start_date, string finish_date,
                                                         string traineeid, bool onlyactivetrainee,
                                                         string passfailnoshow, string grade_start, string grade_finish)
         {
@@ -1273,9 +1273,6 @@ U.ISACTIVE = CASE WHEN @ONLYACTIVETRAINEE = 1 THEN 1 ELSE U.ISACTIVE END
                 string err = e.Message;
             }
             return null;
-
-
-
         }
 
 

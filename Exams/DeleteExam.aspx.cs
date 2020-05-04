@@ -13,7 +13,7 @@ namespace AviaTrain.Exams
     {
         protected new void Page_Load(object sender, EventArgs e)
         {
-            if(!IsPostBack)
+            if (!IsPostBack)
             {
                 Write_Page_Header_Low("DELETE EXAM");
                 DataTable exams = DB_Exams.get_Exams();
@@ -32,7 +32,7 @@ namespace AviaTrain.Exams
         {
             string examid = ddl_exams.SelectedValue;
 
-            if(examid == "" || examid=="-" || examid=="0")
+            if (examid == "" || examid == "-" || examid == "0")
             {
                 grid_exam_questions.Visible = false;
                 btn_delete.Enabled = false;
@@ -40,7 +40,7 @@ namespace AviaTrain.Exams
             else
             {
                 string status = DB_Exams.is_examid_assigned_and_open(examid);
-                if(status != "")
+                if (status != "")
                 {
                     lbl_result.Text = "THIS EXAM IS ASSIGNED TO A USER ! Deleting will cause it to be unassigned! Or malfunctions if user is currently in exam";
                     lbl_result.Visible = true;
@@ -62,13 +62,13 @@ namespace AviaTrain.Exams
 
         protected void btn_delete_Click(object sender, EventArgs e)
         {
-            if(ddl_exams.SelectedValue == "" || ddl_exams.SelectedValue == "-" || ddl_exams.SelectedValue == "0"  )
+            if (ddl_exams.SelectedValue == "" || ddl_exams.SelectedValue == "-" || ddl_exams.SelectedValue == "0")
             {
                 return;
             }
 
             bool ok = DB_Exams.delete_EXAM(ddl_exams.SelectedValue);
-            if(!ok)
+            if (!ok)
             {
                 lbl_result.Text = "System Error ! ";
                 lbl_result.Visible = true;
@@ -89,6 +89,12 @@ namespace AviaTrain.Exams
                 grid_exam_questions.Visible = false;
             }
 
+        }
+
+        protected void grid_exam_questions_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.Cells.Count > 4)
+                e.Row.Cells[4].Visible = false;
         }
     }
 }

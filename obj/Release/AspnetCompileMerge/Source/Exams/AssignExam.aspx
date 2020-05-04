@@ -79,6 +79,7 @@
                     </td>
                     <td colspan="2">
                         <asp:DropDownList ID="ddl_exams" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddl_exams_SelectedIndexChanged"  Width="400" Font-Bold="true"></asp:DropDownList>
+                        <asp:Button ID="btn_show_examformat" runat="server" Text="Show Content" Visible="false" style="margin-left:10px; border:1px solid black; background-color:gray; color : black;" OnClick="btn_show_examformat_Click"  />
                     </td>
                 </tr>
                 <tr>
@@ -123,7 +124,7 @@
                 </tr>
             </table>
 
-            <asp:GridView ID="grid_questions" runat="server" CssClass="grid_questions"></asp:GridView>
+            <asp:GridView ID="grid_questions" runat="server" CssClass="grid_questions" OnRowDataBound="grid_questions_RowDataBound" ></asp:GridView>
 
         </ContentTemplate>
     </asp:UpdatePanel>

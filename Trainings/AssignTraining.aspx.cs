@@ -119,6 +119,7 @@ namespace AviaTrain.Trainings
                 chk_timelimit.Checked = false;
                 txt_finishtime.Text = "";
                 txt_starttime.Text = "";
+                Session["selected_users"] = null;
             }
         }
     }

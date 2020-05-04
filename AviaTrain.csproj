@@ -1222,6 +1222,7 @@
     <Content Include="Trainings\CreateTrainingFinish.aspx" />
     <Content Include="Trainings\UserInTraining.aspx" />
     <Content Include="Trainings\UserTrainingResult.aspx" />
+    <Content Include="Trainings\ViewTrainingResults.aspx" />
     <Content Include="Trainings\ViewTrainings.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -1231,6 +1232,7 @@
   <ItemGroup>
     <Compile Include="App_Code\AzureCon.cs" />
     <Compile Include="App_Code\DB_Reports.cs" />
+    <Compile Include="App_Code\DB_ScheduledTasks.cs" />
     <Compile Include="App_Code\DB_System.cs" />
     <Compile Include="App_Code\DB_Exams.cs" />
     <Content Include="App_Code\Printables.cs" />
@@ -1571,6 +1573,13 @@
     </Compile>
     <Compile Include="Trainings\UserTrainingResult.aspx.designer.cs">
       <DependentUpon>UserTrainingResult.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Trainings\ViewTrainingResults.aspx.cs">
+      <DependentUpon>ViewTrainingResults.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Trainings\ViewTrainingResults.aspx.designer.cs">
+      <DependentUpon>ViewTrainingResults.aspx</DependentUpon>
     </Compile>
     <Compile Include="Trainings\ViewTrainings.aspx.cs">
       <DependentUpon>ViewTrainings.aspx</DependentUpon>

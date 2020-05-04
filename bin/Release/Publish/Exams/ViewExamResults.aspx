@@ -75,9 +75,6 @@
         <ContentTemplate>
             <table class="exam_results_tbl">
                 <tr>
-                    <td style="height: 30px;"></td>
-                </tr>
-                <tr>
                     <td>
                         <table class="filters_tbl">
                             <tr>
@@ -178,13 +175,4 @@
 
         </ContentTemplate>
     </asp:UpdatePanel>
-
-
-  
-    <%-- <asp:TemplateField HeaderText="">
-                                    <ItemTemplate>
-                                        <a href="javascript:openPopup('Info.aspx?id=<%# Eval("ID") %>')">
-                                            <img src="pics/info.gif" mce_src="pics/info.gif" border="0px" width="13px" /></a>
-                                    </ItemTemplate>
-                                </asp:TemplateField>--%>
 </asp:Content>

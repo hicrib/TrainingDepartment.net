@@ -164,15 +164,14 @@ namespace AviaTrain.Exams
             q_html += "<span class='fill_text_span'> " + q_def["TEXT1"].ToString() + " </span>";
 
             //blank 1
-            q_html += "<input type = 'text' id='blank1' value = '' disabled> ";
-
+            //q_html += "<input type = 'text' id='blank1' value='' disabled> ";
             q_html += @"<select id='ans_blank1'>";
             if (q_def["FILL1_ANS1"].ToString() != "")
-                q_html += @" < option value = '" + q_def["FILL1_ANS1"].ToString() + @"' > " + q_def["FILL1_ANS1"].ToString() +@" </ option >";
+                q_html += @" <option value='" + q_def["FILL1_ANS1"].ToString() + @"' > " + q_def["FILL1_ANS1"].ToString() +@" </ option >";
             if (q_def["FILL1_ANS2"].ToString() != "")                                                                        
-                q_html += @" < option value = '" + q_def["FILL1_ANS2"].ToString() + @"' >" + q_def["FILL1_ANS2"].ToString() + @" </ option >";
+                q_html += @" <option value='" + q_def["FILL1_ANS2"].ToString() + @"' >" + q_def["FILL1_ANS2"].ToString() + @" </ option >";
             if (q_def["FILL1_ANS3"].ToString() != "")                                                                        
-                q_html += @" < option value = '" + q_def["FILL1_ANS3"].ToString() + @"' >" + q_def["FILL1_ANS3"].ToString() + @" </ option >";
+                q_html += @" <option value='" + q_def["FILL1_ANS3"].ToString() + @"' >" + q_def["FILL1_ANS3"].ToString() + @" </ option >";
             q_html += "</ select > ";
 
 
@@ -183,14 +182,14 @@ namespace AviaTrain.Exams
             //if there is blank 2
             if (q_def["FILL2_ANS1"].ToString() + q_def["FILL2_ANS2"].ToString() + q_def["FILL2_ANS3"].ToString() != "")
             {
-                q_html += @"<input type = 'text' id='blank2' value = '' disabled> ";
+                //q_html += @"<input type = 'text' id='blank2' value='' disabled> ";
                 q_html += @"<select id='ans_blank2'>";
                 if (q_def["FILL2_ANS1"].ToString() != "")
-                    q_html += @" < option value = '" + q_def["FILL2_ANS1"].ToString() + @"' >" + q_def["FILL2_ANS1"].ToString() + " @</ option >";
+                    q_html += @" <option value='" + q_def["FILL2_ANS1"].ToString() + @"' >" + q_def["FILL2_ANS1"].ToString() + " @</ option >";
                 if (q_def["FILL2_ANS2"].ToString() != "")
-                    q_html += @" < option value = '" + q_def["FILL2_ANS2"].ToString() + @"' > " + q_def["FILL2_ANS2"].ToString() + @"</ option >";
+                    q_html += @" <option value='" + q_def["FILL2_ANS2"].ToString() + @"' > " + q_def["FILL2_ANS2"].ToString() + @"</ option >";
                 if (q_def["FILL2_ANS3"].ToString() != "")
-                    q_html += @" < option value = '" + q_def["FILL2_ANS3"].ToString() + @"' >" + q_def["FILL2_ANS3"].ToString() + @" </ option >";
+                    q_html += @" <option value='" + q_def["FILL2_ANS3"].ToString() + @"' >" + q_def["FILL2_ANS3"].ToString() + @" </ option >";
                 q_html += "</ select > ";
             }
 
@@ -202,14 +201,14 @@ namespace AviaTrain.Exams
             //if there is blank 3
             if (q_def["FILL3_ANS1"].ToString() + q_def["FILL3_ANS2"].ToString() + q_def["FILL3_ANS3"].ToString() != "")
             {
-                q_html += "<input type = 'text' id='blank3' value = '' disabled> ";
+                //q_html += "<input type = 'text' id='blank3' value='' disabled> ";
                 q_html += @"<select id='ans_blank3'>";
                 if (q_def["FILL3_ANS1"].ToString() != "")
-                    q_html += @" < option value = '" + q_def["FILL3_ANS1"].ToString() + @"' >" + q_def["FILL3_ANS1"].ToString() + @"</ option >";
+                    q_html += @" <option value='" + q_def["FILL3_ANS1"].ToString() + @"' >" + q_def["FILL3_ANS1"].ToString() + @"</ option >";
                 if (q_def["FILL3_ANS2"].ToString() != "")
-                    q_html += @" < option value = '" + q_def["FILL3_ANS2"].ToString() + @"' > " + q_def["FILL3_ANS2"].ToString() + @"</ option >";
+                    q_html += @" <option value='" + q_def["FILL3_ANS2"].ToString() + @"' > " + q_def["FILL3_ANS2"].ToString() + @"</ option >";
                 if (q_def["FILL3_ANS3"].ToString() != "")
-                    q_html += @" < option value = '" + q_def["FILL3_ANS3"].ToString() + @"' >" + q_def["FILL3_ANS3"].ToString() + @"</ option >";
+                    q_html += @" <option value='" + q_def["FILL3_ANS3"].ToString() + @"' >" + q_def["FILL3_ANS3"].ToString() + @"</ option >";
                 q_html += "</ select > ";
             }
 

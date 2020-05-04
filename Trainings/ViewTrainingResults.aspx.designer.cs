@@ -7,137 +7,110 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AviaTrain.SysAdmin
+namespace AviaTrain.Trainings
 {
 
 
-    public partial class SysAdminMain
+    public partial class ViewTrainingResults
     {
 
         /// <summary>
-        /// btn_createuser control.
+        /// update_panel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_createuser;
+        protected global::System.Web.UI.UpdatePanel update_panel;
 
         /// <summary>
-        /// btn_edit_roles control.
+        /// filter_training control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_edit_roles;
+        protected global::System.Web.UI.WebControls.DropDownList filter_training;
 
         /// <summary>
-        /// btn_create_questions control.
+        /// filter_trainee control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_questions;
+        protected global::System.Web.UI.WebControls.DropDownList filter_trainee;
 
         /// <summary>
-        /// btn_edit_questions control.
+        /// filter_status control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_edit_questions;
+        protected global::System.Web.UI.WebControls.DropDownList filter_status;
 
         /// <summary>
-        /// btn_create_exam control.
+        /// filter_start control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_exam;
+        protected global::System.Web.UI.WebControls.TextBox filter_start;
 
         /// <summary>
-        /// btn_delete_exam control.
+        /// filter_finish control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_delete_exam;
+        protected global::System.Web.UI.WebControls.TextBox filter_finish;
 
         /// <summary>
-        /// btn_assign_exam control.
+        /// chk_active_training control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_assign_exam;
+        protected global::System.Web.UI.WebControls.CheckBox chk_active_training;
 
         /// <summary>
-        /// btn_view_exam_result control.
+        /// chk_active_trainee control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_view_exam_result;
+        protected global::System.Web.UI.WebControls.CheckBox chk_active_trainee;
 
         /// <summary>
-        /// btn_create_training control.
+        /// lbl_result control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_training;
+        protected global::System.Web.UI.WebControls.Label lbl_result;
 
         /// <summary>
-        /// btn_view_trainingdesigns control.
+        /// btn_search control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_view_trainingdesigns;
+        protected global::System.Web.UI.WebControls.Button btn_search;
 
         /// <summary>
-        /// btn_assign_training control.
+        /// grid_results control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_assign_training;
-
-        /// <summary>
-        /// btn_view_training_results control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_view_training_results;
-
-        /// <summary>
-        /// btn_create_TrainingFolder control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_TrainingFolder;
-
-        /// <summary>
-        /// btn_View_Trainee_Folder control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_View_Trainee_Folder;
+        protected global::System.Web.UI.WebControls.GridView grid_results;
     }
 }

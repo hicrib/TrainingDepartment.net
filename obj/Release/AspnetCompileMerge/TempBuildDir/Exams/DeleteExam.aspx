@@ -113,7 +113,7 @@
 
                 <tr>
                     <td colspan="2">
-                        <asp:GridView ID="grid_exam_questions" runat="server" CssClass="grid_exam_questions"></asp:GridView>
+                        <asp:GridView ID="grid_exam_questions" runat="server" CssClass="grid_exam_questions" OnRowDataBound="grid_exam_questions_RowDataBound"></asp:GridView>
 
                     </td>
                 </tr>
