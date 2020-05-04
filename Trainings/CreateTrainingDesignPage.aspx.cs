@@ -18,11 +18,16 @@ namespace AviaTrain.Trainings
             { 
                 string trn_id = Convert.ToString(Request.QueryString["T"]);
                 string step_id = Convert.ToString(Request.QueryString["S"]);
-                if (String.IsNullOrWhiteSpace(trn_id) || (String.IsNullOrWhiteSpace(step_id)))
+                string trn_name = Convert.ToString(Request.QueryString["N"]);
+                if (String.IsNullOrWhiteSpace(trn_id) || (String.IsNullOrWhiteSpace(step_id)) || (String.IsNullOrWhiteSpace(trn_name)))
                     RedirectWithCode("UNAUTHORIZED");
+
+                lbl_trnname.Text = trn_name;
+                Write_Page_Header_Low("DESIGNING : " +trn_name);
 
                 lbl_step_db_id.Text = step_id;
                 lbl_trn_id.Text = trn_id;
+
 
                 fill_page();
 
@@ -163,7 +168,7 @@ namespace AviaTrain.Trainings
         protected void go_to_training_page(string stepid)
         {
             //can be next, previous
-            Response.Redirect("~/Trainings/CreateTrainingDesignPage.aspx?T=" + lbl_trn_id.Text + "&S=" + stepid);
+            Response.Redirect("~/Trainings/CreateTrainingDesignPage.aspx?T=" + lbl_trn_id.Text + "&S=" + stepid+"&N=" + lbl_trnname.Text);
         }
 
 
@@ -179,7 +184,7 @@ namespace AviaTrain.Trainings
 
             //the following is done because they can finish the training after going back to previous pages of design
             string laststepoftraining = DB_Trainings.get_prev_next_first_last_STEPID(lbl_trn_id.Text, "", "last");
-            Response.Redirect("~/Trainings/CreateTrainingFinish.aspx?T=" + lbl_trn_id.Text + "&S=" + laststepoftraining);
+            Response.Redirect("~/Trainings/CreateTrainingFinish.aspx?T=" + lbl_trn_id.Text + "&S=" + laststepoftraining +"&N=" + lbl_trnname.Text);
         }
 
 

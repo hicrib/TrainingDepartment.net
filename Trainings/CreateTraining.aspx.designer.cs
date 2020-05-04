@@ -24,13 +24,13 @@ namespace AviaTrain.Trainings
         protected global::System.Web.UI.UpdatePanel update_panel;
 
         /// <summary>
-        /// txt_examname control.
+        /// txt_trainingname control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txt_examname;
+        protected global::System.Web.UI.WebControls.TextBox txt_trainingname;
 
         /// <summary>
         /// txt_effective control.

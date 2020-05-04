@@ -88,16 +88,21 @@ namespace AviaTrain.Exams
             }
 
             //todo : date isleri
-            DateTime dte = Calendar_start.SelectedDate;
-            if (dte < DateTime.Today)
+
+            if (DateTime.Compare(Calendar_start.SelectedDate.Date, DateTime.UtcNow.Date) < 0)
             {
-                Page_Result("Choose Start Date");
+                Page_Result("Can't schedule to past (UTC time)");
                 return false;
             }
-            dte = Calendar_finish.SelectedDate;
-            if (dte < DateTime.Today)
+
+            if (DateTime.Compare(Calendar_finish.SelectedDate.Date, DateTime.UtcNow.Date) < 0)
             {
-                Page_Result("Choose Finish Date");
+                Page_Result("Can't schedule to past (UTC time)");
+                return false;
+            }
+            if (DateTime.Compare(Calendar_finish.SelectedDate.Date, Calendar_start.SelectedDate.Date) < 0)
+            {
+                Page_Result("Finish date must be later (UTC time)");
                 return false;
             }
 
@@ -112,8 +117,7 @@ namespace AviaTrain.Exams
 
         protected void Calendar_finish_DayRender(object sender, DayRenderEventArgs e)
         {
-            DateTime dte = Calendar_start.SelectedDate;
-            if (e.Day.Date <= dte)
+            if (e.Day.Date < Calendar_start.SelectedDate.Date || e.Day.Date < DateTime.UtcNow.Date)
             {
                 e.Day.IsSelectable = false;
                 e.Cell.ForeColor = System.Drawing.Color.White;
@@ -122,8 +126,7 @@ namespace AviaTrain.Exams
 
         protected void Calendar_start_DayRender(object sender, DayRenderEventArgs e)
         {
-            DateTime dte = DateTime.UtcNow.Subtract(new TimeSpan(1, 12, 0, 0));
-            if (e.Day.Date < dte)
+            if (e.Day.Date < DateTime.UtcNow.Date)
             {
                 e.Day.IsSelectable = false;
                 e.Cell.ForeColor = System.Drawing.Color.White;

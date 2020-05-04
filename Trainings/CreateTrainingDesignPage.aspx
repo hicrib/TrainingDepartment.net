@@ -245,6 +245,7 @@
     <asp:Label ID="lbl_trn_id" runat="server" Visible="false"></asp:Label>
     <asp:Label ID="lbl_step_orderid" runat="server" Visible="false" Text="0"></asp:Label>
     <asp:Label ID="lbl_step_db_id" runat="server" Visible="false"></asp:Label>
+    <asp:Label ID="lbl_trnname" runat="server" Visible="false"></asp:Label>
 
 
     <div id="___editor"></div>

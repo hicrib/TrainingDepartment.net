@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -15,6 +16,7 @@ namespace AviaTrain.Trainings
         {
             if (!IsPostBack)
             {
+                Write_Page_Header_Low("ASSIGN  TRAINING");
                 //admin kontrol
                 ddl_trainings.DataSource = DB_Trainings.get_TrainingNames();
                 ddl_trainings.DataTextField = "NAME";
@@ -82,7 +84,7 @@ namespace AviaTrain.Trainings
 
         protected void btn_submit_Click(object sender, EventArgs e)
         {
-            if(ddl_trainings.SelectedValue == "0")
+            if (ddl_trainings.SelectedValue == "0")
             {
                 lbl_pageresult.Text = "Chose a Training";
                 lbl_pageresult.Visible = true;
@@ -95,11 +97,31 @@ namespace AviaTrain.Trainings
                 lbl_pageresult.Visible = true;
                 return;
             }
-            if(chk_timelimit.Checked && (txt_finishtime.Text == "" || txt_starttime.Text == ""))
+            if (chk_timelimit.Checked)
             {
-                lbl_pageresult.Text = "Chose Start&Finish Time";
-                lbl_pageresult.Visible = true;
-                return;
+                if (txt_finishtime.Text == "" || txt_starttime.Text == "")
+                {
+                    lbl_pageresult.Text = "Chose Start&Finish Time";
+                    lbl_pageresult.Visible = true;
+                    return;
+                }
+
+                DateTime s = DateTime.ParseExact(txt_starttime.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                DateTime f = DateTime.ParseExact(txt_finishtime.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                if(DateTime.Compare(f.Date ,DateTime.UtcNow) < 0 || DateTime.Compare(s.Date, DateTime.UtcNow) < 0)
+                {
+                    lbl_pageresult.Text = "It can't be scheduled to past!";
+                    lbl_pageresult.Visible = true;
+                    return;
+                }
+                if(DateTime.Compare(f.Date , s.Date) < 0)
+                {
+                    lbl_pageresult.Text = "Finish Time must be earlier than Start";
+                    lbl_pageresult.Visible = true;
+                    return;
+                }
+
+
             }
 
 

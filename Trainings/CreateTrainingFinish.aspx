@@ -132,10 +132,6 @@
 
     <table class="trn_info_tbl">
         <tr>
-            <th colspan="2">FINISH TRAINING PACKAGE
-            </th>
-        </tr>
-        <tr>
             <td colspan="2" style="text-align: center;">
                 <asp:CheckBox ID="chk_addexam" runat="server" Text="Add Exam" AutoPostBack="true" OnCheckedChanged="chk_addexam_CheckedChanged" />
             </td>

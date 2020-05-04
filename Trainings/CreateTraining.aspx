@@ -50,13 +50,9 @@
          
                 <table class="trn_info_tbl">
                     <tr>
-                        <th colspan="2">CREATE TRAINING PACKAGE
-                        </th>
-                    </tr>
-                    <tr>
                         <td>NAME  : </td>
                         <td>
-                            <asp:TextBox ID="txt_examname" Width="200" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="txt_trainingname" Width="200" runat="server"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>

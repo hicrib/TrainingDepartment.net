@@ -19,8 +19,11 @@ namespace AviaTrain.Trainings
             { 
                 string t = Convert.ToString(Request.QueryString["T"]);
                 string s = Convert.ToString(Request.QueryString["S"]);
-                if (t == "" || s == "")
+                string n = Convert.ToString(Request.QueryString["N"]);
+                if (t == "" || s == "" || n=="")
                     RedirectWithCode("UNAUTHORIZED!");
+
+                Write_Page_Header_Low("FINISH DESIGN : " + n);
 
                 lbl_trnid.Text = t;
                 lbl_prev_stepid.Text = s;

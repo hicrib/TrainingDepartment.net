@@ -5,6 +5,7 @@
         .assign_tbl {
             width: 1000px;
             border-collapse: collapse;
+            border : 2px solid #a52a2a;
         }
 
             .assign_tbl th {
@@ -49,9 +50,6 @@
         </Triggers>
         <ContentTemplate>
             <table class="assign_tbl">
-                <tr>
-                    <th colspan="2">ASSIGN  TRAINING</th>
-                </tr>
                 <tr>
                     <td>TRAINING : </td>
                     <td>

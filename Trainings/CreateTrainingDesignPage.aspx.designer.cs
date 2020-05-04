@@ -247,5 +247,14 @@ namespace AviaTrain.Trainings
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbl_step_db_id;
+
+        /// <summary>
+        /// lbl_trnname control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_trnname;
     }
 }
