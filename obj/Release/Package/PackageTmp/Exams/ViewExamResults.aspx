@@ -75,10 +75,6 @@
         <ContentTemplate>
             <table class="exam_results_tbl">
                 <tr>
-                    <th>VIEW EXAM RESULTS
-                    </th>
-                </tr>
-                <tr>
                     <td style="height: 30px;"></td>
                 </tr>
                 <tr>

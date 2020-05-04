@@ -29,7 +29,7 @@ namespace AviaTrain.Exams
                     RedirectWithCode("UNAUTHORIZED!");
 
                 lbl_assignid.Text = assignid;
-                lbl_examname.Text = DB_Exams.get_Exam_Name_by_assignid(assignid);
+                lbl_examname.Text = DB_Exams.get_Exam_Name(assignid: assignid);
 
                 Write_Page_Header_Low(lbl_examname.Text);
 
@@ -496,13 +496,13 @@ namespace AviaTrain.Exams
                             howmany_blank++;
 
                         if (howmany_blank > 0)
-                            if (user_ans1 == real_ans1_acc1 || user_ans1 == real_ans1_acc2 || user_ans1 == real_ans1_acc3)
+                            if (user_ans1.Trim() != "" && (user_ans1 == real_ans1_acc1 || user_ans1 == real_ans1_acc2 || user_ans1 == real_ans1_acc3))
                                 total_user_points += (q_point / (float)howmany_blank);
                         if (howmany_blank > 1)
-                            if (user_ans2 == real_ans2_acc1 || user_ans2 == real_ans2_acc2 || user_ans2 == real_ans2_acc3)
+                            if (user_ans2.Trim() !="" && ( user_ans2 == real_ans2_acc1 || user_ans2 == real_ans2_acc2 || user_ans2 == real_ans2_acc3))
                                 total_user_points += (q_point / (float)howmany_blank);
                         if (howmany_blank > 2)
-                            if (user_ans3 == real_ans3_acc1 || user_ans3 == real_ans3_acc2 || user_ans3 == real_ans3_acc3)
+                            if (user_ans3.Trim() != "" && (  user_ans3 == real_ans3_acc1 || user_ans3 == real_ans3_acc2 || user_ans3 == real_ans3_acc3))
                                 total_user_points += (q_point / (float)howmany_blank);
                     }
                 }

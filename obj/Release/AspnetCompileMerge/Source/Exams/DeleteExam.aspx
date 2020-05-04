@@ -87,10 +87,7 @@
         <ContentTemplate>
 
             <table class="tbl_exam_info">
-                <tr>
-                    <th colspan="2">DELETE EXAM
-                    </th>
-                </tr>
+               
                 <tr>
                     <td colspan="2" style="height: 30px;"></td>
                 </tr>

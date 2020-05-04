@@ -22,9 +22,9 @@ namespace AviaTrain.Exams
 
                 //if admin, examadmin, any trainee
                 UserSession user = (UserSession)Session["usersession"];
-                if(!(user.employeeid == DB_Exams.whose_Assignment(assignid) || user.isAdmin || user.isExamAdmin))
+                if (!(user.employeeid == DB_Exams.whose_Assignment(assignid) || user.isAdmin || user.isExamAdmin))
                     RedirectWithCode("UNAUTHORIZED!");
-               
+
 
                 Fill_Details(assignid);
             }
@@ -56,16 +56,20 @@ namespace AviaTrain.Exams
                 DataRow q_definition = DB_Exams.get_ONE_question(q["Q_ID"].ToString()).Rows[0];
 
                 //q_id, type, point, real_ans1_acc1 .... ,  user_ans1 ...
-                DataRow answer = (user_answers.Select("Q_ID = " + q["Q_ID"])[0]);
+
+                DataRow answer = null;
+                //this check is if the trainee didnt answer question
+                DataRow[] temp = user_answers.Select("Q_ID = " + q["Q_ID"]);
+                if (temp != null && temp.Length > 0) //not answered
+                    answer = user_answers.Select("Q_ID = " + q["Q_ID"])[0];
+
 
                 if (q_definition["TYPE"].ToString() == "2" || q_definition["TYPE"].ToString() == "3" || q_definition["TYPE"].ToString() == "4")
                 {
-
                     q_html = make_ops(q["Question"].ToString(), q_definition, answer, Convert.ToInt32(q_definition["TYPE"]));
                 }
                 else if (q_definition["TYPE"].ToString() == "FILL")
                 {
-
                     q_html = make_FILL(q["Question"].ToString(), q_definition, answer);
                 }
 
@@ -81,14 +85,19 @@ namespace AviaTrain.Exams
 
         protected string make_ops(string orderby, DataRow q_def, DataRow answer, int opsnumber)
         {
-            string user_ans1 = answer["user_ans1"].ToString().ToUpper();
-            string real_ans1_acc1 = answer["real_ans1_acc1"].ToString().ToUpper();
+            string user_ans1 = answer == null ? "" : answer["user_ans1"].ToString().ToUpper();
+            string real_ans1_acc1 = answer == null ? "" : answer["real_ans1_acc1"].ToString().ToUpper();
             bool correct = user_ans1 == real_ans1_acc1;
+
+
+            string point = "";
+            if (answer != null)
+                point = answer["POINT"].ToString();
 
             string q_main = @"<table style='' class='ops_q_table' >
         <tr>
             <td colspan='3'>
-              <span class='ops_q_head_span' > Q " + orderby + @"  (" + answer["POINT"].ToString() + @" pts.) </span>
+              <span class='ops_q_head_span' > Q " + orderby + @"  (" + point + @" pts.) </span>
             </td>
         </tr>
         <tr>
@@ -103,7 +112,7 @@ namespace AviaTrain.Exams
         </tr>       ";
             //</ table >"; SHOULD BE ADDED
 
-           
+
 
             for (int i = 1; i <= opsnumber; i++)
             {
@@ -122,11 +131,11 @@ namespace AviaTrain.Exams
                 {
                     if (user_ans1 == "A")
                         if (correct)
-                            ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green.png'/>");
+                            ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green_small.png'/>");
                         else
                             ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/cross_red.png'/>");
                     else if (real_ans1_acc1 == "A")
-                        ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green.png'/>");
+                        ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green_small.png'/>");
                     else
                         ops_tr_html = ops_tr_html.Replace("@SRC@", "");
 
@@ -138,11 +147,11 @@ namespace AviaTrain.Exams
                 {
                     if (user_ans1 == "B")
                         if (correct)
-                            ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green.png'/>");
+                            ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green_small.png'/>");
                         else
                             ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/cross_red.png'/>");
                     else if (real_ans1_acc1 == "B")
-                        ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green.png'/>");
+                        ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green_small.png'/>");
                     else
                         ops_tr_html = ops_tr_html.Replace("@SRC@", "");
 
@@ -153,11 +162,11 @@ namespace AviaTrain.Exams
                 {
                     if (user_ans1 == "C")
                         if (correct)
-                            ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green.png'/>");
+                            ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green_small.png'/>");
                         else
                             ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/cross_red.png'/>");
                     else if (real_ans1_acc1 == "C")
-                        ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green.png'/>");
+                        ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green_small.png'/>");
                     else
                         ops_tr_html = ops_tr_html.Replace("@SRC@", "");
 
@@ -168,11 +177,11 @@ namespace AviaTrain.Exams
                 {
                     if (user_ans1 == "D")
                         if (correct)
-                            ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green.png'/>");
+                            ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green_small.png'/>");
                         else
                             ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/cross_red.png'/>");
                     else if (real_ans1_acc1 == "D")
-                        ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green.png'/>");
+                        ops_tr_html = ops_tr_html.Replace("@SRC@", "<img src='../images/tick_green_small.png'/>");
                     else
                         ops_tr_html = ops_tr_html.Replace("@SRC@", "");
 
@@ -190,27 +199,31 @@ namespace AviaTrain.Exams
 
         protected string make_FILL(string orderby, DataRow q_def, DataRow answer)
         {
-            string user_ans1 = answer["user_ans1"].ToString();
-            string user_ans2 = answer["user_ans2"].ToString();
-            string user_ans3 = answer["user_ans3"].ToString();
+            string user_ans1 = answer == null ? "" : answer["user_ans1"].ToString();
+            string user_ans2 = answer == null ? "" : answer["user_ans2"].ToString();
+            string user_ans3 = answer == null ? "" : answer["user_ans3"].ToString();
 
-            string real_ans1_acc1 = answer["real_ans1_acc1"].ToString();
-            string real_ans1_acc2 = answer["real_ans1_acc2"].ToString();
-            string real_ans1_acc3 = answer["real_ans1_acc3"].ToString();
+            string real_ans1_acc1 = answer == null ? "" : answer["real_ans1_acc1"].ToString();
+            string real_ans1_acc2 = answer == null ? "" : answer["real_ans1_acc2"].ToString();
+            string real_ans1_acc3 = answer == null ? "" : answer["real_ans1_acc3"].ToString();
 
-            string real_ans2_acc1 = answer["real_ans2_acc1"].ToString();
-            string real_ans2_acc2 = answer["real_ans2_acc2"].ToString();
-            string real_ans2_acc3 = answer["real_ans2_acc3"].ToString();
+            string real_ans2_acc1 = answer == null ? "" : answer["real_ans2_acc1"].ToString();
+            string real_ans2_acc2 = answer == null ? "" : answer["real_ans2_acc2"].ToString();
+            string real_ans2_acc3 = answer == null ? "" : answer["real_ans2_acc3"].ToString();
 
-            string real_ans3_acc1 = answer["real_ans3_acc1"].ToString();
-            string real_ans3_acc2 = answer["real_ans3_acc2"].ToString();
-            string real_ans3_acc3 = answer["real_ans3_acc3"].ToString();
+            string real_ans3_acc1 = answer == null ? "" : answer["real_ans3_acc1"].ToString();
+            string real_ans3_acc2 = answer == null ? "" : answer["real_ans3_acc2"].ToString();
+            string real_ans3_acc3 = answer == null ? "" : answer["real_ans3_acc3"].ToString();
 
+
+            string point = "";
+            if (answer != null)
+                point = answer["POINT"].ToString();
 
             string q_html = @"<table class='fill_q_table'>
         <tr>
             <td class='fill_q_head_td' >
-                Question : " + orderby + @"  (" + answer["POINT"].ToString() + @" pts.)
+                Question : " + orderby + @"  (" + point + @" pts.)
             </td>
         </tr>
         <tr><td>";
@@ -223,11 +236,11 @@ namespace AviaTrain.Exams
             q_html += "<input type = 'text' id='blank1' value = '" + user_ans1.ToUpper() + "' disabled> ";
 
             //answer1 correct
-            if (user_ans1 == real_ans1_acc1 || user_ans1 == real_ans1_acc2 || user_ans1 == real_ans1_acc3)
+            if (user_ans1.Trim() != "" && (user_ans1 == real_ans1_acc1 || user_ans1 == real_ans1_acc2 || user_ans1 == real_ans1_acc3))
                 q_html += "<img src='../images/tick_green_small.png'/>";
             else
                 q_html += "<img src='../images/cross_red_small.png'/>";
-           
+
 
 
 
@@ -238,16 +251,15 @@ namespace AviaTrain.Exams
             //if there is blank 2
             if (real_ans2_acc1 + real_ans2_acc2 + real_ans2_acc3 != "")
             {
-               
                 q_html += "<input type = 'text' id='blank2' value = '" + user_ans2.ToUpper() + "' disabled> ";
 
                 //answer2 correct
-                if (user_ans2 == real_ans2_acc1 || user_ans2 == real_ans2_acc2 || user_ans2 == real_ans2_acc3)
+                if (user_ans2.Trim() != "" && (user_ans2 == real_ans2_acc1 || user_ans2 == real_ans2_acc2 || user_ans2 == real_ans2_acc3))
                     q_html += "<img src='../images/tick_green_small.png'/>";
                 else
                     q_html += "<img src='../images/cross_red_small.png'/>";
 
-           
+
             }
 
             //if there is text 3
@@ -257,16 +269,16 @@ namespace AviaTrain.Exams
             //if there is blank 3
             if (real_ans3_acc1 + real_ans3_acc2 + real_ans3_acc3 != "")
             {
-               
+
                 q_html += "<input type = 'text' id='blank3' value = '" + user_ans3.ToUpper() + "' disabled> ";
 
                 //answer2 correct
-                if (user_ans3 == real_ans3_acc1 || user_ans3 == real_ans3_acc2 || user_ans3 == real_ans3_acc3)
+                if (user_ans3.Trim() != "" && (user_ans3 == real_ans3_acc1 || user_ans3 == real_ans3_acc2 || user_ans3 == real_ans3_acc3))
                     q_html += "<img src='../images/tick_green_small.png'/>";
                 else
                     q_html += "<img src='../images/cross_red_small.png'/>";
 
-               
+
             }
 
             //if there is text 4
@@ -293,7 +305,7 @@ namespace AviaTrain.Exams
             //make html
             string html = @"<table class='exam_header'>
         <tr>
-            <th colspan='3'>" +  details.ElementAt(0) + @"
+            <th colspan='3'>" + details.ElementAt(0) + @"
             </th>
         </tr>
         <tr>

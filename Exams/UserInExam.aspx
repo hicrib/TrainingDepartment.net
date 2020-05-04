@@ -98,6 +98,10 @@
             width: 30% !important; 
             float: right !important;
         }
+        .small {
+            max-width: 25px;
+            max-height : 25px;
+        }
     </style>
 
 
@@ -119,7 +123,7 @@
                         <asp:GridView ID="grid_questions_map" runat="server" CssClass="grid_questions_map" OnRowDataBound="grid_questions_map_RowDataBound"
                             OnRowCommand="grid_questions_map_RowCommand">
                             <Columns>
-                                <asp:ButtonField ButtonType="Image" HeaderText="" ItemStyle-Width="30" ItemStyle-Height="30" CommandName="CHOOSE" ImageUrl="~/Images/view.png" />
+                                <asp:ButtonField ButtonType="Image" HeaderText="" ControlStyle-CssClass="small" ItemStyle-Width="30" ItemStyle-Height="30" CommandName="CHOOSE" ImageUrl="~/Images/view.png" />
                             </Columns>
                         </asp:GridView>
                     </td>

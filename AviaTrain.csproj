@@ -197,6 +197,7 @@
     <Content Include="Exams\CreateQuestions.aspx" />
     <Content Include="Exams\DeleteExam.aspx" />
     <Content Include="Exams\EditQuestions.aspx" />
+    <Content Include="Exams\ViewExam.aspx" />
     <Content Include="images\create.png" />
     <Content Include="images\cross_red.png" />
     <Content Include="images\cross_red_small.png" />
@@ -1279,6 +1280,13 @@
     </Compile>
     <Compile Include="Exams\EditQuestions.aspx.designer.cs">
       <DependentUpon>EditQuestions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Exams\ViewExam.aspx.cs">
+      <DependentUpon>ViewExam.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Exams\ViewExam.aspx.designer.cs">
+      <DependentUpon>ViewExam.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\ErrorPage.aspx.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>

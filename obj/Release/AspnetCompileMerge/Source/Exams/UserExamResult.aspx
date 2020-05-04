@@ -28,14 +28,8 @@
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
+    <asp:Label ID="lbl_exam_name" runat="server" Visible="false"></asp:Label>
     <table class="tbl_result">
-        <tr>
-            <th colspan="2">
-                <asp:Label ID="lbl_exam_name" runat="server"></asp:Label>
-            </th>
-        </tr>
-        
         <tr>
             <td>
                 <asp:Label ID="label2" runat="server" Text="Trainee : "></asp:Label>

@@ -42,6 +42,15 @@ namespace AviaTrain.Exams
         protected global::System.Web.UI.WebControls.DropDownList ddl_exams;
 
         /// <summary>
+        /// btn_show_examformat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_show_examformat;
+
+        /// <summary>
         /// lbl_trainee control.
         /// </summary>
         /// <remarks>

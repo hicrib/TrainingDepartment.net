@@ -56,7 +56,7 @@ namespace AviaTrain.Exams
 
 
             //show result
-            Page_Result("SUCCESS :  '"+ddl_exams.SelectedItem.Text + "' assigned to Trainee : " + ddl_trainee.SelectedItem.Text);
+            Page_Result("SUCCESS :  '" + ddl_exams.SelectedItem.Text + "' assigned to Trainee : " + ddl_trainee.SelectedItem.Text);
 
             //clean-up
             ddl_exams.SelectedValue = "0";
@@ -122,7 +122,7 @@ namespace AviaTrain.Exams
 
         protected void Calendar_start_DayRender(object sender, DayRenderEventArgs e)
         {
-            DateTime dte = DateTime.UtcNow.Subtract(new TimeSpan(1,12,0,0)) ;
+            DateTime dte = DateTime.UtcNow.Subtract(new TimeSpan(1, 12, 0, 0));
             if (e.Day.Date < dte)
             {
                 e.Day.IsSelectable = false;
@@ -132,6 +132,8 @@ namespace AviaTrain.Exams
 
         protected void ddl_exams_SelectedIndexChanged(object sender, EventArgs e)
         {
+            btn_show_examformat.Visible = !(new string[3] { "-", "", "0" }).Contains(ddl_exams.SelectedValue);
+
             DataTable dt = DB_Exams.get_EXAM_QUESTIONS_by_examid(ddl_exams.SelectedValue);
             if (dt == null || dt.Rows.Count == 0)
                 return;
@@ -139,6 +141,18 @@ namespace AviaTrain.Exams
             grid_questions.DataSource = dt;
             grid_questions.DataBind();
 
+        }
+
+        protected void btn_show_examformat_Click(object sender, EventArgs e)
+        {
+            string url = "ViewExam.aspx?ExID=" + ddl_exams.SelectedValue;
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "key", "open('" + url + "') ;", true);
+        }
+
+        protected void grid_questions_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.Cells.Count > 4)
+                e.Row.Cells[4].Visible = false; //ORDERBY column
         }
     }
 }

@@ -180,6 +180,8 @@ namespace AviaTrain.App_Code
                     command.CommandType = CommandType.Text;
 
                     string assignid = Convert.ToString(command.ExecuteScalar());
+                    push_USERANSWERS_for_Assignment(assignid);
+
                     return assignid;
                 }
             }
@@ -190,6 +192,37 @@ namespace AviaTrain.App_Code
 
             //something went wrong
             return "";
+        }
+
+        public static bool push_USERANSWERS_for_Assignment(string assignid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(@"
+                    INSERT INTO EXM_USER_ANSWERS
+                        select ASS.ASSIGN_ID , EDEFQ.Q_ID, '','',''
+                        from EXM_EXAM_DEF_QUESTIONS EDEFQ 
+                        JOIN EXM_EXAM_ASSIGNMENT ASS ON ASS.EXAM_ID = ID
+                        WHERE ASS.ASSIGN_ID = @ASSIGNID ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@ASSIGNID", SqlDbType.Int).Value = assignid;
+                   
+
+                    command.CommandType = CommandType.Text;
+
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            //something went wrong
+            return false;
         }
 
         public static bool push_Exam_Answer(string assignid, string qid, string ans1, string ans2, string ans3)
@@ -698,7 +731,7 @@ namespace AviaTrain.App_Code
         }
 
 
-        // gets Q_ID, QUESTION, ANSWER IN A GRIDVIEW FORMAT 
+        // gets Q.ID, QUESTION, ANSWER IN A GRIDVIEW FORMAT 
         //CHECKS FOR ISACTIVE QUESTIONS 
         //DOESNT CHECK ISACTIVE EXAM
         public static DataTable get_EXAM_QUESTIONS_by_examid(string examid)
@@ -709,26 +742,33 @@ namespace AviaTrain.App_Code
                 using (SqlConnection connection = new SqlConnection(con_str))
                 {
                     using (SqlCommand command = new SqlCommand(
-                                @"SELECT OPS.ID AS 'Q.ID' ,  OPS.Q AS 'Question' ,
-                                    CASE WHEN OPS.ANSWER = 'A' THEN OPS.OPA
-	                                     WHEN OPS.ANSWER = 'B' THEN OPS.OPB
-	                                     WHEN OPS.ANSWER = 'C' THEN OPS.OPC
-	                                     WHEN OPS.ANSWER = 'D' THEN OPS.OPD END AS 'Answer'
-                                    FROM EXM_EXAM_DEF_QUESTIONS DEFQ
-                                    JOIN EXM_QUESTIONS Q ON Q.ID = DEFQ.Q_ID AND (Q.TYPE='2' OR Q.TYPE='3' OR Q.TYPE='4' )
-                                    JOIN EXM_QUESTIONS_OPS OPS ON OPS.ID = Q.ID
-                                    WHERE DEFQ.ID = @EXAMID AND  Q.ISACTIVE = 1
-                                    UNION
-                                    SELECT FILL.ID AS 'Q.ID' ,  
-                                    FILL.TEXT1 + ' ((blank)) ' + FILL.TEXT2 + ' ((blank)) '+ FILL.TEXT3 + ' ((blank)) ' + FILL.TEXT4  AS 'Question',
-                                    '((' + 
-                                    FILL1_ANS1 +','+FILL1_ANS2+','+FILL1_ANS3+')) - ((' + 
-                                    FILL2_ANS1 +','+FILL2_ANS2+','+FILL2_ANS3+')) - ((' +
-                                    FILL3_ANS1 +','+FILL3_ANS2+','+FILL3_ANS3+'))' AS 'Answer'
-                                    FROM EXM_EXAM_DEF_QUESTIONS DEFQ
-                                    JOIN EXM_QUESTIONS Q ON Q.ID = DEFQ.Q_ID AND (Q.TYPE='FILL' )
-                                    JOIN EXM_QUESTIONS_FILL FILL ON FILL.ID = Q.ID
-                                    WHERE DEFQ.ID = @EXAMID AND  Q.ISACTIVE = 1
+                                @"SELECT * FROM 
+                                    (
+                                            SELECT    OPS.ID AS 'Q.ID' ,  
+                                             OPS.Q AS 'Question' ,
+                                             CASE WHEN OPS.ANSWER = 'A' THEN OPS.OPA
+                                                  WHEN OPS.ANSWER = 'B' THEN OPS.OPB
+                                                  WHEN OPS.ANSWER = 'C' THEN OPS.OPC
+                                                  WHEN OPS.ANSWER = 'D' THEN OPS.OPD END AS 'Answer',
+                                                     DEFQ.POINT , DEFQ.ORDERBY
+                                             FROM EXM_EXAM_DEF_QUESTIONS DEFQ
+                                             JOIN EXM_QUESTIONS Q ON Q.ID = DEFQ.Q_ID AND (Q.TYPE='2' OR Q.TYPE='3' OR Q.TYPE='4' )
+                                             JOIN EXM_QUESTIONS_OPS OPS ON OPS.ID = Q.ID
+                                             WHERE DEFQ.ID = 44 AND  Q.ISACTIVE = 1
+                                             UNION
+                                             SELECT FILL.ID AS 'Q.ID' ,  
+                                                     FILL.TEXT1 + ' ((blank)) ' + FILL.TEXT2 + ' ((blank)) '+ FILL.TEXT3 + ' ((blank)) ' + FILL.TEXT4  AS 'Question',
+                                                     '((' + 
+                                                     FILL1_ANS1 +','+FILL1_ANS2+','+FILL1_ANS3+')) - ((' + 
+                                                     FILL2_ANS1 +','+FILL2_ANS2+','+FILL2_ANS3+')) - ((' +
+                                                     FILL3_ANS1 +','+FILL3_ANS2+','+FILL3_ANS3+'))' AS 'Answer',
+                                                     DEFQ.POINT , DEFQ.ORDERBY
+                                             FROM EXM_EXAM_DEF_QUESTIONS DEFQ
+                                             JOIN EXM_QUESTIONS Q ON Q.ID = DEFQ.Q_ID AND (Q.TYPE='FILL' )
+                                             JOIN EXM_QUESTIONS_FILL FILL ON FILL.ID = Q.ID
+                                             WHERE DEFQ.ID = 44 AND  Q.ISACTIVE = 1
+                                     ) TBL
+                                     ORDER BY TBL.ORDERBY
 
 ", connection))
                     {
@@ -809,19 +849,28 @@ namespace AviaTrain.App_Code
 
         // DOESNT CARE EXAM ISACTIVE OR NOT
         //gets exam name for assignment creation
-        public static string get_Exam_Name_by_assignid(string assignid)
+        public static string get_Exam_Name(string assignid="0", string examid = "0")
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(@"
-                      SELECT DEF.[NAME] + '  (' + convert(varchar, DEF.PASSPERCENT ) + '% required)' 
-                        FROM EXM_EXAM_DEFINITION DEF
-                        JOIN EXM_EXAM_ASSIGNMENT EA ON EA.EXAM_ID = DEF.ID 
-                        WHERE EA.ASSIGN_ID = @ASSIGN_ID", connection))
+                       IF @EXAMID = 0
+                        BEGIN
+                            SELECT DEF.[NAME] + '  (' + convert(varchar, DEF.PASSPERCENT ) + '% required)' 
+                            FROM EXM_EXAM_DEFINITION DEF
+                            JOIN EXM_EXAM_ASSIGNMENT EA ON EA.EXAM_ID = DEF.ID 
+                            WHERE EA.ASSIGN_ID = @ASSIGN_ID
+                        END
+                        ELSE
+                            SELECT DEF.[NAME] + '  (' + convert(varchar, DEF.PASSPERCENT ) + '% required)' 
+                            FROM EXM_EXAM_DEFINITION DEF
+                            WHERE DEF.ID = @EXAMID
+                                                            ", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@ASSIGN_ID", SqlDbType.Int).Value = assignid;
+                    command.Parameters.Add("@EXAMID", SqlDbType.Int).Value = examid;
                     command.CommandType = CommandType.Text;
 
                     string res = Convert.ToString(command.ExecuteScalar());
@@ -836,6 +885,8 @@ namespace AviaTrain.App_Code
             //something went wrong
             return "";
         }
+
+       
 
 
 

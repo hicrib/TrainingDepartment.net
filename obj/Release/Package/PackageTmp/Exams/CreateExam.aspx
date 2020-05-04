@@ -94,10 +94,6 @@
         <ContentTemplate>
             <table class="tbl_exam_info">
                 <tr>
-                    <th colspan="2">CREATE EXAM
-                    </th>
-                </tr>
-                <tr>
                     <td>
                         <asp:Label ID="lbl_name" runat="server" Width="160" Font-Bold="true" Text="Exam Name : "></asp:Label>
                     </td>

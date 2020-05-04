@@ -1,8 +1,6 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="ViewUserExamDetails.aspx.cs" Inherits="AviaTrain.Exams.ViewUserExamDetails" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="ViewExam.aspx.cs" Inherits="AviaTrain.Exams.ViewExam" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-
-
     <script type="text/javascript">
         function changeWidth() {
             var e1 = document.getElementById("e1");
@@ -11,7 +9,6 @@
         window.onload = function () {
         };
     </script>
-
     <style>
         body {
             background-color: white;
@@ -27,26 +24,29 @@
         }
 
         .exam_header {
-            border-collapse : collapse;
-            width :550px;
-            border : 1px solid black;
-            margin-bottom : 50px;
-            margin-left : 50px;
-            margin-right : 50px;
+            border-collapse: collapse;
+            width: 550px;
+            border: 1px solid black;
+            margin-bottom: 50px;
+            margin-left: 50px;
+            margin-right: 50px;
         }
 
-        .exam_header th {
-            width:100%;
-            background-color : black;
-            color : white;
-        }
-        .exam_header td:first-child {
-            font-size: large;
-            font-weight : bold;
-        }
-        .exam_header td {
-            padding: 5px;
-        }
+            .exam_header th {
+                width: 100%;
+                background-color: black;
+                color: white;
+            }
+
+            .exam_header td:first-child {
+                font-size: large;
+                font-weight: bold;
+            }
+
+            .exam_header td {
+                padding: 5px;
+            }
+
         .ops_q_table {
             width: 550px;
             border-collapse: collapse;
@@ -107,7 +107,6 @@
         input[type="text"]:disabled {
         }
     </style>
-
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <table class="page_wrapper_table">
@@ -117,11 +116,4 @@
             </td>
         </tr>
     </table>
-
-
-
-
-
-
-
 </asp:Content>
