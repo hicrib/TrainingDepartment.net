@@ -379,7 +379,7 @@ namespace AviaTrain.Reports
 
         protected void btn_ojtisign_Click(object sender, EventArgs e)
         {
-            img_ojtisign.ImageUrl = "~/Signatures/sign_id_" + ddl_ojtis.SelectedValue + ".jpeg";
+            img_ojtisign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_ojtis.SelectedValue)["SIGNATURE"].ToString();
             img_ojtisign.Visible = true;
             btn_ojtisign.Visible = false;
             lbl_ojtisigned.Text = "1";
