@@ -411,7 +411,7 @@ namespace AviaTrain.Reports
 
         protected void btn_sign_controller_Click(object sender, EventArgs e)
         {
-            img_sign_controller.ImageUrl = "~/Signatures/sign_id_" + ddl_trainee.SelectedValue + ".jpeg";
+            img_sign_controller.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_trainee.SelectedValue)["SIGNATURE"].ToString();
             img_sign_controller.Visible = true;
             btn_sign_controller.Visible = false;
             lbl_recom_trainee_signed.Text = "1";

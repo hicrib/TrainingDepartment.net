@@ -452,7 +452,7 @@ namespace AviaTrain.Reports
                 return;
             }
 
-            img_traineesign.ImageUrl = "~/Signatures/sign_id_" + ddl_trainees.SelectedValue + ".jpeg";
+            img_traineesign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_trainees.SelectedValue)["SIGNATURE"].ToString();
             img_traineesign.Visible = true;
             btn_sign_trainee.Visible = false;
             lbl_trainee_signed.Text = "1";
