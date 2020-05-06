@@ -218,6 +218,7 @@
     <Content Include="images\toright.png" />
     <Content Include="images\view.png" />
     <Content Include="images\wait.gif" />
+    <Content Include="Pages\DownloadExcel.aspx" />
     <Content Include="Pages\ErrorPage.aspx" />
     <Content Include="Exams\Exam_MainAdmin.aspx" />
     <Content Include="Exams\Exam_MainGeneral.aspx" />
@@ -1289,6 +1290,13 @@
     </Compile>
     <Compile Include="Exams\ViewExam.aspx.designer.cs">
       <DependentUpon>ViewExam.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\DownloadExcel.aspx.cs">
+      <DependentUpon>DownloadExcel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\DownloadExcel.aspx.designer.cs">
+      <DependentUpon>DownloadExcel.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\ErrorPage.aspx.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>

@@ -81,6 +81,10 @@ namespace AviaTrain.Exams
                 grid_results.DataBind();
                 grid_results.Visible = true;
                 lbl_result.Visible = false;
+
+                //for excel export
+                Session["excel_file"] = dt;
+                Session["excel_file_excludeColumns"] = new Dictionary<string, string> { { "EXAMID", "6" }, { "ASSIGNID", "7" } };
             }
             else
             {

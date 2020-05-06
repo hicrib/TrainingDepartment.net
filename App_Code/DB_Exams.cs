@@ -152,15 +152,13 @@ namespace AviaTrain.App_Code
 
         }
 
-        public static string push_EXAM_Assignment(string examid, string traineeid, string schedule_start, string schedule_finish)
+        public static string push_EXAM_Assignment(string examid, string traineeid, string schedule_start, string schedule_finish, string trn_assignid = "")
         {
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
 
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(@"
-                        IF NOT EXISTS  (SELECT ASSIGN_ID FROM EXM_EXAM_ASSIGNMENT WHERE EXAM_ID = @EXAM_ID AND TRAINEE_ID = @TRAINEE_ID AND (STATUS = 'ASSIGNED' OR STATUS ='USER_STARTED') )
+            string insert = "";
+            if (trn_assignid == "")
+                insert = @"IF NOT EXISTS  (SELECT ASSIGN_ID FROM EXM_EXAM_ASSIGNMENT WHERE EXAM_ID = @EXAM_ID AND TRAINEE_ID = @TRAINEE_ID AND (STATUS = 'ASSIGNED' OR STATUS ='USER_STARTED') )
                         BEGIN
 		                        INSERT INTO EXM_EXAM_ASSIGNMENT VALUES (@EXAM_ID, @TRAINEE_ID, 'ASSIGNED', @START, @FINISH, NULL, NULL, NULL, @BY , convert(varchar, getutcdate(), 20)  )  
                                 SELECT SCOPE_IDENTITY() 
@@ -168,7 +166,28 @@ namespace AviaTrain.App_Code
                         ELSE
                         BEGIN
 		                         SELECT ASSIGN_ID FROM EXM_EXAM_ASSIGNMENT WHERE EXAM_ID = @EXAM_ID AND TRAINEE_ID = @TRAINEE_ID AND (STATUS = 'ASSIGNED' OR STATUS ='USER_STARTED')
-                        END", connection))
+                        END";
+            else
+            {//if it is a training exam
+                insert = @"
+ IF NOT EXISTS  (SELECT ASSIGN_ID FROM EXM_EXAM_ASSIGNMENT 
+                 WHERE EXAM_ID = @EXAM_ID AND TRAINEE_ID = @TRAINEE_ID AND (STATUS = 'ASSIGNED_TRN' + @TRNASSIGNID OR STATUS ='USER_STARTED_TRN'+@TRNASSIGNID) 
+                )
+                        BEGIN
+		                        INSERT INTO EXM_EXAM_ASSIGNMENT VALUES (@EXAM_ID, @TRAINEE_ID, 'ASSIGNED_TRN'+ @TRNASSIGNID , @START, @FINISH, NULL, NULL, NULL, @BY , convert(varchar, getutcdate(), 20)  )  
+                                SELECT SCOPE_IDENTITY() 
+                        END
+                        ELSE
+                        BEGIN
+		                         SELECT ASSIGN_ID FROM EXM_EXAM_ASSIGNMENT WHERE EXAM_ID = @EXAM_ID AND TRAINEE_ID = @TRAINEE_ID AND (STATUS = 'ASSIGNED_TRN' + @TRNASSIGNID  OR STATUS ='USER_STARTED_TRN' + @TRNASSIGNID )
+                        END";
+            }
+
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(insert, connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@EXAM_ID", SqlDbType.Int).Value = examid;
@@ -176,6 +195,8 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@START", SqlDbType.NVarChar).Value = schedule_start;
                     command.Parameters.Add("@FINISH", SqlDbType.NVarChar).Value = schedule_finish;
                     command.Parameters.Add("@BY", SqlDbType.Int).Value = user.employeeid;
+                    if (trn_assignid != "")
+                        command.Parameters.Add("@TRNASSIGNID", SqlDbType.VarChar).Value = trn_assignid;
 
                     command.CommandType = CommandType.Text;
 
@@ -208,7 +229,7 @@ namespace AviaTrain.App_Code
                 {
                     connection.Open();
                     command.Parameters.Add("@ASSIGNID", SqlDbType.Int).Value = assignid;
-                   
+
 
                     command.CommandType = CommandType.Text;
 
@@ -262,7 +283,7 @@ namespace AviaTrain.App_Code
             return false;
         }
 
-        public static bool update_Question_OPS(string qid ,string q, string answer, string a, string b, string c = null, string d = null)
+        public static bool update_Question_OPS(string qid, string q, string answer, string a, string b, string c = null, string d = null)
         {
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
 
@@ -299,7 +320,7 @@ namespace AviaTrain.App_Code
             //something went wrong
             return false;
         }
-        public static bool update_Question_FILL( string qid,string TEXT1, string FILL1_ANS1, string FILL1_ANS2, string FILL1_ANS3,
+        public static bool update_Question_FILL(string qid, string TEXT1, string FILL1_ANS1, string FILL1_ANS2, string FILL1_ANS3,
                                                               string TEXT2, string FILL2_ANS1, string FILL2_ANS2, string FILL2_ANS3,
                                                               string TEXT3, string FILL3_ANS1, string FILL3_ANS2, string FILL3_ANS3,
                                                               string TEXT4)
@@ -391,14 +412,16 @@ namespace AviaTrain.App_Code
             return false;
         }
 
-        public static bool update_Exam_Assignment(string assignid, string status = "", string userstart = "", string userfinish = "", string grade = "")
+        public static bool update_Exam_Assignment(string assignid, string status = "", string userstart = "", string userfinish = "", string grade = "" ,string trnassignid = "")
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
                     @" UPDATE EXM_EXAM_ASSIGNMENT 
-                                        SET STATUS = CASE WHEN  @STATUS = '' THEN STATUS ELSE @STATUS END,
+                                        SET STATUS = CASE WHEN  @STATUS = '' THEN STATUS 
+                                                          WHEN @TRNASSIGNID = ''  THEN @STATUS 
+                                                          ELSE @STATUS + '_TRN' + @TRNASSIGNID END,
                                             USER_START = CASE WHEN @USERSTART = '' THEN USER_START ELSE CONVERT(VARCHAR, GETUTCDATE(),20) END,
                                             USER_FINISH = CASE WHEN @USERFINISH = '' THEN USER_FINISH ELSE CONVERT(VARCHAR, GETUTCDATE(),20) END,
                                             GRADE = CASE WHEN @GRADE = '' THEN GRADE ELSE @GRADE END
@@ -410,6 +433,7 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@USERSTART", SqlDbType.NVarChar).Value = userstart;
                     command.Parameters.Add("@USERFINISH", SqlDbType.NVarChar).Value = userfinish;
                     command.Parameters.Add("@GRADE", SqlDbType.NVarChar).Value = grade;
+                    command.Parameters.Add("@TRNASSIGNID", SqlDbType.NVarChar).Value = trnassignid;
 
                     command.CommandType = CommandType.Text;
 
@@ -444,7 +468,7 @@ namespace AviaTrain.App_Code
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand( update, connection))
+                using (SqlCommand command = new SqlCommand(update, connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@QID", SqlDbType.Int).Value = qid;
@@ -849,7 +873,7 @@ namespace AviaTrain.App_Code
 
         // DOESNT CARE EXAM ISACTIVE OR NOT
         //gets exam name for assignment creation
-        public static string get_Exam_Name(string assignid="0", string examid = "0")
+        public static string get_Exam_Name(string assignid = "0", string examid = "0")
         {
             try
             {
@@ -886,7 +910,7 @@ namespace AviaTrain.App_Code
             return "";
         }
 
-       
+
 
 
 
@@ -1221,6 +1245,8 @@ FROM EXM_EXAM_ASSIGNMENT ASS
 JOIN USERS U ON U.EMPLOYEEID = ASS.TRAINEE_ID              
 JOIN EXM_EXAM_DEFINITION EDEF ON EDEF.ID = ASS.EXAM_ID     
 WHERE 
+ASS.[STATUS] NOT LIKE '%TRN%'
+AND
 ASS.EXAM_ID =  CASE  WHEN @USE_EXAMID = 1  THEN @EXAMID ELSE ASS.EXAM_ID END
 AND
 convert(datetime, ASS.USER_FINISH, 20)   >=  convert(datetime, @STARTDATE, 20) 

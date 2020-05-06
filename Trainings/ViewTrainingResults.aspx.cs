@@ -3,10 +3,17 @@ using PdfSharp.Pdf.Filters;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+
+
+
+
 
 namespace AviaTrain.Trainings
 {
@@ -46,7 +53,7 @@ namespace AviaTrain.Trainings
         {
             Fill_Trainees();
         }
-        
+
         protected DataTable return_Filter_Result()
         {
             string training = "0";
@@ -55,7 +62,7 @@ namespace AviaTrain.Trainings
 
             string trainee = "0";
             if (!(new string[2] { "-", "" }).Contains(filter_trainee.SelectedValue))
-                training = filter_trainee.SelectedValue;
+                trainee = filter_trainee.SelectedValue;
 
             string status = filter_status.SelectedValue == "ALL" ? "" : filter_status.SelectedValue;
 
@@ -70,7 +77,7 @@ namespace AviaTrain.Trainings
             if (filter_finish.Text != "")
                 finish_date = filter_finish.Text + " 23:59:59";
 
-            return  DB_Trainings.View_Training_Results(start_date, finish_date,
+            return DB_Trainings.View_Training_Results(start_date, finish_date,
                                                                training, chk_active_training.Checked,
                                                                trainee, chk_active_trainee.Checked,
                                                                status);
@@ -78,14 +85,18 @@ namespace AviaTrain.Trainings
         protected void btn_search_Click(object sender, EventArgs e)
         {
             DataTable dt = return_Filter_Result();
-            
-            
+
+
             if (dt != null && dt.Rows.Count > 0)
             {
                 grid_results.DataSource = dt;
                 grid_results.DataBind();
                 grid_results.Visible = true;
                 lbl_result.Visible = false;
+
+                //for excel export
+                Session["excel_file"] = dt;
+                Session["excel_file_excludeColumns"] = new Dictionary<string,string> { { "ID", "7" } , { "ASSIGNID", "8" } };
             }
             else
             {
@@ -98,7 +109,7 @@ namespace AviaTrain.Trainings
 
         protected void grid_results_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if(e.Row.Cells.Count > 8)
+            if (e.Row.Cells.Count > 8)
             {
                 e.Row.Cells[7].Visible = false;
                 e.Row.Cells[8].Visible = false;
@@ -131,8 +142,8 @@ namespace AviaTrain.Trainings
                 sortingDirection = "Asc";
 
             }
-            
-            DataView sortedView = new DataView( return_Filter_Result());
+
+            DataView sortedView = new DataView(return_Filter_Result());
             sortedView.Sort = e.SortExpression + " " + sortingDirection;
             Session["SortedView"] = sortedView;
             grid_results.DataSource = sortedView;
@@ -154,5 +165,10 @@ namespace AviaTrain.Trainings
                 ViewState["directionState"] = value;
             }
         }
+
+        protected void btn_export_Click(object sender, EventArgs e)
+        {
+        }
+        
     }
 }

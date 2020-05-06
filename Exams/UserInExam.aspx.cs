@@ -46,7 +46,7 @@ namespace AviaTrain.Exams
 
                 string status = DB_Exams.get_Assignment_STATUS(assignid);
                 if (status == "ASSIGNED")
-                    DB_Exams.update_Exam_Assignment(assignid, userstart: "now", status: "USER_STARTED");
+                    DB_Exams.update_Exam_Assignment(assignid, userstart: "now", status: "USER_STARTED", trnassignid: lbl_trn_assignid.Text);
 
 
                 Fill_grid_questions_map();
@@ -335,10 +335,6 @@ namespace AviaTrain.Exams
 
 
 
-
-
-
-
         protected void btn_save_n_next_Click(object sender, EventArgs e)
         {
             bool pushed = false;
@@ -518,7 +514,7 @@ namespace AviaTrain.Exams
                 passfail = "PASSED";
 
 
-            if (!DB_Exams.update_Exam_Assignment(lbl_assignid.Text, status: passfail, userfinish: "now", grade: grade.ToString("0.00")))
+            if (!DB_Exams.update_Exam_Assignment(lbl_assignid.Text, status: passfail, userfinish: "now", grade: grade.ToString("0.00"),trnassignid:lbl_trn_assignid.Text))
                 RedirectWithCode("System Error : Exam Assignment can't be updated");
 
             //send the results to result page

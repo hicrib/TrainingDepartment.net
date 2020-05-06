@@ -515,7 +515,7 @@ namespace AviaTrain.Trainings
             //create assignmnet
             string examassignid= DB_Exams.push_EXAM_Assignment(dt.Rows[0]["EXAMID"].ToString(), user.employeeid, "1900-01-01", "2099-01-01");
 
-            DB_Trainings.update_Assignment(lbl_trnid.Text, examassignid: examassignid);
+            DB_Trainings.update_Assignment(lbl_assignid.Text, examassignid: examassignid);
             //redirect with special flag
             Session["from_training"] = lbl_assignid.Text;
             Response.Redirect("~/Exams/UserInExam.aspx?AsID=" + examassignid);

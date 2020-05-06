@@ -19,14 +19,19 @@ namespace AviaTrain.Trainings
             { 
                 string t = Convert.ToString(Request.QueryString["T"]);
                 string s = Convert.ToString(Request.QueryString["S"]);
-                string n = Convert.ToString(Request.QueryString["N"]);
-                if (t == "" || s == "" || n=="")
-                    RedirectWithCode("UNAUTHORIZED!");
-
-                Write_Page_Header_Low("FINISH DESIGN : " + n);
 
                 lbl_trnid.Text = t;
                 lbl_prev_stepid.Text = s;
+                if (t == "" || s == "")
+                    RedirectWithCode("UNAUTHORIZED!");
+
+                try
+                {
+                    string trn_name = DB_Trainings.get_TrainingNames().Select("ID = " + t)[0]["NAME"].ToString();
+                    Write_Page_Header_Low("FINISH DESIGN  : " + trn_name);
+                }
+                catch (Exception) { }
+                
 
                 fill_exams();
 

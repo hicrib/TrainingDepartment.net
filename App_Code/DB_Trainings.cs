@@ -676,9 +676,11 @@ namespace AviaTrain.App_Code
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" 
-                               SELECT DEF.NAME , ASS.STATUS , ASS.USER_START , ASS.USER_FINISH , 
+                               SELECT DEF.NAME , 
+                                        ASS.STATUS ,
+                                        ASS.USER_START , ASS.USER_FINISH , 
 		                                CASE WHEN ISNULL(ASS.EXAMID,'') = '' THEN 'No' 
-			                                 ELSE (SELECT EA.GRADE + ' ' + EA.STATUS FROM EXM_EXAM_ASSIGNMENT EA WHERE EA.ASSIGN_ID = ASS.EXAM_ASSIGNID )
+			                                 ELSE (SELECT EA.GRADE + ' ' + SUBSTRING (EA.STATUS, 0 , PATINDEX('%_TRN%' , EA.STATUS))  FROM EXM_EXAM_ASSIGNMENT EA WHERE EA.ASSIGN_ID = ASS.EXAM_ASSIGNID )
 			                                 END AS 'EXAM'
                                 FROM TRN_ASSIGNMENT ASS
                                 JOIN TRN_TRAINING_DEF DEF ON DEF.ID = ASS.TRNID 

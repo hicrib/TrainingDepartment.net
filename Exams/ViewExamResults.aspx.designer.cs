@@ -123,6 +123,15 @@ namespace AviaTrain.Exams
         protected global::System.Web.UI.WebControls.Button btn_search;
 
         /// <summary>
+        /// btn_export control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_export;
+
+        /// <summary>
         /// grid_results control.
         /// </summary>
         /// <remarks>

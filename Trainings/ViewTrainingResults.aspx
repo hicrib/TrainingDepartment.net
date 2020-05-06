@@ -1,6 +1,18 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="ViewTrainingResults.aspx.cs" Inherits="AviaTrain.Trainings.ViewTrainingResults" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" EnableEventValidation="false" AutoEventWireup="true" CodeBehind="ViewTrainingResults.aspx.cs" Inherits="AviaTrain.Trainings.ViewTrainingResults" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <script>
+        function DownloadExcel() {
+            var downloadFrame = document.createElement("IFRAME");
+
+            if (downloadFrame != null) {
+                downloadFrame.setAttribute("src", '../Pages/DownloadExcel.aspx');
+                downloadFrame.style.width = "0px";
+                downloadFrame.style.height = "0px";
+                document.body.appendChild(downloadFrame);
+            }
+        }
+    </script>
     <style>
         .exam_results_tbl {
             width: 1000px;
@@ -86,7 +98,6 @@
                                 <td>Status</td>
                                 <td colspan="2">Last Action<br />
                                     Between Dates</td>
-                                <td>Exam </td>
                             </tr>
 
                             <tr>
@@ -138,6 +149,11 @@
                                     <asp:Button ID="btn_search" CssClass="btn_search" runat="server" Text="SEARCH" OnClick="btn_search_Click" />
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <asp:Button ID="btn_export" OnClientClick="DownloadExcel()" CssClass="btn_search" Style="float: right;" runat="server" Text="Export To Excel" OnClick="btn_export_Click" />
+                                </td>
+                            </tr>
                         </table>
                     </td>
                 </tr>
@@ -153,10 +169,10 @@
                 <tr>
                     <td>
                         <asp:GridView ID="grid_results" runat="server" CssClass="grid_results" OnRowDataBound="grid_results_RowDataBound"
-                            AllowPaging="true" AllowSorting="true" OnSelectedIndexChanged="grid_results_SelectedIndexChanged" 
+                            AllowPaging="true" AllowSorting="true" OnSelectedIndexChanged="grid_results_SelectedIndexChanged"
                             OnPageIndexChanging="grid_results_PageIndexChanging" PageSize="30"
                             OnSorting="grid_results_Sorting">
-                            <PagerSettings Mode="NumericFirstLast" PageButtonCount="10" FirstPageText="First" LastPageText="Last" />                            
+                            <PagerSettings Mode="NumericFirstLast" PageButtonCount="10" FirstPageText="First" LastPageText="Last" />
                         </asp:GridView>
                     </td>
                 </tr>
