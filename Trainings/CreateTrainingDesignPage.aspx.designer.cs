@@ -33,6 +33,15 @@ namespace AviaTrain.Trainings
         protected global::System.Web.UI.WebControls.TextBox txt_upper_div_holder;
 
         /// <summary>
+        /// grid_navigate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_navigate;
+
+        /// <summary>
         /// img1 control.
         /// </summary>
         /// <remarks>
@@ -103,6 +112,15 @@ namespace AviaTrain.Trainings
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btn_next;
+
+        /// <summary>
+        /// btn_delete_this_page control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_delete_this_page;
 
         /// <summary>
         /// btn_finish control.

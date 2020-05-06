@@ -32,6 +32,7 @@ namespace AviaTrain.Trainings
 
 
                 fill_page();
+                Fill_grid_navigate();
 
 
                 if (Session["editable"] != null )
@@ -62,6 +63,11 @@ namespace AviaTrain.Trainings
                 Session["chosen_questions_training"] = null;
 
             Session["chosen_questions_training"] = dt;
+
+            if (get_step_create_ifnone(next: false) == "") //no previous step
+                btn_prev.Visible = false;
+            else
+                btn_prev.Visible = true;
         }
 
         protected void UploadButton_Click(object sender, EventArgs e)
@@ -170,7 +176,7 @@ namespace AviaTrain.Trainings
         protected void go_to_training_page(string stepid)
         {
             //can be next, previous
-            Response.Redirect("~/Trainings/CreateTrainingDesignPage.aspx?T=" + lbl_trn_id.Text + "&S=" + stepid+"&N=" + lbl_trnname.Text);
+            Response.Redirect("~/Trainings/CreateTrainingDesignPage.aspx?T=" + lbl_trn_id.Text + "&S=" + stepid );
         }
 
 
@@ -201,5 +207,66 @@ namespace AviaTrain.Trainings
         }
 
 
+
+
+
+
+
+
+
+
+
+        protected void Fill_grid_navigate()
+        {
+            DataTable dt = DB_Trainings.get_STEPIDs_orderby(lbl_trn_id.Text);
+            if(dt != null && dt.Rows.Count > 0 )
+            {
+                grid_navigate.DataSource = dt;
+                grid_navigate.DataBind();
+            }
+        }
+
+        protected void grid_navigate_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                ((ImageButton)e.Row.Cells[0].Controls[0]).OnClientClick = "TransferDivContent()"; // add any JS you want here
+            }
+
+
+            if (e.Row.Cells.Count > 1)
+                e.Row.Cells[2].Visible = false;
+
+            if (e.Row.Cells[2].Text == lbl_step_db_id.Text)
+                e.Row.Style.Add("background-color", "lightgreen");
+        }
+        protected void grid_navigate_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            //get stepid
+            GridViewRow selectedRow = grid_navigate.Rows[Convert.ToInt32(e.CommandArgument)];
+            string stepid = selectedRow.Cells[2].Text.ToString().Trim();
+
+
+            //I DECIDED NOT TO PUSH STEP TO DB BECAUSE THERE ARE WAYS TO DO THAT ANYWAYS. THERE MUST BE AN OPTION TO NAVIGATE WITHOUT CHANGING
+            //write everything 
+            //push_step_in_db();
+
+            //go there
+            go_to_training_page(stepid);
+        }
+
+        protected void btn_delete_this_page_Click(object sender, EventArgs e)
+        {
+            //delete
+            DB_Trainings.update_STEP(lbl_step_db_id.Text, isactive: "0");
+
+            //go to next page
+            //cleanup
+            Session["chosen_questions_training"] = null;
+
+            string nextstepid = get_step_create_ifnone(next: true); //next
+
+            go_to_training_page(nextstepid);
+        }
     }
 }

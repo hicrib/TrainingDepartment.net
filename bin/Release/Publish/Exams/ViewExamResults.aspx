@@ -1,6 +1,18 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="ViewExamResults.aspx.cs" Inherits="AviaTrain.Exams.ViewExamResults" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <script>
+        function DownloadExcel() {
+            var downloadFrame = document.createElement("IFRAME");
+
+            if (downloadFrame != null) {
+                downloadFrame.setAttribute("src", '../Pages/DownloadExcel.aspx');
+                downloadFrame.style.width = "0px";
+                downloadFrame.style.height = "0px";
+                document.body.appendChild(downloadFrame);
+            }
+        }
+    </script>
     <style>
         .exam_results_tbl {
             width: 1000px;
@@ -68,7 +80,7 @@
 
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-   
+
     <asp:UpdatePanel runat="server" ID="update_panel" UpdateMode="Always" ChildrenAsTriggers="true">
         <Triggers>
         </Triggers>
@@ -148,6 +160,11 @@
                                     <asp:Button ID="btn_search" CssClass="btn_search" runat="server" Text="SEARCH" OnClick="btn_search_Click" />
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="7">
+                                    <asp:Button ID="btn_export" OnClientClick="DownloadExcel()" CssClass="btn_search" Style="float: right;" runat="server" Text="Export To Excel" />
+                                </td>
+                            </tr>
                         </table>
                     </td>
                 </tr>
@@ -164,7 +181,7 @@
                     <td>
                         <asp:GridView ID="grid_results" runat="server" CssClass="grid_results" OnRowCommand="grid_results_RowCommand" OnRowDataBound="grid_results_RowDataBound">
                             <Columns>
-                               <asp:ButtonField ButtonType="Image" CommandName="GO" ImageUrl="~/images/exam.png"  />
+                                <asp:ButtonField ButtonType="Image" CommandName="GO" ImageUrl="~/images/exam.png" />
                             </Columns>
                         </asp:GridView>
                     </td>

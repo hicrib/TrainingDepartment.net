@@ -298,13 +298,13 @@ namespace AviaTrain.App_Code
             try
             {
                 if (which == "next")
-                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID > @STEP_ID ORDER BY STEP_ID ASC";
+                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID > @STEP_ID AND ISACTIVE=1 ORDER BY STEP_ID ASC";
                 else if (which == "prev")
-                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID < @STEP_ID ORDER BY STEP_ID DESC";
+                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID < @STEP_ID  AND ISACTIVE=1 ORDER BY STEP_ID DESC";
                 else if (which == "last")
-                    select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='TRN'  ORDER BY STEP_ID DESC";
+                    select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='TRN'  AND ISACTIVE=1  ORDER BY STEP_ID DESC";
                 else if (which == "first")
-                    select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='TRN'  ORDER BY STEP_ID ASC";
+                    select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='TRN'  AND ISACTIVE=1  ORDER BY STEP_ID ASC";
 
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(select, connection))
@@ -584,6 +584,7 @@ namespace AviaTrain.App_Code
                                     (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = TDEF.ID ORDER BY STEP_ID ASC) AS 'FIRSTSTEP'
                                 from TRN_TRAINING_DEF TDEF 
                                 JOIN USERS U ON U.EMPLOYEEID = TDEF.LAST_MODIFY
+                                ORDER BY LAST_MODIFY_DATE DESC
                                ", connection))
                     {
                         connection.Open();
@@ -798,5 +799,35 @@ namespace AviaTrain.App_Code
             }
             return null;
         }
+
+        public static DataTable get_STEPIDs_orderby(string trnid)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @" SELECT ROW_NUMBER() OVER(ORDER BY STEP_ID) AS '#',  STEP_ID FROM TRN_STEP 
+                                   WHERE TRN_ID = @TRNID AND ISACTIVE = 1 ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@TRNID", trnid);
+                    command.CommandType = CommandType.Text;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
+
+                    return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+
     }
 }
