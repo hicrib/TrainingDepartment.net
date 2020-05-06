@@ -40,6 +40,8 @@ namespace AviaTrain.Trainings
                 string trn = DB_Trainings.get_TrainingName_by_assignid(assignid);
                 lbl_trnid.Text = trn.Split(',')[0];
                 lbl_trn_name.Text = trn.Split(',')[1];
+                Write_Page_Header_Low(lbl_trn_name.Text);
+
                 lbl_assignid.Text = assignid;
                 lbl_stepid.Text = stepid;
 
@@ -54,7 +56,7 @@ namespace AviaTrain.Trainings
                 if (lbl_prevstepid.Text == "")
                     btn_prev_step.Visible = false;
 
-                DB_Trainings.update_Assignment(assignid, laststepid : stepid);
+                DB_Trainings.update_Assignment(assignid, laststepid: stepid);
 
                 fill_step();
             }
@@ -75,9 +77,20 @@ namespace AviaTrain.Trainings
             DataTable dt = DB_Trainings.get_STEP_INFO_with_questions(lbl_trnid.Text, lbl_stepid.Text);
             Session["step_info_w_q"] = dt;
 
-
             if (dt == null || dt.Rows.Count == 0)
                 return; //not supposed to happen
+
+            //check if there are questions, if there are, hide btn_next_step
+            DataRow[] temp = dt.Select("QID <> '0'");
+            if (temp != null && temp.Length > 0)
+            {
+                btn_next_step.Visible = false;
+                btn_finish_Training.Visible = false;
+            }
+            else //no questions , hide the questions tab
+            {
+            }
+
 
             lbl_stepid.Text = dt.Rows[0]["STEP_ID"].ToString();
 
@@ -87,9 +100,9 @@ namespace AviaTrain.Trainings
             }
             else
             {
-                //todo : what to do if exam_step
+                // if exam_step
                 btn_trn_EXAM.Visible = true;
-                btn_finish_Training.Visible = false ;
+                btn_finish_Training.Visible = false;
             }
 
         }
@@ -152,10 +165,24 @@ namespace AviaTrain.Trainings
                 fill_ops_question(q_tbl.Rows[0]);
 
 
-            //hide-show prev-next
+            //hide-show prev-next question
             DataTable dt = (DataTable)Session["step_info_w_q"];
             btn_next_q.Visible = dt.Select("ORDERBY = " + (Convert.ToInt32(lbl_current_orderby.Text) + 1)).Length > 0;
             btn_prev_q.Visible = dt.Select("ORDERBY = " + (Convert.ToInt32(lbl_current_orderby.Text) - 1)).Length > 0;
+
+            //if no next question
+            if (!btn_next_q.Visible)
+            {
+                //but there is a next step
+                if (lbl_nextstepid.Text != "")
+                    btn_next_step.Visible = true;
+                else
+                    btn_finish_Training.Visible = true;
+            }
+            else
+                btn_next_step.Visible = false;
+
+      
 
         }
         protected void fill_ops_question(DataRow n_question)
@@ -291,7 +318,7 @@ namespace AviaTrain.Trainings
         {
             cleanup_question();
 
-            lbl_current_orderby.Text = (Convert.ToInt32(lbl_current_orderby.Text) +1 ).ToString();
+            lbl_current_orderby.Text = (Convert.ToInt32(lbl_current_orderby.Text) + 1).ToString();
 
             DataTable dt = (DataTable)Session["step_info_w_q"];
             if (dt == null || dt.Rows.Count == 0 || dt.Rows[0]["QID"].ToString() == "0")
@@ -513,7 +540,7 @@ namespace AviaTrain.Trainings
             DataTable dt = (DataTable)Session["step_info_w_q"];
             UserSession user = (UserSession)Session["usersession"];
             //create assignmnet
-            string examassignid= DB_Exams.push_EXAM_Assignment(dt.Rows[0]["EXAMID"].ToString(), user.employeeid, "1900-01-01", "2099-01-01");
+            string examassignid = DB_Exams.push_EXAM_Assignment(dt.Rows[0]["EXAMID"].ToString(), user.employeeid, "1900-01-01", "2099-01-01");
 
             DB_Trainings.update_Assignment(lbl_assignid.Text, examassignid: examassignid);
             //redirect with special flag

@@ -339,7 +339,8 @@ namespace AviaTrain.App_Code
                                             S.STEP_ID, S.STEPTYPE , S.TEXTHTML , ISNULL(SQ.Q_ID ,'0') AS 'QID' , ISNULL(S.EXTRA,'0') AS EXAMID
                                     FROM TRN_STEP S
                                     LEFT JOIN TRN_STEP_QUESTIONS SQ ON SQ.STEP_ID = S.STEP_ID
-                                    WHERE S.TRN_ID = @TRNID AND S.STEP_ID = @STEPID 
+                                    LEFT JOIN EXM_QUESTIONS EQ ON EQ.ID = SQ.Q_ID AND EQ.ISACTIVE=1
+                                    WHERE S.TRN_ID = @TRNID AND S.STEP_ID = @STEPID  AND S.ISACTIVE = 1 
                                ", connection))
                 {
                     connection.Open();

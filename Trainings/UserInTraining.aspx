@@ -98,31 +98,36 @@
 
         .prev {
             float: left;
-            background-color : #b09494 !important;
-            color : black !important;
+            background-color: #b09494 !important;
+            color: black !important;
         }
 
         .show {
             margin: auto;
-            background-color : #b09494 !important;
-            color : black !important;
+            background-color: #b09494 !important;
+            color: black !important;
         }
 
         .next {
             float: right;
-            background-color : #b09494 !important;
-            color : black !important;
+            background-color: #b09494 !important;
+            color: black !important;
         }
 
         .nav {
             height: 30px;
             width: 120px;
-            background-color : #a52a2a !important;
-            color : white !important;
-            font-size : large;
-            font-weight : bold;
+            background-color: #a52a2a !important;
+            color: white !important;
+            font-size: large;
+            font-weight: bold;
         }
     </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
 
 </asp:Content>
 
@@ -137,17 +142,9 @@
         </Triggers>
         <ContentTemplate>
 
-            <table style="border-collapse:collapse; padding:0px;margin:0px;">
+            <table style="border-collapse: collapse; padding: 0px; margin: 0px;">
                 <tr>
-                    <td style="width: 1000px;">
-                        <table class="main_tbl">
-                            <tr>
-                                <th>
-                                    <asp:Label ID="lbl_trn_name" runat="server"></asp:Label>
-                                </th>
-                            </tr>
-                        </table>
-                    </td>
+                    <td style="width: 1000px;"></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -269,7 +266,7 @@
                                         </tr>
                                         <tr>
                                             <td style="text-align: center;">
-                                                <asp:Panel ID="panel_q_btn" runat="server" style="width:60% !important; display:inline-block;">
+                                                <asp:Panel ID="panel_q_btn" runat="server" Style="width: 60% !important; display: inline-block;">
                                                     <asp:Button ID="btn_prev_q" runat="server" CssClass="btn btn_q prev" Text="Previous Question" OnClick="btn_prev_q_Click" />
                                                     <asp:Button ID="btn_show_answer" runat="server" CssClass="btn btn_q show" Text="Show Answer" OnClick="btn_show_answer_Click" />
                                                     <asp:Button ID="btn_next_q" runat="server" CssClass="btn btn_q next" Text="Next Question" OnClick="btn_next_q_Click" />
@@ -287,25 +284,24 @@
 
                     </td>
                     <td>
-                        <asp:Button ID="btn_prev_step" runat="server" CssClass="nav"  Text="Back" OnClick="btn_prev_step_Click" />
+                        <asp:Button ID="btn_prev_step" runat="server" CssClass="nav" Text="Back" OnClick="btn_prev_step_Click" />
                         <asp:Button ID="btn_next_step" runat="server" CssClass="nav" Text="Continue" OnClick="btn_next_step_Click" />
-                        <asp:Button ID="btn_finish_Training" runat="server" CssClass="nav" Text="Finish Training" Visible="false" OnClick="btn_finish_Training_Click" />
+                        <asp:Button ID="btn_finish_Training" runat="server" CssClass="nav" Style="width: 150px !important;" Text="Finish Training" Visible="false" OnClick="btn_finish_Training_Click" />
                     </td>
                 </tr>
             </table>
 
+            <asp:Label ID="lbl_assignid" runat="server" Visible="false"></asp:Label>
+            <asp:Label ID="lbl_trnid" runat="server" Visible="false"></asp:Label>
+            <asp:Label ID="lbl_trn_name" runat="server" Visible="false"></asp:Label>
+            <asp:Label ID="lbl_stepid" runat="server" Text="0" Visible="false"></asp:Label>
+            <asp:Label ID="lbl_prevstepid" runat="server" Text="0" Visible="false"></asp:Label>
+            <asp:Label ID="lbl_nextstepid" runat="server" Text="0" Visible="false"></asp:Label>
+
+            <asp:Label ID="lbl_q_type" runat="server" Visible="false"></asp:Label>
+            <asp:Label ID="lbl_current_qid" runat="server" Visible="false"></asp:Label>
+            <asp:Label ID="lbl_current_orderby" runat="server" Text="1" Visible="false"></asp:Label>
+            <asp:Label ID="lbl_current_answers" runat="server" Visible="false"></asp:Label>
         </ContentTemplate>
     </asp:UpdatePanel>
-
-
-    <asp:Label ID="lbl_assignid" runat="server" Visible="false"></asp:Label>
-    <asp:Label ID="lbl_trnid" runat="server" Visible="false"></asp:Label>
-    <asp:Label ID="lbl_stepid" runat="server" Text="0" Visible="false"></asp:Label>
-    <asp:Label ID="lbl_prevstepid" runat="server" Text="0" Visible="false"></asp:Label>
-    <asp:Label ID="lbl_nextstepid" runat="server" Text="0" Visible="false"></asp:Label>
-
-    <asp:Label ID="lbl_q_type" runat="server" Visible="false"></asp:Label>
-    <asp:Label ID="lbl_current_qid" runat="server" Visible="false"></asp:Label>
-    <asp:Label ID="lbl_current_orderby" runat="server" Text="1" Visible="false"></asp:Label>
-    <asp:Label ID="lbl_current_answers" runat="server" Visible="false"></asp:Label>
 </asp:Content>

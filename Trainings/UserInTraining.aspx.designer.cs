@@ -24,15 +24,6 @@ namespace AviaTrain.Trainings
         protected global::System.Web.UI.UpdatePanel update_panel;
 
         /// <summary>
-        /// lbl_trn_name control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_trn_name;
-
-        /// <summary>
         /// Menu1 control.
         /// </summary>
         /// <remarks>
@@ -481,6 +472,15 @@ namespace AviaTrain.Trainings
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbl_trnid;
+
+        /// <summary>
+        /// lbl_trn_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_trn_name;
 
         /// <summary>
         /// lbl_stepid control.
