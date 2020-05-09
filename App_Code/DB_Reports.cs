@@ -970,23 +970,21 @@ namespace AviaTrain.App_Code
                     // if no rows are affected, rollback REPORTS_META and RETURN FALSE
                     if (rows == 0)
                     {
+                        try
                         {
-                            try
+                            using (SqlConnection con = new SqlConnection(con_str))
+                            using (SqlCommand com = new SqlCommand(
+                                         @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
                             {
-                                using (SqlConnection con = new SqlConnection(con_str))
-                                using (SqlCommand com = new SqlCommand(
-                                             @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                {
-                                    con.Open();
-                                    com.ExecuteNonQuery();
-                                    return "";
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                string err = e.Message;
+                                con.Open();
+                                com.ExecuteNonQuery();
                                 return "";
                             }
+                        }
+                        catch (Exception e)
+                        {
+                            string err = e.Message;
+                            return "";
                         }
                     }
                 }
@@ -2074,20 +2072,42 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
 
         public static bool start_folder_APP(string employeeid, string sector, string stepid)
         {
+            //ADD FDO AND ASSIST IF THEY DONT EXIST 
+            // (BECAUSE EVERY SECTOR FOLDER CREATED SEPERATELY, FDO AND ASSIST IS CREATED ONCE)
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                        @" IF NOT EXISTS (
+                                            SELECT TOP 1 TTS.ID  
+                                            FROM USER_TRAINING_FOLDER UTF
+                                            JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
+                                            WHERE UTF.EMPLOYEEID = @EMPLOYEEID 
+                                                 AND TTS.POSITION = 'APP' 
+                                                 AND ISNULL(TTS.SECTOR,'') = '' 
+                                                 AND TTS.PHASE IN ('FDO', 'ASSIST')
+                                          )
+                            BEGIN
+                                INSERT INTO USER_TRAINING_FOLDER 
+                                SELECT TTS.ID, @EMPLOYEEID, CONVERT(VARCHAR, GETUTCDATE(),20),'MIGRATION', NULL, NULL,NULL
+                                FROM TRAINING_TREE_STEPS TTS 
+                                WHERE TTS.POSITION = 'APP' 
+                                        AND ISNULL(TTS.SECTOR,'') = '' 
+                                        AND TTS.PHASE IN ('FDO', 'ASSIST')
+                            END", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+                    command.CommandType = CommandType.Text;
 
-            //first add FDO step, it is always inserted
-            //using (SqlConnection connection = new SqlConnection(con_str))
-            //using (SqlCommand command = new SqlCommand(
-            //        @" DECLARE @FDOID INT = (SELECT ID FROM TRAINING_TREE_STEPS WHERE POSITION ='APP' AND PHASE = 'FDO')
-            //                INSERT INTO USER_TRAINING_FOLDER VALUES (@FDOID , @EMPLOYEEID , convert(varchar, getutcdate(), 20) , 'MIGRATION' , NULL, NULL, NULL) ", connection))
-            //{
-            //    connection.Open();
-            //    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
-            //    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
 
-            //    if (command.ExecuteNonQuery() != 1)
-            //        return false; //something went wrong
-            //}
+            }
+            catch (Exception e)
+            {
+                string mes = e.Message;
+            }
 
 
 
@@ -2096,8 +2116,12 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
                 //insert all steps before chosen step in the sector  as MIGRATION
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
-                                 @"  INSERT INTO USER_TRAINING_FOLDER (STEPID , EMPLOYEEID, CREATED_TIME, [STATUS] , REPORTID , [FILENAME] , COMMENTS)
-                                    SELECT TTS.ID , @EMPLOYEEID, convert(varchar, getutcdate(), 20), 'MIGRATION' , NULL, NULL, NULL FROM TRAINING_TREE_STEPS TTS WHERE TTS.POSITION = 'APP' AND TTS.SECTOR = @SECTOR AND TTS.ID < @STEPID   ", connection))
+                                 @" INSERT INTO USER_TRAINING_FOLDER (STEPID , EMPLOYEEID, CREATED_TIME, [STATUS] , REPORTID , [FILENAME] , COMMENTS)
+                                    SELECT TTS.ID , @EMPLOYEEID, convert(varchar, getutcdate(), 20), 'MIGRATION' , NULL, NULL, NULL 
+                                    FROM TRAINING_TREE_STEPS TTS 
+                                    WHERE TTS.POSITION = 'APP' 
+                                            AND TTS.SECTOR = @SECTOR 
+                                            AND TTS.ID < @STEPID   ", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
@@ -2111,8 +2135,12 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
                 // insert chosen step as ONGOING
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
-                                 @"  INSERT INTO USER_TRAINING_FOLDER (STEPID , EMPLOYEEID, CREATED_TIME, [STATUS] , REPORTID , [FILENAME] , COMMENTS)
-                                    SELECT TTS.ID , @EMPLOYEEID, convert(varchar, getutcdate(), 20), 'ONGOING' , NULL, NULL, NULL FROM TRAINING_TREE_STEPS TTS WHERE TTS.POSITION = 'APP' AND TTS.SECTOR = @SECTOR AND  TTS.ID = @STEPID ", connection))
+                                 @" INSERT INTO USER_TRAINING_FOLDER (STEPID , EMPLOYEEID, CREATED_TIME, [STATUS] , REPORTID , [FILENAME] , COMMENTS)
+                                    SELECT TTS.ID , @EMPLOYEEID, convert(varchar, getutcdate(), 20), 'ONGOING' , NULL, NULL, NULL 
+                                    FROM TRAINING_TREE_STEPS TTS 
+                                    WHERE TTS.POSITION = 'APP' 
+                                            AND TTS.SECTOR = @SECTOR 
+                                            AND  TTS.ID = @STEPID ", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
@@ -2135,21 +2163,42 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
 
         public static bool start_folder_ACC(string employeeid, string sector, string stepid)
         {
+            //ADD FDO AND ASSIST IF THEY DONT EXIST 
+            // (BECAUSE EVERY SECTOR FOLDER CREATED SEPERATELY, FDO AND ASSIST IS CREATED ONCE)
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                        @" IF NOT EXISTS (
+                                            SELECT TOP 1 TTS.ID  
+                                            FROM USER_TRAINING_FOLDER UTF
+                                            JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
+                                            WHERE UTF.EMPLOYEEID = @EMPLOYEEID 
+                                                 AND TTS.POSITION = 'ACC' 
+                                                 AND ISNULL(TTS.SECTOR,'') = '' 
+                                                 AND TTS.PHASE IN ('FDO', 'ASSIST')
+                                          )
+                            BEGIN
+                                INSERT INTO USER_TRAINING_FOLDER 
+                                SELECT TTS.ID, @EMPLOYEEID, CONVERT(VARCHAR, GETUTCDATE(),20),'MIGRATION', NULL, NULL,NULL
+                                FROM TRAINING_TREE_STEPS TTS 
+                                WHERE TTS.POSITION = 'ACC' 
+                                        AND ISNULL(TTS.SECTOR,'') = '' 
+                                        AND TTS.PHASE IN ('FDO', 'ASSIST')
+                            END", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+                    command.CommandType = CommandType.Text;
 
-            ////first add FDO step, it is always inserted
-            //using (SqlConnection connection = new SqlConnection(con_str))
-            //using (SqlCommand command = new SqlCommand(
-            //        @" DECLARE @FDOID INT = (SELECT ID FROM TRAINING_TREE_STEPS WHERE POSITION ='ACC' AND PHASE = 'FDO')
-            //                INSERT INTO USER_TRAINING_FOLDER VALUES (@FDOID , @EMPLOYEEID , convert(varchar, getutcdate(), 20) , 'MIGRATION' , NULL, NULL, NULL) ", connection))
-            //{
-            //    connection.Open();
-            //    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
-            //    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
 
-            //    if (command.ExecuteNonQuery() != 1)
-            //        return false; //something went wrong
-            //}
-
+            }
+            catch (Exception e)
+            {
+                string mes = e.Message;
+            }
 
 
             try
@@ -2206,29 +2255,35 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
             //    connection.Open();
             //    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
             //    command.CommandType = CommandType.Text;
-
             //    if (command.ExecuteNonQuery() != 1)
             //        return false; //something went wrong
             //}
 
-
-            if (sector == "GMC" || sector == "ADC")
+            try
             {
-                // add ASIST as MIGRATION
-
-                using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(
-                        @" DECLARE @ASSISTID INT = (SELECT ID FROM TRAINING_TREE_STEPS WHERE POSITION ='TWR' AND SECTOR = 'ASSIST')
-                                INSERT INTO USER_TRAINING_FOLDER VALUES (@ASSISTID , @EMPLOYEEID , convert(varchar, getutcdate(), 20) , 'MIGRATION' , NULL, NULL, NULL)  ", connection))
+                if (sector == "GMC" || sector == "ADC")
                 {
-                    connection.Open();
-                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
-                    command.CommandType = CommandType.Text;
+                    // add ASIST as MIGRATION
 
-                    if (command.ExecuteNonQuery() != 1)
-                        return false; //something went wrong
+                    using (SqlConnection connection = new SqlConnection(con_str))
+                    using (SqlCommand command = new SqlCommand(
+                            @" DECLARE @ASSISTID INT = (SELECT ID FROM TRAINING_TREE_STEPS WHERE POSITION ='TWR' AND SECTOR = 'ASSIST')
+                                INSERT INTO USER_TRAINING_FOLDER VALUES (@ASSISTID , @EMPLOYEEID , convert(varchar, getutcdate(), 20) , 'MIGRATION' , NULL, NULL, NULL)  ", connection))
+                    {
+                        connection.Open();
+                        command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+                        command.CommandType = CommandType.Text;
+
+                        if (command.ExecuteNonQuery() != 1)
+                            return false; //something went wrong
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                string mes = e.Message;
+            }
+
 
 
 
@@ -2275,5 +2330,88 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
         }
 
 
+
+
+        public static bool update_totalhours(string userid, string sector, string totalhours, string lastupdate, string extra = "")
+        {
+            try
+            {
+                //insert all steps before chosen step in the sector  as MIGRATION
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                      @"IF EXISTS (SELECT TOP 1 TOTALHOURS FROM USER_TOTALHOURS WHERE USERID= @USERID AND SECTOR = @SECTOR)
+                        BEGIN
+		                        UPDATE USER_TOTALHOURS 
+		                        SET TOTALHOURS = @TOTALHOURS ,
+			                        LASTUPDATE = @LASTUPDATE ,
+			                        LASTUPDATE_TIME = CONVERT(VARCHAR, GETUTCDATE(), 20 ),
+			                        EXTRA = CASE WHEN @EXTRA = '' THEN EXTRA ELSE @EXTRA END,
+                                    [BY] = @BY
+		                        WHERE USERID=@USERID AND SECTOR =@SECTOR
+                        END
+                        ELSE
+	                        INSERT INTO USER_TOTALHOURS 
+	                        VALUES (@USERID, @SECTOR, @TOTALHOURS , @LASTUPDATE, CONVERT(VARCHAR, GETUTCDATE(),20), @EXTRA, @BY)", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = userid;
+                    command.Parameters.Add("@SECTOR", SqlDbType.VarChar).Value = sector;
+                    command.Parameters.Add("@TOTALHOURS", SqlDbType.VarChar).Value = totalhours;
+                    command.Parameters.Add("@LASTUPDATE", SqlDbType.VarChar).Value = lastupdate;
+                    command.Parameters.Add("@EXTRA", SqlDbType.NVarChar).Value = extra;
+                    UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
+                    command.Parameters.Add("@BY", SqlDbType.Int).Value = user.employeeid;
+                    command.CommandType = CommandType.Text;
+
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return false;
+        }
+    
+    
+    
+    
+        public static DataTable UserDetails_TrainingFolder(string userid)
+        {
+            DataTable res = new DataTable();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                {
+                    using (SqlCommand command = new SqlCommand(
+                                @" SELECT DISTINCT TTS.ID, TTS.POSITION, TTS.SECTOR, TTS.PHASE, TTS.DESCRIPTION, 
+		                                    UTF.STATUS
+                                    FROM USER_TRAINING_FOLDER UTF
+                                    JOIN TRAINING_TREE_STEPS TTS ON UTF.STEPID = TTS.ID
+                                    WHERE EMPLOYEEID = @USERID AND UTF.STATUS <> 'REPORT'
+                                    ORDER BY TTS.ID ASC", connection))
+                    {
+                        connection.Open();
+                        command.Parameters.Add("@USERID", SqlDbType.Int).Value = userid;
+
+                        command.CommandType = CommandType.Text;
+                        SqlDataAdapter da = new SqlDataAdapter(command);
+                        da.Fill(res);
+
+                        if (res == null || res.Rows.Count == 0)
+                            return new DataTable();
+
+                        return res;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
     }
 }

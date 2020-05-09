@@ -24,6 +24,33 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.UpdatePanel uppanel_evaluation;
 
         /// <summary>
+        /// panel_selectuser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel panel_selectuser;
+
+        /// <summary>
+        /// lbl_user control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_user;
+
+        /// <summary>
+        /// ddl_user control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddl_user;
+
+        /// <summary>
         /// Menu1 control.
         /// </summary>
         /// <remarks>
@@ -69,6 +96,15 @@ namespace AviaTrain.Pages
         protected global::AjaxControlToolkit.AccordionPane pane_acc_FDO;
 
         /// <summary>
+        /// grid_ACC_fdo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_ACC_fdo;
+
+        /// <summary>
         /// pane_acc_ASSIST control.
         /// </summary>
         /// <remarks>
@@ -76,6 +112,15 @@ namespace AviaTrain.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.AccordionPane pane_acc_ASSIST;
+
+        /// <summary>
+        /// grid_ACC_ASSIST control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_ACC_ASSIST;
 
         /// <summary>
         /// pane_acc_NR control.
@@ -87,6 +132,15 @@ namespace AviaTrain.Pages
         protected global::AjaxControlToolkit.AccordionPane pane_acc_NR;
 
         /// <summary>
+        /// grid_ACC_NR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_ACC_NR;
+
+        /// <summary>
         /// pane_acc_SR control.
         /// </summary>
         /// <remarks>
@@ -94,6 +148,15 @@ namespace AviaTrain.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.AccordionPane pane_acc_SR;
+
+        /// <summary>
+        /// grid_ACC_SR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_ACC_SR;
 
         /// <summary>
         /// pane_acc_CR control.
@@ -105,6 +168,15 @@ namespace AviaTrain.Pages
         protected global::AjaxControlToolkit.AccordionPane pane_acc_CR;
 
         /// <summary>
+        /// grid_ACC_CR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_ACC_CR;
+
+        /// <summary>
         /// view_APP control.
         /// </summary>
         /// <remarks>
@@ -114,6 +186,105 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.WebControls.View view_APP;
 
         /// <summary>
+        /// accordion_APP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.Accordion accordion_APP;
+
+        /// <summary>
+        /// pane_app_FDO control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AccordionPane pane_app_FDO;
+
+        /// <summary>
+        /// grid_APP_fdo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_APP_fdo;
+
+        /// <summary>
+        /// pane_app_ASSIST control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AccordionPane pane_app_ASSIST;
+
+        /// <summary>
+        /// grid_APP_ASSIST control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_APP_ASSIST;
+
+        /// <summary>
+        /// pane_app_AR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AccordionPane pane_app_AR;
+
+        /// <summary>
+        /// grid_APP_AR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_APP_AR;
+
+        /// <summary>
+        /// pane_app_BR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AccordionPane pane_app_BR;
+
+        /// <summary>
+        /// grid_APP_BR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_APP_BR;
+
+        /// <summary>
+        /// pane_app_KR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AccordionPane pane_app_KR;
+
+        /// <summary>
+        /// grid_APP_KR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_APP_KR;
+
+        /// <summary>
         /// view_TOWER control.
         /// </summary>
         /// <remarks>
@@ -121,6 +292,69 @@ namespace AviaTrain.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.View view_TOWER;
+
+        /// <summary>
+        /// accordion_TWR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.Accordion accordion_TWR;
+
+        /// <summary>
+        /// pane_TWR_ASSIST control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AccordionPane pane_TWR_ASSIST;
+
+        /// <summary>
+        /// grid_TWR_ASSIST control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_TWR_ASSIST;
+
+        /// <summary>
+        /// pane_TWR_GMC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AccordionPane pane_TWR_GMC;
+
+        /// <summary>
+        /// grid_TWR_GMC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_TWR_GMC;
+
+        /// <summary>
+        /// pane_TWR_ADC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AccordionPane pane_TWR_ADC;
+
+        /// <summary>
+        /// grid_TWR_ADC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_TWR_ADC;
 
         /// <summary>
         /// Accordion1 control.

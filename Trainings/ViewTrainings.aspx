@@ -50,6 +50,7 @@
                 <PagerSettings Mode="NumericFirstLast" PageButtonCount="6" FirstPageText="First" LastPageText="Last" />
                 <Columns>
                     <asp:ButtonField CommandName="VIEWTRAINING" ButtonType="Image" ImageUrl="~/images/view.png" ControlStyle-CssClass="viewbutton" />
+                    <asp:ButtonField CommandName="SAVEAS" ButtonType="Image" ImageUrl="~/images/saveas.png" ControlStyle-CssClass="viewbutton" HeaderText="SaveAs" />
                     <asp:ButtonField CommandName="INACTIVE" ButtonType="Image" ImageUrl="~/images/delete.png" ControlStyle-CssClass="deletebutton" HeaderText="Toggle" />
                 </Columns>
             </asp:GridView>

@@ -1,4 +1,5 @@
 ﻿using AviaTrain.App_Code;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,6 +16,8 @@ namespace AviaTrain.SysAdmin
         {
             if (!IsPostBack)
             {
+                Write_Page_Header_Low("CREATE TRAINING FOLDER");
+
                 Fill_Page_Elements();
             }
         }
@@ -87,11 +90,14 @@ namespace AviaTrain.SysAdmin
             ddl_position.Enabled = false;
             ddl_sector.Enabled = false;
 
+
             btn_chkavailable.Visible = false;
             lbl_availability.Text = "Trainee Available. &nbsp; " +
                                      " Choose A Step to Start (for Initial Data Migration). &nbsp;" +
                                      "All steps BEFORE the chosen step will be regarded as completed.";
             lbl_availability.Visible = true;
+            txt_totalhours.Visible = true;
+            lbl_totalhours.Visible = true;
 
             //load steps for chosen position/sector
 
@@ -107,16 +113,37 @@ namespace AviaTrain.SysAdmin
 
         protected void btn_start_tree_Click(object sender, EventArgs e)
         {
+            if (txt_totalhours.Text == "")
+            {
+                lbl_createresult.Text = "Total Hours is necessary";
+                lbl_createresult.Visible = true;
+                return;
+            }
+            if(!Utility.check_TimeTextbox_format(txt_totalhours.Text))
+            {
+                lbl_createresult.Text = "Total Hours Format  :  00:00";
+                lbl_createresult.Visible = true;
+                return;
+            }
+
             bool res = DB_Reports.start_Training_Folder(ddl_all_trainees.SelectedValue, ddl_position.SelectedValue, ddl_sector.SelectedValue, ddl_steps.SelectedValue);
 
             if (res)
             {
-                Response.Redirect("~/Pages/UserMain.aspx?Code=6&Name=" + ddl_all_trainees.SelectedItem.Text);
+                res = DB_Reports.update_totalhours(ddl_all_trainees.SelectedValue, ddl_sector.SelectedValue, txt_totalhours.Text, "MIGRATION");
+                if (res)
+                {
+                    lbl_createresult.Text = "SUCCESS : Training Folder is created.";
+                    lbl_createresult.Visible = true;
+                    ddl_steps.Enabled = false;
+                    txt_totalhours.Enabled = false;
+                    btn_start_tree.Enabled = false;
+                    return;
+                }
             }
-            else
-                lbl_availability.Text = "Unexpected System Error : Contact System Administrators";
 
-
+            lbl_createresult.Text = "Unexpected System Error : Contact System Administrators";
+            lbl_createresult.Visible = true;
         }
     }
 }

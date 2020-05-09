@@ -15,6 +15,8 @@ namespace AviaTrain.Reports
         {
             if (!IsPostBack)
             {
+                Write_Page_Header_Low("CREATE REPORT FOR TRAINEE");
+
                 DataTable trainees = DB_System.get_ALL_trainees();
                 if (trainees != null)
                 {
@@ -59,6 +61,21 @@ namespace AviaTrain.Reports
 
         protected void btn_findfolder_Click(object sender, EventArgs e)
         {
+            if(ddl_trainees.SelectedValue == "0")
+            {
+                lbl_findresult.Text = "Choose trainee";
+                lbl_findresult.Visible = true;
+                btn_createFolder.Visible = false;
+                return;
+            }
+            if (ddl_positions.SelectedValue == "-" || ddl_sectors.SelectedValue == "-")
+            {
+                lbl_findresult.Text = "Choose Position and Sector";
+                lbl_findresult.Visible = true;
+                btn_createFolder.Visible = false;
+                return;
+            }
+
             //TODO : bring the folder 
             DataTable folder = DB_Reports.get_Training_Folder(ddl_trainees.SelectedValue, ddl_positions.SelectedValue, ddl_sectors.SelectedValue);
             if (folder == null)

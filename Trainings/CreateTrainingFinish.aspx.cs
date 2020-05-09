@@ -11,12 +11,12 @@ namespace AviaTrain.Trainings
 {
     public partial class CreateTrainingFinish : MasterPage
     {
-        protected void Page_Load(object sender, EventArgs e)
+        protected new void Page_Load(object sender, EventArgs e)
         {
             // querystring T , S(last_step_id must create new one"
 
             if (!IsPostBack)
-            { 
+            {
                 string t = Convert.ToString(Request.QueryString["T"]);
                 string s = Convert.ToString(Request.QueryString["S"]);
 
@@ -31,13 +31,9 @@ namespace AviaTrain.Trainings
                     Write_Page_Header_Low("FINISH DESIGN  : " + trn_name);
                 }
                 catch (Exception) { }
-                
 
                 fill_exams();
-
             }
-
-
         }
         protected void fill_exams()
         {
@@ -72,11 +68,16 @@ namespace AviaTrain.Trainings
 
 
                 // TODO : IF COMES HERE wıth url link AFTER AN ERROR, 2 EXAM_STEP IS CREATED. 
+                //CHECK IF THERE IS ALREADY AN EXAM_STEP
+                string examstepid = DB_Trainings.get_prev_next_first_last_STEPID(lbl_trnid.Text, "", which: "exam");
+
+
                 //get new step 
-                string stepid = DB_Trainings.create_NEXT_STEP(lbl_trnid.Text);
+                if (examstepid == "")
+                    examstepid = DB_Trainings.create_NEXT_STEP(lbl_trnid.Text);
 
                 //make status=EXAM_STEP , EXTRA=EXAMID
-                bool step_updated = DB_Trainings.update_STEP(stepid, "EXAM_STEP", "", "", "", ddl_exams.SelectedValue, "");
+                bool step_updated = DB_Trainings.update_STEP(examstepid, "EXAM_STEP", "", "", "", ddl_exams.SelectedValue, "");
                 if (!step_updated)
                 {
                     lbl_pageresult.Text = "System Error : Exam can't be added (Your Training is NOT LOST. You can continue later.";
@@ -94,7 +95,7 @@ namespace AviaTrain.Trainings
                 return;
             }
             else
-                SuccessWithCode("SUCCESS : Training Created" + (chk_addexam.Checked ? " with Exam !" : "!" ));
+                SuccessWithCode("SUCCESS : Training Created" + (chk_addexam.Checked ? " with Exam !" : "!"));
 
         }
 

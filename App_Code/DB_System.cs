@@ -189,8 +189,13 @@ namespace AviaTrain.App_Code
             dt.Columns.Add("LONG");
             dt.Rows.Add(new object[] { "NRH", "ACC-NRH" });
             dt.Rows.Add(new object[] { "NRL", "ACC-NRL" });
+            dt.Rows.Add(new object[] { "NRX", "ACC-NRX" });
             dt.Rows.Add(new object[] { "SRL", "ACC-SRL" });
             dt.Rows.Add(new object[] { "SRH", "ACC-SRH" });
+            dt.Rows.Add(new object[] { "SRX", "ACC-SRX" });
+            dt.Rows.Add(new object[] { "CRL", "ACC-CRL" });
+            dt.Rows.Add(new object[] { "CRH", "ACC-CRH" });
+            dt.Rows.Add(new object[] { "CRX", "ACC-CRX" });
             dt.Rows.Add(new object[] { "ARN", "APP-ARN" });
             dt.Rows.Add(new object[] { "ARS", "APP-ARS" });
             dt.Rows.Add(new object[] { "BRN", "APP-BRN" });
@@ -212,7 +217,7 @@ namespace AviaTrain.App_Code
                     using (SqlCommand command = new SqlCommand(
                                 @" SELECT '-' AS CODE  
                                     UNION
-                                    SELECT DISTINCT POSITION AS CODE FROM POSITON_SECTOR", connection))
+                                    SELECT DISTINCT POSITION AS CODE FROM POSITION_SECTOR", connection))
                     {
                         connection.Open();
                         SqlDataAdapter da = new SqlDataAdapter(command);
@@ -242,7 +247,7 @@ namespace AviaTrain.App_Code
                     using (SqlCommand command = new SqlCommand(
                                 @" SELECT '-' AS [CODE]    
                                     UNION  
-                                    SELECT DISTINCT EXTRA AS [CODE] FROM POSITON_SECTOR WHERE POSITION = @POSITION", connection))
+                                    SELECT DISTINCT EXTRA AS [CODE] FROM POSITION_SECTOR WHERE POSITION = @POSITION", connection))
                     {
                         connection.Open();
                         command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
@@ -274,7 +279,7 @@ namespace AviaTrain.App_Code
                     using (SqlCommand command = new SqlCommand(
                                 @" SELECT '-' AS [CODE]    
                                     UNION  
-                                    SELECT DISTINCT POSITION + '-' + SECTOR AS [CODE] FROM POSITON_SECTOR ", connection))
+                                    SELECT DISTINCT POSITION + '-' + SECTOR AS [CODE] FROM POSITION_SECTOR ", connection))
                     {
                         connection.Open();
 
@@ -306,7 +311,7 @@ namespace AviaTrain.App_Code
                     using (SqlCommand command = new SqlCommand(
                                 @" SELECT '-' AS [CODE]    
                                     UNION  
-                                    SELECT DISTINCT [DESCRIPTION] AS [CODE] FROM POSITON_SECTOR WHERE POSITION = @POSITION", connection))
+                                    SELECT DISTINCT [DESCRIPTION] AS [CODE] FROM POSITION_SECTOR WHERE POSITION = @POSITION", connection))
                     {
                         connection.Open();
                         command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;

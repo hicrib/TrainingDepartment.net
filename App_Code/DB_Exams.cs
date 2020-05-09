@@ -778,7 +778,7 @@ namespace AviaTrain.App_Code
                                              FROM EXM_EXAM_DEF_QUESTIONS DEFQ
                                              JOIN EXM_QUESTIONS Q ON Q.ID = DEFQ.Q_ID AND (Q.TYPE='2' OR Q.TYPE='3' OR Q.TYPE='4' )
                                              JOIN EXM_QUESTIONS_OPS OPS ON OPS.ID = Q.ID
-                                             WHERE DEFQ.ID = 44 AND  Q.ISACTIVE = 1
+                                             WHERE DEFQ.ID =@EXAMID AND  Q.ISACTIVE = 1
                                              UNION
                                              SELECT FILL.ID AS 'Q.ID' ,  
                                                      FILL.TEXT1 + ' ((blank)) ' + FILL.TEXT2 + ' ((blank)) '+ FILL.TEXT3 + ' ((blank)) ' + FILL.TEXT4  AS 'Question',
@@ -790,7 +790,7 @@ namespace AviaTrain.App_Code
                                              FROM EXM_EXAM_DEF_QUESTIONS DEFQ
                                              JOIN EXM_QUESTIONS Q ON Q.ID = DEFQ.Q_ID AND (Q.TYPE='FILL' )
                                              JOIN EXM_QUESTIONS_FILL FILL ON FILL.ID = Q.ID
-                                             WHERE DEFQ.ID = 44 AND  Q.ISACTIVE = 1
+                                             WHERE DEFQ.ID = @EXAMID AND  Q.ISACTIVE = 1
                                      ) TBL
                                      ORDER BY TBL.ORDERBY
 

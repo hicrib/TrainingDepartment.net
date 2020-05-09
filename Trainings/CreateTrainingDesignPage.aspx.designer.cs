@@ -114,6 +114,15 @@ namespace AviaTrain.Trainings
         protected global::System.Web.UI.WebControls.Button btn_next;
 
         /// <summary>
+        /// insertunable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label insertunable;
+
+        /// <summary>
         /// btn_delete_this_page control.
         /// </summary>
         /// <remarks>
@@ -121,6 +130,15 @@ namespace AviaTrain.Trainings
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btn_delete_this_page;
+
+        /// <summary>
+        /// btn_insertpage_after control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_insertpage_after;
 
         /// <summary>
         /// btn_finish control.
@@ -274,5 +292,14 @@ namespace AviaTrain.Trainings
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbl_trnname;
+
+        /// <summary>
+        /// lbl_editable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_editable;
     }
 }

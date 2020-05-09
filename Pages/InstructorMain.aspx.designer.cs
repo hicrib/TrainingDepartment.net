@@ -42,6 +42,15 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.WebControls.Button btn_create_report;
 
         /// <summary>
+        /// btn_create_trainingfolder control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_create_trainingfolder;
+
+        /// <summary>
         /// ojtireports_tbl control.
         /// </summary>
         /// <remarks>

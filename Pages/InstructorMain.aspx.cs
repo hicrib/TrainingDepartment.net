@@ -100,5 +100,10 @@ namespace AviaTrain.Pages
         {
             Response.Redirect("~/Pages/TraineeMain.aspx");
         }
+
+        protected void btn_create_trainingfolde_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/SysAdmin/CreateTrainingFolder.aspx");
+        }
     }
 }

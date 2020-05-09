@@ -8,6 +8,7 @@ using System.Web.UI;
 using System.IO;
 using System.Text;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace AviaTrain.App_Code
 {
@@ -267,5 +268,29 @@ namespace AviaTrain.App_Code
             return false;
         }
 
+
+
+
+        public static bool check_TimeTextbox_format(string text)
+        {
+            if (Regex.IsMatch(text, @"[0-9]+:[0-9][0-9]")
+                || Regex.IsMatch(text, @"[0-9]+:[0-9]"))
+                return true;
+
+            return false;
+        }
+        public static string add_TimeFormat(string first, string second)
+        {
+
+            int hours = Convert.ToInt32(first.Split(':')[0]) + Convert.ToInt32(second.Split(':')[0]);
+            int minutes = Convert.ToInt32(first.Split(':')[1]) + Convert.ToInt32(second.Split(':')[1]);
+            if(minutes >=60)
+            {
+                hours++;
+                minutes -= 60;
+            }
+            
+            return hours.ToString() + ":" + (minutes < 10 ? "0" : "") + minutes.ToString() ;
+        }
     }
 }

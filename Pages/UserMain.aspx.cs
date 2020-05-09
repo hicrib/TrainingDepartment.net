@@ -26,12 +26,6 @@ namespace AviaTrain.Pages
             if (user.isOnlyTrainee)
                 Response.Redirect("~/Pages/TraineeMain.aspx");
 
-            if (user.isAdmin)
-            {
-                DB_ScheduledTasks.NoShow();
-                Response.Redirect("~/SysAdmin/SysAdminMain.aspx");
-            }
-               
 
             if (user.isOJTI || user.isLCE )
                 Response.Redirect("~/Pages/InstructorMain.aspx");

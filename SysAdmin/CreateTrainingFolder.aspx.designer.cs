@@ -69,6 +69,15 @@ namespace AviaTrain.SysAdmin
         protected global::System.Web.UI.WebControls.Label lbl_availability;
 
         /// <summary>
+        /// lbl_createresult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_createresult;
+
+        /// <summary>
         /// ddl_steps control.
         /// </summary>
         /// <remarks>
@@ -76,6 +85,24 @@ namespace AviaTrain.SysAdmin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddl_steps;
+
+        /// <summary>
+        /// lbl_totalhours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_totalhours;
+
+        /// <summary>
+        /// txt_totalhours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_totalhours;
 
         /// <summary>
         /// btn_start_tree control.

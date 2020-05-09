@@ -80,7 +80,7 @@
                 display: block;
                 margin-left: auto;
                 margin-right: auto;
-                max-width : 130px;
+                max-width: 130px;
                 max-height: 130px;
             }
 
@@ -150,6 +150,16 @@
                 font-size: small;
                 height: 40px;
             }
+
+        .folder_grids {
+            width: 70%;
+            margin-left : 50px;
+            font-size : small;
+            font-weight : bold;
+        }
+        .folder_grids td {
+            padding : 5px;
+        }
     </style>
     <script type="text/javascript">  
         function uploadcomplete() {
@@ -167,6 +177,11 @@
             <asp:PostBackTrigger ControlID="btn_hidden_refresh" />
         </Triggers>
         <ContentTemplate>
+            <asp:Panel ID="panel_selectuser" runat="server" Visible="false">
+                <asp:Label ID="lbl_user" runat="server" Text="User"></asp:Label>
+                <asp:DropDownList ID="ddl_user" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddl_user_SelectedIndexChanged"></asp:DropDownList>
+            </asp:Panel>
+
             <table class="userinfo_tbl">
                 <tr>
                     <td style="width: 700px; border-left: none !important; border-right: none !important;">
@@ -189,26 +204,33 @@
                                                 <Header>FDO
                                                 </Header>
                                                 <Content>
+                                                       <asp:GridView  ShowHeader="false" ID="grid_ACC_fdo" runat="server" CssClass="folder_grids"></asp:GridView>
+                                                
                                                 </Content>
                                             </ajaxToolkit:AccordionPane>
                                             <ajaxToolkit:AccordionPane ID="pane_acc_ASSIST" runat="server">
                                                 <Header>Assist Training</Header>
                                                 <Content>
+                                                       <asp:GridView  ShowHeader="false" ID="grid_ACC_ASSIST" runat="server" CssClass="folder_grids"></asp:GridView>
+                                                
                                                 </Content>
                                             </ajaxToolkit:AccordionPane>
                                             <ajaxToolkit:AccordionPane ID="pane_acc_NR" runat="server">
                                                 <Header>NR </Header>
                                                 <Content>
+                                                    <asp:GridView  ShowHeader="false" ID="grid_ACC_NR" runat="server" CssClass="folder_grids"></asp:GridView>
                                                 </Content>
                                             </ajaxToolkit:AccordionPane>
                                             <ajaxToolkit:AccordionPane ID="pane_acc_SR" runat="server">
                                                 <Header>SR</Header>
                                                 <Content>
+                                                    <asp:GridView  ShowHeader="false" ID="grid_ACC_SR" runat="server" CssClass="folder_grids"></asp:GridView>
                                                 </Content>
                                             </ajaxToolkit:AccordionPane>
                                             <ajaxToolkit:AccordionPane ID="pane_acc_CR" runat="server">
                                                 <Header>CR</Header>
                                                 <Content>
+                                                    <asp:GridView  ShowHeader="false" ID="grid_ACC_CR" runat="server" CssClass="folder_grids"></asp:GridView>
                                                 </Content>
                                             </ajaxToolkit:AccordionPane>
 
@@ -219,10 +241,73 @@
 
 
                                 <asp:View ID="view_APP" runat="server">
+                                    <ajaxToolkit:Accordion ID="accordion_APP" runat="server" HeaderCssClass="folder_headerCssClass" ContentCssClass="folder_contentCssClass"
+                                        HeaderSelectedCssClass="folder_headerSelectedCss" FadeTransitions="true" TransitionDuration="100"
+                                        AutoSize="None" Height="300" Style="height: 100% !important;" RequireOpenedPane="false" SelectedIndex="-1">
+                                        <Panes>
+                                            <ajaxToolkit:AccordionPane ID="pane_app_FDO" runat="server">
+                                                <Header>FDO
+                                                </Header>
+                                                <Content>
+                                                         <asp:GridView  ShowHeader="false" ID="grid_APP_fdo" runat="server" CssClass="folder_grids"></asp:GridView>
+                                               
+                                                </Content>
+                                            </ajaxToolkit:AccordionPane>
+                                            <ajaxToolkit:AccordionPane ID="pane_app_ASSIST" runat="server">
+                                                <Header>Assist Training</Header>
+                                                <Content>
+                                                         <asp:GridView  ShowHeader="false" ID="grid_APP_ASSIST" runat="server" CssClass="folder_grids"></asp:GridView>
+                                                </Content>
+                                            </ajaxToolkit:AccordionPane>
+                                            <ajaxToolkit:AccordionPane ID="pane_app_AR" runat="server">
+                                                <Header>AR </Header>
+                                                <Content>
+                                                    <asp:GridView  ShowHeader="false" ID="grid_APP_AR" runat="server" CssClass="folder_grids"></asp:GridView>
+                                                </Content>
+                                            </ajaxToolkit:AccordionPane>
+                                            <ajaxToolkit:AccordionPane ID="pane_app_BR" runat="server">
+                                                <Header>BR</Header>
+                                                <Content>
+                                                    <asp:GridView  ShowHeader="false" ID="grid_APP_BR" runat="server" CssClass="folder_grids"></asp:GridView>
+                                                </Content>
+                                            </ajaxToolkit:AccordionPane>
+                                            <ajaxToolkit:AccordionPane ID="pane_app_KR" runat="server">
+                                                <Header>KR</Header>
+                                                <Content>
+                                                    <asp:GridView  ShowHeader="false" ID="grid_APP_KR" runat="server" CssClass="folder_grids"></asp:GridView>
+                                                </Content>
+                                            </ajaxToolkit:AccordionPane>
+                                        </Panes>
+                                    </ajaxToolkit:Accordion>
+
                                 </asp:View>
 
 
                                 <asp:View ID="view_TOWER" runat="server">
+                                    <ajaxToolkit:Accordion ID="accordion_TWR" runat="server" HeaderCssClass="folder_headerCssClass" ContentCssClass="folder_contentCssClass"
+                                        HeaderSelectedCssClass="folder_headerSelectedCss" FadeTransitions="true" TransitionDuration="100"
+                                        AutoSize="None" Height="300" Style="height: 100% !important;" RequireOpenedPane="false" SelectedIndex="-1">
+                                        <Panes>
+                                            <ajaxToolkit:AccordionPane ID="pane_TWR_ASSIST" runat="server">
+                                                <Header>Assist Training</Header>
+                                                <Content>
+                                                        <asp:GridView  ShowHeader="false" ID="grid_TWR_ASSIST" runat="server" CssClass="folder_grids"></asp:GridView>
+                                                </Content>
+                                            </ajaxToolkit:AccordionPane>
+                                            <ajaxToolkit:AccordionPane ID="pane_TWR_GMC" runat="server">
+                                                <Header>GMC</Header>
+                                                <Content>
+                                                    <asp:GridView ID="grid_TWR_GMC" runat="server" ShowHeader="false" CssClass="folder_grids"></asp:GridView>
+                                                </Content>
+                                            </ajaxToolkit:AccordionPane>
+                                            <ajaxToolkit:AccordionPane ID="pane_TWR_ADC" runat="server">
+                                                <Header>ADC</Header>
+                                                <Content>
+                                                    <asp:GridView  ShowHeader="false" ID="grid_TWR_ADC" runat="server" CssClass="folder_grids"></asp:GridView>
+                                                </Content>
+                                            </ajaxToolkit:AccordionPane>
+                                        </Panes>
+                                    </ajaxToolkit:Accordion>
                                 </asp:View>
                             </asp:MultiView>
                         </div>
@@ -260,9 +345,9 @@
                                     <Header>User photo 
                                         </Header>
                                     <Content>
-                                        <asp:Image ID="img_userphoto" runat="server"  />
+                                        <asp:Image ID="img_userphoto" runat="server" />
                                         <ajaxToolkit:AjaxFileUpload ID="fileupload_photo" runat="server"
-                                            AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss"  MaxFileSize="2000"
+                                            AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="2000"
                                             MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
                                             OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
                                     </Content>
@@ -270,7 +355,7 @@
                                 <ajaxToolkit:AccordionPane ID="AccordionPane2" runat="server">
                                     <Header>User Signature</Header>
                                     <Content>
-                                        <asp:Image ID="img_signature" runat="server"  />
+                                        <asp:Image ID="img_signature" runat="server" />
                                         <ajaxToolkit:AjaxFileUpload ID="fileupload_signature" runat="server"
                                             AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
                                             MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
@@ -280,7 +365,7 @@
                                 <ajaxToolkit:AccordionPane ID="AccordionPane1" runat="server">
                                     <Header>Certificate 1 - Academy</Header>
                                     <Content>
-                                        <asp:Image ID="img_cert_academy" runat="server"  />
+                                        <asp:Image ID="img_cert_academy" runat="server" />
                                         <ajaxToolkit:AjaxFileUpload ID="fileupload_cert_academy" runat="server"
                                             AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
                                             MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
@@ -290,7 +375,7 @@
                                 <ajaxToolkit:AccordionPane ID="AccordionPane3" runat="server">
                                     <Header>Certificate 2 - OJT Course</Header>
                                     <Content>
-                                        <asp:Image ID="img_ojtcourse" runat="server"  />
+                                        <asp:Image ID="img_ojtcourse" runat="server" />
                                         <ajaxToolkit:AjaxFileUpload ID="fileupload_ojtcourse" runat="server"
                                             AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
                                             MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
@@ -300,7 +385,7 @@
                                 <ajaxToolkit:AccordionPane ID="AccordionPane4" runat="server">
                                     <Header>Sup. Course Certificate</Header>
                                     <Content>
-                                        <asp:Image ID="img_supcourse" runat="server"  />
+                                        <asp:Image ID="img_supcourse" runat="server" />
                                         <ajaxToolkit:AjaxFileUpload ID="fileupload_supcourse" runat="server"
                                             AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
                                             MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
@@ -310,7 +395,7 @@
                                 <ajaxToolkit:AccordionPane ID="AccordionPane5" runat="server">
                                     <Header>ECT Certificate</Header>
                                     <Content>
-                                         <asp:Image ID="img_ECT" runat="server"  />
+                                        <asp:Image ID="img_ECT" runat="server" />
                                         <ajaxToolkit:AjaxFileUpload ID="fileupload_ECT" runat="server"
                                             AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
                                             MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
@@ -320,7 +405,7 @@
                                 <ajaxToolkit:AccordionPane ID="AccordionPane6" runat="server">
                                     <Header>Training Certificate 1</Header>
                                     <Content>
-                                        <asp:Image ID="img_trnCert_1" runat="server"  />
+                                        <asp:Image ID="img_trnCert_1" runat="server" />
                                         <ajaxToolkit:AjaxFileUpload ID="fileupload_trnCert_1" runat="server"
                                             AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
                                             MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
@@ -330,7 +415,7 @@
                                 <ajaxToolkit:AccordionPane ID="AccordionPane7" runat="server">
                                     <Header>Equipment Test</Header>
                                     <Content>
-                                        <asp:Image ID="img_equiptest" runat="server"  />
+                                        <asp:Image ID="img_equiptest" runat="server" />
                                         <ajaxToolkit:AjaxFileUpload ID="fileupload_equiptest" runat="server"
                                             AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
                                             MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
@@ -340,7 +425,7 @@
                                 <ajaxToolkit:AccordionPane ID="AccordionPane8" runat="server">
                                     <Header>OJT Permit</Header>
                                     <Content>
-                                        <asp:Image ID="img_OJTPermit" runat="server"  />
+                                        <asp:Image ID="img_OJTPermit" runat="server" />
                                         <ajaxToolkit:AjaxFileUpload ID="fileupload_OJTPermit" runat="server"
                                             AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
                                             MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
@@ -354,7 +439,7 @@
 
             </table>
 
-            <asp:Button ID="btn_hidden_refresh" runat="server" style="display:none;;" Text =" sssssssssssssssssssss" OnClick="btn_hidden_refresh_Click"/>
+            <asp:Button ID="btn_hidden_refresh" runat="server" Style="display: none;" Text=" sssssssssssssssssssss" OnClick="btn_hidden_refresh_Click" />
         </ContentTemplate>
     </asp:UpdatePanel>
 

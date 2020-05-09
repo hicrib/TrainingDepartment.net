@@ -25,13 +25,10 @@ namespace AviaTrain
                 if (user == null)
                     Response.Redirect("~/Pages/login.aspx");
 
-
                 RoleControlForPage();
 
                 DB_System.log_pages(user.employeeid, HttpContext.Current.Request.Url.AbsoluteUri);
             }
-
-
 
             base.OnPreInit(e);
         }

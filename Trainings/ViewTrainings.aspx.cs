@@ -29,25 +29,31 @@ namespace AviaTrain.Trainings
 
         protected void grid_trainings_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            
 
-
-            if (e.CommandName == "VIEWTRAINING")
+            if (e.CommandName == "SAVEAS")
             {
+                GridViewRow selectedRow = grid_trainings.Rows[Convert.ToInt32(e.CommandArgument)];
+                string trnid = selectedRow.Cells[11].Text.Trim(); //TRNID
+                string trnname = selectedRow.Cells[4].Text.Trim(); //NAME
+
+                string url = "CreateTraining.aspx?ID=" + trnid + "&NAME=" + trnname ;
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "key", "open('" + url + "') ;", true);
+
+            }
+            else if (e.CommandName == "VIEWTRAINING")
+            {
+                GridViewRow selectedRow = grid_trainings.Rows[Convert.ToInt32(e.CommandArgument)];
                 //go to details in a new tab
-                int index = Convert.ToInt32(e.CommandArgument);
-                GridViewRow selectedRow = grid_trainings.Rows[index];
-
-
-                string trnid = selectedRow.Cells[10].Text.Trim(); //TRNID
-                string laststepid = selectedRow.Cells[11].Text.Trim(); //LASTSTEPID
-                string firststepid = selectedRow.Cells[12].Text.Trim(); //FIRSTSTEPID
+                string trnid = selectedRow.Cells[11].Text.Trim(); //TRNID
+                string laststepid = selectedRow.Cells[12].Text.Trim(); //LASTSTEPID
+                string firststepid = selectedRow.Cells[13].Text.Trim(); //FIRSTSTEPID
 
                 string url = "";
-                if (selectedRow.Cells[3].Text.Trim() == "DESIGN_FINISHED")
+                if (selectedRow.Cells[5].Text.Trim() == "DESIGN_FINISHED")
                 {
                     //SEND PASSIVE - FROM THE FIRST DESIGN STEP
-                    Session["editable"] = false;
-                    url = "CreateTrainingDesignPage.aspx?T=" + trnid + "&S=" + firststepid;
+                    url = "CreateTrainingDesignPage.aspx?T=" + trnid + "&S=" + firststepid ; //non-editable
                 }
                 else
                 {
@@ -59,19 +65,16 @@ namespace AviaTrain.Trainings
             }
             else if (e.CommandName == "INACTIVE")
             {
-                int index = Convert.ToInt32(e.CommandArgument);
-                GridViewRow selectedRow = grid_trainings.Rows[index];
-
-                string trnid = selectedRow.Cells[10].Text.Trim();
-                bool active = selectedRow.Cells[2].Text.Trim() == "Yes";
+                GridViewRow selectedRow = grid_trainings.Rows[Convert.ToInt32(e.CommandArgument)];
+                string trnid = selectedRow.Cells[11].Text.Trim();
+                bool active = selectedRow.Cells[3].Text.Trim() == "Yes";
 
                 if (active)
                     DB_Trainings.update_TRAINING_DEF(trnid, isactive: "0");
                 else
                     DB_Trainings.update_TRAINING_DEF(trnid, isactive: "1");
 
-
-                selectedRow.Cells[2].Text = active ? "No" : "Yes"; 
+                selectedRow.Cells[3].Text = active ? "No" : "Yes"; 
             }
         }
 
@@ -79,9 +82,14 @@ namespace AviaTrain.Trainings
 
         protected void grid_trainings_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            e.Row.Cells[10].Visible = false; // hide TRNID
-            e.Row.Cells[11].Visible = false; // hide LASTSTEPID
-            e.Row.Cells[12].Visible = false; // hide FIRSTSTEPID
+            e.Row.Cells[11].Visible = false; // hide TRNID
+            e.Row.Cells[12].Visible = false; // hide LASTSTEPID
+            e.Row.Cells[13].Visible = false; // hide FIRSTSTEPID
+
+            if(e.Row.Cells[5].Text == "DESIGN_FINISHED")
+            {
+               // e.Row.Cells[0].Controls[0].Visible = false;
+            }
         }
 
 

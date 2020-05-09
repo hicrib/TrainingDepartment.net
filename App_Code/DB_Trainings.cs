@@ -230,19 +230,34 @@ namespace AviaTrain.App_Code
             return false;
         }
 
-        public static string create_NEXT_STEP(string trnid)
-        {
+        public static string create_NEXT_STEP(string trnid, string stepid = "", string increment = "256")
+        {//dont even ask why 256
+            string insert = "";
+            if (stepid == "")
+            {
+                insert = @"DECLARE @NEWSTEPID INT = (SELECT MAX(STEP_ID) + @INCREMENT FROM TRN_STEP)
+
+                           INSERT INTO TRN_STEP VALUES( @NEWSTEPID ,@TRN_ID , 'TRN' , null , null, NULL , NULL, 1 )
+
+                           SELECT  @NEWSTEPID ";
+            }
+            else
+            {
+                insert = @"DECLARE @NEWSTEPID INT = (SELECT " + stepid + @" + @INCREMENT)
+
+                           INSERT INTO TRN_STEP VALUES( @NEWSTEPID ,@TRN_ID , 'TRN' , null , null, NULL , NULL, 1 )
+
+                           SELECT  @NEWSTEPID";
+            }
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(
-                        @" INSERT INTO TRN_STEP 
-                            VALUES( @TRN_ID , null , null , null, NULL , NULL, 1 )
-
-                            SELECT SCOPE_IDENTITY()  ", connection))
+                using (SqlCommand command = new SqlCommand(insert, connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@TRN_ID", SqlDbType.Int).Value = trnid;
+                    command.Parameters.Add("@INCREMENT", SqlDbType.Int).Value = increment;
                     command.CommandType = CommandType.Text;
 
                     return Convert.ToString(command.ExecuteScalar());
@@ -298,13 +313,16 @@ namespace AviaTrain.App_Code
             try
             {
                 if (which == "next")
-                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID > @STEP_ID AND ISACTIVE=1 ORDER BY STEP_ID ASC";
+                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID > @STEP_ID and STEPTYPE='TRN'  AND ISACTIVE=1 ORDER BY STEP_ID ASC";
                 else if (which == "prev")
-                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID < @STEP_ID  AND ISACTIVE=1 ORDER BY STEP_ID DESC";
+                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID < @STEP_ID  and STEPTYPE='TRN'  AND ISACTIVE=1 ORDER BY STEP_ID DESC";
                 else if (which == "last")
                     select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='TRN'  AND ISACTIVE=1  ORDER BY STEP_ID DESC";
                 else if (which == "first")
                     select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='TRN'  AND ISACTIVE=1  ORDER BY STEP_ID ASC";
+                else if (which == "exam")
+                    select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='EXAM_STEP'  AND ISACTIVE=1  ORDER BY STEP_ID ASC";
+
 
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(select, connection))
@@ -570,18 +588,22 @@ namespace AviaTrain.App_Code
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" 
-                                SELECT 
-	                                CASE WHEN TDEF.ISACTIVE = 1 THEN 'Yes' Else 'No' END AS 'ACTIVE',
-	                                NAME , 
-	                                STATUS , 
-	                                SECTOR , 
-	                                EFFECTIVE , 
-	                                U.FIRSTNAME + ' ' + U.SURNAME AS LAST_MODIFY,
-	                                LAST_MODIFY_DATE,
-	                                CASE WHEN EXISTS (SELECT TOP 1 * FROM TRN_STEP WHERE STEPTYPE='EXAM_STEP' AND TRN_ID=TDEF.ID AND ISNULL(EXTRA,'') <> '' )
-					                                THEN 'Yes' ELSE 'No' END AS 'EXAM',
-	                                TDEF.ID AS 'TRNID' , 
-	                                (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = TDEF.ID ORDER BY STEP_ID DESC) AS 'LASTSTEPID',
+                               SELECT 
+                                    CASE WHEN TDEF.ISACTIVE = 1 THEN 'Yes' Else 'No' END AS 'ACTIVE',
+                                    NAME , 
+                                    STATUS , 
+                                    SECTOR , 
+                                    EFFECTIVE , 
+                                    U.FIRSTNAME + ' ' + U.SURNAME AS LAST_MODIFY,
+                                    LAST_MODIFY_DATE,
+                                    CASE WHEN EXISTS (SELECT TOP 1 * FROM TRN_STEP WHERE STEPTYPE='EXAM_STEP' AND TRN_ID=TDEF.ID AND ISNULL(EXTRA,'') <> '' )
+                                                    THEN (SELECT EDEF.NAME FROM EXM_EXAM_DEFINITION EDEF
+								                                   JOIN TRN_STEP  TS ON TS.EXTRA = EDEF.ID AND TS.STEPTYPE = 'EXAM_STEP'
+								                                   WHERE TS.TRN_ID = TDEF.ID
+					                                )
+		                                 ELSE '-' END AS 'EXAM',
+                                    TDEF.ID AS 'TRNID' , 
+                                    (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = TDEF.ID AND STEPTYPE = 'TRN' ORDER BY STEP_ID DESC) AS 'LASTSTEPID',
                                     (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = TDEF.ID ORDER BY STEP_ID ASC) AS 'FIRSTSTEP'
                                 from TRN_TRAINING_DEF TDEF 
                                 JOIN USERS U ON U.EMPLOYEEID = TDEF.LAST_MODIFY
@@ -809,7 +831,7 @@ namespace AviaTrain.App_Code
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
                             @" SELECT ROW_NUMBER() OVER(ORDER BY STEP_ID) AS '#',  STEP_ID FROM TRN_STEP 
-                                   WHERE TRN_ID = @TRNID AND ISACTIVE = 1 ", connection))
+                                   WHERE TRN_ID = @TRNID AND ISACTIVE = 1  ", connection))
                 {
                     connection.Open();
                     command.Parameters.AddWithValue("@TRNID", trnid);
@@ -830,5 +852,65 @@ namespace AviaTrain.App_Code
             return null;
         }
 
+
+        public static bool saveAs_Training(string oldtrnid, string trnname, string sector, string effective)
+        {
+            UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                     @"INSERT INTO TRN_TRAINING_DEF
+                            SELECT @NAME, @SECTOR, @EFFECTIVE, @USERID, CONVERT(VARCHAR, GETUTCDATE(),20), 'DESIGN_STARTED',null,1 
+                            FROM TRN_TRAINING_DEF WHERE ID= @TRNID
+
+                       SELECT SCOPE_IDENTITY()", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@TRNID", SqlDbType.Int).Value = oldtrnid;
+                    command.Parameters.Add("@NAME", SqlDbType.NVarChar).Value = trnname;
+                    command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
+                    command.Parameters.Add("@EFFECTIVE", SqlDbType.NVarChar).Value = effective;
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = user.employeeid;
+                    command.CommandType = CommandType.Text;
+
+                    string newtrnid = Convert.ToString(command.ExecuteScalar());
+                    if (newtrnid == "")
+                        return false;
+                    //todo delete if there is a problem
+
+                    // # , STEP_ID
+                    DataTable steps = get_STEPIDs_orderby(oldtrnid);
+                    if (steps == null || steps.Rows.Count == 0)
+                        return false;
+                    foreach (DataRow step in steps.Rows)
+                    {
+                        using (SqlConnection connection2 = new SqlConnection(con_str))
+                        using (SqlCommand command2 = new SqlCommand(
+                             @"DECLARE @NEWSTEPID INT = (SELECT MAX(STEP_ID) + 256 FROM TRN_STEP )
+
+                                INSERT INTO TRN_STEP
+                                SELECT @NEWSTEPID, @NEWTRNID, STEPTYPE,TEXTHTML,FILEADRESS, STATUS, EXTRA,ISACTIVE
+                                FROM TRN_STEP WHERE STEP_ID = @OLDSTEPID
+
+                                INSERT INTO TRN_STEP_QUESTIONS
+                                SELECT @NEWSTEPID , Q_ID FROM TRN_STEP_QUESTIONS WHERE STEP_ID = @OLDSTEPID", connection2))
+                        {
+                            connection2.Open();
+                            command2.Parameters.Add("@NEWTRNID", SqlDbType.Int).Value = newtrnid;
+                            command2.Parameters.Add("@OLDSTEPID", SqlDbType.Int).Value = step["STEP_ID"].ToString();
+                            command2.ExecuteNonQuery();
+                        }
+                    }
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
     }
 }

@@ -34,7 +34,12 @@ namespace AviaTrain.Pages
                 //todo : burada doldurulması faydalı başka şeyler de olabilir.
                 //todo : kişiye yapılacak bildirimler buradan öğrenilip yapılabilir.
 
-                if(user.isExamAdmin)
+                if (user.isAdmin)
+                {
+                    DB_ScheduledTasks.NoShow();
+                    Response.Redirect("~/SysAdmin/SysAdminMain.aspx");
+                }
+                else if (user.isExamAdmin)
                     Response.Redirect("~/Exams/Exam_MainAdmin.aspx");
                 else if (user.isExamTrainee)
                     Response.Redirect("~/Exams/Exam_MainGeneral.aspx");

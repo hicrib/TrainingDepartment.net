@@ -206,7 +206,7 @@
                         <table class="right_buttons_tbl">
                             <tr>
                                 <td rowspan="10" style="vertical-align: top;">
-                                    <div style="overflow-y:scroll; height:550px; ">
+                                    <div style="overflow-y: scroll; height: 550px;">
                                         <asp:GridView ID="grid_navigate" CssClass="grid_navigate" runat="server" OnRowDataBound="grid_navigate_RowDataBound" OnRowCommand="grid_navigate_RowCommand">
                                             <Columns>
                                                 <asp:ButtonField ButtonType="Image" ImageUrl="~/images/view.png" CommandName="GO" />
@@ -215,62 +215,67 @@
                                     </div>
                                 </td>
                                 <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div style="margin-left: auto; margin-right: auto; max-height: 400px; max-width: 400px;">
-                            <asp:Image ID="img1" runat="server" Style="display: none; max-height: 400px !important; max-width: 400px !important;" />
-                        </div>
-                        <div>
-                            You can use this address to post images 
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div style="margin-left: auto; margin-right: auto; max-height: 400px; max-width: 400px;">
+                                        <asp:Image ID="img1" runat="server" Style="display: none; max-height: 400px !important; max-width: 400px !important;" />
+                                    </div>
+                                    <div>
+                                        You can use this address to post images 
                                          <br />
-                            <asp:FileUpload ID="file_upload" runat="server" accept=".png,.jpg,.jpeg,.gif" />
-                            <asp:Button runat="server" ID="UploadButton" Text="Upload" OnClick="UploadButton_Click" />
-                            <div style="max-width: 150px;">
-                                <asp:Label ID="lbl_step_image1" runat="server" Visible="true"></asp:Label>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+                                        <asp:FileUpload ID="file_upload" runat="server" accept=".png,.jpg,.jpeg,.gif" />
+                                        <asp:Button runat="server" ID="UploadButton" Text="Upload" OnClick="UploadButton_Click" />
+                                        <div style="max-width: 150px;">
+                                            <asp:Label ID="lbl_step_image1" runat="server" Visible="true"></asp:Label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
 
-                <tr>
-                    <td>
-                        <asp:Button ID="btn_create_question" CssClass="btn_create btn_belows" runat="server" OnClientClick="return ShowModalPopup()" Style="margin: auto;" Text="Create Question" OnClick="btn_create_question_Click" />
+                            <tr>
+                                <td>
+                                    <asp:Button ID="btn_create_question" CssClass="btn_create btn_belows" runat="server" OnClientClick="return ShowModalPopup()" Style="margin: auto;" Text="Create Question" OnClick="btn_create_question_Click" />
+                                </td>
+                                <td>
+                                    <asp:Button ID="btn_chose_question" CssClass="btn_create btn_belows" runat="server" OnClientClick="return ShowModalPopup2()" Style="margin: auto;" Text="Choose Questions" OnClick="btn_chose_question_Click" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Button ID="btn_prev" runat="server" CssClass="btn_belows btn_prev" OnClientClick="TransferDivContent()" Style="float: left;" Text="Save & Prev." OnClick="btn_prev_Click" />
+                                </td>
+                                <td>
+                                    <asp:Button ID="btn_next" runat="server" CssClass="btn_belows btn_forw" OnClientClick="TransferDivContent()" Style="float: right; margin-left: 10px !important;" Text="Save & Next" OnClick="btn_next_Click" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <asp:Label ID="insertunable" runat="server" Visible="false"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Button ID="btn_delete_this_page" runat="server" CssClass="btn_belows" Text="Delete Page" OnClientClick="ConfirmDelete()" OnClick="btn_delete_this_page_Click" />
+                                </td>
+                                <td>
+                                    <asp:Button ID="btn_insertpage_after" runat="server" CssClass="btn_belows btn_forw" Text="Insert After" OnClientClick="TransferDivContent()" OnClick="btn_insertpage_after_Click" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding-bottom: 0px !important;">
+                                    <asp:Button ID="btn_finish" runat="server" CssClass="btn_belows btn_finish" Text="Finish Designing Training" OnClientClick="TransferDivContent(); " OnClick="btn_finish_Click" />
+                                </td>
+                            </tr>
+                        </table>
                     </td>
-                    <td>
-                        <asp:Button ID="btn_chose_question" CssClass="btn_create btn_belows" runat="server" OnClientClick="return ShowModalPopup2()" Style="margin: auto;" Text="Choose Questions" OnClick="btn_chose_question_Click" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <asp:Button ID="btn_prev" runat="server" CssClass="btn_belows btn_prev" OnClientClick="TransferDivContent()" Style="float: left;" Text="Save & Prev." OnClick="btn_prev_Click" />
-                    </td>
-                    <td>
-                        <asp:Button ID="btn_next" runat="server" CssClass="btn_belows btn_forw" OnClientClick="TransferDivContent()" Style="float: right; margin-left: 10px !important;" Text="Save & Next" OnClick="btn_next_Click" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <asp:Button ID="btn_delete_this_page" runat="server" CssClass="btn_belows" Text="Delete Page" OnClientClick="ConfirmDelete()" OnClick="btn_delete_this_page_Click" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="padding-bottom: 0px !important;">
-                        <asp:Button ID="btn_finish" runat="server" CssClass="btn_belows btn_finish" Text="Finish Designing Training" OnClientClick="TransferDivContent(); " OnClick="btn_finish_Click" />
-                    </td>
-                </tr>
-            </table>
-            </td>
                 </tr>
             </table>
 
@@ -329,6 +334,9 @@
     <asp:Label ID="lbl_step_db_id" runat="server" Visible="false"></asp:Label>
     <asp:Label ID="lbl_trnname" runat="server" Visible="false"></asp:Label>
 
+    <asp:Label ID="lbl_editable" ClientIDMode="Static" runat="server" Text="1" Style="display: none;"></asp:Label>
+
+
 
     <div id="___editor"></div>
 
@@ -355,45 +363,49 @@
 
     <script>
         //$.trumbowyg.svgPath = '~\Scripts\trumbowyg\ui\icons.svg';
-
-        $('#ContentPlaceHolder1_upper_div')
-            .trumbowyg({
-                svgPath: '/Scripts/trumbowyg/ui/icons.svg',// or a path like '/assets/my-custom-path/icons.svg',
-                btnsDef: {
-                    // Create a new dropdown
-                    image: {
-                        dropdown: ['insertImage', 'noembed'],
-                        ico: 'insertImage'
+        if ($('#lbl_editable').text() == "0") {
+           
+        }
+        else {
+            $('#ContentPlaceHolder1_upper_div')
+                .trumbowyg({
+                    svgPath: '/Scripts/trumbowyg/ui/icons.svg',// or a path like '/assets/my-custom-path/icons.svg',
+                    btnsDef: {
+                        // Create a new dropdown
+                        image: {
+                            dropdown: ['insertImage', 'noembed'],
+                            ico: 'insertImage'
+                        }
+                    },
+                    // Redefine the button pane
+                    btns: [
+                        ['viewHTML'],
+                        ['historyUndo', 'historyRedo'],
+                        ['fontfamily'],
+                        ['foreColor', 'backColor'],
+                        ['table'],
+                        ['formatting'],
+                        ['fontsize'],
+                        ['strong', 'em', 'del'],
+                        ['link'],
+                        ['image'], // Our fresh created dropdown
+                        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                        ['unorderedList', 'orderedList'],
+                        ['horizontalRule'],
+                        ['fullscreen']
+                    ],
+                    plugins: {
+                        // Add imagur parameters to upload plugin for demo purposes
+                        upload: {
+                            serverPath: '~/images/',
+                            fileFieldName: 'image',
+                            headers: {
+                                'Authorization': 'Client-ID xxxxxxxxxxxx'
+                            },
+                            urlPropertyName: 'data.link'
+                        }
                     }
-                },
-                // Redefine the button pane
-                btns: [
-                    ['viewHTML'],
-                    ['historyUndo', 'historyRedo'],
-                    ['fontfamily'],
-                    ['foreColor', 'backColor'],
-                    ['table'],
-                    ['formatting'],
-                    ['fontsize'],
-                    ['strong', 'em', 'del'],
-                    ['link'],
-                    ['image'], // Our fresh created dropdown
-                    ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                    ['unorderedList', 'orderedList'],
-                    ['horizontalRule'],
-                    ['fullscreen']
-                ],
-                plugins: {
-                    // Add imagur parameters to upload plugin for demo purposes
-                    upload: {
-                        serverPath: '~/images/',
-                        fileFieldName: 'image',
-                        headers: {
-                            'Authorization': 'Client-ID xxxxxxxxxxxx'
-                        },
-                        urlPropertyName: 'data.link'
-                    }
-                }
-            });
+                });
+        }
     </script>
 </asp:Content>

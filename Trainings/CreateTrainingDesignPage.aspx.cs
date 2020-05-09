@@ -1,4 +1,5 @@
 ﻿using AviaTrain.App_Code;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,38 +16,60 @@ namespace AviaTrain.Trainings
         {
 
             if (!IsPostBack)
-            { 
+            {
+                Session["chosen_questions_training"] = null;
+
                 string trn_id = Convert.ToString(Request.QueryString["T"]);
                 string step_id = Convert.ToString(Request.QueryString["S"]);
-                try {
-                    string trn_name = DB_Trainings.get_TrainingNames().Select("ID = " + trn_id)[0]["NAME"].ToString();
+                try
+                {
+                    string trn_name = DB_Trainings.get_TrainingNames(false).Select("ID = " + trn_id)[0]["NAME"].ToString();
                     lbl_trnname.Text = trn_name;
                     Write_Page_Header_Low("DESIGNING : " + trn_name);
-                } catch (Exception){}
-                
-                if (String.IsNullOrWhiteSpace(trn_id) || (String.IsNullOrWhiteSpace(step_id)) )
+                }
+                catch (Exception ex)
+                {
+                    string a = ex.Message;
+                }
+
+                if (String.IsNullOrWhiteSpace(trn_id) || (String.IsNullOrWhiteSpace(step_id)))
                     RedirectWithCode("UNAUTHORIZED");
 
                 lbl_step_db_id.Text = step_id;
                 lbl_trn_id.Text = trn_id;
 
+                //if no next step, dont allow insert page. that is reserved for actual insert
+                if ("" == DB_Trainings.get_prev_next_first_last_STEPID(lbl_trn_id.Text, lbl_step_db_id.Text, "next"))
+                    btn_insertpage_after.Visible = false;
 
                 fill_page();
                 Fill_grid_navigate();
 
 
-                if (Session["editable"] != null )
+                if (Convert.ToString(Request.QueryString["E"]) == "0")
                 {
-                    bool editable = (bool)Session["editable"];
-                    if (!editable)
-                        Disable_Editing(); //todo : implement
+                    lbl_editable.Text = "0";
+                    Disable_Editing(); //todo : implement
                 }
-                
+
             }
         }
         protected void Disable_Editing()
         {
             //todo : implement
+            btn_chose_question.Visible = false;
+            btn_create_question.Visible = false;
+            btn_finish.Visible = false;
+            btn_delete_this_page.Visible = false;
+            btn_insertpage_after.Visible = false;
+            insertunable.Text = "NON-EDITABLE Mode! Design finished before.";
+            insertunable.Style.Add("color", "indianred");
+            insertunable.Style.Add("font-weight", "bold");
+            insertunable.Style.Add("font-size", "large");
+            insertunable.Visible = true;
+
+            btn_prev.Text = "Previous";
+            btn_next.Text = "Next";
         }
         protected void fill_page()
         {
@@ -102,10 +125,13 @@ namespace AviaTrain.Trainings
 
         protected void btn_prev_Click(object sender, EventArgs e)
         {
-            //put everything in db , step and questions if there are
-            bool pushed = push_step_in_db();
-            if (!pushed)
-                return; //Page Error
+            if (lbl_editable.Text == "1")
+            {
+                //put everything in db , step and questions if there are
+                bool pushed = push_step_in_db();
+                if (!pushed)
+                    return; //Page Error
+            }
 
             string nextstepid = get_step_create_ifnone(next: false); //next
 
@@ -120,9 +146,12 @@ namespace AviaTrain.Trainings
         protected void btn_next_Click(object sender, EventArgs e)
         {
             //put everything in db , step and questions if there are
-            bool pushed = push_step_in_db();
-            if (!pushed)
-                return; //Page Error 
+            if (lbl_editable.Text == "1")
+            {
+                bool pushed = push_step_in_db();
+                if (!pushed)
+                    return; //Page Error 
+            }
 
             //cleanup
             Session["chosen_questions_training"] = null;
@@ -176,7 +205,7 @@ namespace AviaTrain.Trainings
         protected void go_to_training_page(string stepid)
         {
             //can be next, previous
-            Response.Redirect("~/Trainings/CreateTrainingDesignPage.aspx?T=" + lbl_trn_id.Text + "&S=" + stepid );
+            Response.Redirect("~/Trainings/CreateTrainingDesignPage.aspx?T=" + lbl_trn_id.Text + "&S=" + stepid + "&E=" + lbl_editable.Text);
         }
 
 
@@ -192,7 +221,7 @@ namespace AviaTrain.Trainings
 
             //the following is done because they can finish the training after going back to previous pages of design
             string laststepoftraining = DB_Trainings.get_prev_next_first_last_STEPID(lbl_trn_id.Text, "", "last");
-            Response.Redirect("~/Trainings/CreateTrainingFinish.aspx?T=" + lbl_trn_id.Text + "&S=" + laststepoftraining +"&N=" + lbl_trnname.Text);
+            Response.Redirect("~/Trainings/CreateTrainingFinish.aspx?T=" + lbl_trn_id.Text + "&S=" + laststepoftraining + "&N=" + lbl_trnname.Text);
         }
 
 
@@ -219,7 +248,7 @@ namespace AviaTrain.Trainings
         protected void Fill_grid_navigate()
         {
             DataTable dt = DB_Trainings.get_STEPIDs_orderby(lbl_trn_id.Text);
-            if(dt != null && dt.Rows.Count > 0 )
+            if (dt != null && dt.Rows.Count > 0)
             {
                 grid_navigate.DataSource = dt;
                 grid_navigate.DataBind();
@@ -257,6 +286,15 @@ namespace AviaTrain.Trainings
 
         protected void btn_delete_this_page_Click(object sender, EventArgs e)
         {
+
+            string prevstepid = DB_Trainings.get_prev_next_first_last_STEPID(lbl_trn_id.Text, lbl_step_db_id.Text, "prev");
+            string nextstepid = DB_Trainings.get_prev_next_first_last_STEPID(lbl_trn_id.Text, lbl_step_db_id.Text, "next");
+            if (prevstepid == "" && nextstepid == "")
+            {
+                insertunable.Text = "This is the only step. Unable to Delete.";
+                insertunable.Visible = true;
+                return;
+            }
             //delete
             DB_Trainings.update_STEP(lbl_step_db_id.Text, isactive: "0");
 
@@ -264,9 +302,43 @@ namespace AviaTrain.Trainings
             //cleanup
             Session["chosen_questions_training"] = null;
 
-            string nextstepid = get_step_create_ifnone(next: true); //next
+            go_to_training_page(prevstepid != "" ? prevstepid : nextstepid);
+        }
 
-            go_to_training_page(nextstepid);
+        protected void btn_insertpage_after_Click(object sender, EventArgs e)
+        {
+            //put everything in db , step and questions if there are
+            bool pushed = push_step_in_db();
+            if (!pushed)
+                return; //Page Error 
+
+            //cleanup
+            Session["chosen_questions_training"] = null;
+
+
+            // insert functionality : 
+            // since there is no orderby in step creation we had to implement this
+            // normal step ids are created 256 apart. An inserted id is 8th of distance between this and next. it allows 7 consecitve but 256 in ideal.
+            // 
+            int nextstepid = Convert.ToInt32(DB_Trainings.get_prev_next_first_last_STEPID(lbl_trn_id.Text, lbl_step_db_id.Text, "next"));
+            int thisstepid = Convert.ToInt32(lbl_step_db_id.Text);
+
+            int increment;
+            if ((nextstepid - thisstepid) > 32)
+                increment = (nextstepid - thisstepid) / 8;
+            else
+                increment = (nextstepid - thisstepid) / 2;
+
+            if (thisstepid + increment >= nextstepid || increment == 0 || nextstepid - 1 == thisstepid)
+            {
+                insertunable.Text = "insert is unable for this step";
+                insertunable.Visible = true;
+                btn_insertpage_after.Visible = false;
+                return;
+            }
+
+            string newstepid = DB_Trainings.create_NEXT_STEP(lbl_trn_id.Text, stepid: lbl_step_db_id.Text, increment: increment.ToString());
+            go_to_training_page(newstepid);
         }
     }
 }

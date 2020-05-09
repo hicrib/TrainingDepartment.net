@@ -207,7 +207,7 @@
                     <br />
                     <table class="awaiting_assignments">
                         <tr>
-                            <th>TRAININGS
+                            <th>NON-COMPULSORY  TRAININGS
                             </th>
                         </tr>
                         <tr>

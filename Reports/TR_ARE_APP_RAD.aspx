@@ -12,6 +12,7 @@
 
 
         <form id="form1" runat="server">
+            <asp:ScriptManager ID="ScriptManager1" runat="server" />
             <div>
             </div>
             <div style="float: left;">
