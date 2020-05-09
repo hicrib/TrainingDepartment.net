@@ -275,7 +275,7 @@ namespace AviaTrain.Reports
             data.Add("TRAF_DENS", radio_density.SelectedValue);
             data.Add("COMPLEXITY", radio_complexity.SelectedValue);
             data.Add("HOURS", txt_hours.Text);
-            data.Add("TOTAL_HOURS", txt_totalhours.Text);
+            data.Add("TOTAL_HOURS",  Utility.add_TimeFormat(txt_totalhours.Text , txt_hours.Text));
 
             data.Add("PREBRIEF_COMMENTS_FILENAME", uploadedfilename.Text);
             data.Add("PREBRIEF_COMMENTS", txt_prebrief_comment.Text);
