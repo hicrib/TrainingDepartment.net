@@ -190,8 +190,6 @@ namespace AviaTrain.Reports
                 ddl_trainees.DataValueField = "ID";
                 ddl_trainees.DataBind();
             }
-
-
         }
 
         

@@ -1901,7 +1901,7 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
                                         WHERE UTF.EMPLOYEEID = @EMPLOYEEID 
 	                                          AND TTS.POSITION = @POSITION 
 	                                          AND ( TTS.SECTOR = @SECTOR OR ISNULL(TTS.SECTOR, '') = '' )
-                                        ORDER BY TTS.ID DESC, UTF.GENID DESC", connection))
+                                        ORDER BY TTS.ID DESC, UTF.GENID ASC", connection))
                     {
                         connection.Open();
                         command.Parameters.Add("@EMPLOYEEID", SqlDbType.NVarChar).Value = employeeid;
@@ -2373,10 +2373,10 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
             }
             return false;
         }
-    
-    
-    
-    
+
+
+
+
         public static DataTable UserDetails_TrainingFolder(string userid)
         {
             DataTable res = new DataTable();
@@ -2412,6 +2412,34 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
                 string err = e.Message;
             }
             return null;
+        }
+
+        public static string get_TOTALHOURS(string trainee, string sector)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                             @"  SELECT TOTALHOURS FROM USER_TOTALHOURS
+                                    WHERE USERID = @TRAINEE AND SECTOR = @SECTOR
+                                    ", connection))
+                {
+                    command.Parameters.Add("@TRAINEE", SqlDbType.Int).Value = trainee;
+                    command.Parameters.Add("@SECTOR", SqlDbType.VarChar).Value = sector;
+
+                    connection.Open();
+                    string result = Convert.ToString(command.ExecuteScalar());
+                    if (String.IsNullOrWhiteSpace(result))
+                        return "00:00";
+                    else
+                        return result;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return "";
         }
     }
 }

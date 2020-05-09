@@ -222,6 +222,9 @@ namespace AviaTrain.Reports
             ddl_positions.SelectedValue = directed["position"] + "-" + directed["sector"];
             ddl_positions.Enabled = false;
 
+            txt_totalhours.Text = DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["sector"]);
+            txt_totalhours.Enabled = false;
+
             //todo: ojt-PRELEVEL1-assess etc can be filled here as well
         }
 

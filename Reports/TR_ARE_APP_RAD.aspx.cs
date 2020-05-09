@@ -222,13 +222,18 @@ namespace AviaTrain.Reports
             ddl_ojtis.SelectedValue = directed["ojtiid"];
             ddl_ojtis.Enabled = false;
 
+            
             //remove the ones not containing sector
             List<ListItem> l = Utility.remove_sectors(ddl_positions.Items, directed["sector"]);
             ddl_positions.Items.Clear();
             foreach (ListItem item in l)
-            {
                 ddl_positions.Items.Add(item);
-            }
+
+
+            txt_totalhours.Text =  DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["sector"]);
+            txt_totalhours.Enabled = false;
+
+
                
 
             //ddl_positions.SelectedValue = directed["position"] + "-" + directed["sector"];

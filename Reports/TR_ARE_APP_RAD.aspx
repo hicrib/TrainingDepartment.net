@@ -92,7 +92,7 @@
                             <table style="width: 100% !important;">
                                 <tr>
                                     <td>Date : 
-                                      <asp:TextBox ID="txt_date" runat="server" TextMode="DateTime"></asp:TextBox>
+                                      <asp:TextBox ID="txt_date" runat="server" TextMode="Date"></asp:TextBox>
                                     </td>
                                     <td>Position :
                                         <asp:DropDownList ID="ddl_positions" DataSourceID="" runat="server"></asp:DropDownList></td>
@@ -145,7 +145,7 @@
                                         <asp:TextBox ID="txt_hours" TextMode="Time" runat="server"></asp:TextBox>
                                     </td>
                                     <td>Total Hours :
-                                        <asp:TextBox ID="txt_totalhours" TextMode="Time" runat="server"></asp:TextBox>
+                                        <asp:TextBox ID="txt_totalhours"  runat="server"></asp:TextBox>
                                     </td>
                                 </tr>
                             </table>

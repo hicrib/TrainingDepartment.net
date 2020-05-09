@@ -257,7 +257,7 @@
                                 <td>
                                     <asp:Label ID="lbl_date" runat="server" Text="Date"> </asp:Label></td>
                                 <td>
-                                    <asp:TextBox ID="txt_date" runat="server" TextMode="DateTime"></asp:TextBox>
+                                    <asp:TextBox ID="txt_date" runat="server" TextMode="Date"></asp:TextBox>
                                 </td>
                             </tr>
                             <tr>
