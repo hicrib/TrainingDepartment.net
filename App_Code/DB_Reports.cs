@@ -1904,9 +1904,8 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
-                {
-                    using (SqlCommand command = new SqlCommand(
-                                @"  SELECT TTS.DESCRIPTION , UTF.STATUS , UTF.CREATED_TIME, ISNULL(UTF.REPORTID,'') AS [Rpt.Num.] , ISNULL(UTF.FILENAME,'') AS [FileName]
+                using (SqlCommand command = new SqlCommand(
+                            @"  SELECT TTS.DESCRIPTION , UTF.STATUS , UTF.CREATED_TIME, ISNULL(UTF.REPORTID,'') AS [Rpt.Num.] , ISNULL(UTF.FILENAME,'') AS [FileName]
 		                                , UTF.GENID, TTS.PHASE , TTS.[NAME]
                                         FROM USER_TRAINING_FOLDER UTF
                                         JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
@@ -1914,21 +1913,20 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
 	                                          AND TTS.POSITION = @POSITION 
 	                                          AND ( TTS.SECTOR = @SECTOR OR ISNULL(TTS.SECTOR, '') = '' )
                                         ORDER BY TTS.ID DESC, UTF.GENID ASC", connection))
-                    {
-                        connection.Open();
-                        command.Parameters.Add("@EMPLOYEEID", SqlDbType.NVarChar).Value = employeeid;
-                        command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
-                        command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
+                {
+                    connection.Open();
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.NVarChar).Value = employeeid;
+                    command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
+                    command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
 
-                        command.CommandType = CommandType.Text;
-                        SqlDataAdapter da = new SqlDataAdapter(command);
-                        da.Fill(res);
+                    command.CommandType = CommandType.Text;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
 
-                        if (res == null || res.Rows.Count == 0)
-                            return new DataTable();
+                    if (res == null || res.Rows.Count == 0)
+                        return new DataTable();
 
-                        return res;
-                    }
+                    return res;
                 }
             }
             catch (Exception e)
@@ -2432,8 +2430,7 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
-                             @"  SELECT TOTALHOURS FROM USER_TOTALHOURS
-                                    WHERE USERID = @TRAINEE AND SECTOR = @SECTOR
+                             @"  SELECT TOTALHOURS FROM USER_TOTALHOURS WHERE USERID = @TRAINEE AND SECTOR = @SECTOR
                                     ", connection))
                 {
                     command.Parameters.Add("@TRAINEE", SqlDbType.Int).Value = trainee;
@@ -2452,6 +2449,130 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
                 string err = e.Message;
             }
             return "";
+        }
+
+        public static string get_MER(string stepid, string employeeid = "")
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                             @"DECLARE @MER INT = (  SELECT UM.MER FROM TRAINING_TREE_STEPS TTS
+					                                  JOIN MER_USER UM ON UM.POSITION = TTS.POSITION 
+											                                AND ISNULL(UM.SECTOR,'') = ISNULL(TTS.SECTOR,'')
+											                                AND TTS.PHASE = UM.PHASE
+					                                  WHERE TTS.ID = @STEPID AND UM.EMPLOYEEID = @EMPLOYEEID
+					                                )
+
+                                IF ISNULL(@MER,0) = 0
+                                BEGIN
+		                                SELECT MD.MER FROM TRAINING_TREE_STEPS TTS
+		                                JOIN MER_DEFAULT MD ON MD.POSITION = TTS.POSITION 
+								                                AND ISNULL(MD.SECTOR,'') = ISNULL(TTS.SECTOR,'')
+								                                AND TTS.PHASE = MD.PHASE
+		                                WHERE TTS.ID = @STEPID
+                                END
+                                ELSE 
+                                        SELECT @MER", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid == "" ? "0" : employeeid;
+
+                    command.CommandType = CommandType.Text;
+
+                    string result = Convert.ToString(command.ExecuteScalar() as object);
+                    if (result == "")
+                        return null;
+                    else
+                        return result;
+
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+
+        public static DataTable get_MERs(string position = "", string sector = "", string stepid = "")
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @"  SELECT TTS.POSITION , TTS.SECTOR, TTS.DESCRIPTION , MD.MER , TTS.ID
+                                FROM TRAINING_TREE_STEPS TTS
+                                LEFT JOIN MER_DEFAULT MD ON MD.POSITION = TTS.POSITION 
+                                                        AND ISNULL(MD.SECTOR,'') = ISNULL(TTS.SECTOR,'')
+                                                        AND TTS.PHASE = MD.PHASE
+                                WHERE 
+                                    TTS.ID = CASE WHEN @STEPID = 0 THEN TTS.ID ELSE @STEPID END
+                                    AND 
+                                    TTS.POSITION = CASE WHEN @POSITION = '' THEN TTS.POSITION ELSE @POSITION END
+                                    AND 
+                                    TTS.SECTOR = CASE WHEN @SECTOR = '' THEN TTS.SECTOR ELSE @SECTOR END", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid == "" ? "0" : stepid;
+                    command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
+                    command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
+
+                    command.CommandType = CommandType.Text;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    DataTable res = new DataTable();
+                    da.Fill(res);
+
+                    if (res != null || res.Rows.Count > 0)
+                        return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+
+        public static bool update_MER(string stepid, string MER, string employeeid = "", string comments = "")
+        {
+            //TODO : EMPLOYEEID WOULDNT UPDATE SINCE THERE IS NO PRIOR RECORD. MUST INSERT FIRST
+            UserSession user = (UserSession)HttpContext.Current.Session["usersession"];
+            string update = "";
+            if (employeeid != "")
+            {
+                update = @"INSERT INTO MER_USER
+                                SELECT " + employeeid + ", POSITION, SECTOR, PHASE , NULL, @MER , " + user.employeeid + @" , @COMMENTS
+                                FROM TRAINING_TREE_STEPS 
+                                WHERE ID = @ID";
+            }
+            else
+                update = @"UPDATE MER_DEFAULT SET MER = @MER  WHERE ID=@ID";
+
+            try
+            {
+
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand( update, connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@ID", SqlDbType.Int).Value = stepid;
+                    command.Parameters.Add("@MER", SqlDbType.Int).Value = MER;
+                    if (employeeid != "")
+                        command.Parameters.Add("@COMMENTS", SqlDbType.NVarChar).Value = comments;
+
+                    command.CommandType = CommandType.Text;
+
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string me = e.Message;
+            }
+            return false;
         }
     }
 }

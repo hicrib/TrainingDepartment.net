@@ -586,14 +586,15 @@ namespace AviaTrain.App_Code
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
-                             @"DECLARE @MER INT = ( SELECT MER FROM MER_DEFAULT WHERE POSITION = @POSITION AND SECTOR=@SECTOR AND PHASE = @PHASE )
+                             @"DECLARE @MER INT = (SELECT MER FROM MER_USER 
+					                                WHERE EMPLOYEEID=@EMPLOYEEID AND POSITION = @POSITION AND SECTOR=@SECTOR  AND PHASE =  @PHASE  )
 
-                                    IF @MER = NULL
-                                    BEGIN
-                                    SET @MER = (SELECT MER FROM MER_USER WHERE EMPLOYEEID=@EMPLOYEEID AND POSITION = @POSITION AND SECTOR=@SECTOR AND PHASE = @PHASE  )
-                                    END
+                                IF @MER = NULL
+                                BEGIN
+                                SET @MER = ( SELECT MER FROM MER_DEFAULT WHERE POSITION = @POSITION AND SECTOR=@SECTOR AND PHASE = @PHASE )
+                                END
 
-                                    SELECT ISNULL(@MER,0)", connection))
+                                SELECT ISNULL(@MER,0)", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;

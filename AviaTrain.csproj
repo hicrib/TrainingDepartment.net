@@ -1213,6 +1213,7 @@
     <Content Include="SysAdmin\CreateTrainingFolder.aspx" />
     <Content Include="SysAdmin\CreateUser.aspx" />
     <Content Include="SysAdmin\EditRoles.aspx" />
+    <Content Include="SysAdmin\MERAssign.aspx" />
     <Content Include="SysAdmin\__CreateUser.aspx" />
     <Content Include="SysAdmin\SysAdminMain.aspx" />
     <Content Include="SysAdmin\ViewTrainingFolder.aspx" />
@@ -1510,6 +1511,13 @@
     </Compile>
     <Compile Include="SysAdmin\EditRoles.aspx.designer.cs">
       <DependentUpon>EditRoles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SysAdmin\MERAssign.aspx.cs">
+      <DependentUpon>MERAssign.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SysAdmin\MERAssign.aspx.designer.cs">
+      <DependentUpon>MERAssign.aspx</DependentUpon>
     </Compile>
     <Compile Include="SysAdmin\__CreateUser.aspx.cs">
       <DependentUpon>__CreateUser.aspx</DependentUpon>
