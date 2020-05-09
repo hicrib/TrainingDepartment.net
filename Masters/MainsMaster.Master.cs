@@ -14,27 +14,30 @@ namespace AviaTrain.Masters
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Fill_UserInfo();
+            if (!IsPostBack)
+            {
+                UserSession user = (UserSession)Session["usersession"];
+                lbl_username.Text = user.initial + " - " + user.name_surname;
+                lbl_userid.Text = user.employeeid;
+                if (user.photo != "")
+                    img_userphoto.ImageUrl = AzureCon.general_container_url + user.photo;
+            }
         }
 
-
-        protected void Fill_UserInfo()
-        {
-            UserSession user = (UserSession)Session["usersession"];
-
-            //todo: details can be added
-            lbl_userinfo.Text = user.name_surname;
-        }
-
-        protected void btn_logout_Click1(object sender, ImageClickEventArgs e)
+        protected void btn_log_out_Click(object sender, ImageClickEventArgs e)
         {
             FormsAuthentication.SignOut();
             Response.Redirect("~/Pages/Login.aspx");
         }
 
-        protected void btn_main_Click(object sender, ImageClickEventArgs e)
+        protected void btn_mainpage_Click(object sender, ImageClickEventArgs e)
         {
             Response.Redirect("~/Pages/UserMain.aspx");
+        }
+
+        protected void btn_user_details_Click(object sender, ImageClickEventArgs e)
+        {
+            Response.Redirect("~/Pages/UserDetails.aspx");
         }
     }
 }

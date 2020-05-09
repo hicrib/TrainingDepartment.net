@@ -18,7 +18,7 @@ namespace AviaTrain.SysAdmin
                 Session["direct_dictionary"] = null; //clean-up
                 Session["chosen_questions"] = null; //clean-up
                 Session["exam_result_details"] = null;
-                 
+
             }
         }
 
@@ -90,6 +90,11 @@ namespace AviaTrain.SysAdmin
         protected void btn_view_training_results_Click(object sender, EventArgs e)
         {
             Response.Redirect("~/Trainings/ViewTrainingResults.aspx");
+        }
+
+        protected void btn_view_userdetails_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/UserDetails.aspx");
         }
     }
 }

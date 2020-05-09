@@ -87,10 +87,8 @@ namespace AviaTrain.Reports
             if (meta.Rows[0]["OJTI_SIGNED"].ToString() == "True")
                 btn_ojtisign_Click(new object(), new EventArgs());
 
-            string date = form.Rows[0]["DATE"].ToString();
-            ddl_DAY_controller.Items.Add(date.Split('.')[0]);
-            ddl_MONTH_controller.SelectedValue = date.Split('.')[1];
-            ddl_YEAR_controller.SelectedValue = date.Split('.')[2];
+            txt_controller_date.Text = form.Rows[0]["DATE"].ToString();
+           
 
             txt_comments.Text = form.Rows[0]["COMMENTS"].ToString();
 
@@ -181,10 +179,10 @@ namespace AviaTrain.Reports
             ddl_sectors.DataValueField = "CODE";
             ddl_sectors.DataBind();
 
-            string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
-            ddl_DAY_controller.SelectedValue = today.Split('.')[0];
-            ddl_MONTH_controller.SelectedValue = Convert.ToInt32(today.Split('.')[1]).ToString();
-            ddl_YEAR_controller.SelectedValue = today.Split('.')[2];
+            //string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
+            //ddl_DAY_controller.SelectedValue = today.Split('.')[0];
+            //ddl_MONTH_controller.SelectedValue = Convert.ToInt32(today.Split('.')[1]).ToString();
+            //ddl_YEAR_controller.SelectedValue = today.Split('.')[2];
 
             lbl_MER.Text = "( MER : " + DB_System.get_MER(ddl_trainee.SelectedValue, ddl_sectors.Text.Split('-')[0], ddl_sectors.Text.Split('-')[1], "") + ")";//ddl_level vardı burada
 
@@ -345,7 +343,7 @@ namespace AviaTrain.Reports
             data.Add("TRAINEE_SIGNED", lbl_recom_trainee_signed.Text);
             data.Add("TRAINEE_SIGN_DATE", lbl_recom_trainee_signed.Text == "1" ? DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm") : "");
 
-            data.Add("DATE", ddl_DAY_controller.SelectedValue + "." + ddl_MONTH_controller.SelectedValue + "." + ddl_YEAR_controller.SelectedValue);
+            data.Add("DATE", txt_controller_date.Text);
 
             data.Add("REVIEW_TEAM_APPROVAL", rad_NO.Checked ? "0" : "1");
             data.Add("REVIEW_TEAM_APPROVAL_SIGN_DATE", rad_NO.Checked ? DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm") : "");

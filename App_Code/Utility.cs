@@ -292,5 +292,8 @@ namespace AviaTrain.App_Code
             
             return hours.ToString() + ":" + (minutes < 10 ? "0" : "") + minutes.ToString() ;
         }
+
+
+       
     }
 }

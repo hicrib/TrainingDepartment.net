@@ -43,7 +43,55 @@ WHERE [STATUS] <> 'NOSHOW' AND ISNULL(USER_FINISH, '') = '' AND CONVERT(DATETIME
 
             //something went wrong
             return false;
+        }
 
+
+        public static bool NoSign_24hour(string traineeid = "", string instructorid = "", string sysadminid = "")
+        {
+            string add = "";
+            if (sysadminid != "")
+                add = "";
+            else if (traineeid != "")
+                add += " AND TRAINEE_ID = " + traineeid;
+            else if (instructorid != "")
+                add += " AND CREATER = " + instructorid;
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(@"
+UPDATE REPORT_RECOM_CERTIF
+SET TRAINEE_SIGNED = 1  , TRAINEE_SIGN_DATE = CONVERT(VARCHAR, GETUTCDATE(),20)
+WHERE TRAINEE_SIGNED = 0 
+AND 
+dateADD(DAY, 1, CONVERT(DATETIME,  [DATE], 20))  <  CONVERT(DATETIME, GETUTCDATE(), 20)
+
+UPDATE REPORT_RECOM_LEVEL
+SET TRAINEE_SIGNED = 1  
+WHERE TRAINEE_SIGNED = 0 
+AND 
+dateADD(DAY, 1, CONVERT(DATETIME,  [DATE], 20))  <  CONVERT(DATETIME, GETUTCDATE(), 20)
+
+UPDATE REPORTS_META
+SET TRAINEE_SIGNED = 1
+WHERE TRAINEE_SIGNED = 0 
+AND 
+dateADD(DAY, 1, CONVERT(DATETIME,  CREATE_TIME, 20))  <  CONVERT(DATETIME, GETUTCDATE(), 20)" + add, connection))
+                {
+                    connection.Open();
+                    command.CommandType = CommandType.Text;
+
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            //something went wrong
+            return false;
         }
 
     }

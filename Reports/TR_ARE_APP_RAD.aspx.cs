@@ -129,8 +129,9 @@ namespace AviaTrain.Reports
                     rad.Checked = true;
             }
 
+            //this.Master.FindControl("form1")
             //disable everything
-            DisableControls(form1);
+            DisableControls(pnl_wrapper);
             btn_submit.Visible = false;
 
             //bring ojti sign but check just in case

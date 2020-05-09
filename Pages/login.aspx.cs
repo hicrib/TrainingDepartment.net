@@ -37,14 +37,12 @@ namespace AviaTrain.Pages
                 if (user.isAdmin)
                 {
                     DB_ScheduledTasks.NoShow();
+                    DB_ScheduledTasks.NoSign_24hour(sysadminid: user.employeeid);
                     Response.Redirect("~/SysAdmin/SysAdminMain.aspx");
                 }
-                else if (user.isExamAdmin)
-                    Response.Redirect("~/Exams/Exam_MainAdmin.aspx");
-                else if (user.isExamTrainee)
-                    Response.Redirect("~/Exams/Exam_MainGeneral.aspx");
-                else
+                else 
                     Response.Redirect("~/Pages/UserMain.aspx");
+
             }
 
 

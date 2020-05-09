@@ -221,7 +221,7 @@
     <Content Include="Pages\DownloadExcel.aspx" />
     <Content Include="Pages\ErrorPage.aspx" />
     <Content Include="Exams\Exam_MainAdmin.aspx" />
-    <Content Include="Exams\Exam_MainGeneral.aspx" />
+    <Content Include="Pages\TraineeMain.aspx" />
     <Content Include="Exams\Unusual\index.htm" />
     <Content Include="Exams\Unusual\introduction.htm" />
     <Content Include="Exams\Unusual\main_lessons.htm" />
@@ -1121,7 +1121,6 @@
     <Content Include="Pages\SuccessPage.aspx" />
     <Content Include="Pages\UserDetails.aspx" />
     <Content Include="Pages\UserMain.aspx" />
-    <Content Include="Pages\TraineeMain.aspx" />
     <Content Include="Pages\TrainingTree.aspx" />
     <Content Include="Reports\CreateReport.aspx" />
     <Content Include="Reports\DAILYTR_ASS_RAD.aspx" />
@@ -1312,12 +1311,12 @@
     <Compile Include="Exams\Exam_MainAdmin.aspx.designer.cs">
       <DependentUpon>Exam_MainAdmin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Exams\Exam_MainGeneral.aspx.cs">
-      <DependentUpon>Exam_MainGeneral.aspx</DependentUpon>
+    <Compile Include="Pages\TraineeMain.aspx.cs">
+      <DependentUpon>TraineeMain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Exams\Exam_MainGeneral.aspx.designer.cs">
-      <DependentUpon>Exam_MainGeneral.aspx</DependentUpon>
+    <Compile Include="Pages\TraineeMain.aspx.designer.cs">
+      <DependentUpon>TraineeMain.aspx</DependentUpon>
     </Compile>
     <Compile Include="Exams\Unusual\UnusualTraining.aspx.cs">
       <DependentUpon>UnusualTraining.aspx</DependentUpon>
@@ -1419,13 +1418,6 @@
     </Compile>
     <Compile Include="Pages\UserMain.aspx.designer.cs">
       <DependentUpon>UserMain.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\TraineeMain.aspx.cs">
-      <DependentUpon>TraineeMain.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\TraineeMain.aspx.designer.cs">
-      <DependentUpon>TraineeMain.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\TrainingTree.aspx.cs">
       <DependentUpon>TrainingTree.aspx</DependentUpon>

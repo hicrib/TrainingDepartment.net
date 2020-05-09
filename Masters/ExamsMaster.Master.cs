@@ -33,15 +33,7 @@ namespace AviaTrain.Masters
 
         protected void btn_mainpage_Click(object sender, ImageClickEventArgs e)
         {
-            UserSession user = (UserSession)Session["usersession"];
-
-            if (user.isAdmin)
-                Response.Redirect("~/SysAdmin/SysAdminMain.aspx");
-            else if (user.isExamAdmin)
-                Response.Redirect("~/Exams/Exam_MainAdmin.aspx");
-            else if (user.isExamTrainee)
-                Response.Redirect("~/Exams/Exam_MainGeneral.aspx");
-
+            Response.Redirect("~/Pages/UserMain.aspx");
         }
 
         protected void btn_user_details_Click(object sender, ImageClickEventArgs e)

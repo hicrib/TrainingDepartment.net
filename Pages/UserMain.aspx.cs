@@ -29,6 +29,17 @@ namespace AviaTrain.Pages
 
             if (user.isOJTI || user.isLCE )
                 Response.Redirect("~/Pages/InstructorMain.aspx");
+
+            if (user.isAdmin)
+                Response.Redirect("~/SysAdmin/SysAdminMain.aspx");
+            if(user.isOnlyTrainee)
+                Response.Redirect("~/Pages/TraineeMain.aspx");
+            else if (user.isExamAdmin)
+                Response.Redirect("~/Exams/Exam_MainAdmin.aspx");
+            else if (user.isExamTrainee)
+                Response.Redirect("~/Pages/TraineeMain.aspx");
+            else if (user.isOJTI || user.isLCE)
+                Response.Redirect("~/Pages/InstructorMain.aspx");
         }
     }
 }

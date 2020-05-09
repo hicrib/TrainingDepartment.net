@@ -7,21 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AviaTrain.Pages
+namespace AviaTrain.Exams
 {
 
 
-    public partial class TraineeMain
+    public partial class Exam_MainGeneral
     {
 
         /// <summary>
-        /// lbl_traineeID control.
+        /// update_panel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_traineeID;
+        protected global::System.Web.UI.UpdatePanel update_panel;
 
         /// <summary>
         /// traineeports_tbl control.
@@ -40,5 +40,50 @@ namespace AviaTrain.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView grid_trainee_reports;
+
+        /// <summary>
+        /// grid_examassignments control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_examassignments;
+
+        /// <summary>
+        /// grid_examcompleted control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_examcompleted;
+
+        /// <summary>
+        /// grid_assigned_training control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_assigned_training;
+
+        /// <summary>
+        /// grid_completed_trainings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_completed_trainings;
+
+        /// <summary>
+        /// btn_unusual control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btn_unusual;
     }
 }

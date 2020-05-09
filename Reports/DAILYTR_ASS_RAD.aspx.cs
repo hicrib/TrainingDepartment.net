@@ -12,7 +12,6 @@ namespace AviaTrain.Reports
 {
     public partial class DAILYTR_ASS_RAD : MasterPage
     {
-
         protected new void Page_Load(object sender, EventArgs e)
         {
             Page.MaintainScrollPositionOnPostBack = true;

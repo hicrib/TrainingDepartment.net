@@ -51,49 +51,85 @@ namespace AviaTrain.Masters
         protected global::System.Web.UI.UpdateProgress prgLoadingStatus;
 
         /// <summary>
-        /// user_info_tbl control.
+        /// img_userphoto control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table user_info_tbl;
+        protected global::System.Web.UI.WebControls.Image img_userphoto;
 
         /// <summary>
-        /// lbl_userinfo control.
+        /// lbl_username control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_userinfo;
+        protected global::System.Web.UI.WebControls.Label lbl_username;
 
         /// <summary>
-        /// lbl_UserMessage control.
+        /// lbl_userid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_UserMessage;
+        protected global::System.Web.UI.WebControls.Label lbl_userid;
 
         /// <summary>
-        /// btn_main control.
+        /// btn_user_details control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton btn_main;
+        protected global::System.Web.UI.WebControls.ImageButton btn_user_details;
 
         /// <summary>
-        /// btn_logout control.
+        /// masterhead_up_div control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton btn_logout;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl masterhead_up_div;
+
+        /// <summary>
+        /// masterhead_low_div control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl masterhead_low_div;
+
+        /// <summary>
+        /// lbl_masterhead_low control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_masterhead_low;
+
+        /// <summary>
+        /// btn_mainpage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton btn_mainpage;
+
+        /// <summary>
+        /// btn_log_out control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton btn_log_out;
 
         /// <summary>
         /// ContentPlaceHolder1 control.

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/MainsMaster.Master" AutoEventWireup="true" CodeBehind="SysAdminMain.aspx.cs" Inherits="AviaTrain.SysAdmin.SysAdminMain" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="SysAdminMain.aspx.cs" Inherits="AviaTrain.SysAdmin.SysAdminMain" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
@@ -41,7 +41,7 @@
 
     <table class="admin_actions_tbl">
         <tr>
-            <th colspan="2">
+            <th colspan="3">
                 SYSTEM FUNCTIONS
             </th>
         </tr>
@@ -51,6 +51,10 @@
             </td>
             <td>
                 <asp:Button ID="btn_edit_roles" runat="server" CssClass="admin_buttons" OnClick="btn_edit_roles_Click" Text="Edit User Roles" />
+            </td>
+            <td>
+   <asp:Button ID="btn_view_userdetails" runat="server" CssClass="admin_buttons" OnClick="btn_view_userdetails_Click" Text="View User Details" />
+            
             </td>
         </tr>
     </table>
