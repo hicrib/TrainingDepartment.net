@@ -313,6 +313,12 @@ namespace AviaTrain.Reports
                 return false;
             }
 
+            if (txt_controller_date.Text == "")
+            {
+                ClientMessage(lbl_pageresult, "Date must be entered", System.Drawing.Color.Red);
+                return false;
+            }
+
             //  todo: review team approval ???
             //todo : team member approval??
 

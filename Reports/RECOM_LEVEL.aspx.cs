@@ -320,7 +320,13 @@ namespace AviaTrain.Reports
                 return false;
             }
 
-            
+            if ( txt_date.Text == "")
+            {
+                ClientMessage(lbl_pageresult, "Date must be entered", System.Drawing.Color.Red);
+                return false;
+            }
+
+
 
             return true;
         }
