@@ -312,7 +312,7 @@ namespace AviaTrain.Exams
             }
 
 
-            bool ok = DB_Exams.push_EXAM_DEF(name, passpercent, questions);
+            bool ok = DB_Exams.push_EXAM_DEF(name, ddl_examsector.SelectedValue, passpercent, questions);
 
             return ok;
 

@@ -504,7 +504,7 @@ namespace AviaTrain.Exams
             foreach (DataRow item in dt.Rows)
                 questions.Add(item["ID"].ToString(), q_point);
 
-            if (DB_Exams.push_EXAM_DEF(txt_examname.Text, txt_passpercent.Text, questions))
+            if (DB_Exams.push_EXAM_DEF(txt_examname.Text, ddl_examsector.SelectedValue, txt_passpercent.Text, questions))
             {
                 lbl_createexamresult.Text = "Exam Created";
                 txt_examname.Text = "";

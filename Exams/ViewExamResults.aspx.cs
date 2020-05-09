@@ -70,8 +70,9 @@ namespace AviaTrain.Exams
             if (filter_finish.Text != "")
                 finish_date = filter_finish.Text + " 23:59:59";
 
+            string sector = ddl_examsector.SelectedValue == "-" ? "" : ddl_examsector.SelectedValue;
 
-            DataTable dt = DB_Exams.View_Exam_Results(exam_id, chk_active_exams.Checked,
+            DataTable dt = DB_Exams.View_Exam_Results(exam_id, chk_active_exams.Checked, sector,
                                                             start_date, finish_date, traineeid, chk_active_trainee.Checked,
                                                             filter_passed.SelectedValue,
                                                             filter_grd_start.Text, filter_grd_finish.Text);
@@ -125,10 +126,10 @@ namespace AviaTrain.Exams
 
         protected void grid_results_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.Cells.Count > 7)
+            if (e.Row.Cells.Count > 8)
             {
-                e.Row.Cells[7].Visible = false; // hide EXAMID
-                e.Row.Cells[8].Visible = false; // hide ASSIGNID
+                e.Row.Cells[8].Visible = false; // hide EXAMID
+                e.Row.Cells[9].Visible = false; // hide ASSIGNID
             }
         }
 
@@ -138,14 +139,14 @@ namespace AviaTrain.Exams
             int index = Convert.ToInt32(e.CommandArgument);
             GridViewRow selectedRow = grid_results.Rows[index];
 
-            string assignid = selectedRow.Cells[8].Text.Trim(); //  ASSIGNID  
+            string assignid = selectedRow.Cells[9].Text.Trim(); //  ASSIGNID  
             List<string> details = new List<string>();
             details.Add(selectedRow.Cells[1].Text.Trim()); //name
-            details.Add(selectedRow.Cells[2].Text.Trim()); //name
             details.Add(selectedRow.Cells[3].Text.Trim()); //name
             details.Add(selectedRow.Cells[4].Text.Trim()); //name
             details.Add(selectedRow.Cells[5].Text.Trim()); //name
             details.Add(selectedRow.Cells[6].Text.Trim()); //name
+            details.Add(selectedRow.Cells[7].Text.Trim()); //name
 
             Session["exam_result_details"] = details;
 

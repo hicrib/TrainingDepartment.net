@@ -109,11 +109,11 @@ namespace AviaTrain.App_Code
             return "";
         }
 
-        public static bool push_EXAM_DEF(string name, string passpercent, Dictionary<string, string> questions)
+        public static bool push_EXAM_DEF(string name, string sector, string passpercent, Dictionary<string, string> questions)
         {
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
 
-            string insert = @"INSERT INTO EXM_EXAM_DEFINITION VALUES ( @NAME, @PASSPERCENT, 1 , " + user.employeeid + @" , convert(varchar, getutcdate(), 20)   )
+            string insert = @"INSERT INTO EXM_EXAM_DEFINITION VALUES ( @NAME, @PASSPERCENT, 1 , " + user.employeeid + @" , convert(varchar, getutcdate(), 20) , @SECTOR   )
                                 DECLARE @EXAMID INT = (SELECT SCOPE_IDENTITY())
 
                               ";
@@ -135,6 +135,7 @@ namespace AviaTrain.App_Code
                     connection.Open();
                     command.Parameters.Add("@NAME", SqlDbType.VarChar).Value = name;
                     command.Parameters.Add("@PASSPERCENT", SqlDbType.Int).Value = passpercent;
+                    command.Parameters.Add("@SECTOR", SqlDbType.VarChar).Value = sector;
 
                     command.CommandType = CommandType.Text;
 
@@ -1222,7 +1223,8 @@ namespace AviaTrain.App_Code
 
 
 
-        public static DataTable View_Exam_Results(string examid, bool onlyactiveexam, string start_date, string finish_date,
+        public static DataTable View_Exam_Results(string examid, bool onlyactiveexam, string sector ,
+                                                    string start_date, string finish_date,
                                                         string traineeid, bool onlyactivetrainee,
                                                         string passfailnoshow, string grade_start, string grade_finish)
         {
@@ -1234,6 +1236,7 @@ namespace AviaTrain.App_Code
                             @" 
 SELECT 
 EDEF.NAME AS 'Exam',
+EDEF.SECTOR AS 'Sector',
 EDEF.PASSPERCENT as '% Req.', 
 U.INITIAL + ' - ' + U.FIRSTNAME + ' ' + U.SURNAME as 'Trainee',
 ASS.USER_FINISH as 'Time', 
@@ -1245,6 +1248,8 @@ FROM EXM_EXAM_ASSIGNMENT ASS
 JOIN USERS U ON U.EMPLOYEEID = ASS.TRAINEE_ID              
 JOIN EXM_EXAM_DEFINITION EDEF ON EDEF.ID = ASS.EXAM_ID     
 WHERE 
+EDEF.SECTOR = CASE WHEN @SECTOR = '' THEN EDEF.SECTOR ELSE @SECTOR END
+AND
 ASS.[STATUS] NOT LIKE '%TRN%'
 AND
 ASS.EXAM_ID =  CASE  WHEN @USE_EXAMID = 1  THEN @EXAMID ELSE ASS.EXAM_ID END
@@ -1269,6 +1274,8 @@ U.ISACTIVE = CASE WHEN @ONLYACTIVETRAINEE = 1 THEN 1 ELSE U.ISACTIVE END
                     connection.Open();
                     command.Parameters.Add("@USE_EXAMID", SqlDbType.Int).Value = examid == "" ? 0 : 1;
                     command.Parameters.Add("@EXAMID", SqlDbType.Int).Value = examid == "" ? "123456" : examid;
+                    command.Parameters.Add("@SECTOR", SqlDbType.VarChar).Value = sector;
+
                     command.Parameters.Add("@STARTDATE", SqlDbType.NVarChar).Value = start_date;
                     command.Parameters.Add("@FINISHDATE", SqlDbType.NVarChar).Value = finish_date;
 

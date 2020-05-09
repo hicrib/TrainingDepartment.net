@@ -42,6 +42,24 @@ namespace AviaTrain.Exams
         protected global::System.Web.UI.WebControls.TextBox txt_examname;
 
         /// <summary>
+        /// lbl_sector control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_sector;
+
+        /// <summary>
+        /// ddl_examsector control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddl_examsector;
+
+        /// <summary>
         /// lbl_passpercent control.
         /// </summary>
         /// <remarks>
