@@ -15,6 +15,15 @@ namespace AviaTrain.Reports
     {
 
         /// <summary>
+        /// pnl_wrapper control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnl_wrapper;
+
+        /// <summary>
         /// lbl_reportnumber control.
         /// </summary>
         /// <remarks>
@@ -150,22 +159,58 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.TextBox txt_timeoff;
 
         /// <summary>
-        /// radio_density control.
+        /// chk_den_L control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList radio_density;
+        protected global::System.Web.UI.WebControls.CheckBox chk_den_L;
 
         /// <summary>
-        /// radio_complexity control.
+        /// chk_den_M control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList radio_complexity;
+        protected global::System.Web.UI.WebControls.CheckBox chk_den_M;
+
+        /// <summary>
+        /// chk_den_H control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chk_den_H;
+
+        /// <summary>
+        /// chk_comp_L control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chk_comp_L;
+
+        /// <summary>
+        /// chk_comp_M control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chk_comp_M;
+
+        /// <summary>
+        /// chk_comp_H control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chk_comp_H;
 
         /// <summary>
         /// txt_hours control.

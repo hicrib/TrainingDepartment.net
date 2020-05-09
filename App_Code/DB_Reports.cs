@@ -54,9 +54,6 @@ namespace AviaTrain.App_Code
                     string insertstr = @"INSERT INTO REPORT_TR_ARE_APP_RAD
                                                ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_PRELEVEL1],[CHK_SIM],[CHK_LVLASS],[CHK_PROGASS],[CHK_COCASS],[CHK_REMASS],[CHK_OTS],[DATE],[POSITION],[POSITION_EXTRA],[TIMEON],[TIMEOFF],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[NOTES],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS] )
                                         VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_PRELEVEL1,@CHK_SIM,@CHK_LVLASS,@CHK_PROGASS,@CHK_COCASS,@CHK_REMASS,@CHK_OTS,@DATE,@POSITION,@POSITION_EXTRA,@TIMEON,@TIMEOFF,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@NOTES,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS)
-
-INSERT INTO USER_TOTALHOURS 
-VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), CONVERT(VARCHAR, GETUTCDATE(),20), NULL, @OJTI_ID )
 ";
                     using (SqlCommand command = new SqlCommand(insertstr, connection))
                     {
@@ -91,27 +88,27 @@ VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), 
                         int rows = command.ExecuteNonQuery();
 
                         // if no rows are affected, rollback REPORTS_META and RETURN FALSE
-                        if (rows == 0)
+                        if (rows > 0)
                         {
+                            update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid);
+                        }
+                        else
+                        {
+                            try
                             {
-                                try
+                                using (SqlConnection con = new SqlConnection(con_str))
+                                using (SqlCommand com = new SqlCommand(
+                                             @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
                                 {
-                                    using (SqlConnection con = new SqlConnection(con_str))
-                                    {
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                            return "";
-                                        }
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    string err = e.Message;
+                                    con.Open();
+                                    com.ExecuteNonQuery();
                                     return "";
                                 }
+                            }
+                            catch (Exception e)
+                            {
+                                string err = e.Message;
+                                return "";
                             }
                         }
                     }
@@ -282,27 +279,28 @@ VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), 
                         int rows = command.ExecuteNonQuery();
 
                         // if no rows are affected, rollback REPORTS_META and RETURN FALSE
-                        if (rows == 0)
+
+                        if (rows > 0)
                         {
+                            update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid);
+                        }
+                        else
+                        {
+                            try
                             {
-                                try
+                                using (SqlConnection con = new SqlConnection(con_str))
+                                using (SqlCommand com = new SqlCommand(
+                                             @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
                                 {
-                                    using (SqlConnection con = new SqlConnection(con_str))
-                                    {
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                            return "";
-                                        }
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    string err = e.Message;
+                                    con.Open();
+                                    com.ExecuteNonQuery();
                                     return "";
                                 }
+                            }
+                            catch (Exception e)
+                            {
+                                string err = e.Message;
+                                return "";
                             }
                         }
                     }
@@ -469,27 +467,28 @@ VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), 
                         int rows = command.ExecuteNonQuery();
 
                         // if no rows are affected, rollback REPORTS_META and RETURN FALSE
-                        if (rows == 0)
+
+                        if (rows > 0)
                         {
+                            update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid);
+                        }
+                        else
+                        {
+                            try
                             {
-                                try
+                                using (SqlConnection con = new SqlConnection(con_str))
+                                using (SqlCommand com = new SqlCommand(
+                                             @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
                                 {
-                                    using (SqlConnection con = new SqlConnection(con_str))
-                                    {
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                            return "";
-                                        }
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    string err = e.Message;
+                                    con.Open();
+                                    com.ExecuteNonQuery();
                                     return "";
                                 }
+                            }
+                            catch (Exception e)
+                            {
+                                string err = e.Message;
+                                return "";
                             }
                         }
                     }
@@ -654,27 +653,27 @@ VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), 
                         int rows = command.ExecuteNonQuery();
 
                         // if no rows are affected, rollback REPORTS_META and RETURN FALSE
-                        if (rows == 0)
+                        if (rows > 0)
                         {
+                            update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid);
+                        }
+                        else
+                        {
+                            try
                             {
-                                try
+                                using (SqlConnection con = new SqlConnection(con_str))
+                                using (SqlCommand com = new SqlCommand(
+                                             @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
                                 {
-                                    using (SqlConnection con = new SqlConnection(con_str))
-                                    {
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                            return "";
-                                        }
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    string err = e.Message;
+                                    con.Open();
+                                    com.ExecuteNonQuery();
                                     return "";
                                 }
+                            }
+                            catch (Exception e)
+                            {
+                                string err = e.Message;
+                                return "";
                             }
                         }
                     }

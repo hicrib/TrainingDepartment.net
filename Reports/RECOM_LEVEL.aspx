@@ -139,7 +139,8 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div>
+
+    <asp:Panel ID="pnl_wrapper" runat="server">
         <table id="main_lvlass_tbl">
             <thead>
                 <tr>
@@ -318,5 +319,5 @@
         <asp:Label ID="lbl_reportnumber" runat="server" Visible="false" Text=""></asp:Label>
 
 
-    </div>
+    </asp:Panel>
 </asp:Content>

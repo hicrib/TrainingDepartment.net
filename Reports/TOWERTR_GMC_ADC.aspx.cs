@@ -102,8 +102,13 @@ namespace AviaTrain.Reports
             txt_timeoff.Text = form.Rows[0]["TIMEOFF"].ToString();
 
 
-            radio_density.SelectedValue = form.Rows[0]["TRAF_DENS"].ToString();
-            radio_complexity.SelectedValue = form.Rows[0]["COMPLEXITY"].ToString();
+            chk_den_L.Checked = form.Rows[0]["TRAF_DENS"].ToString().Contains("L");
+            chk_den_M.Checked = form.Rows[0]["TRAF_DENS"].ToString().Contains("M");
+            chk_den_H.Checked = form.Rows[0]["TRAF_DENS"].ToString().Contains("H");
+
+            chk_comp_L.Checked = form.Rows[0]["COMPLEXITY"].ToString().Contains("L");
+            chk_comp_M.Checked = form.Rows[0]["COMPLEXITY"].ToString().Contains("M");
+            chk_comp_H.Checked = form.Rows[0]["COMPLEXITY"].ToString().Contains("H");
 
             txt_hours.Text = form.Rows[0]["HOURS"].ToString();
             txt_totalhours.Text = form.Rows[0]["TOTAL_HOURS"].ToString();
@@ -133,7 +138,7 @@ namespace AviaTrain.Reports
             }
 
             //disable everything
-            DisableControls(form1);
+            DisableControls(pnl_wrapper);
             btn_submit.Visible = false;
 
             //bring ojti sign but check just in case
@@ -252,8 +257,12 @@ namespace AviaTrain.Reports
             data.Add("TIMEON", txt_timeon.Text);
             data.Add("TIMEOFF", txt_timeoff.Text);
 
-            data.Add("TRAF_DENS", radio_density.SelectedValue);
-            data.Add("COMPLEXITY", radio_complexity.SelectedValue);
+            string density = (chk_den_L.Checked ? "L" : "") + (chk_den_M.Checked ? "M" : "") + (chk_den_H.Checked ? "H" : "");
+            data.Add("TRAF_DENS", density);
+
+            string complexity = (chk_comp_L.Checked ? "L" : "") + (chk_comp_M.Checked ? "M" : "") + (chk_comp_H.Checked ? "H" : "");
+            data.Add("COMPLEXITY", complexity);
+
             data.Add("HOURS", txt_hours.Text);
             
             data.Add("TOTAL_HOURS", Utility.add_TimeFormat(txt_totalhours.Text, txt_hours.Text));
@@ -408,7 +417,8 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose TIME OFF!", System.Drawing.Color.Red);
                 return false;
             }
-            if (radio_complexity.SelectedValue == "" || radio_density.SelectedValue == "")
+            if ((!chk_comp_L.Checked && !chk_comp_M.Checked && !chk_comp_H.Checked)
+                || (!chk_den_L.Checked && !chk_den_M.Checked && !chk_den_H.Checked))
             {
                 ClientMessage(lbl_pageresult, "Choose Traffic Density and Complexity", System.Drawing.Color.Red);
                 return false;
@@ -468,14 +478,7 @@ namespace AviaTrain.Reports
             }
             else
             {
-                //todo: GO TO SOME SORT OF RESULT PAGE
-                lbl_pageresult.Text = "Your Report is filed with Report Number : " + reportid;
-                lbl_pageresult.Visible = true;
-                lbl_reportnumber.Text = reportid;
-                lbl_reportnumber.Visible = true;
-                DisableControls(form1);
-
-                Response.Redirect("~/Pages/UserMain.aspx?Code=1&ID=" + reportid);
+                SuccessWithCode("SUCCESS : REPORT CREATED !");
             }
 
         }

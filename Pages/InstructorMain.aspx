@@ -28,6 +28,10 @@
                 padding: 5px;
                 text-align: center;
             }
+            .ojtireports_tbl td {
+            padding: 5px;
+            margin: 0px;
+        }
 
         .instructorButton {
             width: 100%;
@@ -38,9 +42,12 @@
             border: 1px solid #a52a2a;
         }
 
-        #ContentPlaceHolder1_actionstbl td {
-            padding: 5px;
-            margin: 0px;
+        .iconimg{
+            max-height: 25px;
+            max-width : 25px;
+        }
+        .grid_table{
+            width : 99%;
         }
     </style>
 </asp:Content>
@@ -75,12 +82,12 @@
         </asp:TableHeaderRow>
         <asp:TableRow>
             <asp:TableCell ColumnSpan="4">
-                <asp:GridView ID="grid_ojti_reports" AllowPaging="true" AllowSorting="true" runat="server"
+                <asp:GridView ID="grid_ojti_reports" AllowPaging="true" AllowSorting="true" runat="server" CssClass="grid_table"
                     OnSelectedIndexChanged="grid_ojti_reports_SelectedIndexChanged" OnPageIndexChanging="grid_ojti_reports_PageIndexChanging" PageSize="10"
                     OnSorting="grid_ojti_reports_Sorting">
                     <PagerSettings Mode="NumericFirstLast" PageButtonCount="4" FirstPageText="First" LastPageText="Last" />
                     <Columns>
-                        <asp:CommandField ShowSelectButton="True" ButtonType="Image" SelectImageUrl="~/Images/view.png" SelectText="View" />
+                        <asp:CommandField ShowSelectButton="True" ControlStyle-CssClass="iconimg" ButtonType="Image" SelectImageUrl="~/Images/view.png" SelectText="View" />
                     </Columns>
                 </asp:GridView>
             </asp:TableCell>

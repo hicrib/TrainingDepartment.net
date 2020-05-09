@@ -7,7 +7,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <div style="float: left;">
+    <asp:Panel ID="pnl_wrapper" runat="server" Style="float: left;">
         <div id="reportinfo_div">
             <table class="main_table">
                 <tr style="height: 50px; border-bottom: 1px solid black;">
@@ -98,11 +98,12 @@
                                                 <td style="width: 150px;">Traffic Density   :</td>
                                                 <td>
                                                     <div>
-                                                        <asp:RadioButtonList ID="radio_density" RepeatDirection="Horizontal" runat="server">
-                                                            <asp:ListItem Text="Light" Value="L" />
-                                                            <asp:ListItem Text="Mod" Value="M" />
-                                                            <asp:ListItem Text="Heavy" Value="H" />
-                                                        </asp:RadioButtonList>
+                                                        Light
+                                                        <asp:CheckBox ID="chk_den_L" runat="server" />
+                                                        Mod
+                                                        <asp:CheckBox ID="chk_den_M" runat="server" />
+                                                        Heavy
+                                                        <asp:CheckBox ID="chk_den_H" runat="server" />
                                                     </div>
                                                 </td>
                                             </tr>
@@ -110,11 +111,12 @@
                                                 <td style="width: 150px;">Complexity     : </td>
                                                 <td>
                                                     <div>
-                                                        <asp:RadioButtonList ID="radio_complexity" RepeatDirection="Horizontal" runat="server">
-                                                            <asp:ListItem Text="Low" Value="L" />
-                                                            <asp:ListItem Text="Mod" Value="M" />
-                                                            <asp:ListItem Text="High" Value="H" />
-                                                        </asp:RadioButtonList>
+                                                       Low
+                                                        <asp:CheckBox ID="chk_comp_L" runat="server" />
+                                                        Mod
+                                                        <asp:CheckBox ID="chk_comp_M" runat="server" />
+                                                        High
+                                                        <asp:CheckBox ID="chk_comp_H" runat="server" />
                                                     </div>
                                                 </td>
                                             </tr>
@@ -624,7 +626,7 @@
         <asp:Label ID="lbl_trainee_signed" runat="server" Visible="false"></asp:Label>
         <asp:Label ID="lbl_viewmode" runat="server" Visible="false" Text="Label"></asp:Label>
         <asp:Label ID="lbl_genid" runat="server" Visible="false" Text=""></asp:Label>
-    </div>
+    </asp:Panel>
 </asp:Content>
 
 

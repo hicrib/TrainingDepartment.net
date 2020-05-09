@@ -93,7 +93,7 @@ namespace AviaTrain.Reports
             txt_comments.Text = form.Rows[0]["COMMENTS"].ToString();
 
             //disable everything
-            DisableControls(form1);
+            DisableControls(pnl_wrapper);
             btn_Submit.Visible = false;
 
             //bring ojti sign but check just in case
@@ -264,14 +264,7 @@ namespace AviaTrain.Reports
             }
             else
             {
-                //todo: GO TO SOME SORT OF RESULT PAGE
-                lbl_pageresult.Text = "Your Report is filed with Report Number : " + reportid;
-                lbl_pageresult.Visible = true;
-                lbl_reportnumber.Text = reportid;
-                lbl_reportnumber.Visible = true;
-                DisableControls(form1);
-
-                Response.Redirect("~/Pages/UserMain.aspx?Code=1&ID=" + reportid);
+                SuccessWithCode("SUCCESS : REPORT CREATED !");
             }
         }
 

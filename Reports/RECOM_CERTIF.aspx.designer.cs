@@ -15,6 +15,15 @@ namespace AviaTrain.Reports
     {
 
         /// <summary>
+        /// pnl_wrapper control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnl_wrapper;
+
+        /// <summary>
         /// uppanel_evaluation control.
         /// </summary>
         /// <remarks>
