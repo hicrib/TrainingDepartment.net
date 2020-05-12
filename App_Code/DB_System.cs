@@ -798,5 +798,52 @@ namespace AviaTrain.App_Code
         }
 
 
+
+        public static bool publish_notification(string type, string to, string header, string message, List<string> files , string effective, string expires)
+        {
+            if (effective == "")
+                effective = "2000-01-01";
+            if (expires == "")
+                expires = "2099-01-01";
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @"INSERT INTO NOTIFICATIONS_DEF
+                            ( [TYPE], [TO], HEADER, [TEXT], FILE1, FILE2, FILE3, FILE4, ISACTIVE, [BY], BY_TIME,EFFECTIVE,EXPIRED )
+                            VALUES 
+                            ( @TYPE, @TO, @HEADER, @TEXT, @FILE1, @FILE2, @FILE3, @FILE4, 1, 
+                            @BY, CONVERT(VARCHAR, GETUTCDATE(),20) ,@EFFECTIVE,@EXPIRED ) ", connection))
+                {
+                    UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
+                    connection.Open();
+                    command.Parameters.Add("@TYPE", SqlDbType.NVarChar).Value = type;
+                    command.Parameters.Add("@TO", SqlDbType.NVarChar).Value = to;
+                    command.Parameters.Add("@HEADER", SqlDbType.NVarChar).Value = header;
+                    command.Parameters.Add("@TEXT", SqlDbType.NVarChar).Value = message;
+                    command.Parameters.Add("@FILE1", SqlDbType.NVarChar).Value = files.ElementAt(0);
+                    command.Parameters.Add("@FILE2", SqlDbType.NVarChar).Value = files.ElementAt(1);
+                    command.Parameters.Add("@FILE3", SqlDbType.NVarChar).Value = files.ElementAt(2);
+                    command.Parameters.Add("@FILE4", SqlDbType.NVarChar).Value = files.ElementAt(3);
+                    
+                    command.Parameters.Add("@BY", SqlDbType.Int).Value = user.employeeid;
+                    command.Parameters.Add("@EFFECTIVE", SqlDbType.NVarChar).Value = effective;
+                    command.Parameters.Add("@EXPIRED", SqlDbType.NVarChar).Value = expires;
+                   
+
+                    command.CommandType = CommandType.Text;
+
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
+
     }
 }

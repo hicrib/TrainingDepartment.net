@@ -850,5 +850,5 @@
         <asp:Label ID="lbl_trainee_signed" runat="server" Visible="false"></asp:Label>
         <asp:Label ID="lbl_viewmode" runat="server" Visible="false" Text=""></asp:Label>
         <asp:Label ID="lbl_genid" runat="server" Visible="false" Text=""></asp:Label>
-    <//asp:Panel>
+    </asp:Panel>
 </asp:Content>

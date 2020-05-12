@@ -294,7 +294,7 @@
                                     <td style="width: 200px; padding: 5px; font-weight: bold; font-size: medium; text-align: center;">Sector       :
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddl_sector" Width="200" Font-Bold="true" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddl_sector_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddl_sector" Width="200" Font-Bold="true" runat="server" OnSelectedIndexChanged="ddl_sector_SelectedIndexChanged">
                                             <asp:ListItem Value="GEN" Text=" General "></asp:ListItem>
                                             <asp:ListItem Value="LATSI"></asp:ListItem>
                                             <asp:ListItem Value="AIP"></asp:ListItem>
@@ -303,6 +303,7 @@
                                             <asp:ListItem Value="APP" Text=" APP General "></asp:ListItem>
                                             <asp:ListItem Value="ACC-NR"></asp:ListItem>
                                             <asp:ListItem Value="ACC-SR"></asp:ListItem>
+                                            <asp:ListItem Value="ACC-CR"></asp:ListItem>
                                             <asp:ListItem Value="APP-AR"></asp:ListItem>
                                             <asp:ListItem Value="APP-BR"></asp:ListItem>
                                             <asp:ListItem Value="APP-KR"></asp:ListItem>
@@ -467,6 +468,27 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <td style="width: 100px;">Sector</td>
+                                            <td>
+                                                <asp:DropDownList ID="ddl_examsector" Width="200" Font-Bold="true" runat="server" >
+                                                    <asp:ListItem Value="GEN" Text=" General "></asp:ListItem>
+                                                    <asp:ListItem Value="LATSI"></asp:ListItem>
+                                                    <asp:ListItem Value="AIP"></asp:ListItem>
+                                                    <asp:ListItem Value="TWR" Text=" Tower General "></asp:ListItem>
+                                                    <asp:ListItem Value="ACC" Text=" ACC General "></asp:ListItem>
+                                                    <asp:ListItem Value="APP" Text=" APP General "></asp:ListItem>
+                                                    <asp:ListItem Value="ACC-NR"></asp:ListItem>
+                                                    <asp:ListItem Value="ACC-SR"></asp:ListItem>
+                                                    <asp:ListItem Value="ACC-CR"></asp:ListItem>
+                                                    <asp:ListItem Value="APP-AR"></asp:ListItem>
+                                                    <asp:ListItem Value="APP-BR"></asp:ListItem>
+                                                    <asp:ListItem Value="APP-KR"></asp:ListItem>
+                                                    <asp:ListItem Value="TWR-GMC"></asp:ListItem>
+                                                    <asp:ListItem Value="TWR-ADC"></asp:ListItem>
+                                                </asp:DropDownList></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
                                             <td style="width: 100px;">Pass Percent</td>
                                             <td>
                                                 <asp:TextBox ID="txt_passpercent" runat="server" Width="25"></asp:TextBox></td>
@@ -478,8 +500,6 @@
                                         </tr>
                                     </table>
                                 </div>
-
-
                             </asp:Panel>
                         </td>
                     </tr>

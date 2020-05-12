@@ -313,7 +313,7 @@ namespace AviaTrain.App_Code
             try
             {
                 if (which == "next")
-                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID > @STEP_ID and STEPTYPE='TRN'  AND ISACTIVE=1 ORDER BY STEP_ID ASC";
+                    select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID > @STEP_ID   AND ISACTIVE=1 ORDER BY STEP_ID ASC";
                 else if (which == "prev")
                     select = "SELECT TOP 1 ISNULL(STEP_ID,'') FROM TRN_STEP WHERE TRN_ID =@TRN_ID AND STEP_ID < @STEP_ID  and STEPTYPE='TRN'  AND ISACTIVE=1 ORDER BY STEP_ID DESC";
                 else if (which == "last")

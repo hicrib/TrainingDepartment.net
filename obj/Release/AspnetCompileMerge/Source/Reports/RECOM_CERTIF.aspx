@@ -1,11 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="RECOM_CERTIF.aspx.cs" Inherits="AviaTrain.Reports.RECOM_CERTIF" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Masters/MainsMaster.Master" AutoEventWireup="true" CodeBehind="RECOM_CERTIF.aspx.cs" Inherits="AviaTrain.Reports.RECOM_CERTIF" %>
 
-<!DOCTYPE html>
-
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
         table, tr, td {
             margin: 0px;
@@ -162,7 +157,7 @@
 
         .submit_button {
             float: left;
-            background-color: #a52a2a	;
+            background-color: #a52a2a;
             font-weight: bold;
             font-size: medium;
             color: white;
@@ -182,10 +177,10 @@
             padding: 10px;
         }
     </style>
-</head>
-<body>
-    <form id="form1" runat="server">
-        
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <asp:Panel ID="pnl_wrapper" runat="server">
         <asp:UpdatePanel runat="server" ID="uppanel_evaluation" UpdateMode="Always">
             <Triggers>
                 <asp:PostBackTrigger ControlID="btn_submit" />
@@ -301,9 +296,7 @@
                                         <tr>
                                             <td>
                                                 <asp:Label ID="lbl_controller" runat="server" Text="Controller/Trainee Sign"></asp:Label></td>
-                                            <td>
-                                               
-                                            </td>
+                                            <td></td>
                                             <td>
                                                 <asp:Label ID="lbl_controller_sign" runat="server" Text="Signature"></asp:Label></td>
                                             <td>
@@ -315,73 +308,7 @@
                                             <td>
                                                 <asp:Label ID="lbl_controller_date" runat="server" Text="Date : "></asp:Label></td>
                                             <td>
-                                                <asp:DropDownList ID="ddl_DAY_controller" runat="server">
-                                                    <asp:ListItem Value="1"></asp:ListItem>
-                                                    <asp:ListItem Value="2"></asp:ListItem>
-                                                    <asp:ListItem Value="3"></asp:ListItem>
-                                                    <asp:ListItem Value="4"></asp:ListItem>
-                                                    <asp:ListItem Value="5"></asp:ListItem>
-                                                    <asp:ListItem Value="6"></asp:ListItem>
-                                                    <asp:ListItem Value="7"></asp:ListItem>
-                                                    <asp:ListItem Value="8"></asp:ListItem>
-                                                    <asp:ListItem Value="9"></asp:ListItem>
-                                                    <asp:ListItem Value="10"></asp:ListItem>
-                                                    <asp:ListItem Value="11"></asp:ListItem>
-                                                    <asp:ListItem Value="12"></asp:ListItem>
-                                                    <asp:ListItem Value="13"></asp:ListItem>
-                                                    <asp:ListItem Value="14"></asp:ListItem>
-                                                    <asp:ListItem Value="15"></asp:ListItem>
-                                                    <asp:ListItem Value="16"></asp:ListItem>
-                                                    <asp:ListItem Value="17"></asp:ListItem>
-                                                    <asp:ListItem Value="18"></asp:ListItem>
-                                                    <asp:ListItem Value="19"></asp:ListItem>
-                                                    <asp:ListItem Value="20"></asp:ListItem>
-                                                    <asp:ListItem Value="21"></asp:ListItem>
-                                                    <asp:ListItem Value="22"></asp:ListItem>
-                                                    <asp:ListItem Value="23"></asp:ListItem>
-                                                    <asp:ListItem Value="24"></asp:ListItem>
-                                                    <asp:ListItem Value="25"></asp:ListItem>
-                                                    <asp:ListItem Value="26"></asp:ListItem>
-                                                    <asp:ListItem Value="27"></asp:ListItem>
-                                                    <asp:ListItem Value="28"></asp:ListItem>
-                                                    <asp:ListItem Value="29"></asp:ListItem>
-                                                    <asp:ListItem Value="30"></asp:ListItem>
-                                                    <asp:ListItem Value="31"></asp:ListItem>
-                                                </asp:DropDownList>
-                                                <asp:DropDownList ID="ddl_MONTH_controller" runat="server">
-                                                    <asp:ListItem Text="JANUARY" Value="1"></asp:ListItem>
-                                                    <asp:ListItem Text="FEBRUARY" Value="2"></asp:ListItem>
-                                                    <asp:ListItem Text="MARCH" Value="3"></asp:ListItem>
-                                                    <asp:ListItem Text="APRIL" Value="4"></asp:ListItem>
-                                                    <asp:ListItem Text="MAY" Value="5"></asp:ListItem>
-                                                    <asp:ListItem Text="JUNE" Value="6"></asp:ListItem>
-                                                    <asp:ListItem Text="JULY" Value="7"></asp:ListItem>
-                                                    <asp:ListItem Text="AUGUST" Value="8"></asp:ListItem>
-                                                    <asp:ListItem Text="SEPTEMBER" Value="9"></asp:ListItem>
-                                                    <asp:ListItem Text="OCTOBER" Value="10"></asp:ListItem>
-                                                    <asp:ListItem Text="NOVEMBER" Value="11"></asp:ListItem>
-                                                    <asp:ListItem Text="DECEMBER" Value="12"></asp:ListItem>
-                                                </asp:DropDownList>
-                                                <asp:DropDownList ID="ddl_YEAR_controller" runat="server">
-                                                    <asp:ListItem Value="2012"></asp:ListItem>
-                                                    <asp:ListItem Value="2013"></asp:ListItem>
-                                                    <asp:ListItem Value="2014"></asp:ListItem>
-                                                    <asp:ListItem Value="2015"></asp:ListItem>
-                                                    <asp:ListItem Value="2016"></asp:ListItem>
-                                                    <asp:ListItem Value="2017"></asp:ListItem>
-                                                    <asp:ListItem Value="2018"></asp:ListItem>
-                                                    <asp:ListItem Value="2019"></asp:ListItem>
-                                                    <asp:ListItem Value="2020"></asp:ListItem>
-                                                    <asp:ListItem Value="2021"></asp:ListItem>
-                                                    <asp:ListItem Value="2022"></asp:ListItem>
-                                                    <asp:ListItem Value="2023"></asp:ListItem>
-                                                    <asp:ListItem Value="2024"></asp:ListItem>
-                                                    <asp:ListItem Value="2025"></asp:ListItem>
-                                                    <asp:ListItem Value="2026"></asp:ListItem>
-                                                    <asp:ListItem Value="2027"></asp:ListItem>
-                                                    <asp:ListItem Value="2028"></asp:ListItem>
-                                                    <asp:ListItem Value="2029"></asp:ListItem>
-                                                </asp:DropDownList>
+                                                <asp:TextBox ID="txt_controller_date" runat="server" TextMode="Date"></asp:TextBox>
                                             </td>
                                         </tr>
                                     </table>
@@ -574,7 +501,5 @@
                 </div>
             </ContentTemplate>
         </asp:UpdatePanel>
-    </form>
-</body>
-</html>
-
+    </asp:Panel>
+</asp:Content>

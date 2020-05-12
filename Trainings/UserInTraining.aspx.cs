@@ -540,7 +540,7 @@ namespace AviaTrain.Trainings
             DataTable dt = (DataTable)Session["step_info_w_q"];
             UserSession user = (UserSession)Session["usersession"];
             //create assignmnet
-            string examassignid = DB_Exams.push_EXAM_Assignment(dt.Rows[0]["EXAMID"].ToString(), user.employeeid, "1900-01-01", "2099-01-01");
+            string examassignid = DB_Exams.push_EXAM_Assignment(dt.Rows[0]["EXAMID"].ToString(), user.employeeid, "1900-01-01", "2099-01-01",trn_assignid:lbl_assignid.Text);
 
             DB_Trainings.update_Assignment(lbl_assignid.Text, examassignid: examassignid);
             //redirect with special flag

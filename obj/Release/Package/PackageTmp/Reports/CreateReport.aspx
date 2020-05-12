@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/MainsMaster.Master" AutoEventWireup="true" CodeBehind="CreateReport.aspx.cs" Inherits="AviaTrain.Reports.CreateReport" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="CreateReport.aspx.cs" Inherits="AviaTrain.Reports.CreateReport" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
@@ -6,7 +6,8 @@
             width: 100%;
             border-collapse: collapse;
             padding: 10px;
-            margin: 0px;
+            margin: 3px;
+            border : 2px solid #a52a2a;
         }
 
             .create_tbl th {
@@ -78,9 +79,6 @@
 
                 <table class="create_tbl">
                     <thead>
-                        <tr>
-                            <th colspan="3">CREATE REPORT FOR TRAINEE</th>
-                        </tr>
                     </thead>
                     <tbody>
                         <tr>

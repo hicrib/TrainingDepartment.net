@@ -90,14 +90,15 @@
                     <td>
                         <table class="filters_tbl">
                             <tr>
-                                <th colspan="7">FILTERS
+                                <th colspan="8">FILTERS
                                 </th>
                             </tr>
                             <tr>
-                                <td colspan="7" style="height: 10px;"></td>
+                                <td colspan="8" style="height: 10px;"></td>
                             </tr>
                             <tr>
                                 <td>Exam Name</td>
+                                <td>Sector</td>
                                 <td colspan="2">Between Dates</td>
                                 <td>Trainee</td>
                                 <td>Passed</td>
@@ -109,10 +110,29 @@
                                     <asp:DropDownList ID="filter_examname" runat="server"></asp:DropDownList>
                                 </td>
                                 <td>
-                                    <asp:TextBox TextMode="Date" ID="filter_start" runat="server"></asp:TextBox>
+                                     <asp:DropDownList ID="ddl_examsector"  Font-Bold="true" runat="server" >
+                                                    <asp:ListItem Value="-" Text=" - "></asp:ListItem>
+                                                    <asp:ListItem Value="GEN" Text=" General "></asp:ListItem>
+                                                    <asp:ListItem Value="LATSI"></asp:ListItem>
+                                                    <asp:ListItem Value="AIP"></asp:ListItem>
+                                                    <asp:ListItem Value="TWR" Text=" Tower General "></asp:ListItem>
+                                                    <asp:ListItem Value="ACC" Text=" ACC General "></asp:ListItem>
+                                                    <asp:ListItem Value="APP" Text=" APP General "></asp:ListItem>
+                                                    <asp:ListItem Value="ACC-NR"></asp:ListItem>
+                                                    <asp:ListItem Value="ACC-SR"></asp:ListItem>
+                                                    <asp:ListItem Value="ACC-CR"></asp:ListItem>
+                                                    <asp:ListItem Value="APP-AR"></asp:ListItem>
+                                                    <asp:ListItem Value="APP-BR"></asp:ListItem>
+                                                    <asp:ListItem Value="APP-KR"></asp:ListItem>
+                                                    <asp:ListItem Value="TWR-GMC"></asp:ListItem>
+                                                    <asp:ListItem Value="TWR-ADC"></asp:ListItem>
+                                                </asp:DropDownList>
                                 </td>
                                 <td>
-                                    <asp:TextBox TextMode="Date" ID="filter_finish" runat="server"></asp:TextBox>
+                                    <asp:TextBox TextMode="Date" ID="filter_start" Width="140" runat="server"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <asp:TextBox TextMode="Date" ID="filter_finish" Width="140" runat="server"></asp:TextBox>
                                 </td>
                                 <td>
                                     <asp:DropDownList ID="filter_trainee" runat="server"></asp:DropDownList>
@@ -127,7 +147,7 @@
                                 </td>
                                 <td>
                                     <asp:TextBox ID="filter_grd_start" Width="30" Style="" runat="server" Text="0" TextMode="Number"></asp:TextBox>
-                                    <span style="float: right;">-</span>
+                                    <span style="float: right;"></span>
                                 </td>
                                 <td>
 
@@ -135,12 +155,13 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Only Active Exams
+                                <td>Only Active 
                                     <asp:CheckBox ID="chk_active_exams" OnCheckedChanged="chk_active_exams_CheckedChanged" AutoPostBack="true" runat="server" Checked="true" />
                                 </td>
                                 <td></td>
                                 <td></td>
-                                <td>Only Active Trainees
+                                <td></td>
+                                <td>Only Active 
                                     <asp:CheckBox ID="chk_active_trainee" OnCheckedChanged="chk_active_trainee_CheckedChanged" AutoPostBack="true" runat="server" Checked="true" />
                                 </td>
                                 <td></td>
@@ -148,20 +169,20 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <td colspan="7" style="height: 10px;"></td>
+                                <td colspan="8" style="height: 10px;"></td>
                             </tr>
                             <tr>
-                                <td colspan="7">
+                                <td colspan="8">
                                     <asp:Label ID="lbl_result" runat="server" Visible="false"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="7">
+                                <td colspan="8">
                                     <asp:Button ID="btn_search" CssClass="btn_search" runat="server" Text="SEARCH" OnClick="btn_search_Click" />
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="7">
+                                <td colspan="8">
                                     <asp:Button ID="btn_export" OnClientClick="DownloadExcel()" CssClass="btn_search" Style="float: right;" runat="server" Text="Export To Excel" />
                                 </td>
                             </tr>

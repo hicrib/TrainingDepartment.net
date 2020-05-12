@@ -174,7 +174,7 @@ namespace AviaTrain.Reports
                 }
                 else
                 {
-                    if (selectedRow.Cells[3].Text.Contains("ASSIST"))
+                    if (selectedRow.Cells[2].Text.Contains("Assist"))
                         Response.Redirect("~/Reports/DAILYTR_ASS_RAD.aspx?Code=GENID");
                     else
                         Response.Redirect("~/Reports/TR_ARE_APP_RAD.aspx?Code=GENID");

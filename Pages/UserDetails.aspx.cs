@@ -121,7 +121,7 @@ namespace AviaTrain.Pages
                 grid_APP_BR.DataBind();
             }
             DataRow[] app_KR = utf.Select("POSITION = 'APP' AND SECTOR = 'KR'");
-            if (app_BR.Length > 0)
+            if (app_KR.Length > 0)
             {
                 grid_APP_KR.DataSource = app_KR.CopyToDataTable();
                 grid_APP_KR.DataBind();

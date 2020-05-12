@@ -269,7 +269,7 @@
                                         <asp:CheckBox ID="chk_active" runat="server" />
                                     </td>
                                     <td>
-                                        <asp:Button ID="btn_search" runat="server" Text="Search" Style="width: 100px; font-weight: bold; height: 25px; background-color: indianred; color: white; border: 1px solid black;" OnClick="btn_search_Click" />
+                                        <asp:Button ID="btn_search" runat="server" Text="Search" Style="width: 100px; font-weight: bold; height: 25px; background-color: #a52a2a; color: white; border: 1px solid black;" OnClick="btn_search_Click" />
                                     </td>
                                 </tr>
                             </table>

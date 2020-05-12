@@ -136,7 +136,7 @@
         .right_buttons_tbl {
             border-collapse: collapse;
             padding: 5px;
-            border: 0px solid indianred;
+            border: 0px solid #a52a2a;
             height: 480px;
         }
 

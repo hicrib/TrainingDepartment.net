@@ -96,5 +96,15 @@ namespace AviaTrain.SysAdmin
         {
             Response.Redirect("~/Pages/UserDetails.aspx");
         }
+
+        protected void btn_defaultMER_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/SysAdmin/MERAssign.aspx");
+        }
+
+        protected void btn_publishnotification_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/SysAdmin/PublishNotification.aspx");
+        }
     }
 }

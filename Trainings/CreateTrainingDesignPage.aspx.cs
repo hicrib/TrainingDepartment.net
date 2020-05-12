@@ -63,7 +63,7 @@ namespace AviaTrain.Trainings
             btn_delete_this_page.Visible = false;
             btn_insertpage_after.Visible = false;
             insertunable.Text = "NON-EDITABLE Mode! Design finished before.";
-            insertunable.Style.Add("color", "indianred");
+            insertunable.Style.Add("color", "#a52a2a");
             insertunable.Style.Add("font-weight", "bold");
             insertunable.Style.Add("font-size", "large");
             insertunable.Visible = true;

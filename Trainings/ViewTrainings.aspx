@@ -8,7 +8,7 @@
         }
 
             .grid_view_trainings th {
-                background-color: indianred;
+                background-color: #a52a2a;
                 font-weight: bold;
             }
 

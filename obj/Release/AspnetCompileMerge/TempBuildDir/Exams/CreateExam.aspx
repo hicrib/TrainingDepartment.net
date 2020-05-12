@@ -102,6 +102,25 @@
                     </td>
                 </tr>
                 <tr>
+                    <td><asp:Label ID="lbl_sector" runat="server" Width="160" Font-Bold="true" Text="Sector : "></asp:Label></td>
+                    <td> <asp:DropDownList ID="ddl_examsector" Width="200" Font-Bold="true" runat="server"  >
+                                            <asp:ListItem Value="GEN" Text=" General "></asp:ListItem>
+                                            <asp:ListItem Value="LATSI"></asp:ListItem>
+                                            <asp:ListItem Value="AIP"></asp:ListItem>
+                                            <asp:ListItem Value="TWR" Text=" Tower General "></asp:ListItem>
+                                            <asp:ListItem Value="ACC" Text=" ACC General "></asp:ListItem>
+                                            <asp:ListItem Value="APP" Text=" APP General "></asp:ListItem>
+                                            <asp:ListItem Value="ACC-NR"></asp:ListItem>
+                                            <asp:ListItem Value="ACC-SR"></asp:ListItem>
+                                            <asp:ListItem Value="ACC-CR"></asp:ListItem>
+                                            <asp:ListItem Value="APP-AR"></asp:ListItem>
+                                            <asp:ListItem Value="APP-BR"></asp:ListItem>
+                                            <asp:ListItem Value="APP-KR"></asp:ListItem>
+                                            <asp:ListItem Value="TWR-GMC"></asp:ListItem>
+                                            <asp:ListItem Value="TWR-ADC"></asp:ListItem>
+                                        </asp:DropDownList></td>
+                </tr>
+                <tr>
                     <td>
                         <asp:Label ID="lbl_passpercent" runat="server" Width="160" Font-Bold="true" Text="Pass Grade (Percent) :"></asp:Label>
                     </td>

@@ -22,11 +22,11 @@
         padding-left: 5px !important;
     }
 
-#evaluation_main_table {
+.evaluation_main_table {
     border-collapse: collapse;
 }
 
-    #evaluation_main_table th {
+    .evaluation_main_table th {
         background-color: #0080ff;
         font-weight: bold;
         color: white;
@@ -36,45 +36,45 @@
         border-bottom: 2px solid black;
     }
 
-    #evaluation_main_table td {
+    .evaluation_main_table td {
         border: 1px solid black;
         padding: 2px 0px 2px 6px;
     }
 
 
 
-#evaluation_main_table {
+.evaluation_main_table {
     border: 3px solid black;
     width: 1100px !important;
 }
 
-    #evaluation_main_table td:first-child,
-    #evaluation_main_table th:first-child {
+    .evaluation_main_table td:first-child,
+    .evaluation_main_table th:first-child {
         background-color: lightgray;
     }
 
-    #evaluation_main_table th:nth-child(2) {
+    .evaluation_main_table th:nth-child(2) {
         border-right: 2px solid black;
     }
 
-    #evaluation_main_table th:nth-child(3),
-    #evaluation_main_table th:nth-child(4),
-    #evaluation_main_table th:nth-child(5) {
+    .evaluation_main_table th:nth-child(3),
+    .evaluation_main_table th:nth-child(4),
+    .evaluation_main_table th:nth-child(5) {
         border-left: 1px groove black;
         border-right: 1px groove black;
     }
 
-    #evaluation_main_table th:nth-child(6),
-    #evaluation_main_table td:nth-child(6) {
+    .evaluation_main_table th:nth-child(6),
+    .evaluation_main_table td:nth-child(6) {
         border-right: 2px solid black;
     }
 
-    #evaluation_main_table th:nth-child(2) {
+    .evaluation_main_table th:nth-child(2) {
         text-align: left;
         border-left: none !important;
     }
 
-    #evaluation_main_table td:nth-child(2) {
+    .evaluation_main_table td:nth-child(2) {
         text-align: left;
         border-right: 2px solid black;
         border-left: 2px solid black;
@@ -88,13 +88,13 @@
     width: 20px;
 }
 
-#explanation_table {
+.explanation_table {
     border-collapse: collapse;
     border: 3px solid black;
     width: 1100px !important;
 }
 
-    #explanation_table th {
+    .explanation_table th {
         background-color: #0080ff;
         font-weight: bold;
         color: white;
@@ -103,19 +103,19 @@
         border-bottom: 1px solid black;
     }
 
-    #explanation_table td {
+    .explanation_table td {
         padding: 3px;
         border: 1px solid black;
     }
 
-#notes_table {
+.notes_table {
     border-collapse: collapse;
     border: 3px solid black;
     width: 1100px !important;
     height: 300px;
 }
 
-    #notes_table th {
+    .notes_table th {
         background-color: #0080ff;
         font-weight: bold;
         color: white;
@@ -125,14 +125,14 @@
         text-align: center;
     }
 
-#additionalcomments_table {
+.additionalcomments_table {
     border-collapse: collapse;
     border: 3px solid black;
     width: 1100px !important;
     height: 300px;
 }
 
-    #additionalcomments_table th {
+    .additionalcomments_table th {
         background-color: #0080ff;
         font-weight: bold;
         color: white;
@@ -142,14 +142,14 @@
         text-align: center;
     }
 
-#studentcomments_table {
+.studentcomments_table {
     border-collapse: collapse;
     border: 3px solid black;
     width: 1100px !important;
     height: 300px;
 }
 
-    #studentcomments_table th {
+    .studentcomments_table th {
         background-color: #0080ff;
         font-weight: bold;
         color: white;
@@ -159,11 +159,11 @@
         text-align: center;
     }
 
-#reportversion_div {
+.reportversion_div {
     align-self: center;
 }
 
-    #reportversion_div td {
+    .reportversion_div td {
         border: 1px solid black;
         padding: 5px;
     }
@@ -200,7 +200,7 @@
     padding: 10px;
 }
 
-#rad_prebrief_comment {
+.rad_prebrief_comment {
     width: 50% !important;
     border: 1px !important;
 }

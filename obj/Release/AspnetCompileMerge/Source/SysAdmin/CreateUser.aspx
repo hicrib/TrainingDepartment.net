@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/MainsMaster.Master" AutoEventWireup="true" CodeBehind="CreateUser.aspx.cs" Inherits="AviaTrain.SysAdmin.CreateUser1" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="CreateUser.aspx.cs" Inherits="AviaTrain.SysAdmin.CreateUser1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
      <style>
         #createuser_tbl {

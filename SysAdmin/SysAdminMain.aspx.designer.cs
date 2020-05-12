@@ -42,6 +42,15 @@ namespace AviaTrain.SysAdmin
         protected global::System.Web.UI.WebControls.Button btn_view_userdetails;
 
         /// <summary>
+        /// btn_publishnotification control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_publishnotification;
+
+        /// <summary>
         /// btn_create_questions control.
         /// </summary>
         /// <remarks>
@@ -139,6 +148,15 @@ namespace AviaTrain.SysAdmin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btn_create_TrainingFolder;
+
+        /// <summary>
+        /// btn_defaultMER control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_defaultMER;
 
         /// <summary>
         /// btn_View_Trainee_Folder control.
