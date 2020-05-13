@@ -125,7 +125,7 @@ namespace AviaTrain.App_Code
 
         public static string getRandomFileName()
         {
-            string date = System.DateTime.UtcNow.ToString("yyyyMMdd_HHmmss" + "_" + (new Random().Next(100)).ToString());
+            string date = System.DateTime.UtcNow.ToString("yyyyMMdd_HHmmss" + "_" + (new Random().Next(100)).ToString() + "_");
             return date;
         }
 
@@ -294,6 +294,11 @@ namespace AviaTrain.App_Code
         }
 
 
-       
+       public static string last_part(string aString , char delimiter)
+        {
+            string[] arr = aString.Split(delimiter);
+
+            return arr.ElementAt(arr.Length - 1);
+        }
     }
 }

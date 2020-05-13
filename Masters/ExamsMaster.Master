@@ -103,6 +103,28 @@
             font-weight: bold;
             text-align: center;
         }
+
+
+
+
+        .btn_notif {
+            max-width: 30px;
+            max-height: 30px;
+            margin-left: 5px;
+           
+            z-index: -1;
+        }
+
+        .notifnumber {
+            position : relative;
+            left : -10px;
+            top : -15px;
+            z-index: 10;
+            background-color: red;
+            color: white;
+            font-weight : bold;
+            font-size : large;
+        }
     </style>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
@@ -148,6 +170,11 @@
                     </td>
                     <td>
                         <asp:ImageButton ID="btn_mainpage" runat="server" Style="margin-left: 5px; float: left;" OnClick="btn_mainpage_Click" ImageUrl="~/images/main.png" />
+
+                        <div style="display: inline-block;">
+                            <asp:ImageButton ID="btn_notifications" runat="server" CssClass="btn_notif" OnClick="btn_notifications_Click" ImageUrl="~/images/notification.png" />
+                            <asp:Label ID="lbl_notifnumber" runat="server" CssClass="notifnumber" Visible="false"></asp:Label>
+                        </div>
 
                         <asp:ImageButton ID="btn_log_out" runat="server" OnClientClick="return confirmation_LOGOUT();" Style="margin-right: 5px; float: right;" OnClick="btn_log_out_Click" ImageUrl="~/images/logout.png" />
                     </td>

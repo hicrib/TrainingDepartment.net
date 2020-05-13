@@ -1122,6 +1122,7 @@
     <Content Include="Pages\UserDetails.aspx" />
     <Content Include="Pages\UserMain.aspx" />
     <Content Include="Pages\TrainingTree.aspx" />
+    <Content Include="Pages\UserNotifications.aspx" />
     <Content Include="Reports\CreateReport.aspx" />
     <Content Include="Reports\DAILYTR_ASS_RAD.aspx" />
     <Content Include="Reports\DAILYTR_ASS_TWR.aspx" />
@@ -1427,6 +1428,13 @@
     </Compile>
     <Compile Include="Pages\TrainingTree.aspx.designer.cs">
       <DependentUpon>TrainingTree.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\UserNotifications.aspx.cs">
+      <DependentUpon>UserNotifications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\UserNotifications.aspx.designer.cs">
+      <DependentUpon>UserNotifications.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\CreateReport.aspx.cs">

@@ -22,6 +22,7 @@ namespace AviaTrain.App_Code
         public string problem;
         public bool isExamTrainee;
         public bool isExamAdmin;
+        public int notif;
 
         public DataRow info;
 
@@ -45,6 +46,7 @@ namespace AviaTrain.App_Code
             isExamTrainee = Utility.isEXAMTRAINEE(role_priv);
             isExamAdmin = Utility.isEXAM_ADMIN(role_priv);
             roles_pages = DB_System.get_ROLES_PAGES(employeeid);
+            notif = DB_System.has_new_user_notification(employeeid);
 
             if (isAdmin || isLCE || isOJTI)
                 isOnlyTrainee = false;

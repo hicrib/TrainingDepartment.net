@@ -38,7 +38,8 @@ namespace AviaTrain.SysAdmin
             else if (ddl_type.SelectedValue == "SECTOR")
             {
                 ddl_generic.DataSource = DB_System.get_Sectors();
-                ddl_generic.DataValueField = "CODE";
+                ddl_generic.DataTextField = "CODE";
+                ddl_generic.DataValueField = "SECT";
                 ddl_generic.DataBind();
                 ddl_generic.Items.RemoveAt(0);
                 ddl_generic.Visible = true;
@@ -46,7 +47,8 @@ namespace AviaTrain.SysAdmin
             else if (ddl_type.SelectedValue == "ROLE")
             {
                 ddl_generic.DataSource = DB_System.get_ALL_Roles();
-                ddl_generic.DataValueField = "NAME";
+                ddl_generic.DataValueField = "ID";
+                ddl_generic.DataTextField = "NAME";
                 ddl_generic.DataBind();
                 ddl_generic.Visible = true;
             }

@@ -101,7 +101,7 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-        public static bool update_UserInfo(string employeeid, string password = "" , string email = "" , string photo = "" , string signature = ""  )
+        public static bool update_UserInfo(string employeeid, string password = "", string email = "", string photo = "", string signature = "")
         {
             try
             {
@@ -243,23 +243,21 @@ namespace AviaTrain.App_Code
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
-                {
-                    using (SqlCommand command = new SqlCommand(
-                                @" SELECT '-' AS [CODE]    
+                using (SqlCommand command = new SqlCommand(
+                            @" SELECT '-' AS [CODE]    
                                     UNION  
                                     SELECT DISTINCT EXTRA AS [CODE] FROM POSITION_SECTOR WHERE POSITION = @POSITION", connection))
-                    {
-                        connection.Open();
-                        command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
-                        command.CommandType = CommandType.Text;
-                        SqlDataAdapter da = new SqlDataAdapter(command);
-                        da.Fill(res);
+                {
+                    connection.Open();
+                    command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
+                    command.CommandType = CommandType.Text;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
 
-                        if (res == null || res.Rows.Count == 0)
-                            return null;
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
 
-                        return res;
-                    }
+                    return res;
                 }
             }
             catch (Exception e)
@@ -277,9 +275,10 @@ namespace AviaTrain.App_Code
                 using (SqlConnection connection = new SqlConnection(con_str))
                 {
                     using (SqlCommand command = new SqlCommand(
-                                @" SELECT '-' AS [CODE]    
+                                @" SELECT '-' AS [CODE]    , '-' AS SECT
                                     UNION  
-                                    SELECT DISTINCT POSITION + '-' + SECTOR AS [CODE] FROM POSITION_SECTOR ", connection))
+                                    SELECT DISTINCT POSITION + '-' + SECTOR AS [CODE] , SECTOR AS SECT
+                                    FROM POSITION_SECTOR ", connection))
                     {
                         connection.Open();
 
@@ -378,7 +377,7 @@ namespace AviaTrain.App_Code
 
                     if (rows > 0)
                         return true;
-                        
+
                 }
             }
             catch (Exception e)
@@ -490,17 +489,17 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-        public static DataTable get_ALL_Users(bool with_empty = true ,  bool isactive = true)
+        public static DataTable get_ALL_Users(bool with_empty = true, bool isactive = true)
         {
             DataTable res = new DataTable();
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
-                            @"" + 
+                            @"" +
                             (with_empty ?
                             @"SELECT '-' AS [ID], ' --- ' AS [NAME]
-                            UNION" : "" ) +
+                            UNION" : "") +
                          @" SELECT EMPLOYEEID AS ID ,  INITIAL + ' - ' + FIRSTNAME +' '+ SURNAME AS [NAME] 
                             FROM USERS " + (isactive ? " WHERE ISACTIVE = 1 " : " ") +
                             "ORDER BY NAME"
@@ -535,12 +534,12 @@ namespace AviaTrain.App_Code
                     connection.Open();
                     command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = userinfo["employeeid"];
                     command.Parameters.Add("@NAME", SqlDbType.NVarChar).Value = userinfo["firstname"];
-                    command.Parameters.Add("@SURNAME", SqlDbType.NVarChar).Value = userinfo["surname"]; 
-                    command.Parameters.Add("@PASSWORD", SqlDbType.NVarChar).Value = userinfo["password"] ;
-                    command.Parameters.Add("@INITIAL", SqlDbType.NVarChar).Value = userinfo["initial"]; 
-                    command.Parameters.Add("@EMAIL", SqlDbType.NVarChar).Value = userinfo["email"]; 
-                    command.Parameters.Add("@PHOTO", SqlDbType.NVarChar).Value = userinfo["photo"]; 
-                    command.Parameters.Add("@SIGNATURE", SqlDbType.NVarChar).Value = userinfo["signature"]; 
+                    command.Parameters.Add("@SURNAME", SqlDbType.NVarChar).Value = userinfo["surname"];
+                    command.Parameters.Add("@PASSWORD", SqlDbType.NVarChar).Value = userinfo["password"];
+                    command.Parameters.Add("@INITIAL", SqlDbType.NVarChar).Value = userinfo["initial"];
+                    command.Parameters.Add("@EMAIL", SqlDbType.NVarChar).Value = userinfo["email"];
+                    command.Parameters.Add("@PHOTO", SqlDbType.NVarChar).Value = userinfo["photo"];
+                    command.Parameters.Add("@SIGNATURE", SqlDbType.NVarChar).Value = userinfo["signature"];
 
                     command.CommandType = CommandType.Text;
                     int rows = command.ExecuteNonQuery();
@@ -722,7 +721,7 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-        public static bool update_User_Certificates(string userid, string academy = "",string ojtcourse = "",string supcourse = "",string ECT = "",string training = "", string equiptest = "",string ojtpermit = "")
+        public static bool update_User_Certificates(string userid, string academy = "", string ojtcourse = "", string supcourse = "", string ECT = "", string training = "", string equiptest = "", string ojtpermit = "")
         {
             try
             {
@@ -757,7 +756,7 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@OJTPERMIT", SqlDbType.NVarChar).Value = ojtpermit;
 
                     command.CommandType = CommandType.Text;
-                    
+
                     if (command.ExecuteNonQuery() > 0)
                         return true;
                 }
@@ -799,7 +798,7 @@ namespace AviaTrain.App_Code
 
 
 
-        public static bool publish_notification(string type, string to, string header, string message, List<string> files , string effective, string expires)
+        public static bool publish_notification(string type, string to, string header, string message, List<string> files, string effective, string expires)
         {
             if (effective == "")
                 effective = "2000-01-01";
@@ -825,11 +824,11 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@FILE2", SqlDbType.NVarChar).Value = files.ElementAt(1);
                     command.Parameters.Add("@FILE3", SqlDbType.NVarChar).Value = files.ElementAt(2);
                     command.Parameters.Add("@FILE4", SqlDbType.NVarChar).Value = files.ElementAt(3);
-                    
+
                     command.Parameters.Add("@BY", SqlDbType.Int).Value = user.employeeid;
                     command.Parameters.Add("@EFFECTIVE", SqlDbType.NVarChar).Value = effective;
                     command.Parameters.Add("@EXPIRED", SqlDbType.NVarChar).Value = expires;
-                   
+
 
                     command.CommandType = CommandType.Text;
 
@@ -845,5 +844,185 @@ namespace AviaTrain.App_Code
             return false;
         }
 
+
+        //returns the number of unseen notification
+        public static int has_new_user_notification(string employeeid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @"
+                            SELECT COUNT(DISTINCT ID) FROM
+                                    (
+                                    SELECT DEF.ID, DEF.ISACTIVE, DEF.EFFECTIVE, DEF.EXPIRED
+                                    FROM NOTIFICATIONS_DEF  DEF
+                                    JOIN USER_ROLES UR ON CAST(UR.ROLEID AS VARCHAR) = DEF.[TO] AND UR.EMPLOYEEID = @USERID
+                                    WHERE   DEF.[TYPE] = 'ROLE' 
+
+                                    UNION 
+                                    SELECT DEF.ID, DEF.ISACTIVE, DEF.EFFECTIVE, DEF.EXPIRED
+                                    FROM NOTIFICATIONS_DEF  DEF 
+                                    JOIN TRAINING_TREE_STEPS TTS ON DEF.[TO] = TTS.POSITION
+                                    JOIN USER_TRAINING_FOLDER UTF ON  UTF.STEPID = TTS.ID
+                                    WHERE DEF.[TYPE] = 'POSITION' AND 
+                                    UTF.EMPLOYEEID=@USERID 
+
+                                    UNION
+                                    SELECT DEF.ID, DEF.ISACTIVE, DEF.EFFECTIVE, DEF.EXPIRED
+                                    FROM NOTIFICATIONS_DEF  DEF 
+                                    JOIN TRAINING_TREE_STEPS TTS ON DEF.[TO] = TTS.SECTOR
+                                    JOIN USER_TRAINING_FOLDER UTF ON  UTF.STEPID = TTS.ID
+                                    WHERE DEF.[TYPE] = 'SECTOR' AND 
+                                    UTF.EMPLOYEEID=@USERID 
+
+                                    UNION
+                                    SELECT DEF.ID, DEF.ISACTIVE, DEF.EFFECTIVE, DEF.EXPIRED
+                                    FROM NOTIFICATIONS_DEF DEF WHERE DEF.TYPE = 'BROADCAST'
+
+                                    )
+                                     AS A
+                            WHERE 
+		                            A.ISACTIVE = 1 AND
+		                            CONVERT(DATETIME,GETUTCDATE(),20) 
+			                            BETWEEN CONVERT(DATETIME, A.EFFECTIVE, 20) AND CONVERT(DATETIME,A.EXPIRED , 20)
+		                            AND
+			                            NOT EXISTS (SELECT * FROM USER_NOTIFICATION UN2 
+						                            WHERE  UN2.USERID=@USERID AND UN2.NOTIF_ID = A.ID )", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = employeeid;
+                    command.CommandType = CommandType.Text;
+
+                    return Convert.ToInt32(command.ExecuteScalar() as object);
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return 0;
+        }
+
+        public static DataTable get_user_notifications(string employeeid)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                           @"SELECT
+	                              A.HEADER AS Title, 
+                                  CASE WHEN ISNULL(UN.SEEN_TIME ,'') =''  THEN  '-' ELSE UN.SEEN_TIME END AS 'Seen',
+	                              A.ID,
+                                  A.EFFECTIVE AS 'Effective'
+                             FROM
+                                      (
+                                      SELECT DEF.*
+                                      FROM NOTIFICATIONS_DEF  DEF
+                                      JOIN USER_ROLES UR ON CAST(UR.ROLEID AS VARCHAR) = DEF.[TO] AND UR.EMPLOYEEID = @USERID
+                                      WHERE   DEF.[TYPE] = 'ROLE' 
+
+                                      UNION 
+                                      SELECT DEF.*
+                                      FROM NOTIFICATIONS_DEF  DEF 
+                                      JOIN TRAINING_TREE_STEPS TTS ON DEF.[TO] = TTS.POSITION
+                                      JOIN USER_TRAINING_FOLDER UTF ON  UTF.STEPID = TTS.ID
+                                      WHERE DEF.[TYPE] = 'POSITION' AND 
+                                      UTF.EMPLOYEEID=@USERID 
+
+                                      UNION
+                                      SELECT DEF.*
+                                      FROM NOTIFICATIONS_DEF  DEF 
+                                      JOIN TRAINING_TREE_STEPS TTS ON DEF.[TO] = TTS.SECTOR
+                                      JOIN USER_TRAINING_FOLDER UTF ON  UTF.STEPID = TTS.ID
+                                      WHERE DEF.[TYPE] = 'SECTOR' AND 
+                                      UTF.EMPLOYEEID=@USERID 
+
+                                      UNION
+                                      SELECT DEF.*
+                                      FROM NOTIFICATIONS_DEF DEF WHERE DEF.TYPE = 'BROADCAST'
+
+                                      )
+                                       AS A
+		                               LEFT JOIN USER_NOTIFICATION UN ON  UN.USERID=@USERID AND UN.NOTIF_ID = A.ID
+                              WHERE 
+                                      A.ISACTIVE = 1 AND
+                                      CONVERT(DATETIME,GETUTCDATE(),20) 
+                                          BETWEEN CONVERT(DATETIME, A.EFFECTIVE, 20) AND CONVERT(DATETIME,A.EXPIRED , 20)
+                              
+                              ORDER BY UN.SEEN_TIME DESC, A.EFFECTIVE DESC", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add(@"USERID", SqlDbType.Int).Value = employeeid;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
+
+                    return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+
+        public static DataRow get_notification(string notifid)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                           @"SELECT * FROM NOTIFICATIONS_DEF WHERE ID = @NOTIFID", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add(@"NOTIFID", SqlDbType.Int).Value = notifid;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+
+                    if (res == null || res.Rows.Count == 0)
+                        return null;
+
+                    return res.Rows[0];
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+
+        public static bool update_user_notification(string notifid, string userid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @" IF NOT EXISTS (SELECT * FROM USER_NOTIFICATION  WHERE NOTIF_ID = @NOTIFID AND USERID=@USERID)
+                            INSERT INTO USER_NOTIFICATION VALUES (@NOTIFID, @USERID, CONVERT(VARCHAR, GETUTCDATE(),20) ) ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@NOTIFID", SqlDbType.Int).Value = notifid;
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = userid;
+
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
     }
 }

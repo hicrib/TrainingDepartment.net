@@ -1865,8 +1865,15 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(@"  
-SELECT [ID] , [DESCRIPTION] 
-FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY ID ASC ", connection))
+                                SELECT [ID] , [DESCRIPTION] 
+                                FROM TRAINING_TREE_STEPS 
+                                WHERE POSITION = @POSITION 
+                                AND 1 = CASE WHEN @POSITION = 'TWR' AND @SECTOR = 'ASSIST' AND PHASE = @SECTOR
+						                                THEN 1
+				                                   WHEN SECTOR = @SECTOR
+						                                THEN 1
+				                                   ELSE 0 END
+                                ORDER BY ID ASC", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = "TWR";
@@ -1911,7 +1918,11 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
                                         JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
                                         WHERE UTF.EMPLOYEEID = @EMPLOYEEID 
 	                                          AND TTS.POSITION = @POSITION 
-	                                          AND ( TTS.SECTOR = @SECTOR OR ISNULL(TTS.SECTOR, '') = '' )
+	                                          AND 1 = CASE WHEN @POSITION = 'TWR' AND @SECTOR = 'ASSIST' AND TTS.PHASE = @SECTOR
+						                                        THEN 1
+				                                           WHEN TTS.SECTOR = @SECTOR
+						                                        THEN 1
+				                                           ELSE 0 END
                                         ORDER BY TTS.ID DESC, UTF.GENID ASC", connection))
                 {
                     connection.Open();
@@ -2277,7 +2288,7 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
 
                     using (SqlConnection connection = new SqlConnection(con_str))
                     using (SqlCommand command = new SqlCommand(
-                            @" DECLARE @ASSISTID INT = (SELECT ID FROM TRAINING_TREE_STEPS WHERE POSITION ='TWR' AND SECTOR = 'ASSIST')
+                            @" DECLARE @ASSISTID INT = (SELECT ID FROM TRAINING_TREE_STEPS WHERE POSITION ='TWR' AND PHASE = 'ASSIST')
                                 INSERT INTO USER_TRAINING_FOLDER VALUES (@ASSISTID , @EMPLOYEEID , convert(varchar, getutcdate(), 20) , 'MIGRATION' , NULL, NULL, NULL)  ", connection))
                     {
                         connection.Open();
@@ -2318,7 +2329,14 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
                                  @"  INSERT INTO USER_TRAINING_FOLDER (STEPID , EMPLOYEEID, CREATED_TIME, [STATUS] , REPORTID , [FILENAME] , COMMENTS)
-                                    SELECT TTS.ID , @EMPLOYEEID, convert(varchar, getutcdate(), 20), 'ONGOING' , NULL, NULL, NULL FROM TRAINING_TREE_STEPS TTS WHERE TTS.POSITION = 'TWR' AND TTS.SECTOR = @SECTOR AND  TTS.ID = @STEPID ", connection))
+                                        SELECT TTS.ID , @EMPLOYEEID, convert(varchar, getutcdate(), 20), 'ONGOING' , NULL, NULL, NULL 
+                                        FROM TRAINING_TREE_STEPS TTS 
+                                        WHERE TTS.POSITION = 'TWR' AND  TTS.ID = @STEPID 
+                                        AND 1 = CASE WHEN @SECTOR = 'ASSIST' AND TTS.PHASE = @SECTOR
+                                                                THEN 1
+                                                           WHEN TTS.SECTOR = @SECTOR
+                                                                THEN 1
+                                                           ELSE 0 END", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;

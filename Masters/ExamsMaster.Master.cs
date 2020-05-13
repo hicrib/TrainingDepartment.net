@@ -20,6 +20,12 @@ namespace AviaTrain.Masters
                 lbl_userid.Text = user.employeeid;
                 if (user.photo != "")
                     img_userphoto.ImageUrl = AzureCon.general_container_url + user.photo;
+
+                if(user.notif > 0)
+                {
+                    lbl_notifnumber.Visible = true;
+                    lbl_notifnumber.Text = user.notif.ToString();
+                }
             }
         }
 
@@ -39,6 +45,11 @@ namespace AviaTrain.Masters
         protected void btn_user_details_Click(object sender, ImageClickEventArgs e)
         {
             Response.Redirect("~/Pages/UserDetails.aspx");
+        }
+
+        protected void btn_notifications_Click(object sender, ImageClickEventArgs e)
+        {
+            Response.Redirect("~/Pages/UserNotifications.aspx");
         }
     }
 }
