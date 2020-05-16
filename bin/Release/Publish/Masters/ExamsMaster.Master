@@ -117,13 +117,18 @@
 
         .notifnumber {
             position : relative;
-            left : -10px;
-            top : -15px;
+            left : 20px;
+            top : -35px;
             z-index: 10;
             background-color: red;
             color: white;
             font-weight : bold;
             font-size : large;
+            border-radius: 50%;
+            text-align: center;
+            width : 20px;
+            border : 1px solid black;
+            vertical-align : middle;
         }
     </style>
     <asp:ContentPlaceHolder ID="head" runat="server">
@@ -173,7 +178,9 @@
 
                         <div style="display: inline-block;">
                             <asp:ImageButton ID="btn_notifications" runat="server" CssClass="btn_notif" OnClick="btn_notifications_Click" ImageUrl="~/images/notification.png" />
-                            <asp:Label ID="lbl_notifnumber" runat="server" CssClass="notifnumber" Visible="false"></asp:Label>
+                            <div class="notifnumber">
+                                <asp:Label ID="lbl_notifnumber" runat="server"  Visible="false"></asp:Label>
+                            </div>
                         </div>
 
                         <asp:ImageButton ID="btn_log_out" runat="server" OnClientClick="return confirmation_LOGOUT();" Style="margin-right: 5px; float: right;" OnClick="btn_log_out_Click" ImageUrl="~/images/logout.png" />

@@ -65,76 +65,82 @@
                         </td>
                     </tr>
                     <!-- third row -->
-                    <tr style="border-bottom: 1px solid black;">
-                        <td colspan="2">
-                            <div>
-                                <table style="width: 100% !important;">
-                                    <tr>
-                                        <td>Date : 
-                                                    <asp:TextBox ID="txt_date" runat="server" TextMode="Date"></asp:TextBox>
-                                        </td>
-                                        <td>Position :
-                                        <asp:DropDownList ID="ddl_positions" DataSourceID="" runat="server">
-                                        </asp:DropDownList>
-                                        </td>
-                                        <td>Time On :
-                                        <asp:TextBox ID="txt_timeon" TextMode="Time" runat="server"></asp:TextBox>
-                                        </td>
-                                        <td>Time Off :
-                                        <asp:TextBox ID="txt_timeoff" TextMode="Time" runat="server"></asp:TextBox>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- third row -->
-                    <tr>
-                        <td colspan="2">
-                            <div>
-                                <table style="width: 100% !important;">
-                                    <tr>
-                                        <td colspan="1">
-                                            <table>
-                                                <tr>
-                                                    <td style="width: 150px;">Traffic Density   :</td>
-                                                    <td>
-                                                        <div>
-                                                            Light
+                    <tr style="border: 1px solid black;">
+                        <td style="width: 550px; border: 1px solid black;">
+                            <table style="width: 100% !important;">
+                                <tr style="border-bottom: 1px solid black;">
+                                    <td style="height: 40px;">Date : 
+                                      <asp:TextBox ID="txt_date" runat="server" TextMode="Date"></asp:TextBox>
+                                    </td>
+                                    <td>Position :
+                                        <asp:DropDownList ID="ddl_positions" DataSourceID="" runat="server"></asp:DropDownList></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%;">Traffic Density   :</td>
+                                    <td>
+                                        <div>
+                                            Light
                                                         <asp:CheckBox ID="chk_den_L" runat="server" />
-                                                            Mod
+                                            Mod
                                                         <asp:CheckBox ID="chk_den_M" runat="server" />
-                                                            Heavy
+                                            Heavy
                                                         <asp:CheckBox ID="chk_den_H" runat="server" />
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="width: 150px;">Complexity     : </td>
-                                                    <td>
-                                                        <div>
-                                                            Low
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%;">Complexity     : </td>
+                                    <td>
+                                        <div>
+                                            Low
                                                         <asp:CheckBox ID="chk_comp_L" runat="server" />
-                                                            Mod
+                                            Mod
                                                         <asp:CheckBox ID="chk_comp_M" runat="server" />
-                                                            High
+                                            High
                                                         <asp:CheckBox ID="chk_comp_H" runat="server" />
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td>Hours :
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table style="padding: 5px;">
+                                <tr>
+                                    <th style="width: 20%;"></th>
+                                    <th style="width: 40%;">Time One</th>
+                                    <th style="width: 40%;">Time Off</th>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; text-align: center;">Scheduled : </td>
+                                    <td style="text-align: center;">
+                                        <asp:TextBox ID="txt_timeon_sch" TextMode="Time" runat="server"></asp:TextBox>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <asp:TextBox ID="txt_timeoff_sch" TextMode="Time" runat="server"></asp:TextBox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; text-align: center;">Actual : </td>
+                                    <td style="text-align: center;">
+                                        <asp:TextBox ID="txt_timeon_act" AutoPostBack="true" OnTextChanged="txt_timeon_act_TextChanged" TextMode="Time" runat="server"></asp:TextBox>
+                                    </td>
+                                    <td style="text-align: center; padding: 5px !important;">
+                                        <asp:TextBox ID="txt_timeoff_act" AutoPostBack="true" OnTextChanged="txt_timeon_act_TextChanged" TextMode="Time" runat="server"></asp:TextBox>
+                                    </td>
+                                </tr>
+                                <tr style="border-top: 1px solid black;">
+                                    <td colspan="3" style="text-align: center; padding: 5px !important;">Hours :
                                         <asp:TextBox ID="txt_hours" TextMode="Time" runat="server"></asp:TextBox>
-                                        </td>
-                                        <td>Total Hours :
-                                        <asp:TextBox ID="txt_totalhours" TextMode="Time" runat="server"></asp:TextBox>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
+
+                                        Total Hours :
+                                        <asp:TextBox ID="txt_totalhours" runat="server"></asp:TextBox>
+                                    </td>
+                                </tr>
+                            </table>
+
                         </td>
                     </tr>
+
                 </table>
             </div>
             <!-- EVAULUATIONS -->

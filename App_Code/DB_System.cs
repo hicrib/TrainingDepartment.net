@@ -244,9 +244,9 @@ namespace AviaTrain.App_Code
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
-                            @" SELECT '-' AS [CODE]    
+                            @" SELECT '-' AS [CODE]   , '---' AS DESCRIPTION
                                     UNION  
-                                    SELECT DISTINCT EXTRA AS [CODE] FROM POSITION_SECTOR WHERE POSITION = @POSITION", connection))
+                                    SELECT DISTINCT EXTRA AS [CODE], [DESCRIPTION] FROM POSITION_SECTOR WHERE POSITION = @POSITION", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;

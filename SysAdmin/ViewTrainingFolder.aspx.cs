@@ -15,6 +15,8 @@ namespace AviaTrain.SysAdmin
         {
             if (!IsPostBack)
             {
+                Write_Page_Header_Low("VIEW TRAINING FOLDER");
+
                 Fill_Page_Elements();
             }
         }
@@ -113,6 +115,16 @@ namespace AviaTrain.SysAdmin
             Session["SortedView"] = sortedView;
             grid_folder.DataSource = sortedView;
             grid_folder.DataBind();
+        }
+
+        protected void grid_folder_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if(e.Row.Cells.Count > 5)
+            {
+                e.Row.Cells[6].Visible = false;
+                e.Row.Cells[7].Visible = false;
+                e.Row.Cells[8].Visible = false;
+            }
         }
     }
 }
