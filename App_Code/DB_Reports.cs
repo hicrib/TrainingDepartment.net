@@ -17,388 +17,252 @@ namespace AviaTrain.App_Code
 
 
         #region PUSH REPORT
-        public static string push_TR_ARE_APP_RAD(Dictionary<string, string> data)
+        public static void rollback_push_report(string reportid)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(con_str))
+                using (SqlCommand com = new SqlCommand(@" DELETE FROM REPORTS_META WHERE ID = @REPORTID
+
+                                                          DELETE FROM REPORT_TR_ARE_APP_RAD WHERE ID = @REPORTID
+                                                          DELETE FROM REPORT_DAILYTR_ASS_RAD WHERE ID = @REPORTID
+                                                          DELETE FROM REPORT_DAILYTR_ASS_TWR WHERE ID = @REPORTID
+                                                          DELETE FROM REPORT_TOWERTR_GMC_ADC WHERE ID = @REPORTID 
+
+                                                          DELETE FROM CRITICALSKILL_RESULTS WHERE REPORTID = @REPORTID", con))
+                {
+                    con.Open();
+                    com.Parameters.Add("@REPORTID", SqlDbType.Int).Value = reportid;
+                    com.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
+        }
+
+        public static string push_Training_Report(string reporttype, Dictionary<string, string> data)
         {
             string reportid = "";
 
+            if (reporttype == "1")
+                reportid = push_TR_ARE_APP_RAD(data);
+            if (reporttype == "2")
+                reportid = push_DAILYTR_ASS_TWR(data);
+            if (reporttype == "3")
+                reportid = push_DAILYTR_ASS_RAD(data);
+            if (reporttype == "4")
+                reportid = push_TOWERTR_GMC_ADC(data);
 
-            // push into  REPORTS_META
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                {
-                    using (SqlCommand command = new SqlCommand(
-                                 @"INSERT INTO REPORTS_META VALUES('1', '" + data["OJTI_ID"] + "', convert(varchar, getutcdate(), 20) ,  'OJTISUBMIT' , " + data["OJTI_SIGNED"] + ", " + data["TRAINEE_SIGNED"] + " , " + data["TRAINEE_ID"] + ")   ; SELECT SCOPE_IDENTITY()", connection))
-                    {
-                        connection.Open();
-                        reportid = Convert.ToString(command.ExecuteScalar());
-                        if (String.IsNullOrWhiteSpace(reportid))
-                            return "";
+            if (reportid == "")
+                return "";
 
-                    }
-                }
-            }
-            catch (Exception e)
+
+            if (!push_criticalskill_results(reportid, reporttype, data))
             {
-                string err = e.Message;
+                rollback_push_report(reportid);
                 return "";
             }
 
 
-            // push into REPORT_TR_ARE_APP_RAD
-            try
+            if (!push_UserTrainingFolder(reportid, data["genid"]))
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                {
-
-                    string insertstr = @"INSERT INTO REPORT_TR_ARE_APP_RAD
-                                               ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_PRELEVEL1],[CHK_SIM],[CHK_LVLASS],[CHK_PROGASS],[CHK_COCASS],[CHK_REMASS],[CHK_OTS],[DATE],[POSITION],[POSITION_EXTRA],[TIMEON],[TIMEOFF],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[NOTES],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS] )
-                                        VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_PRELEVEL1,@CHK_SIM,@CHK_LVLASS,@CHK_PROGASS,@CHK_COCASS,@CHK_REMASS,@CHK_OTS,@DATE,@POSITION,@POSITION_EXTRA,@TIMEON,@TIMEOFF,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@NOTES,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS)
-";
-                    using (SqlCommand command = new SqlCommand(insertstr, connection))
-                    {
-                        command.Parameters.Add("@ID", SqlDbType.Int).Value = reportid;
-                        command.Parameters.Add("@OJTI_ID", SqlDbType.Int).Value = data["OJTI_ID"];
-                        command.Parameters.Add("@TRAINEE_ID", SqlDbType.Int).Value = data["TRAINEE_ID"];
-                        command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
-                        command.Parameters.Add("@CHK_PRELEVEL1", SqlDbType.Bit).Value = data["CHK_PRELEVEL1"] == "1";
-                        command.Parameters.Add("@CHK_SIM", SqlDbType.Bit).Value = data["CHK_SIM"] == "1";
-                        command.Parameters.Add("@CHK_LVLASS", SqlDbType.Bit).Value = data["CHK_LVLASS"] == "1";
-                        command.Parameters.Add("@CHK_PROGASS", SqlDbType.Bit).Value = data["CHK_PROGASS"] == "1";
-                        command.Parameters.Add("@CHK_COCASS", SqlDbType.Bit).Value = data["CHK_COCASS"] == "1";
-                        command.Parameters.Add("@CHK_REMASS", SqlDbType.Bit).Value = data["CHK_REMASS"] == "1";
-                        command.Parameters.Add("@CHK_OTS", SqlDbType.Bit).Value = data["CHK_OTS"] == "1";
-                        command.Parameters.Add("@DATE", SqlDbType.VarChar).Value = data["DATE"];
-                        command.Parameters.Add("@POSITION", SqlDbType.VarChar).Value = data["POSITION"];
-                        command.Parameters.Add("@POSITION_EXTRA", SqlDbType.VarChar).Value = data["POSITION_EXTRA"];
-                        command.Parameters.Add("@TIMEON", SqlDbType.VarChar).Value = data["TIMEON"];
-                        command.Parameters.Add("@TIMEOFF", SqlDbType.VarChar).Value = data["TIMEOFF"];
-                        command.Parameters.Add("@TRAF_DENS", SqlDbType.VarChar).Value = data["TRAF_DENS"];
-                        command.Parameters.Add("@COMPLEXITY", SqlDbType.VarChar).Value = data["COMPLEXITY"];
-                        command.Parameters.Add("@HOURS", SqlDbType.VarChar).Value = data["HOURS"];
-                        command.Parameters.Add("@TOTAL_HOURS", SqlDbType.VarChar).Value = data["TOTAL_HOURS"];
-                        command.Parameters.Add("@PREBRIEF_COMMENTS_FILENAME", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS_FILENAME"];
-                        command.Parameters.Add("@PREBRIEF_COMMENTS", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS"];
-                        command.Parameters.Add("@NOTES", SqlDbType.NVarChar).Value = data["NOTES"];
-                        command.Parameters.Add("@ADDITIONAL_COMMENTS", SqlDbType.NVarChar).Value = data["ADDITIONAL_COMMENTS"];
-                        command.Parameters.Add("@STUDENT_COMMENTS", SqlDbType.NVarChar).Value = data["STUDENT_COMMENTS"];
-
-                        connection.Open();
-                        command.CommandType = CommandType.Text;
-                        int rows = command.ExecuteNonQuery();
-
-                        // if no rows are affected, rollback REPORTS_META and RETURN FALSE
-                        if (rows > 0)
-                        {
-                            update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                using (SqlConnection con = new SqlConnection(con_str))
-                                using (SqlCommand com = new SqlCommand(
-                                             @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                {
-                                    con.Open();
-                                    com.ExecuteNonQuery();
-                                    return "";
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                string err = e.Message;
-                                return "";
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
+                rollback_push_report(reportid);
                 return "";
             }
 
+            //todo : there is no rollback of usertrainingfolder when this fails. Rest is rolledback
+            if (!update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid))
+            {
+                rollback_push_report(reportid);
+                return "";
+            }
 
-            // push into CRITICALSKILL_RESULTS
+            return reportid;
+        }
+
+        public static bool push_criticalskill_results(string reportid, string reportcategory, Dictionary<string, string> data)
+        {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                {
-                    //////////////////////////////////////////////////////////////////////
-                    ///// REPORT TYPE 1 IS GIVEN, BE CAREFUL WHEN COPY/PASTE
-                    string insert = @"with A as    
-                                        (
+                string insert = @"with A as (
                                             @replaceme@
                                         )
                                         INSERT INTO CRITICALSKILL_RESULTS
                                         SELECT " + reportid + @", RSC.ID , A.RES FROM REPORT_SKILL_CATEGORIES RSC
                                         JOIN A   ON RSC.CATEG_SKILL = A.CATEG
-                                        WHERE RSC.REPORTTYPE = 1";
+                                        WHERE RSC.REPORTTYPE = " + reportcategory;
 
-                    //todo: empty radiobuttons might be regarded as N/A
-                    for (int i = 1; i < 11; i++)
+                //todo: empty radiobuttons might be regarded as N/A
+                for (int i = 1; i < 11; i++)
+                {
+                    foreach (string st in new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S" })
                     {
-                        foreach (string st in new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S" })
+                        string skill = i.ToString() + st;
+                        if (data.ContainsKey(skill))
                         {
-                            string skill = i.ToString() + st;
-                            if (data.ContainsKey(skill))
-                            {
-                                insert = insert.Replace("@replaceme@", @"SELECT '" + skill + "' as CATEG , '" + data[skill] + "' as RES   "
-                                                               + " UNION @replaceme@");
-                            }
-                            else
-                                break;// go to next skill category
+                            insert = insert.Replace("@replaceme@", @"SELECT '" + skill + "' as CATEG , '" + data[skill] + "' as RES   "
+                                                           + " UNION @replaceme@");
                         }
+                        else
+                            break;// go to next skill category
                     }
-                    //clean the union and @replaceme@
-                    insert = insert.Replace("UNION @replaceme@", "");
+                }
+                //clean the union and @replaceme@
+                insert = insert.Replace("UNION @replaceme@", "");
 
-
-                    using (SqlCommand command = new SqlCommand(
-                                 insert, connection))
-                    {
-                        connection.Open();
-                        int rows = command.ExecuteNonQuery();
-
-                        // if no rows are affected, rollback REPORTS_META, rollback REPORT_TR_ARE_APP_RAD  and RETURN FALSE
-                        if (rows == 0)
-                        {
-                            {
-                                try
-                                {
-                                    using (SqlConnection con = new SqlConnection(con_str))
-                                    {
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                        }
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORT_TR_ARE_APP_RAD WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                        }
-                                        return "";
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    string err = e.Message;
-                                    return "";
-                                }
-                            }
-                        }
-
-                    }
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(insert, connection))
+                {
+                    connection.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
                 }
             }
             catch (Exception e)
             {
-                string err = e.Message;
-                return "";
+                string debug = e.Message;
             }
-            //reaching here means everything went fine
-            if (!push_UserTrainingFolder(reportid, data["genid"]))
-                return "";
-            return reportid;
+            return false;
+        }
+        public static string push_TR_ARE_APP_RAD(Dictionary<string, string> data)
+        {
+            string reportid = "";
+
+            // push into  REPORTS_META
+            using (SqlConnection connection = new SqlConnection(con_str))
+            using (SqlCommand command = new SqlCommand(
+                         @"INSERT INTO REPORTS_META VALUES('1', @OJTI_ID, convert(varchar, getutcdate(), 20) ,  'OJTISUBMIT' , 1, @TRAINEE_SIGNED , @TRAINEE_ID )
+                           DECLARE @ID INT = ( SELECT SCOPE_IDENTITY() )
+
+                         INSERT INTO REPORT_TR_ARE_APP_RAD
+                                ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_PRELEVEL1],[CHK_SIM],[CHK_LVLASS],[CHK_PROGASS],[CHK_COCASS],[CHK_REMASS],[CHK_OTS],[DATE],[POSITION],[POSITION_EXTRA],[TIMEON_SCH],[TIMEOFF_SCH],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[NOTES],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS],TIMEON_ACT,TIMEOFF_ACT )
+                         VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_PRELEVEL1,@CHK_SIM,@CHK_LVLASS,@CHK_PROGASS,@CHK_COCASS,@CHK_REMASS,@CHK_OTS,@DATE,@POSITION,@POSITION_EXTRA,@TIMEON_SCH,@TIMEOFF_SCH,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@NOTES,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS,@TIMEON_ACT, @TIMEOFF_ACT)
+
+                            SELECT @ID", connection))
+            {
+                connection.Open();
+                SqlTransaction tran = connection.BeginTransaction();
+                try
+                {
+                    command.Parameters.AddWithValue("@OJTI_ID", data["OJTI_ID"]);
+                    command.Parameters.AddWithValue("@TRAINEE_SIGNED", data["TRAINEE_SIGNED"]);
+                    command.Parameters.AddWithValue("@TRAINEE_ID", data["TRAINEE_ID"]);
+
+                    command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
+                    command.Parameters.Add("@CHK_PRELEVEL1", SqlDbType.Bit).Value = data["CHK_PRELEVEL1"] == "1";
+                    command.Parameters.Add("@CHK_SIM", SqlDbType.Bit).Value = data["CHK_SIM"] == "1";
+                    command.Parameters.Add("@CHK_LVLASS", SqlDbType.Bit).Value = data["CHK_LVLASS"] == "1";
+                    command.Parameters.Add("@CHK_PROGASS", SqlDbType.Bit).Value = data["CHK_PROGASS"] == "1";
+                    command.Parameters.Add("@CHK_COCASS", SqlDbType.Bit).Value = data["CHK_COCASS"] == "1";
+                    command.Parameters.Add("@CHK_REMASS", SqlDbType.Bit).Value = data["CHK_REMASS"] == "1";
+                    command.Parameters.Add("@CHK_OTS", SqlDbType.Bit).Value = data["CHK_OTS"] == "1";
+                    command.Parameters.Add("@DATE", SqlDbType.VarChar).Value = data["DATE"];
+                    command.Parameters.Add("@POSITION", SqlDbType.VarChar).Value = data["POSITION"];
+                    command.Parameters.Add("@POSITION_EXTRA", SqlDbType.VarChar).Value = data["POSITION_EXTRA"];
+                    command.Parameters.Add("@TIMEON_SCH", SqlDbType.VarChar).Value = data["TIMEON_SCH"];
+                    command.Parameters.Add("@TIMEOFF_SCH", SqlDbType.VarChar).Value = data["TIMEOFF_SCH"];
+                    command.Parameters.Add("@TRAF_DENS", SqlDbType.VarChar).Value = data["TRAF_DENS"];
+                    command.Parameters.Add("@COMPLEXITY", SqlDbType.VarChar).Value = data["COMPLEXITY"];
+                    command.Parameters.Add("@HOURS", SqlDbType.VarChar).Value = data["HOURS"];
+                    command.Parameters.Add("@TOTAL_HOURS", SqlDbType.VarChar).Value = data["TOTAL_HOURS"];
+                    command.Parameters.Add("@PREBRIEF_COMMENTS_FILENAME", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS_FILENAME"];
+                    command.Parameters.Add("@PREBRIEF_COMMENTS", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS"];
+                    command.Parameters.Add("@NOTES", SqlDbType.NVarChar).Value = data["NOTES"];
+                    command.Parameters.Add("@ADDITIONAL_COMMENTS", SqlDbType.NVarChar).Value = data["ADDITIONAL_COMMENTS"];
+                    command.Parameters.Add("@STUDENT_COMMENTS", SqlDbType.NVarChar).Value = data["STUDENT_COMMENTS"];
+                    command.Parameters.Add("@TIMEON_ACT", SqlDbType.NVarChar).Value = data["TIMEON_ACT"];
+                    command.Parameters.Add("@TIMEOFF_ACT", SqlDbType.NVarChar).Value = data["TIMEOFF_ACT"];
+
+                    reportid = Convert.ToString(command.ExecuteScalar() as object);
+                    tran.Commit();
+                }
+                catch (Exception e)
+                {
+                    try
+                    {
+                        tran.Rollback();
+                    }
+                    catch (Exception exRollback)
+                    {
+                        string debug = exRollback.Message + "___" + e.Message;
+                    }
+
+                }
+
+                return reportid;
+            }
         }
 
         public static string push_TOWERTR_GMC_ADC(Dictionary<string, string> data)
         {
             string reportid = "";
 
-
             // push into  REPORTS_META
-            try
+            using (SqlConnection connection = new SqlConnection(con_str))
+            using (SqlCommand command = new SqlCommand(
+@"INSERT INTO REPORTS_META VALUES('4', @OJTI_ID, convert(varchar, getutcdate(), 20) ,  'OJTISUBMIT' , 1, @TRAINEE_SIGNED , @TRAINEE_ID )
+  DECLARE @ID INT = ( SELECT SCOPE_IDENTITY() )
+
+INSERT INTO REPORT_TOWERTR_GMC_ADC
+        ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_PRELEVEL1],[CHK_SIM],[CHK_LVLASS],[CHK_PROGASS],[CHK_COCASS],[CHK_REMASS],[CHK_OTS],[DATE],[POSITION],[TIMEON_SCH],[TIMEOFF_SCH],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS],TIMEON_ACT,TIMEOFF_ACT )
+VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_PRELEVEL1,@CHK_SIM,@CHK_LVLASS,@CHK_PROGASS,@CHK_COCASS,@CHK_REMASS,@CHK_OTS,@DATE,@POSITION,@TIMEON_SCH,@TIMEOFF_SCH,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS,@TIMEON_ACT, @TIMEOFF_ACT)
+
+SELECT @ID
+", connection))
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(
-                             @"INSERT INTO REPORTS_META VALUES('4', '" + data["OJTI_ID"] + "', convert(varchar, getutcdate(), 20) ,  'OJTISUBMIT' , " + data["OJTI_SIGNED"] + ", " + data["TRAINEE_SIGNED"] + " , " + data["TRAINEE_ID"] + ")   ; SELECT SCOPE_IDENTITY()", connection))
+                connection.Open();
+                SqlTransaction tran = connection.BeginTransaction();
+                try
                 {
-                    connection.Open();
-                    reportid = Convert.ToString(command.ExecuteScalar());
-                    if (String.IsNullOrWhiteSpace(reportid))
-                        return "";
+                    command.Parameters.AddWithValue("@OJTI_ID", data["OJTI_ID"]);
+                    command.Parameters.AddWithValue("@TRAINEE_SIGNED", data["TRAINEE_SIGNED"]);
+                    command.Parameters.AddWithValue("@TRAINEE_ID", data["TRAINEE_ID"]);
+
+                    command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
+                    command.Parameters.Add("@CHK_PRELEVEL1", SqlDbType.Bit).Value = data["CHK_PRELEVEL1"] == "1";
+                    command.Parameters.Add("@CHK_SIM", SqlDbType.Bit).Value = data["CHK_SIM"] == "1";
+                    command.Parameters.Add("@CHK_LVLASS", SqlDbType.Bit).Value = data["CHK_LVLASS"] == "1";
+                    command.Parameters.Add("@CHK_PROGASS", SqlDbType.Bit).Value = data["CHK_PROGASS"] == "1";
+                    command.Parameters.Add("@CHK_COCASS", SqlDbType.Bit).Value = data["CHK_COCASS"] == "1";
+                    command.Parameters.Add("@CHK_REMASS", SqlDbType.Bit).Value = data["CHK_REMASS"] == "1";
+                    command.Parameters.Add("@CHK_OTS", SqlDbType.Bit).Value = data["CHK_OTS"] == "1";
+                    command.Parameters.Add("@DATE", SqlDbType.VarChar).Value = data["DATE"];
+                    command.Parameters.Add("@POSITION", SqlDbType.VarChar).Value = data["POSITION"];
+                    command.Parameters.Add("@TIMEON_SCH", SqlDbType.VarChar).Value = data["TIMEON_SCH"];
+                    command.Parameters.Add("@TIMEOFF_SCH", SqlDbType.VarChar).Value = data["TIMEOFF_SCH"];
+                    command.Parameters.Add("@TRAF_DENS", SqlDbType.VarChar).Value = data["TRAF_DENS"];
+                    command.Parameters.Add("@COMPLEXITY", SqlDbType.VarChar).Value = data["COMPLEXITY"];
+                    command.Parameters.Add("@HOURS", SqlDbType.VarChar).Value = data["HOURS"];
+                    command.Parameters.Add("@TOTAL_HOURS", SqlDbType.VarChar).Value = data["TOTAL_HOURS"];
+                    command.Parameters.Add("@PREBRIEF_COMMENTS_FILENAME", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS_FILENAME"];
+                    command.Parameters.Add("@PREBRIEF_COMMENTS", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS"];
+                    command.Parameters.Add("@ADDITIONAL_COMMENTS", SqlDbType.NVarChar).Value = data["ADDITIONAL_COMMENTS"];
+                    command.Parameters.Add("@STUDENT_COMMENTS", SqlDbType.NVarChar).Value = data["STUDENT_COMMENTS"];
+                    command.Parameters.Add("@TIMEON_ACT", SqlDbType.NVarChar).Value = data["TIMEON_ACT"];
+                    command.Parameters.Add("@TIMEOFF_ACT", SqlDbType.NVarChar).Value = data["TIMEOFF_ACT"];
+
+
+                    reportid = Convert.ToString(command.ExecuteScalar() as object);
+                    tran.Commit();
+                }
+                catch (Exception e)
+                {
+                    try
+                    {
+                        tran.Rollback();
+                    }
+                    catch (Exception exRollback)
+                    {
+                        string debug = exRollback.Message + "___" + e.Message;
+                    }
+
                 }
 
+                return reportid;
             }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return "";
-            }
-
-
-            //todo: push into step 
-
-            // push into REPORT_TOWERTR_GMC_ADC
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                {
-
-                    string insertstr = @"INSERT INTO REPORT_TOWERTR_GMC_ADC
-                                               ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_PRELEVEL1],[CHK_SIM],[CHK_LVLASS],[CHK_PROGASS],[CHK_COCASS],[CHK_REMASS],[CHK_OTS],[DATE],[POSITION],[TIMEON],[TIMEOFF],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS] )
-                                        VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_PRELEVEL1,@CHK_SIM,@CHK_LVLASS,@CHK_PROGASS,@CHK_COCASS,@CHK_REMASS,@CHK_OTS,@DATE,@POSITION,@TIMEON,@TIMEOFF,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS)
-
-INSERT INTO USER_TOTALHOURS 
-VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), CONVERT(VARCHAR, GETUTCDATE(),20), NULL, @OJTI_ID )";
-                    using (SqlCommand command = new SqlCommand(insertstr, connection))
-                    {
-                        command.Parameters.Add("@ID", SqlDbType.Int).Value = reportid;
-                        command.Parameters.Add("@OJTI_ID", SqlDbType.Int).Value = data["OJTI_ID"];
-                        command.Parameters.Add("@TRAINEE_ID", SqlDbType.Int).Value = data["TRAINEE_ID"];
-                        command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
-                        command.Parameters.Add("@CHK_PRELEVEL1", SqlDbType.Bit).Value = data["CHK_PRELEVEL1"] == "1";
-                        command.Parameters.Add("@CHK_SIM", SqlDbType.Bit).Value = data["CHK_SIM"] == "1";
-                        command.Parameters.Add("@CHK_LVLASS", SqlDbType.Bit).Value = data["CHK_LVLASS"] == "1";
-                        command.Parameters.Add("@CHK_PROGASS", SqlDbType.Bit).Value = data["CHK_PROGASS"] == "1";
-                        command.Parameters.Add("@CHK_COCASS", SqlDbType.Bit).Value = data["CHK_COCASS"] == "1";
-                        command.Parameters.Add("@CHK_REMASS", SqlDbType.Bit).Value = data["CHK_REMASS"] == "1";
-                        command.Parameters.Add("@CHK_OTS", SqlDbType.Bit).Value = data["CHK_OTS"] == "1";
-                        command.Parameters.Add("@DATE", SqlDbType.VarChar).Value = data["DATE"];
-                        command.Parameters.Add("@POSITION", SqlDbType.VarChar).Value = data["POSITION"];
-                        command.Parameters.Add("@TIMEON", SqlDbType.VarChar).Value = data["TIMEON"];
-                        command.Parameters.Add("@TIMEOFF", SqlDbType.VarChar).Value = data["TIMEOFF"];
-                        command.Parameters.Add("@TRAF_DENS", SqlDbType.VarChar).Value = data["TRAF_DENS"];
-                        command.Parameters.Add("@COMPLEXITY", SqlDbType.VarChar).Value = data["COMPLEXITY"];
-                        command.Parameters.Add("@HOURS", SqlDbType.VarChar).Value = data["HOURS"];
-                        command.Parameters.Add("@TOTAL_HOURS", SqlDbType.VarChar).Value = data["TOTAL_HOURS"];
-                        command.Parameters.Add("@PREBRIEF_COMMENTS_FILENAME", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS_FILENAME"];
-                        command.Parameters.Add("@PREBRIEF_COMMENTS", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS"];
-                        // command.Parameters.Add("@NOTES", SqlDbType.NVarChar).Value = data["NOTES"];
-                        command.Parameters.Add("@ADDITIONAL_COMMENTS", SqlDbType.NVarChar).Value = data["ADDITIONAL_COMMENTS"];
-                        command.Parameters.Add("@STUDENT_COMMENTS", SqlDbType.NVarChar).Value = data["STUDENT_COMMENTS"];
-
-                        connection.Open();
-                        command.CommandType = CommandType.Text;
-                        int rows = command.ExecuteNonQuery();
-
-                        // if no rows are affected, rollback REPORTS_META and RETURN FALSE
-
-                        if (rows > 0)
-                        {
-                            update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                using (SqlConnection con = new SqlConnection(con_str))
-                                using (SqlCommand com = new SqlCommand(
-                                             @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                {
-                                    con.Open();
-                                    com.ExecuteNonQuery();
-                                    return "";
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                string err = e.Message;
-                                return "";
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return "";
-            }
-
-
-            //push into CRITICALSKILL_RESULTS
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                {
-                    //////////////////////////////////////////////////////////////////////
-                    ///// REPORT TYPE 4 IS GIVEN, BE CAREFUL WHEN COPY/PASTE
-                    string insert = @"with A as    
-                                        (
-                                            @replaceme@
-                                        )
-                                        INSERT INTO CRITICALSKILL_RESULTS
-                                        SELECT " + reportid + @", RSC.ID , A.RES FROM REPORT_SKILL_CATEGORIES RSC
-                                        JOIN A   ON RSC.CATEG_SKILL = A.CATEG
-                                        WHERE RSC.REPORTTYPE = 4";
-
-                    //todo: empty radiobuttons might be regarded as N/A
-                    for (int i = 1; i < 11; i++)
-                    {
-                        foreach (string st in new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S" })
-                        {
-                            string skill = i.ToString() + st;
-                            if (data.ContainsKey(skill))
-                            {
-                                insert = insert.Replace("@replaceme@", @"SELECT '" + skill + "' as CATEG , '" + data[skill] + "' as RES   "
-                                                               + " UNION @replaceme@");
-                            }
-                            else
-                                break;// go to next skill category
-                        }
-                    }
-                    //clean the union and @replaceme@
-                    insert = insert.Replace("UNION @replaceme@", "");
-
-
-                    using (SqlCommand command = new SqlCommand(
-                                 insert, connection))
-                    {
-                        connection.Open();
-                        int rows = command.ExecuteNonQuery();
-
-                        // if no rows are affected, rollback REPORTS_META, rollback REPORT_TOWERTR_GMC_ADC  and RETURN FALSE
-                        if (rows == 0)
-                        {
-                            {
-                                try
-                                {
-                                    using (SqlConnection con = new SqlConnection(con_str))
-                                    {
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                        }
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORT_TOWERTR_GMC_ADC WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                        }
-                                        return "";
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    string err = e.Message;
-                                    return "";
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return "";
-            }
-
-            //reaching here means everything went fine
-            if (!push_UserTrainingFolder(reportid, data["genid"]))
-                return "";
-
-            return reportid;
         }
 
         public static string push_DAILYTR_ASS_RAD(Dictionary<string, string> data)
@@ -407,185 +271,66 @@ VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), 
 
 
             //todo: push into  REPORTS_META
-            try
+
+            using (SqlConnection connection = new SqlConnection(con_str))
+            using (SqlCommand command = new SqlCommand(
+         @"
+INSERT INTO REPORTS_META VALUES('3', @OJTI_ID, convert(varchar, getutcdate(), 20) ,  'OJTISUBMIT' , 1, @TRAINEE_SIGNED , @TRAINEE_ID )
+DECLARE @ID INT = ( SELECT SCOPE_IDENTITY() )
+
+INSERT INTO REPORT_DAILYTR_ASS_RAD
+       ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_ASS],[DATE],[POSITION],[POSITION_EXTRA],[TIMEON_SCH],[TIMEOFF_SCH],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS],TIMEON_ACT, TIMEOFF_ACT )
+VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_ASS,@DATE,@POSITION,@POSITION_EXTRA,@TIMEON_SCH,@TIMEOFF_SCH,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS, @TIMEON_ACT, @TIMEOFF_ACT)
+
+SELECT @ID
+", connection))
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                connection.Open();
+                SqlTransaction tran = connection.BeginTransaction();
+                try
                 {
-                    using (SqlCommand command = new SqlCommand(
-                                 @"INSERT INTO REPORTS_META VALUES('3', '" + data["OJTI_ID"] + "', convert(varchar, getutcdate(), 20) ,  'OJTISUBMIT' , " + data["OJTI_SIGNED"] + ", " + data["TRAINEE_SIGNED"] + " , " + data["TRAINEE_ID"] + ")   ; SELECT SCOPE_IDENTITY()", connection))
-                    {
-                        connection.Open();
-                        reportid = Convert.ToString(command.ExecuteScalar());
-                        if (String.IsNullOrWhiteSpace(reportid))
-                            return "";
+                    command.Parameters.AddWithValue("@OJTI_ID", data["OJTI_ID"]);
+                    command.Parameters.AddWithValue("@TRAINEE_SIGNED", data["TRAINEE_SIGNED"]);
+                    command.Parameters.AddWithValue("@TRAINEE_ID", data["TRAINEE_ID"]);
 
-                    }
+                    command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
+                    command.Parameters.Add("@CHK_ASS", SqlDbType.Bit).Value = data["CHK_ASS"] == "1";
+                    command.Parameters.Add("@DATE", SqlDbType.VarChar).Value = data["DATE"];
+                    command.Parameters.Add("@POSITION", SqlDbType.VarChar).Value = data["POSITION"];
+                    command.Parameters.Add("@POSITION_EXTRA", SqlDbType.VarChar).Value = data["POSITION_EXTRA"];
+                    command.Parameters.Add("@TIMEON_SCH", SqlDbType.VarChar).Value = data["TIMEON_SCH"];
+                    command.Parameters.Add("@TIMEOFF_SCH", SqlDbType.VarChar).Value = data["TIMEOFF_SCH"];
+                    command.Parameters.Add("@TRAF_DENS", SqlDbType.VarChar).Value = data["TRAF_DENS"];
+                    command.Parameters.Add("@COMPLEXITY", SqlDbType.VarChar).Value = data["COMPLEXITY"];
+                    command.Parameters.Add("@HOURS", SqlDbType.VarChar).Value = data["HOURS"];
+                    command.Parameters.Add("@TOTAL_HOURS", SqlDbType.VarChar).Value = data["TOTAL_HOURS"];
+                    command.Parameters.Add("@PREBRIEF_COMMENTS_FILENAME", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS_FILENAME"];
+                    command.Parameters.Add("@PREBRIEF_COMMENTS", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS"];
+                    command.Parameters.Add("@ADDITIONAL_COMMENTS", SqlDbType.NVarChar).Value = data["ADDITIONAL_COMMENTS"];
+                    command.Parameters.Add("@STUDENT_COMMENTS", SqlDbType.NVarChar).Value = data["STUDENT_COMMENTS"];
+                    command.Parameters.Add("@TIMEON_ACT", SqlDbType.NVarChar).Value = data["TIMEON_ACT"];
+                    command.Parameters.Add("@TIMEOFF_ACT", SqlDbType.NVarChar).Value = data["TIMEOFF_ACT"];
+
+                    reportid = Convert.ToString(command.ExecuteScalar() as object);
+                    tran.Commit();
                 }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return "";
-            }
-
-
-            // push into REPORT_DAILYTR_ASS_RAD
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                catch (Exception e)
                 {
-
-                    string insertstr = @"INSERT INTO REPORT_DAILYTR_ASS_RAD
-                                               ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_ASS],[DATE],[POSITION],[POSITION_EXTRA],[TIMEON],[TIMEOFF],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS] )
-                                        VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_ASS,@DATE,@POSITION,@POSITION_EXTRA,@TIMEON,@TIMEOFF,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS)
-
-INSERT INTO USER_TOTALHOURS 
-VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), CONVERT(VARCHAR, GETUTCDATE(),20), NULL, @OJTI_ID )";
-                    using (SqlCommand command = new SqlCommand(insertstr, connection))
+                    try
                     {
-                        command.Parameters.Add("@ID", SqlDbType.Int).Value = reportid;
-                        command.Parameters.Add("@OJTI_ID", SqlDbType.Int).Value = data["OJTI_ID"];
-                        command.Parameters.Add("@TRAINEE_ID", SqlDbType.Int).Value = data["TRAINEE_ID"];
-                        command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
-                        command.Parameters.Add("@CHK_ASS", SqlDbType.Bit).Value = data["CHK_ASS"] == "1";
-                        command.Parameters.Add("@DATE", SqlDbType.VarChar).Value = data["DATE"];
-                        command.Parameters.Add("@POSITION", SqlDbType.VarChar).Value = data["POSITION"];
-                        command.Parameters.Add("@POSITION_EXTRA", SqlDbType.VarChar).Value = data["POSITION_EXTRA"];
-                        command.Parameters.Add("@TIMEON", SqlDbType.VarChar).Value = data["TIMEON"];
-                        command.Parameters.Add("@TIMEOFF", SqlDbType.VarChar).Value = data["TIMEOFF"];
-                        command.Parameters.Add("@TRAF_DENS", SqlDbType.VarChar).Value = data["TRAF_DENS"];
-                        command.Parameters.Add("@COMPLEXITY", SqlDbType.VarChar).Value = data["COMPLEXITY"];
-                        command.Parameters.Add("@HOURS", SqlDbType.VarChar).Value = data["HOURS"];
-                        command.Parameters.Add("@TOTAL_HOURS", SqlDbType.VarChar).Value = data["TOTAL_HOURS"];
-                        command.Parameters.Add("@PREBRIEF_COMMENTS_FILENAME", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS_FILENAME"];
-                        command.Parameters.Add("@PREBRIEF_COMMENTS", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS"];
-                        command.Parameters.Add("@ADDITIONAL_COMMENTS", SqlDbType.NVarChar).Value = data["ADDITIONAL_COMMENTS"];
-                        command.Parameters.Add("@STUDENT_COMMENTS", SqlDbType.NVarChar).Value = data["STUDENT_COMMENTS"];
-
-                        connection.Open();
-                        command.CommandType = CommandType.Text;
-                        int rows = command.ExecuteNonQuery();
-
-                        // if no rows are affected, rollback REPORTS_META and RETURN FALSE
-
-                        if (rows > 0)
-                        {
-                            update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                using (SqlConnection con = new SqlConnection(con_str))
-                                using (SqlCommand com = new SqlCommand(
-                                             @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                {
-                                    con.Open();
-                                    com.ExecuteNonQuery();
-                                    return "";
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                string err = e.Message;
-                                return "";
-                            }
-                        }
+                        tran.Rollback();
                     }
+                    catch (Exception exRollback)
+                    {
+                        string debug = exRollback.Message + "___" + e.Message;
+                    }
+
                 }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return "";
+
+                return reportid;
+
             }
 
-
-            //push into CRITICALSKILL_RESULTS
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                {
-                    //////////////////////////////////////////////////////////////////////
-                    ///// REPORT TYPE 4 IS GIVEN, BE CAREFUL WHEN COPY/PASTE
-                    string insert = @"with A as    
-                                        (
-                                            @replaceme@
-                                        )
-                                        INSERT INTO CRITICALSKILL_RESULTS
-                                        SELECT " + reportid + @", RSC.ID , A.RES FROM REPORT_SKILL_CATEGORIES RSC
-                                        JOIN A   ON RSC.CATEG_SKILL = A.CATEG
-                                        WHERE RSC.REPORTTYPE = 3";
-
-                    //todo: empty radiobuttons might be regarded as N/A
-                    for (int i = 1; i < 11; i++)
-                    {
-                        foreach (string st in new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S" })
-                        {
-                            string skill = i.ToString() + st;
-                            if (data.ContainsKey(skill))
-                            {
-                                insert = insert.Replace("@replaceme@", @"SELECT '" + skill + "' as CATEG , '" + data[skill] + "' as RES   "
-                                                               + " UNION @replaceme@");
-                            }
-                            else
-                                break;// go to next skill category
-                        }
-                    }
-                    //clean the union and @replaceme@
-                    insert = insert.Replace("UNION @replaceme@", "");
-
-
-                    using (SqlCommand command = new SqlCommand(
-                                 insert, connection))
-                    {
-                        connection.Open();
-                        int rows = command.ExecuteNonQuery();
-
-                        // if no rows are affected, rollback REPORTS_META, rollback REPORT_TOWERTR_GMC_ADC  and RETURN FALSE
-                        if (rows == 0)
-                        {
-                            {
-                                try
-                                {
-                                    using (SqlConnection con = new SqlConnection(con_str))
-                                    {
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                        }
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORT_DAILYTR_ASS_RAD WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                        }
-                                        return "";
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    string err = e.Message;
-                                    return "";
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return "";
-            }
-
-            //reaching here means everything went fine
-            if (!push_UserTrainingFolder(reportid, data["genid"]))
-                return "";
-            return reportid;
         }
 
         public static string push_DAILYTR_ASS_TWR(Dictionary<string, string> data)
@@ -594,184 +339,66 @@ VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), 
 
 
             //todo: push into  REPORTS_META
-            try
+
+            using (SqlConnection connection = new SqlConnection(con_str))
+            using (SqlCommand command = new SqlCommand(
+@"
+INSERT INTO REPORTS_META VALUES('2', @OJTI_ID, convert(varchar, getutcdate(), 20) ,  'OJTISUBMIT' , 1, @TRAINEE_SIGNED , @TRAINEE_ID )
+DECLARE @ID INT = ( SELECT SCOPE_IDENTITY() )
+
+INSERT INTO REPORT_DAILYTR_ASS_TWR
+       ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_ASS],[DATE],[POSITION],[TIMEON_SCH],[TIMEOFF_SCH],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS], TIMEON_ACT, TIMEOFF_ACT )
+VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_ASS,@DATE,@POSITION,@TIMEON_SCH,@TIMEOFF_SCH,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS, @TIMEON_ACT, @TIMEOFF_ACT)
+
+SELECT @ID
+", connection))
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                connection.Open();
+                SqlTransaction tran = connection.BeginTransaction();
+                try
                 {
-                    using (SqlCommand command = new SqlCommand(
-                                 @"INSERT INTO REPORTS_META VALUES('2', '" + data["OJTI_ID"] + "', convert(varchar, getutcdate(), 20) ,  'OJTISUBMIT' , " + data["OJTI_SIGNED"] + ", " + data["TRAINEE_SIGNED"] + " , " + data["TRAINEE_ID"] + ")   ; SELECT SCOPE_IDENTITY()", connection))
-                    {
-                        connection.Open();
-                        reportid = Convert.ToString(command.ExecuteScalar());
-                        if (String.IsNullOrWhiteSpace(reportid))
-                            return "";
+                    command.Parameters.AddWithValue("@OJTI_ID", data["OJTI_ID"]);
+                    command.Parameters.AddWithValue("@TRAINEE_SIGNED", data["TRAINEE_SIGNED"]);
+                    command.Parameters.AddWithValue("@TRAINEE_ID", data["TRAINEE_ID"]);
 
-                    }
+                    command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
+                    command.Parameters.Add("@CHK_ASS", SqlDbType.Bit).Value = data["CHK_ASS"] == "1";
+                    command.Parameters.Add("@DATE", SqlDbType.VarChar).Value = data["DATE"];
+                    command.Parameters.Add("@POSITION", SqlDbType.VarChar).Value = data["POSITION"];
+                    command.Parameters.Add("@TIMEON_SCH", SqlDbType.VarChar).Value = data["TIMEON_SCH"];
+                    command.Parameters.Add("@TIMEOFF_SCH", SqlDbType.VarChar).Value = data["TIMEOFF_SCH"];
+                    command.Parameters.Add("@TRAF_DENS", SqlDbType.VarChar).Value = data["TRAF_DENS"];
+                    command.Parameters.Add("@COMPLEXITY", SqlDbType.VarChar).Value = data["COMPLEXITY"];
+                    command.Parameters.Add("@HOURS", SqlDbType.VarChar).Value = data["HOURS"];
+                    command.Parameters.Add("@TOTAL_HOURS", SqlDbType.VarChar).Value = data["TOTAL_HOURS"];
+                    command.Parameters.Add("@PREBRIEF_COMMENTS_FILENAME", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS_FILENAME"];
+                    command.Parameters.Add("@PREBRIEF_COMMENTS", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS"];
+                    command.Parameters.Add("@ADDITIONAL_COMMENTS", SqlDbType.NVarChar).Value = data["ADDITIONAL_COMMENTS"];
+                    command.Parameters.Add("@STUDENT_COMMENTS", SqlDbType.NVarChar).Value = data["STUDENT_COMMENTS"];
+                    command.Parameters.Add("@TIMEON_ACT", SqlDbType.NVarChar).Value = data["TIMEON_ACT"];
+                    command.Parameters.Add("@TIMEOFF_ACT", SqlDbType.NVarChar).Value = data["TIMEOFF_ACT"];
+
+
+                    reportid = Convert.ToString(command.ExecuteScalar() as object);
+                    tran.Commit();
                 }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return "";
-            }
-
-
-            // push into REPORT_DAILYTR_ASS_RAD
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                catch (Exception e)
                 {
-
-                    string insertstr = @"INSERT INTO REPORT_DAILYTR_ASS_TWR
-                                               ([ID],[OJTI_ID],[TRAINEE_ID],[CHK_OJT],[CHK_ASS],[DATE],[POSITION],[TIMEON],[TIMEOFF],[TRAF_DENS],[COMPLEXITY],[HOURS],[TOTAL_HOURS],[PREBRIEF_COMMENTS_FILENAME],[PREBRIEF_COMMENTS],[ADDITIONAL_COMMENTS],[STUDENT_COMMENTS] )
-                                        VALUES (@ID,@OJTI_ID,@TRAINEE_ID,@CHK_OJT,@CHK_ASS,@DATE,@POSITION,@TIMEON,@TIMEOFF,@TRAF_DENS,@COMPLEXITY,@HOURS,@TOTAL_HOURS,@PREBRIEF_COMMENTS_FILENAME,@PREBRIEF_COMMENTS,@ADDITIONAL_COMMENTS,@STUDENT_COMMENTS)
-
-INSERT INTO USER_TOTALHOURS 
-VALUES (@TRAINEE_ID, @POSITION, @TOTAL_HOURS, 'REPORT:' + CAST(@ID AS VARCHAR), CONVERT(VARCHAR, GETUTCDATE(),20), NULL, @OJTI_ID )";
-                    using (SqlCommand command = new SqlCommand(insertstr, connection))
+                    try
                     {
-                        command.Parameters.Add("@ID", SqlDbType.Int).Value = reportid;
-                        command.Parameters.Add("@OJTI_ID", SqlDbType.Int).Value = data["OJTI_ID"];
-                        command.Parameters.Add("@TRAINEE_ID", SqlDbType.Int).Value = data["TRAINEE_ID"];
-                        command.Parameters.Add("@CHK_OJT", SqlDbType.Bit).Value = data["CHK_OJT"] == "1";
-                        command.Parameters.Add("@CHK_ASS", SqlDbType.Bit).Value = data["CHK_ASS"] == "1";
-                        command.Parameters.Add("@DATE", SqlDbType.VarChar).Value = data["DATE"];
-                        command.Parameters.Add("@POSITION", SqlDbType.VarChar).Value = data["POSITION"];
-                        command.Parameters.Add("@TIMEON", SqlDbType.VarChar).Value = data["TIMEON"];
-                        command.Parameters.Add("@TIMEOFF", SqlDbType.VarChar).Value = data["TIMEOFF"];
-                        command.Parameters.Add("@TRAF_DENS", SqlDbType.VarChar).Value = data["TRAF_DENS"];
-                        command.Parameters.Add("@COMPLEXITY", SqlDbType.VarChar).Value = data["COMPLEXITY"];
-                        command.Parameters.Add("@HOURS", SqlDbType.VarChar).Value = data["HOURS"];
-                        command.Parameters.Add("@TOTAL_HOURS", SqlDbType.VarChar).Value = data["TOTAL_HOURS"];
-                        command.Parameters.Add("@PREBRIEF_COMMENTS_FILENAME", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS_FILENAME"];
-                        command.Parameters.Add("@PREBRIEF_COMMENTS", SqlDbType.NVarChar).Value = data["PREBRIEF_COMMENTS"];
-                        command.Parameters.Add("@ADDITIONAL_COMMENTS", SqlDbType.NVarChar).Value = data["ADDITIONAL_COMMENTS"];
-                        command.Parameters.Add("@STUDENT_COMMENTS", SqlDbType.NVarChar).Value = data["STUDENT_COMMENTS"];
-
-                        connection.Open();
-                        command.CommandType = CommandType.Text;
-                        int rows = command.ExecuteNonQuery();
-
-                        // if no rows are affected, rollback REPORTS_META and RETURN FALSE
-                        if (rows > 0)
-                        {
-                            update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                using (SqlConnection con = new SqlConnection(con_str))
-                                using (SqlCommand com = new SqlCommand(
-                                             @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                {
-                                    con.Open();
-                                    com.ExecuteNonQuery();
-                                    return "";
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                string err = e.Message;
-                                return "";
-                            }
-                        }
+                        tran.Rollback();
                     }
+                    catch (Exception exRollback)
+                    {
+                        string debug = exRollback.Message + "___" + e.Message;
+                    }
+
                 }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return "";
+
+                return reportid;
+
             }
 
-
-            //push into CRITICALSKILL_RESULTS
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(con_str))
-                {
-                    //////////////////////////////////////////////////////////////////////
-                    ///// REPORT TYPE 4 IS GIVEN, BE CAREFUL WHEN COPY/PASTE
-                    string insert = @"with A as    
-                                        (
-                                            @replaceme@
-                                        )
-                                        INSERT INTO CRITICALSKILL_RESULTS
-                                        SELECT " + reportid + @", RSC.ID , A.RES FROM REPORT_SKILL_CATEGORIES RSC
-                                        JOIN A   ON RSC.CATEG_SKILL = A.CATEG
-                                        WHERE RSC.REPORTTYPE = 2";
-
-                    //todo: empty radiobuttons might be regarded as N/A
-                    for (int i = 1; i < 11; i++)
-                    {
-                        foreach (string st in new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S" })
-                        {
-                            string skill = i.ToString() + st;
-                            if (data.ContainsKey(skill))
-                            {
-                                insert = insert.Replace("@replaceme@", @"SELECT '" + skill + "' as CATEG , '" + data[skill] + "' as RES   "
-                                                               + " UNION @replaceme@");
-                            }
-                            else
-                                break;// go to next skill category
-                        }
-                    }
-                    //clean the union and @replaceme@
-                    insert = insert.Replace("UNION @replaceme@", "");
-
-
-                    using (SqlCommand command = new SqlCommand(
-                                 insert, connection))
-                    {
-                        connection.Open();
-                        int rows = command.ExecuteNonQuery();
-
-                        // if no rows are affected, rollback REPORTS_META, rollback REPORT_TOWERTR_GMC_ADC  and RETURN FALSE
-                        if (rows == 0)
-                        {
-                            {
-                                try
-                                {
-                                    using (SqlConnection con = new SqlConnection(con_str))
-                                    {
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORTS_META WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                        }
-                                        using (SqlCommand com = new SqlCommand(
-                                                     @"DELETE FROM REPORT_DAILYTR_ASS_TWR WHERE ID = " + reportid, connection))
-                                        {
-                                            con.Open();
-                                            com.ExecuteNonQuery();
-                                        }
-                                        return "";
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    string err = e.Message;
-                                    return "";
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return "";
-            }
-
-            //reaching here means everything went fine
-            if (!push_UserTrainingFolder(reportid, data["genid"]))
-                return "";
-
-            return reportid;
         }
 
         public static string push_RECOM_LEVEL(Dictionary<string, string> data)
@@ -2572,7 +2199,7 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
             {
 
                 using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand( update, connection))
+                using (SqlCommand command = new SqlCommand(update, connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@ID", SqlDbType.Int).Value = stepid;

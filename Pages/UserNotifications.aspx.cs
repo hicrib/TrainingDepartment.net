@@ -60,6 +60,8 @@ namespace AviaTrain.Pages
                     lnk_file1.Attributes.Add("href", file1);
                     lnk_file1.Attributes.Add("target", "_blank");
                 }
+                else lnk_file1.Visible = false;
+
                 if (file2 != "")
                 {
                     lnk_file2.Visible = true;
@@ -67,6 +69,8 @@ namespace AviaTrain.Pages
                     lnk_file2.Attributes.Add("href", file2);
                     lnk_file2.Attributes.Add("target", "_blank");
                 }
+                else lnk_file2.Visible = false;
+
                 if (file3 != "")
                 {
                     lnk_file3.Visible = true;
@@ -74,6 +78,8 @@ namespace AviaTrain.Pages
                     lnk_file3.Attributes.Add("href", file3);
                     lnk_file3.Attributes.Add("target", "_blank");
                 }
+                else lnk_file3.Visible = false;
+
                 if (file4 != "")
                 {
                     lnk_file4.Visible = true;
@@ -81,6 +87,7 @@ namespace AviaTrain.Pages
                     lnk_file4.Attributes.Add("href", file4);
                     lnk_file4.Attributes.Add("target", "_blank");
                 }
+                else lnk_file4.Visible = false;
 
                 //mark as seen
                 if (selectedRow.Cells[2].Text == "-")
@@ -112,8 +119,8 @@ namespace AviaTrain.Pages
             if (e.Row.Cells.Count > 2)
             {
                 e.Row.Cells[3].Visible = false; //ID of notification
-                if(e.Row.Cells[2].Text == "-")
-                e.Row.Style.Add("font-weight", "bold");
+                if (e.Row.Cells[2].Text == "-")
+                    e.Row.Style.Add("font-weight", "bold");
             }
 
         }

@@ -141,24 +141,6 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.DropDownList ddl_positions;
 
         /// <summary>
-        /// txt_timeon control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txt_timeon;
-
-        /// <summary>
-        /// txt_timeoff control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txt_timeoff;
-
-        /// <summary>
         /// chk_den_L control.
         /// </summary>
         /// <remarks>
@@ -211,6 +193,42 @@ namespace AviaTrain.Reports
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chk_comp_H;
+
+        /// <summary>
+        /// txt_timeon_sch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_timeon_sch;
+
+        /// <summary>
+        /// txt_timeoff_sch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_timeoff_sch;
+
+        /// <summary>
+        /// txt_timeon_act control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_timeon_act;
+
+        /// <summary>
+        /// txt_timeoff_act control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_timeoff_act;
 
         /// <summary>
         /// txt_hours control.

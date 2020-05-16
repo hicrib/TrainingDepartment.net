@@ -281,6 +281,8 @@ namespace AviaTrain.App_Code
         }
         public static string add_TimeFormat(string first, string second)
         {
+            if (!check_TimeTextbox_format(first) || !check_TimeTextbox_format(second))
+                return null;
 
             int hours = Convert.ToInt32(first.Split(':')[0]) + Convert.ToInt32(second.Split(':')[0]);
             int minutes = Convert.ToInt32(first.Split(':')[1]) + Convert.ToInt32(second.Split(':')[1]);
@@ -293,6 +295,61 @@ namespace AviaTrain.App_Code
             return hours.ToString() + ":" + (minutes < 10 ? "0" : "") + minutes.ToString() ;
         }
 
+        public static string subtract_TimeFormat(string earlier, string later)
+        {
+            if (!check_TimeTextbox_format(earlier) || !check_TimeTextbox_format(later))
+                return null;
+
+            int hr_1 = Convert.ToInt32(earlier.Split(':')[0]);
+            int hr_2 = Convert.ToInt32(later.Split(':')[0]);
+
+            int min_1 = Convert.ToInt32(earlier.Split(':')[1]);
+            int min_2 = Convert.ToInt32(later.Split(':')[1]);
+
+            if (hr_1 > hr_2)
+                hr_2 += 24;
+
+            int hr = hr_2 - hr_1;
+
+            if (min_1 > min_2)
+            {
+                min_2 += 60;
+                hr -= 1;
+            }
+            int min = min_2 - min_1;
+
+            return (hr < 10 ? "0" : "") + hr.ToString() + ":" + (min < 10 ? "0" : "") + (min.ToString());
+        }
+
+        public static string divide_TimeFormat(string time, int divide)
+        {
+            if (!check_TimeTextbox_format(time))
+                return "";
+
+            int mins = Convert.ToInt32(time.Split(':')[0]) * 60 + Convert.ToInt32(time.Split(':')[1]);
+
+            mins = mins / divide;
+
+            int hr = mins / 60;
+            int min = mins % 60;
+
+            return (hr < 10 ? "0" : "") + hr.ToString() + ":" + (min < 10 ? "0" : "") + min.ToString();
+
+        }
+
+        //public static string compare_TimeFormat(string first, string second)
+        //{
+        //    if (!check_TimeTextbox_format(first) || !check_TimeTextbox_format(second))
+        //        return null;
+
+        //    int hr_1 = Convert.ToInt32(first.Split(':')[0]);
+        //    int hr_2 = Convert.ToInt32(second.Split(':')[0]);
+
+        //    int min_1 = Convert.ToInt32(first.Split(':')[1]);
+        //    int min_2 = Convert.ToInt32(second.Split(':')[1]);
+
+
+        //}
 
        public static string last_part(string aString , char delimiter)
         {

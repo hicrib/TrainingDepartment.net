@@ -98,8 +98,11 @@ namespace AviaTrain.Reports
             }
             ddl_positions.SelectedValue = form.Rows[0]["POSITION"].ToString();
 
-            txt_timeon.Text = form.Rows[0]["TIMEON"].ToString();
-            txt_timeoff.Text = form.Rows[0]["TIMEOFF"].ToString();
+            txt_timeon_sch.Text = form.Rows[0]["TIMEON_SCH"].ToString();
+            txt_timeoff_sch.Text = form.Rows[0]["TIMEOFF_SCH"].ToString();
+
+            txt_timeon_act.Text = form.Rows[0]["TIMEON_ACT"].ToString();
+            txt_timeoff_act.Text = form.Rows[0]["TIMEOFF_ACT"].ToString();
 
 
             chk_den_L.Checked = form.Rows[0]["TRAF_DENS"].ToString().Contains("L");
@@ -254,8 +257,12 @@ namespace AviaTrain.Reports
             //string date = ddl_DAY.SelectedValue + "." + ddl_MONTH.SelectedValue + "." + ddl_YEAR.SelectedValue;
             data.Add("DATE", txt_date.Text);
             data.Add("POSITION", ddl_positions.SelectedValue);
-            data.Add("TIMEON", txt_timeon.Text);
-            data.Add("TIMEOFF", txt_timeoff.Text);
+
+            data.Add("TIMEON_SCH", txt_timeon_sch.Text);
+            data.Add("TIMEOFF_SCH", txt_timeoff_sch.Text);
+
+            data.Add("TIMEON_ACT", txt_timeon_act.Text);
+            data.Add("TIMEOFF_ACT", txt_timeoff_act.Text);
 
             string density = (chk_den_L.Checked ? "L" : "") + (chk_den_M.Checked ? "M" : "") + (chk_den_H.Checked ? "H" : "");
             data.Add("TRAF_DENS", density);
@@ -263,6 +270,7 @@ namespace AviaTrain.Reports
             string complexity = (chk_comp_L.Checked ? "L" : "") + (chk_comp_M.Checked ? "M" : "") + (chk_comp_H.Checked ? "H" : "");
             data.Add("COMPLEXITY", complexity);
 
+            txt_timeon_act_TextChanged(new object(), new EventArgs());
             data.Add("HOURS", txt_hours.Text);
             
             data.Add("TOTAL_HOURS", Utility.add_TimeFormat(txt_totalhours.Text, txt_hours.Text));
@@ -327,7 +335,7 @@ namespace AviaTrain.Reports
                 return "";
             }
             data.Add("genid", lbl_genid.Text);
-            string reportid = DB_Reports.push_TOWERTR_GMC_ADC(data);
+            string reportid = DB_Reports.push_Training_Report("4",data);
             
             return reportid;
         }
@@ -407,14 +415,14 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose Date", System.Drawing.Color.Red);
                 return false;
             }
-            if (txt_timeon.Text == "")
+            if (txt_timeon_act.Text == "" || txt_timeoff_act.Text == "")
             {
-                ClientMessage(lbl_pageresult, "Choose TIME ON!", System.Drawing.Color.Red);
+                ClientMessage(lbl_pageresult, "Choose Actual TIME ON/OFF!", System.Drawing.Color.Red);
                 return false;
             }
-            if (txt_timeoff.Text == "")
+            if (txt_timeon_sch.Text == "" || txt_timeoff_sch.Text == "")
             {
-                ClientMessage(lbl_pageresult, "Choose TIME OFF!", System.Drawing.Color.Red);
+                ClientMessage(lbl_pageresult, "Choose Scheduled TIME ON/OFF!", System.Drawing.Color.Red);
                 return false;
             }
             if ((!chk_comp_L.Checked && !chk_comp_M.Checked && !chk_comp_H.Checked)
@@ -536,6 +544,16 @@ namespace AviaTrain.Reports
             lbl_ojti_signed.Text = "1";
         }
 
+        protected void txt_timeon_act_TextChanged(object sender, EventArgs e)
+        {
+            if (txt_timeon_act.Text == "" || txt_timeoff_act.Text == "")
+                return;
 
+            txt_hours.Text = Utility.subtract_TimeFormat(txt_timeon_act.Text, txt_timeoff_act.Text);
+
+
+            if (chk_Sim.Checked)
+                txt_hours.Text = Utility.divide_TimeFormat(txt_hours.Text, 2);
+        }
     }
 }
