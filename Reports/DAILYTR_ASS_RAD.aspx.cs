@@ -77,6 +77,9 @@ namespace AviaTrain.Reports
             chk_OJT.Checked = form.Rows[0]["CHK_OJT"].ToString() == "True";
             chk_Ass.Checked = form.Rows[0]["CHK_ASS"].ToString() == "True";
 
+            chk_noshow.Checked = form.Rows[0]["NOSHOW"].ToString() == "True";
+            chk_notraining.Checked = form.Rows[0]["NOTRAINING"].ToString() == "True";
+
             string date = form.Rows[0]["DATE"].ToString();
             txt_date.Text = date;
             //ddl_DAY.Items.Add(date.Split('.')[0]);
@@ -249,6 +252,9 @@ namespace AviaTrain.Reports
             data.Add("CHK_OJT", chk_OJT.Checked ? "1" : "0");
             data.Add("CHK_ASS", chk_Ass.Checked ? "1" : "0");
 
+            data.Add("NOSHOW", chk_noshow.Checked ? "1" : "0");
+            data.Add("NOTRAINING", chk_notraining.Checked ? "1" : "0");
+
 
             data.Add("OJTI_SIGNED", lbl_ojti_signed.Text == "1" ? "1" : "0");
             data.Add("TRAINEE_SIGNED", lbl_trainee_signed.Text == "1" ? "1" : "0");
@@ -276,7 +282,7 @@ namespace AviaTrain.Reports
 
             txt_timeon_act_TextChanged(new object(), new EventArgs());
             data.Add("HOURS", txt_hours.Text);
-            
+
             data.Add("TOTAL_HOURS", Utility.add_TimeFormat(txt_totalhours.Text, txt_hours.Text));
 
             data.Add("PREBRIEF_COMMENTS_FILENAME", uploadedfilename.Text);
@@ -335,7 +341,7 @@ namespace AviaTrain.Reports
             }
             data.Add("genid", lbl_genid.Text);
 
-            string reportid = DB_Reports.push_Training_Report("3",data);
+            string reportid = DB_Reports.push_Training_Report("3", data);
             return reportid;
         }
 
@@ -412,27 +418,30 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose Date!", System.Drawing.Color.Red);
                 return false;
             }
-            if (txt_timeon_act.Text == "" || txt_timeoff_act.Text == "")
-            {
-                ClientMessage(lbl_pageresult, "Choose Actual TIME ON/OFF!", System.Drawing.Color.Red);
-                return false;
-            }
+            if (!chk_noshow.Checked && !chk_notraining.Checked)
+                if (txt_timeon_act.Text == "" || txt_timeoff_act.Text == "")
+                {
+                    ClientMessage(lbl_pageresult, "Choose Actual TIME ON/OFF!", System.Drawing.Color.Red);
+                    return false;
+                }
             if (txt_timeon_sch.Text == "" || txt_timeoff_sch.Text == "")
             {
                 ClientMessage(lbl_pageresult, "Choose Scheduled TIME ON/OFF!", System.Drawing.Color.Red);
                 return false;
             }
-            if ((!chk_comp_L.Checked && !chk_comp_M.Checked && !chk_comp_H.Checked)
-                || ( !chk_den_L.Checked && !chk_den_M.Checked && !chk_den_H.Checked)  )
-            {
-                ClientMessage(lbl_pageresult, "Choose Traffic Density and Complexity", System.Drawing.Color.Red);
-                return false;
-            }
-            if (txt_hours.Text == "")
-            {
-                ClientMessage(lbl_pageresult, "Choose Hours", System.Drawing.Color.Red);
-                return false;
-            }
+            if (!chk_noshow.Checked)
+                if ((!chk_comp_L.Checked && !chk_comp_M.Checked && !chk_comp_H.Checked)
+                || (!chk_den_L.Checked && !chk_den_M.Checked && !chk_den_H.Checked))
+                {
+                    ClientMessage(lbl_pageresult, "Choose Traffic Density and Complexity", System.Drawing.Color.Red);
+                    return false;
+                }
+            if (!chk_noshow.Checked && !chk_notraining.Checked)
+                if (txt_hours.Text == "")
+                {
+                    ClientMessage(lbl_pageresult, "Choose Hours", System.Drawing.Color.Red);
+                    return false;
+                }
             if (txt_totalhours.Text == "")
             {
                 ClientMessage(lbl_pageresult, "Choose Total Hours", System.Drawing.Color.Red);
@@ -547,6 +556,25 @@ namespace AviaTrain.Reports
                 return;
 
             txt_hours.Text = Utility.subtract_TimeFormat(txt_timeon_act.Text, txt_timeoff_act.Text);
+        }
+
+        protected void chk_noshow_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_notraining.Checked || chk_noshow.Checked)
+            {
+                txt_timeon_act.Text = "";
+                txt_timeoff_act.Text = "";
+                txt_hours.Text = "";
+                txt_timeon_act.Enabled = false;
+                txt_timeoff_act.Enabled = false;
+                txt_hours.Enabled = false;
+            }
+            else
+            {
+                txt_timeon_act.Enabled = true;
+                txt_timeoff_act.Enabled = true;
+                txt_hours.Enabled = true;
+            }
         }
     }
 }

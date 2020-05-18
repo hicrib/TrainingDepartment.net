@@ -104,11 +104,12 @@
                         </table>
                     </td>
                     <td>
-                        <table style="padding: 5px;">
+                        <table style="padding: 5px; width: 100%;">
                             <tr>
-                                <th style="width: 20%;"></th>
-                                <th style="width: 40%;">Time One</th>
-                                <th style="width: 40%;">Time Off</th>
+                                <th style="width: 16%;"></th>
+                                <th style="width: 30%;">Time One</th>
+                                <th style="width: 30%;">Time Off</th>
+                                <th style="width: 24%;"></th>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; text-align: center;">Scheduled : </td>
@@ -118,22 +119,30 @@
                                 <td style="text-align: center;">
                                     <asp:TextBox ID="txt_timeoff_sch" TextMode="Time" runat="server"></asp:TextBox>
                                 </td>
+                                <td>
+                                    <asp:CheckBox ID="chk_noshow" runat="server" AutoPostBack="true" OnCheckedChanged="chk_noshow_CheckedChanged" />
+                                    No-Show
+                                </td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; text-align: center;">Actual : </td>
                                 <td style="text-align: center;">
-                                    <asp:TextBox ID="txt_timeon_act" AutoPostBack="true" OnTextChanged="txt_timeon_act_TextChanged" TextMode="Time" runat="server"></asp:TextBox>
+                                    <asp:TextBox ID="txt_timeon_act" TextMode="Time" runat="server" AutoPostBack="true" OnTextChanged="txt_timeon_act_TextChanged"></asp:TextBox>
                                 </td>
                                 <td style="text-align: center; padding: 5px !important;">
-                                    <asp:TextBox ID="txt_timeoff_act" AutoPostBack="true" OnTextChanged="txt_timeon_act_TextChanged" TextMode="Time" runat="server"></asp:TextBox>
+                                    <asp:TextBox ID="txt_timeoff_act" TextMode="Time" runat="server" AutoPostBack="true" OnTextChanged="txt_timeon_act_TextChanged"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <asp:CheckBox ID="chk_notraining" runat="server" AutoPostBack="true" OnCheckedChanged="chk_noshow_CheckedChanged" />
+                                    No Training
                                 </td>
                             </tr>
                             <tr style="border-top: 1px solid black;">
-                                <td colspan="3" style="text-align: center; padding: 5px !important;">Hours :
+                                <td colspan="2" style="text-align: center; padding: 5px !important;">Hours :
                                         <asp:TextBox ID="txt_hours" TextMode="Time" runat="server"></asp:TextBox>
-
-                                    Total Hours :
-                                        <asp:TextBox ID="txt_totalhours" runat="server"></asp:TextBox>
+                                </td>
+                                <td colspan="2">Total Hours :
+                                        <asp:TextBox ID="txt_totalhours" Width="70" runat="server"></asp:TextBox>
                                 </td>
                             </tr>
                         </table>

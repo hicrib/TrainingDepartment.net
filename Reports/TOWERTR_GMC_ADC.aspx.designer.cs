@@ -213,6 +213,15 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.TextBox txt_timeoff_sch;
 
         /// <summary>
+        /// chk_noshow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chk_noshow;
+
+        /// <summary>
         /// txt_timeon_act control.
         /// </summary>
         /// <remarks>
@@ -229,6 +238,15 @@ namespace AviaTrain.Reports
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txt_timeoff_act;
+
+        /// <summary>
+        /// chk_notraining control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chk_notraining;
 
         /// <summary>
         /// txt_hours control.

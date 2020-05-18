@@ -298,6 +298,12 @@ namespace AviaTrain.App_Code
         }
         public static string add_TimeFormat(string first, string second)
         {
+            
+            if (first == "")
+                first = "00:00";
+            if (second == "")
+                second = "00:00";
+
             if (!check_TimeTextbox_format(first) || !check_TimeTextbox_format(second))
                 return null;
 
@@ -314,6 +320,11 @@ namespace AviaTrain.App_Code
 
         public static string subtract_TimeFormat(string earlier, string later)
         {
+            if (earlier == "")
+                earlier = "00:00";
+            if (later == "")
+                later = "00:00";
+
             if (!check_TimeTextbox_format(earlier) || !check_TimeTextbox_format(later))
                 return null;
 
