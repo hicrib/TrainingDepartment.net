@@ -1126,6 +1126,7 @@
     <Content Include="Reports\CreateReport.aspx" />
     <Content Include="Reports\DAILYTR_ASS_RAD.aspx" />
     <Content Include="Reports\DAILYTR_ASS_TWR.aspx" />
+    <Content Include="Reports\LevelObjectives.aspx" />
     <Content Include="Reports\RECOM_CERTIF.aspx" />
     <Content Include="Reports\RECOM_LEVEL.aspx" />
     <Content Include="Reports\ShowReport.aspx" />
@@ -1457,6 +1458,13 @@
     </Compile>
     <Compile Include="Reports\DAILYTR_ASS_TWR.aspx.designer.cs">
       <DependentUpon>DAILYTR_ASS_TWR.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\LevelObjectives.aspx.cs">
+      <DependentUpon>LevelObjectives.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\LevelObjectives.aspx.designer.cs">
+      <DependentUpon>LevelObjectives.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\RECOM_CERTIF.aspx.cs">
       <DependentUpon>RECOM_CERTIF.aspx</DependentUpon>

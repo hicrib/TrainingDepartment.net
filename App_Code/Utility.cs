@@ -63,6 +63,23 @@ namespace AviaTrain.App_Code
 
             return false;
         }
+        public static bool isExaminer(DataTable dt)
+        {
+            try
+            {
+                if (dt == null || dt.Rows.Count == 0)
+                    return false;
+
+                DataRow[] o = dt.Select("ROLENAME = 'EXAMINER'");
+                if (o.Length > 0)
+                    return true;
+            }
+            catch (Exception)
+            {
+            }
+
+            return false;
+        }
 
         public static bool isEXAMTRAINEE(DataTable dt)
         {

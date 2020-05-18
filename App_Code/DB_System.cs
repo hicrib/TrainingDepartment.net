@@ -190,16 +190,23 @@ namespace AviaTrain.App_Code
             dt.Rows.Add(new object[] { "NRH", "ACC-NRH" });
             dt.Rows.Add(new object[] { "NRL", "ACC-NRL" });
             dt.Rows.Add(new object[] { "NRX", "ACC-NRX" });
-            dt.Rows.Add(new object[] { "SRL", "ACC-SRL" });
+
             dt.Rows.Add(new object[] { "SRH", "ACC-SRH" });
+            dt.Rows.Add(new object[] { "SRL", "ACC-SRL" });
             dt.Rows.Add(new object[] { "SRX", "ACC-SRX" });
-            dt.Rows.Add(new object[] { "CRL", "ACC-CRL" });
+
             dt.Rows.Add(new object[] { "CRH", "ACC-CRH" });
+            dt.Rows.Add(new object[] { "CRL", "ACC-CRL" });
             dt.Rows.Add(new object[] { "CRX", "ACC-CRX" });
+           
             dt.Rows.Add(new object[] { "ARN", "APP-ARN" });
             dt.Rows.Add(new object[] { "ARS", "APP-ARS" });
+            dt.Rows.Add(new object[] { "ARX", "APP-ARX" });
+            
             dt.Rows.Add(new object[] { "BRN", "APP-BRN" });
             dt.Rows.Add(new object[] { "BRS", "APP-BRS" });
+            dt.Rows.Add(new object[] { "BRX", "APP-BRX" });
+
             dt.Rows.Add(new object[] { "KR", "APP-KR" });
 
             return dt;
@@ -246,7 +253,7 @@ namespace AviaTrain.App_Code
                 using (SqlCommand command = new SqlCommand(
                             @" SELECT '-' AS [CODE]   , '---' AS DESCRIPTION
                                     UNION  
-                                    SELECT DISTINCT EXTRA AS [CODE], [DESCRIPTION] FROM POSITION_SECTOR WHERE POSITION = @POSITION", connection))
+                                    SELECT DISTINCT EXTRA AS [CODE], EXTRA AS 'DESCRIPTION' FROM POSITION_SECTOR WHERE POSITION = @POSITION", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
@@ -469,7 +476,8 @@ namespace AviaTrain.App_Code
                                   FROM USER_ROLES UR
                                   JOIN ROLE_DEFINITION RDEF  ON UR.ROLEID=RDEF.ID
                                   JOIN USERS U ON UR.EMPLOYEEID = U.EMPLOYEEID
-                                  WHERE RDEF.[NAME] = 'TRAINEE' AND U.ISACTIVE=1 ", connection))
+                                  WHERE RDEF.[NAME] = 'TRAINEE' AND U.ISACTIVE=1 
+                                  order by [NAME] ", connection))
                     {
                         connection.Open();
                         SqlDataAdapter da = new SqlDataAdapter(command);

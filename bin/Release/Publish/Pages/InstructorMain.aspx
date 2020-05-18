@@ -70,6 +70,13 @@
                 <asp:Button ID="btn_create_trainingfolder" runat="server" Text="Create Training Folder" OnClick="btn_create_trainingfolde_Click" CssClass="instructorButton" />
             </asp:TableCell>
         </asp:TableRow>
+        <asp:TableRow>
+            <asp:TableCell ColumnSpan="2">
+            </asp:TableCell>
+            <asp:TableCell ColumnSpan="2">
+                <asp:Button ID="btn_levelobjectives" runat="server" Text="Sign Level Objectives" OnClick="btn_levelobjectives_Click" CssClass="instructorButton" />
+            </asp:TableCell>
+        </asp:TableRow>
     </asp:Table>
     <br />
     <br />

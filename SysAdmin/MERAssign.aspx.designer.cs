@@ -24,31 +24,13 @@ namespace AviaTrain.SysAdmin
         protected global::System.Web.UI.UpdatePanel update_panel;
 
         /// <summary>
-        /// Menu1 control.
+        /// ddl_trainee control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Menu Menu1;
-
-        /// <summary>
-        /// MultiView1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.MultiView MultiView1;
-
-        /// <summary>
-        /// view_defaultMERs control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View view_defaultMERs;
+        protected global::System.Web.UI.WebControls.DropDownList ddl_trainee;
 
         /// <summary>
         /// ddl_position control.
@@ -87,6 +69,24 @@ namespace AviaTrain.SysAdmin
         protected global::System.Web.UI.WebControls.Button btn_findMERs;
 
         /// <summary>
+        /// lbl_pageresult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_pageresult;
+
+        /// <summary>
+        /// txt_comments control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_comments;
+
+        /// <summary>
         /// grid_defaultMERs control.
         /// </summary>
         /// <remarks>
@@ -94,14 +94,5 @@ namespace AviaTrain.SysAdmin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView grid_defaultMERs;
-
-        /// <summary>
-        /// view_userMERs control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View view_userMERs;
     }
 }

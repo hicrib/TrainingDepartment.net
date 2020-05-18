@@ -178,7 +178,7 @@ namespace AviaTrain.Reports
 
             Dictionary<string, string> direct_dict = (Dictionary<string, string>)Session["direct_dictionary"];
 
-            if (direct_dict != null || direct_dict.Count != 0)
+            if (direct_dict != null && direct_dict.Count != 0)
                 fill_from_CreateReport(direct_dict);
         }
 

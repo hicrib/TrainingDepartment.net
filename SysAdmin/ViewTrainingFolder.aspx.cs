@@ -46,6 +46,7 @@ namespace AviaTrain.SysAdmin
 
             ddl_sector.DataSource = DB_System.get_Sectors(ddl_positions.SelectedValue);
             ddl_sector.DataValueField = "CODE";
+            ddl_sector.DataTextField = "DESCRIPTION";
             ddl_sector.DataBind();
         }
 
@@ -124,7 +125,31 @@ namespace AviaTrain.SysAdmin
                 e.Row.Cells[6].Visible = false;
                 e.Row.Cells[7].Visible = false;
                 e.Row.Cells[8].Visible = false;
+
+                if (e.Row.Cells[2].Text == "REPORT")
+                    e.Row.Cells[1].Text = "";
+                else
+                    e.Row.Cells[0].Style.Add("opacity", "0");//todo burada findcontrols desek daha iyi. ornegi LEVELOBJECTIVES'de
+
+                if (e.Row.Cells[2].Text == "ONGOING")
+                    e.Row.Style.Add("font-weight", "bold");
+
+                if (e.Row.Cells[4].Text == "0")
+                    e.Row.Cells[4].Text = "";
             }
+        }
+
+        protected void grid_folder_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if(e.CommandName == "GO")
+            {
+                GridViewRow selectedRow = grid_folder.Rows[Convert.ToInt32(e.CommandArgument)];
+                string reportid = selectedRow.Cells[4].Text.ToString().Trim();
+                Response.Redirect("~/Reports/ShowReport.aspx?ID=" + reportid);
+
+                //Response.Write("<script>window.open ('/Reports/ShowReport.aspx?ID=" + reportid + "','_blank');</script>");
+            }
+           
         }
     }
 }

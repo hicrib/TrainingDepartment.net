@@ -7,74 +7,74 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AviaTrain.Pages
+namespace AviaTrain.Reports
 {
 
 
-    public partial class InstructorMain
+    public partial class LevelObjectives
     {
 
         /// <summary>
-        /// actionstbl control.
+        /// uppanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table actionstbl;
+        protected global::System.Web.UI.UpdatePanel uppanel;
 
         /// <summary>
-        /// btn_my_training control.
+        /// ddl_trainee control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_my_training;
+        protected global::System.Web.UI.WebControls.DropDownList ddl_trainee;
 
         /// <summary>
-        /// btn_create_report control.
+        /// ddl_position control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_report;
+        protected global::System.Web.UI.WebControls.DropDownList ddl_position;
 
         /// <summary>
-        /// btn_create_trainingfolder control.
+        /// lbl_pageresult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_trainingfolder;
+        protected global::System.Web.UI.WebControls.Label lbl_pageresult;
 
         /// <summary>
-        /// btn_levelobjectives control.
+        /// pnl_grid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_levelobjectives;
+        protected global::System.Web.UI.WebControls.Panel pnl_grid;
 
         /// <summary>
-        /// ojtireports_tbl control.
+        /// lbl_tableheader control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table ojtireports_tbl;
+        protected global::System.Web.UI.WebControls.Label lbl_tableheader;
 
         /// <summary>
-        /// grid_ojti_reports control.
+        /// grid_objectives control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grid_ojti_reports;
+        protected global::System.Web.UI.WebControls.GridView grid_objectives;
     }
 }

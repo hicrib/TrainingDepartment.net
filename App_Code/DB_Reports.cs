@@ -47,37 +47,47 @@ namespace AviaTrain.App_Code
         {
             string reportid = "";
 
-            if (reporttype == "1")
-                reportid = push_TR_ARE_APP_RAD(data);
-            if (reporttype == "2")
-                reportid = push_DAILYTR_ASS_TWR(data);
-            if (reporttype == "3")
-                reportid = push_DAILYTR_ASS_RAD(data);
-            if (reporttype == "4")
-                reportid = push_TOWERTR_GMC_ADC(data);
-
-            if (reportid == "")
-                return "";
-
-
-            if (!push_criticalskill_results(reportid, reporttype, data))
+            try
             {
-                rollback_push_report(reportid);
-                return "";
+
+
+                if (reporttype == "1")
+                    reportid = push_TR_ARE_APP_RAD(data);
+                if (reporttype == "2")
+                    reportid = push_DAILYTR_ASS_TWR(data);
+                if (reporttype == "3")
+                    reportid = push_DAILYTR_ASS_RAD(data);
+                if (reporttype == "4")
+                    reportid = push_TOWERTR_GMC_ADC(data);
+
+                if (reportid == "")
+                    return "";
+
+
+                if (!push_criticalskill_results(reportid, reporttype, data))
+                {
+                    rollback_push_report(reportid);
+                    return "";
+                }
+
+
+                if (!push_UserTrainingFolder(reportid, data["genid"]))
+                {
+                    rollback_push_report(reportid);
+                    return "";
+                }
+
+                //todo : there is no rollback of usertrainingfolder when this fails. Rest is rolledback
+                if (!update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid))
+                {
+                    rollback_push_report(reportid);
+                    return "";
+                }
             }
-
-
-            if (!push_UserTrainingFolder(reportid, data["genid"]))
+            catch (Exception e)
             {
-                rollback_push_report(reportid);
-                return "";
-            }
 
-            //todo : there is no rollback of usertrainingfolder when this fails. Rest is rolledback
-            if (!update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid))
-            {
-                rollback_push_report(reportid);
-                return "";
+                string mes = e.Message;
             }
 
             return reportid;
@@ -144,7 +154,7 @@ namespace AviaTrain.App_Code
                             SELECT @ID", connection))
             {
                 connection.Open();
-                SqlTransaction tran = connection.BeginTransaction();
+                //SqlTransaction tran = connection.BeginTransaction();
                 try
                 {
                     command.Parameters.AddWithValue("@OJTI_ID", data["OJTI_ID"]);
@@ -177,13 +187,13 @@ namespace AviaTrain.App_Code
                     command.Parameters.Add("@TIMEOFF_ACT", SqlDbType.NVarChar).Value = data["TIMEOFF_ACT"];
 
                     reportid = Convert.ToString(command.ExecuteScalar() as object);
-                    tran.Commit();
+                    //tran.Commit();
                 }
                 catch (Exception e)
                 {
                     try
                     {
-                        tran.Rollback();
+                        //tran.Rollback();
                     }
                     catch (Exception exRollback)
                     {
@@ -214,7 +224,7 @@ SELECT @ID
 ", connection))
             {
                 connection.Open();
-                SqlTransaction tran = connection.BeginTransaction();
+                //SqlTransaction tran = connection.BeginTransaction();
                 try
                 {
                     command.Parameters.AddWithValue("@OJTI_ID", data["OJTI_ID"]);
@@ -246,13 +256,13 @@ SELECT @ID
 
 
                     reportid = Convert.ToString(command.ExecuteScalar() as object);
-                    tran.Commit();
+                    //tran.Commit();
                 }
                 catch (Exception e)
                 {
                     try
                     {
-                        tran.Rollback();
+                        //tran.Rollback();
                     }
                     catch (Exception exRollback)
                     {
@@ -286,7 +296,7 @@ SELECT @ID
 ", connection))
             {
                 connection.Open();
-                SqlTransaction tran = connection.BeginTransaction();
+                //SqlTransaction tran = connection.BeginTransaction();
                 try
                 {
                     command.Parameters.AddWithValue("@OJTI_ID", data["OJTI_ID"]);
@@ -312,13 +322,13 @@ SELECT @ID
                     command.Parameters.Add("@TIMEOFF_ACT", SqlDbType.NVarChar).Value = data["TIMEOFF_ACT"];
 
                     reportid = Convert.ToString(command.ExecuteScalar() as object);
-                    tran.Commit();
+                    //tran.Commit();
                 }
                 catch (Exception e)
                 {
                     try
                     {
-                        tran.Rollback();
+                        //tran.Rollback();
                     }
                     catch (Exception exRollback)
                     {
@@ -354,7 +364,7 @@ SELECT @ID
 ", connection))
             {
                 connection.Open();
-                SqlTransaction tran = connection.BeginTransaction();
+                //SqlTransaction tran = connection.BeginTransaction();
                 try
                 {
                     command.Parameters.AddWithValue("@OJTI_ID", data["OJTI_ID"]);
@@ -380,13 +390,13 @@ SELECT @ID
 
 
                     reportid = Convert.ToString(command.ExecuteScalar() as object);
-                    tran.Commit();
+                    //tran.Commit();
                 }
                 catch (Exception e)
                 {
                     try
                     {
-                        tran.Rollback();
+                        //tran.Rollback();
                     }
                     catch (Exception exRollback)
                     {
@@ -2141,25 +2151,26 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
             return null;
         }
 
-        public static DataTable get_MERs(string position = "", string sector = "", string stepid = "")
+        public static DataTable get_MERs(string employeeid, string position = "", string sector = "", string stepid = "")
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(con_str))
                 using (SqlCommand command = new SqlCommand(
-                            @"  SELECT TTS.POSITION , TTS.SECTOR, TTS.DESCRIPTION , MD.MER , TTS.ID
-                                FROM TRAINING_TREE_STEPS TTS
-                                LEFT JOIN MER_DEFAULT MD ON MD.POSITION = TTS.POSITION 
-                                                        AND ISNULL(MD.SECTOR,'') = ISNULL(TTS.SECTOR,'')
-                                                        AND TTS.PHASE = MD.PHASE
-                                WHERE 
-                                    TTS.ID = CASE WHEN @STEPID = 0 THEN TTS.ID ELSE @STEPID END
-                                    AND 
-                                    TTS.POSITION = CASE WHEN @POSITION = '' THEN TTS.POSITION ELSE @POSITION END
-                                    AND 
-                                    TTS.SECTOR = CASE WHEN @SECTOR = '' THEN TTS.SECTOR ELSE @SECTOR END", connection))
+                            @"  SELECT ISNULL(MU.MER,'0') AS 'Current' , 
+                                     TTS.POSITION , TTS.SECTOR, TTS.DESCRIPTION , 
+                                     TTS.ID
+                                 FROM TRAINING_TREE_STEPS TTS
+                                 LEFT JOIN MER_USER MU ON TTS.ID = MU.STEPID AND  MU.EMPLOYEEID = @EMPLOYEEID
+                                 WHERE 
+                                     TTS.ID = CASE WHEN @STEPID = 0 THEN TTS.ID ELSE @STEPID END
+                                     AND 
+                                     TTS.POSITION = CASE WHEN @POSITION = '' THEN TTS.POSITION ELSE @POSITION END
+                                     AND 
+                                     TTS.SECTOR = CASE WHEN @SECTOR = '' THEN TTS.SECTOR ELSE @SECTOR END", connection))
                 {
                     connection.Open();
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
                     command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid == "" ? "0" : stepid;
                     command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
                     command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
@@ -2180,32 +2191,191 @@ FROM TRAINING_TREE_STEPS WHERE POSITION = @POSITION AND SECTOR =@SECTOR ORDER BY
             return null;
         }
 
-        public static bool update_MER(string stepid, string MER, string employeeid = "", string comments = "")
+        public static bool update_MER(string stepid, string MER, string employeeid , string comments = "")
         {
             //TODO : EMPLOYEEID WOULDNT UPDATE SINCE THERE IS NO PRIOR RECORD. MUST INSERT FIRST
             UserSession user = (UserSession)HttpContext.Current.Session["usersession"];
-            string update = "";
-            if (employeeid != "")
+            
+            try
             {
-                update = @"INSERT INTO MER_USER
-                                SELECT " + employeeid + ", POSITION, SECTOR, PHASE , NULL, @MER , " + user.employeeid + @" , @COMMENTS
-                                FROM TRAINING_TREE_STEPS 
-                                WHERE ID = @ID";
+
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(@"
+                        IF NOT EXISTS (SELECT * FROM MER_USER WHERE EMPLOYEEID = @EMPLOYEEID AND STEPID = @STEPID)
+	                        INSERT INTO MER_USER 
+	                        VALUES( @EMPLOYEEID, @STEPID , @MER, @ADMINID, CONVERT(VARCHAR,GETUTCDATE(),20),@COMMENTS)
+                        ELSE
+	                        UPDATE MER_USER
+	                        SET MER=@MER , DEFINED_BY = @ADMINID, COMMENTS = @COMMENTS, DEFINED_TIME = CONVERT(VARCHAR,GETUTCDATE(),20)
+	                        WHERE EMPLOYEEID = @EMPLOYEEID AND STEPID = @STEPID", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+                    command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
+                    command.Parameters.Add("@MER", SqlDbType.Int).Value = MER;
+                    command.Parameters.Add("@ADMINID", SqlDbType.Int).Value = user.employeeid;
+                    command.Parameters.Add("@COMMENTS", SqlDbType.VarChar).Value = comments;
+                    
+                    command.CommandType = CommandType.Text;
+
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
+                }
             }
-            else
-                update = @"UPDATE MER_DEFAULT SET MER = @MER  WHERE ID=@ID";
+            catch (Exception e)
+            {
+                string me = e.Message;
+            }
+            return false;
+        }
+
+
+        public static DataTable get_Level_Objectives(string employeeid, DataRow row)
+        {
+            string position = row["POSITION"].ToString();
+            string sector = row["SECTOR"].ToString();
+            string phase = row["PHASE"].ToString();
+
+            if (sector == "")
+                sector = phase; // TWR ASSIST HAS TO BE HANDLED
+
+            string type = "";
+            if (sector == "GMC")
+                type = "TWR_GMC";
+            else if (sector == "ADC")
+                type = "TWR_ADC";
+            else if (sector == "ASSIST")
+                type = "TWR_ASSIST";
+            else if (new string[6] { "AR", "BR", "KR", "NR", "SR", "CR" }.Contains(sector))
+                type = "AREA_APPROACH";
+
+            string level = "";
+            if (phase.Contains("LEVEL1"))
+                level = "1";
+            else if (phase.Contains("LEVEL2"))
+                level = "2";
+            else if (phase.Contains("LEVEL3"))
+                level = "3";
+            else if (sector == "ASSIST" && phase == "ASSIST") //TWR ASSIST
+                level = "0";
+
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                 @" SELECT DEF.ID, DEF.CATEGORY , DEF.HEADER, DEF.OBJECTIVE ,
+	                     ISNULL(US.INITIAL,'') as 'By' , F.ID as 'FORMID'
+                 FROM LEVEL_OBJECTIVES_FORM F
+                 JOIN LEVEL_OBJECTIVES_DEF DEF ON DEF.FORMID = F.ID
+                 LEFT JOIN LEVEL_OBJECTIVES_USER U ON U.OBJECTIVEID = DEF.ID AND U.USERID = @USERID
+                 LEFT JOIN USERS US ON US.EMPLOYEEID = U.SIGNEDBY
+                 WHERE F.TYPE = @TYPE AND F.LEVELNUM = @LEVEL AND F.ISACTIVE = 1 AND DEF.ISACTIVE = 1", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = employeeid;
+                    command.Parameters.Add("@TYPE", SqlDbType.VarChar).Value = type;
+                    command.Parameters.Add("@LEVEL", SqlDbType.VarChar).Value = level;
+                    command.CommandType = CommandType.Text;
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    DataTable res = new DataTable();
+                    da.Fill(res);
+
+                    if (res != null || res.Rows.Count > 0)
+                        return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+
+        public static DataTable get_ONGOING_step(string employeeid, string sector)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @" SELECT TTS.POSITION, TTS.SECTOR, TTS.PHASE, TTS.ID, UTF.GENID
+                                FROM USER_TRAINING_FOLDER UTF
+                                JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
+                                WHERE UTF.EMPLOYEEID = @EMPLOYEEID AND UTF.STATUS = 'ONGOING'
+                                AND 1 = CASE WHEN @SECTOR = 'ASSIST' AND TTS.POSITION='TWR' AND TTS.PHASE = 'ASSIST' THEN 1
+			                                 WHEN TTS.SECTOR = @SECTOR THEN 1
+			                                 ELSE 0 END ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+                    command.Parameters.Add("@SECTOR", SqlDbType.VarChar).Value = sector;
+                    command.CommandType = CommandType.Text;
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    DataTable res = new DataTable();
+                    da.Fill(res);
+
+                    if (res != null || res.Rows.Count > 0)
+                        return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+        public static DataTable get_ONGOING_steps(string employeeid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlCommand command = new SqlCommand(
+                            @" SELECT TTS.POSITION, ISNULL(TTS.SECTOR,'') AS 'SECTOR', TTS.PHASE, TTS.ID, UTF.GENID
+                                FROM USER_TRAINING_FOLDER UTF
+                                JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
+                                WHERE UTF.EMPLOYEEID = @EMPLOYEEID AND UTF.STATUS = 'ONGOING'  ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+                    command.CommandType = CommandType.Text;
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    DataTable res = new DataTable();
+                    da.Fill(res);
+
+                    if (res != null || res.Rows.Count > 0)
+                        return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+
+        public static bool sign_unsign_objective(string employeeid, string formid, string objectiveid, string sign)
+        {
+            UserSession user = (UserSession)HttpContext.Current.Session["usersession"];
 
             try
             {
 
                 using (SqlConnection connection = new SqlConnection(con_str))
-                using (SqlCommand command = new SqlCommand(update, connection))
+                using (SqlCommand command = new SqlCommand(@"
+                       DELETE FROM LEVEL_OBJECTIVES_USER WHERE USERID=@EMPLOYEEID AND FORMID=@FORMID AND OBJECTIVEID=@OBJID
+                       IF @SIGN = 1
+                            INSERT INTO LEVEL_OBJECTIVES_USER VALUES(@EMPLOYEEID, @FORMID,@OBJID,@OJTIID,CONVERT(VARCHAR,GETUTCDATE(),20) )", connection))
                 {
                     connection.Open();
-                    command.Parameters.Add("@ID", SqlDbType.Int).Value = stepid;
-                    command.Parameters.Add("@MER", SqlDbType.Int).Value = MER;
-                    if (employeeid != "")
-                        command.Parameters.Add("@COMMENTS", SqlDbType.NVarChar).Value = comments;
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+                    command.Parameters.Add("@FORMID", SqlDbType.Int).Value = formid;
+                    command.Parameters.Add("@OBJID", SqlDbType.Int).Value = objectiveid;
+                    command.Parameters.Add("@OJTIID", SqlDbType.Int).Value = user.employeeid;
+                    command.Parameters.Add("@SIGN", SqlDbType.Int).Value = sign;
+                    
 
                     command.CommandType = CommandType.Text;
 

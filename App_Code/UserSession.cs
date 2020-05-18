@@ -18,6 +18,7 @@ namespace AviaTrain.App_Code
         public bool isAdmin;
         public bool isOJTI;
         public bool isLCE;
+        public bool isExaminer;
         public bool isOnlyTrainee = true;
         public string problem;
         public bool isExamTrainee;
@@ -43,12 +44,13 @@ namespace AviaTrain.App_Code
             isAdmin = Utility.isAdmin(role_priv);
             isOJTI = Utility.isOJTI(role_priv);
             isLCE = Utility.isLCE(role_priv);
+            isExaminer = Utility.isExaminer(role_priv);
             isExamTrainee = Utility.isEXAMTRAINEE(role_priv);
             isExamAdmin = Utility.isEXAM_ADMIN(role_priv);
             roles_pages = DB_System.get_ROLES_PAGES(employeeid);
             notif = DB_System.has_new_user_notification(employeeid);
 
-            if (isAdmin || isLCE || isOJTI)
+            if (isAdmin || isLCE || isOJTI || isExaminer)
                 isOnlyTrainee = false;
 
             if (role_priv == null || role_priv.Rows.Count == 0)

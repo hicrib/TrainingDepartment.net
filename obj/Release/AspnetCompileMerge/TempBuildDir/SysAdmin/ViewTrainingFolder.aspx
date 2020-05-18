@@ -87,12 +87,12 @@
                         </tr>
                     </tbody>
                 </table>
-                <asp:GridView ID="grid_folder" AllowPaging="true" AllowSorting="true" CssClass="grid_folder" runat="server" Visible="false"
-                    OnSelectedIndexChanged="grid_folder_SelectedIndexChanged" OnPageIndexChanging="grid_folder_PageIndexChanging" PageSize="5"
-                    OnSorting="grid_folder_Sorting" OnRowDataBound="grid_folder_RowDataBound">
+                <asp:GridView ID="grid_folder" AllowPaging="true"  CssClass="grid_folder" runat="server" Visible="false"
+                    OnPageIndexChanging="grid_folder_PageIndexChanging" PageSize="20" OnRowCommand="grid_folder_RowCommand"
+                     OnRowDataBound="grid_folder_RowDataBound">
                     <PagerSettings Mode="NumericFirstLast" PageButtonCount="20" FirstPageText="First" LastPageText="Last" />
                     <Columns>
-                        <asp:CommandField ShowSelectButton="True" ButtonType="Image" ControlStyle-CssClass="imgicon" SelectImageUrl="~/Images/view.png" SelectText="View" />
+                        <asp:ButtonField CommandName="GO"  ButtonType="Image" ControlStyle-CssClass="imgicon" ImageUrl="~/Images/view.png"  />
                     </Columns>
                 </asp:GridView>
 

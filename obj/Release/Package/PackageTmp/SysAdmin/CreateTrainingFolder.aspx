@@ -2,13 +2,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
     <style>
-         #createuser_tbl {
+         .creatfolder_tbl {
             border: 2px solid #a52a2a	;
             border-collapse: collapse;
             width: 1000px;
         }
 
-            #createuser_tbl td {
+            .creatfolder_tbl td {
                 padding: 5px;
                 font-weight: bold;
                 font-size: medium;
@@ -45,13 +45,12 @@
             </Triggers>
             <ContentTemplate>
                 <div>
-                    <table id="createuser_tbl" style="">
+                    <table id="createuser_tbl" class="creatfolder_tbl" style="">
                         <tr>
                             <td>Trainee : </td>
                             <td colspan="3">
                                 <asp:DropDownList ID="ddl_all_trainees" runat="server" CssClass="dropdown"></asp:DropDownList></td>
                             <td></td>
-
                         </tr>
                         <tr>
                             <td>Position :  </td>

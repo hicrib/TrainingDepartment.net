@@ -25,6 +25,8 @@ namespace AviaTrain.Reports
 
                     string relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid);
 
+                    if (user.isAdmin)
+                        relation = "sysadmin";
                     // Check if trainee will sign OR there is privilege to view
                     switch (relation)
                     {
@@ -139,7 +141,10 @@ namespace AviaTrain.Reports
             //bring trainee sing if signed
             if (meta.Rows[0]["TRAINEE_SIGNED"].ToString() == "True")
             {
-                btn_sign_trainee_Click(new object(), new EventArgs());
+                img_traineesign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_trainees.SelectedValue)["SIGNATURE"].ToString();
+                img_traineesign.Visible = true;
+                btn_sign_trainee.Visible = false;
+                lbl_trainee_signed.Text = "1";
             }
 
 
@@ -204,7 +209,7 @@ namespace AviaTrain.Reports
             }
 
             Dictionary<string, string> direct_dict = (Dictionary<string, string>)Session["direct_dictionary"];
-            if (direct_dict != null || direct_dict.Count != 0)
+            if (direct_dict != null && direct_dict.Count != 0)
                 fill_from_CreateReport(direct_dict);
         }
 
