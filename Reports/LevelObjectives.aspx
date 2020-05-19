@@ -40,10 +40,6 @@
             width: 100px;
         }
 
-        .iconimg {
-            height: 25px;
-            width: 25px;
-        }
 
         .main_tbl {
             width: 1000px;

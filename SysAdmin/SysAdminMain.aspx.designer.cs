@@ -51,6 +51,15 @@ namespace AviaTrain.SysAdmin
         protected global::System.Web.UI.WebControls.Button btn_publishnotification;
 
         /// <summary>
+        /// btn_filetypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_filetypes;
+
+        /// <summary>
         /// btn_create_questions control.
         /// </summary>
         /// <remarks>

@@ -27,7 +27,7 @@ namespace AviaTrain.App_Code
 
         public DataRow info;
 
-        DataTable role_priv;
+        public DataTable role_priv;
         public DataTable roles_pages;
 
         public UserSession(string id)
@@ -41,13 +41,16 @@ namespace AviaTrain.App_Code
             signature = info["SIGNATURE"].ToString();
 
             role_priv = DB_System.get_ALL_Privileges_of_Person(employeeid);
+
             isAdmin = Utility.isAdmin(role_priv);
             isOJTI = Utility.isOJTI(role_priv);
             isLCE = Utility.isLCE(role_priv);
             isExaminer = Utility.isExaminer(role_priv);
             isExamTrainee = Utility.isEXAMTRAINEE(role_priv);
             isExamAdmin = Utility.isEXAM_ADMIN(role_priv);
+
             roles_pages = DB_System.get_ROLES_PAGES(employeeid);
+
             notif = DB_System.has_new_user_notification(employeeid);
 
             if (isAdmin || isLCE || isOJTI || isExaminer)

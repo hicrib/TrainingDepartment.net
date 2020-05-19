@@ -33,10 +33,7 @@
             padding : 5px;
         }
 
-        .iconimg {
-            max-width: 25px;
-            max-height: 25px;
-        }
+       
 
         .header {
             font-weight: bold;

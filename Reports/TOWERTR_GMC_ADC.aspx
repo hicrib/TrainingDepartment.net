@@ -138,9 +138,9 @@
                         <table style="padding: 5px; width: 100%;">
                             <tr>
                                 <th style="width: 16%;"></th>
-                                <th style="width: 30%;">Time One</th>
+                                <th style="width: 25%;">Time One</th>
                                 <th style="width: 30%;">Time Off</th>
-                                <th style="width: 24%;"></th>
+                                <th style="width: 29%;"></th>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold; text-align: center;">Scheduled : </td>
@@ -165,7 +165,7 @@
                                 </td>
                                 <td>
                                     <asp:CheckBox ID="chk_notraining" runat="server" AutoPostBack="true" OnCheckedChanged="chk_noshow_CheckedChanged" />
-                                    No Training
+                                    No Training Value
                                 </td>
                             </tr>
                             <tr style="border-top: 1px solid black;">

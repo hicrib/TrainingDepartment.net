@@ -56,7 +56,7 @@ namespace AviaTrain.Pages
                 if (file1 != "")
                 {
                     lnk_file1.Visible = true;
-                    lnk_file1.Text = Utility.last_part(file1, '_');
+                    lnk_file1.Text = Utility.last_part(file1, "_x_");
                     lnk_file1.Attributes.Add("href", file1);
                     lnk_file1.Attributes.Add("target", "_blank");
                 }
@@ -65,7 +65,7 @@ namespace AviaTrain.Pages
                 if (file2 != "")
                 {
                     lnk_file2.Visible = true;
-                    lnk_file2.Text = Utility.last_part(file2, '_');
+                    lnk_file2.Text = Utility.last_part(file2, "_x_");
                     lnk_file2.Attributes.Add("href", file2);
                     lnk_file2.Attributes.Add("target", "_blank");
                 }
@@ -74,7 +74,7 @@ namespace AviaTrain.Pages
                 if (file3 != "")
                 {
                     lnk_file3.Visible = true;
-                    lnk_file3.Text = Utility.last_part(file3, '_');
+                    lnk_file3.Text = Utility.last_part(file3, "_x_");
                     lnk_file3.Attributes.Add("href", file3);
                     lnk_file3.Attributes.Add("target", "_blank");
                 }
@@ -83,7 +83,7 @@ namespace AviaTrain.Pages
                 if (file4 != "")
                 {
                     lnk_file4.Visible = true;
-                    lnk_file4.Text = Utility.last_part(file4, '_');
+                    lnk_file4.Text = Utility.last_part(file4, "_x_");
                     lnk_file4.Attributes.Add("href", file4);
                     lnk_file4.Attributes.Add("target", "_blank");
                 }

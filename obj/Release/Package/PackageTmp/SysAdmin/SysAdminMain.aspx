@@ -58,6 +58,14 @@
                 <asp:Button ID="btn_publishnotification" runat="server" CssClass="admin_buttons" Text="Publish Notification" OnClick="btn_publishnotification_Click" />
             </td>
         </tr>
+        <tr>
+            <td>
+              <asp:Button ID="btn_filetypes" runat="server" CssClass="admin_buttons" Text="File Types" OnClick="btn_filetypes_Click" />
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
 
     <br />

@@ -148,12 +148,14 @@ C:\Users\hicri\source\repos\TrainingDepartment.net\bin\HtmlRenderer.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\HtmlRenderer.PdfSharp.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.AspNet.FriendlyUrls.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.Azure.KeyVault.Core.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.Bcl.HashCode.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.ScriptManager.MSAjax.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.ScriptManager.WebForms.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.WindowsAzure.Storage.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Newtonsoft.Json.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\PdfSharp.Charting.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\PdfSharp.dll
@@ -169,8 +171,11 @@ C:\Users\hicri\source\repos\TrainingDepartment.net\bin\System.Web.Optimization.d
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\WebGrease.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\HtmlRenderer.pdb
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\HtmlRenderer.PdfSharp.pdb
+C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.Azure.KeyVault.Core.xml
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.Bcl.AsyncInterfaces.xml
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.Bcl.HashCode.xml
+C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.WindowsAzure.Storage.pdb
+C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.WindowsAzure.Storage.xml
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\PdfSharp.xml
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\PdfSharp.Charting.xml
 C:\Users\hicri\source\repos\TrainingDepartment.net\bin\System.Buffers.xml
@@ -194,8 +199,3 @@ C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.csproj.Co
 C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.csproj.CopyComplete
 C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.dll
 C:\Users\hicri\source\repos\TrainingDepartment.net\obj\Debug\AviaTrain.pdb
-C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.Azure.KeyVault.Core.dll
-C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.WindowsAzure.Storage.dll
-C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.Azure.KeyVault.Core.xml
-C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.WindowsAzure.Storage.pdb
-C:\Users\hicri\source\repos\TrainingDepartment.net\bin\Microsoft.WindowsAzure.Storage.xml

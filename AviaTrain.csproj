@@ -190,6 +190,7 @@
     <Content Include="Css\flexslider-rtl-min.css" />
     <Content Include="Css\flexslider-rtl.css" />
     <Content Include="Css\flexslider.css" />
+    <Content Include="Css\General.css" />
     <Content Include="Css\TR.css" />
     <Content Include="Exams\AssignExam.aspx" />
     <Content Include="Exams\ChooseQuestions_Mini.aspx" />
@@ -1120,6 +1121,7 @@
     <Content Include="Pages\login.aspx" />
     <Content Include="Pages\SuccessPage.aspx" />
     <Content Include="Pages\UserDetails.aspx" />
+    <Content Include="Pages\UserFileSystem.aspx" />
     <Content Include="Pages\UserMain.aspx" />
     <Content Include="Pages\TrainingTree.aspx" />
     <Content Include="Pages\UserNotifications.aspx" />
@@ -1215,6 +1217,7 @@
     <Content Include="SysAdmin\CreateTrainingFolder.aspx" />
     <Content Include="SysAdmin\CreateUser.aspx" />
     <Content Include="SysAdmin\EditRoles.aspx" />
+    <Content Include="SysAdmin\FileTypeDefinition.aspx" />
     <Content Include="SysAdmin\MERAssign.aspx" />
     <Content Include="SysAdmin\PublishNotification.aspx" />
     <Content Include="SysAdmin\__CreateUser.aspx" />
@@ -1235,6 +1238,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\AzureCon.cs" />
+    <Compile Include="App_Code\DB_FileSys.cs" />
     <Compile Include="App_Code\DB_Reports.cs" />
     <Compile Include="App_Code\DB_ScheduledTasks.cs" />
     <Compile Include="App_Code\DB_System.cs" />
@@ -1416,6 +1420,13 @@
     <Compile Include="Pages\UserDetails.aspx.designer.cs">
       <DependentUpon>UserDetails.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\UserFileSystem.aspx.cs">
+      <DependentUpon>UserFileSystem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\UserFileSystem.aspx.designer.cs">
+      <DependentUpon>UserFileSystem.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\UserMain.aspx.cs">
       <DependentUpon>UserMain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1528,6 +1539,13 @@
     </Compile>
     <Compile Include="SysAdmin\EditRoles.aspx.designer.cs">
       <DependentUpon>EditRoles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SysAdmin\FileTypeDefinition.aspx.cs">
+      <DependentUpon>FileTypeDefinition.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SysAdmin\FileTypeDefinition.aspx.designer.cs">
+      <DependentUpon>FileTypeDefinition.aspx</DependentUpon>
     </Compile>
     <Compile Include="SysAdmin\MERAssign.aspx.cs">
       <DependentUpon>MERAssign.aspx</DependentUpon>
@@ -1688,6 +1706,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties content_4bootstrap-theme_1min_1css_1map__JsonSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

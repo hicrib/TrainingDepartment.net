@@ -42,10 +42,7 @@
             border: 1px solid #a52a2a;
         }
 
-        .iconimg{
-            max-height: 25px;
-            max-width : 25px;
-        }
+       
         .grid_table{
             width : 99%;
         }
