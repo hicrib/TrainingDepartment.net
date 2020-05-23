@@ -43,8 +43,6 @@ namespace AviaTrain.Reports
                             Response.Redirect("~/Pages/UserMain.aspx?Code=3&ID=" + reportid);
                             break;
                     }
-
-
                 }
                 else
                 {
@@ -76,6 +74,12 @@ namespace AviaTrain.Reports
 
             chk_OJT.Checked = form.Rows[0]["CHK_OJT"].ToString() == "True";
             chk_Ass.Checked = form.Rows[0]["CHK_ASS"].ToString() == "True";
+
+            if (chk_Ass.Checked)
+            {
+                rad_passfail.SelectedValue = form.Rows[0]["ASSESS_PASSED"].ToString();
+                rad_passfail.Visible = true;
+            }
 
             chk_noshow.Checked = form.Rows[0]["NOSHOW"].ToString() == "True";
             chk_notraining.Checked = form.Rows[0]["NOTRAINING"].ToString() == "True";
@@ -154,7 +158,6 @@ namespace AviaTrain.Reports
             // if not signed by trainee enable sign button
             if (mode == "trainee" && meta.Rows[0]["TRAINEE_SIGNED"].ToString() != "True")
             {
-
                 //let them sign , let them comment
                 btn_sign_trainee.Enabled = true;
 
@@ -168,12 +171,6 @@ namespace AviaTrain.Reports
                 //change mode to allow update in reports table when submit button clicked
                 lbl_viewmode.Text = "trainee";
             }
-
-
-
-
-
-
 
             //todo: disable and hide elements based on mode
         }
@@ -235,12 +232,6 @@ namespace AviaTrain.Reports
 
             txt_totalhours.Text = DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["sector"]);
             txt_totalhours.Enabled = false;
-
-
-            //ddl_positions.SelectedValue = directed["position"] + "-" + directed["sector"];
-            //ddl_positions.Enabled = false;
-
-            //todo: ojt-PRELEVEL1-assess etc can be filled here as well
         }
 
         protected string push_into_db()
@@ -251,6 +242,8 @@ namespace AviaTrain.Reports
             data.Add("OJTI_ID", ddl_ojtis.SelectedValue);
             data.Add("CHK_OJT", chk_OJT.Checked ? "1" : "0");
             data.Add("CHK_ASS", chk_Ass.Checked ? "1" : "0");
+
+            data.Add("ASSESS_PASSED", chk_Ass.Checked ? rad_passfail.SelectedValue : null); //1 - 0
 
             data.Add("NOSHOW", chk_noshow.Checked ? "1" : "0");
             data.Add("NOTRAINING", chk_notraining.Checked ? "1" : "0");
@@ -453,6 +446,7 @@ namespace AviaTrain.Reports
                 return false;
             }
 
+
             return true;
         }
 
@@ -567,14 +561,17 @@ namespace AviaTrain.Reports
                 txt_hours.Text = "";
                 txt_timeon_act.Enabled = false;
                 txt_timeoff_act.Enabled = false;
-                txt_hours.Enabled = false;
             }
             else
             {
                 txt_timeon_act.Enabled = true;
                 txt_timeoff_act.Enabled = true;
-                txt_hours.Enabled = true;
             }
+        }
+
+        protected void chk_Ass_CheckedChanged(object sender, EventArgs e)
+        {
+            rad_passfail.Visible = chk_Ass.Checked;
         }
     }
 }

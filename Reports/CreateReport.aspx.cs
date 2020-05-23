@@ -90,7 +90,6 @@ namespace AviaTrain.Reports
                 lbl_findresult.Visible = true;
                 btn_createFolder.Visible = true;
             }
-             
             else
             {
                 grid_folder.DataSource = folder;
@@ -125,10 +124,16 @@ namespace AviaTrain.Reports
                     e.Row.Cells[0].Attributes["src"] = "../Images/create.png";
                 }
 
+                if(ddl_sectors.SelectedItem.Text.ToLower().Contains("assist")) // no recommend for assist
+                {
+                    e.Row.Cells[1].Enabled = false; //disable the Create buttons is not ONGOING STEPS (finished, migration etc (todo: else?)
+                    e.Row.Cells[1].CssClass = "hidden-cell";
+                }
+
 
                 //hide 
                 e.Row.Cells[7].Visible = false; //the genid
-                e.Row.Cells[8].Visible = false; // PHASE  : PRELEVEL1, OJT_LEVEL1 , ASSIST etc...
+                e.Row.Cells[8].Visible = false; // PHASE  : PREOJT, OJT_LEVEL1 , ASSIST etc...
                 e.Row.Cells[9].Visible = false; //NAME  : APP_BR_ASSIST , TWR_GMC_LEVEL3PLUS etc...
 
 
@@ -144,7 +149,7 @@ namespace AviaTrain.Reports
             int index = Convert.ToInt32(e.CommandArgument);
             GridViewRow selectedRow = grid_folder.Rows[index];
             string genid = selectedRow.Cells[7].Text; //  genid
-            string phase = selectedRow.Cells[8].Text; // PHASE  : PRELEVEL1, OJT_LEVEL1 , ASSIST etc...
+            string phase = selectedRow.Cells[8].Text; // PHASE  : PREOJT, OJT_LEVEL1 , ASSIST etc...
             string name = selectedRow.Cells[9].Text; //NAME  : APP_BR_ASSIST , TWR_GMC_LEVEL3PLUS etc...
 
 
@@ -153,7 +158,7 @@ namespace AviaTrain.Reports
             direct_dictionary.Add("traineeid", ddl_trainees.SelectedValue);
             direct_dictionary.Add("sector", ddl_sectors.SelectedValue);
             direct_dictionary.Add("position", ddl_positions.SelectedValue);
-            direct_dictionary.Add("phase", phase);    // PHASE  : PRELEVEL1, OJT_LEVEL1 , ASSIST etc...
+            direct_dictionary.Add("phase", phase);    // PHASE  : PREOJT, OJT_LEVEL1 , ASSIST etc...
             direct_dictionary.Add("name", name);    //NAME  : APP_BR_ASSIST , TWR_GMC_LEVEL3PLUS etc...
 
             UserSession user = (UserSession)Session["usersession"];

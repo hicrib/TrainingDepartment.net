@@ -255,6 +255,7 @@
                                             <asp:ListItem Value="APP" Text="APP General "></asp:ListItem>
                                             <asp:ListItem Value="ACC-NR"></asp:ListItem>
                                             <asp:ListItem Value="ACC-SR"></asp:ListItem>
+                                            <asp:ListItem Value="ACC-CR"></asp:ListItem>
                                             <asp:ListItem Value="APP-AR"></asp:ListItem>
                                             <asp:ListItem Value="APP-BR"></asp:ListItem>
                                             <asp:ListItem Value="APP-KR"></asp:ListItem>

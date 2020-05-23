@@ -5,7 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div id="pagediv" style="margin-left: 20px; margin-top: 30px;">
+    <div id="pagediv" style=" margin-top: 30px;">
 
         <asp:Panel ID="pnl_wrapper" runat="server" Style="float: left;">
             <div id="reportinfo_div">
@@ -49,11 +49,19 @@
                                             <!-- checkboxes -->
                                             <table style="width: 550px; height: 100px;">
                                                 <tr>
-                                                    <td style="width=50%;">
+                                                    <td style="width=50%; text-align:center;">
                                                         <asp:CheckBox ID="chk_OJT" Text="OJT" runat="server" />
                                                     </td>
-                                                    <td style="">
-                                                        <asp:CheckBox ID="chk_Ass" Text="Assessment" runat="server" />
+                                                      <td style="width=50%; text-align:center;">
+                                                        <asp:CheckBox ID="chk_Ass" Text="Assessment" AutoPostBack="true" OnCheckedChanged="chk_Ass_CheckedChanged" runat="server" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" style="text-align:center;">
+                                                        <asp:RadioButtonList ID="rad_passfail" style="width:100%;" runat="server" RepeatDirection="Horizontal" Visible="false">
+                                                            <asp:ListItem Value="1" Text="PASSED" Selected="True"></asp:ListItem>
+                                                            <asp:ListItem Value="0" Text="FAILED"></asp:ListItem>
+                                                        </asp:RadioButtonList>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -73,7 +81,7 @@
                                       <asp:TextBox ID="txt_date" runat="server" TextMode="Date"></asp:TextBox>
                                     </td>
                                     <td>Position :
-                                        <asp:DropDownList ID="ddl_positions" DataSourceID="" runat="server"></asp:DropDownList></td>
+                                        <asp:DropDownList ID="ddl_positions"  runat="server"></asp:DropDownList></td>
                                 </tr>
                                 <tr>
                                     <td style="width: 50%;">Traffic Density   :</td>
@@ -139,7 +147,7 @@
                                 </tr>
                                 <tr style="border-top: 1px solid black;">
                                     <td colspan="2" style="text-align: center; padding: 5px !important;">Hours :
-                                        <asp:TextBox ID="txt_hours" TextMode="Time" runat="server"></asp:TextBox>
+                                        <asp:TextBox ID="txt_hours" Enabled="false" runat="server"></asp:TextBox>
                                     </td>
                                     <td colspan="2">Total Hours :
                                         <asp:TextBox ID="txt_totalhours" Width="70" runat="server"></asp:TextBox>
@@ -539,7 +547,7 @@
             <asp:Label ID="lbl_ojti_signed" runat="server" Visible="false"></asp:Label>
             <asp:Label ID="lbl_trainee_signed" runat="server" Visible="false"></asp:Label>
             <asp:Label ID="lbl_viewmode" runat="server" Visible="false" Text=""></asp:Label>
-            <asp:Label ID="lbl_STEPID" runat="server" Visible="false" Text=""></asp:Label>
+            <asp:Label ID="lbl_genid" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
     </div>
 </asp:Content>

@@ -10,14 +10,11 @@ namespace AviaTrain.App_Code
 {
     public static class DB_ScheduledTasks
     {
-        public static string con_str_hosting = ConfigurationManager.ConnectionStrings["local_dbconn"].ConnectionString;
-        public static string con_str = ConfigurationManager.ConnectionStrings["dbconn_hosting"].ConnectionString;
-
         public static bool NoShow()
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
 UPDATE EXM_EXAM_ASSIGNMENT
 SET [STATUS] = 'NOSHOW'
@@ -58,7 +55,7 @@ WHERE [STATUS] <> 'NOSHOW' AND ISNULL(USER_FINISH, '') = '' AND CONVERT(DATETIME
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
 UPDATE REPORT_RECOM_CERTIF
 SET TRAINEE_SIGNED = 1  , TRAINEE_SIGN_DATE = CONVERT(VARCHAR, GETUTCDATE(),20)

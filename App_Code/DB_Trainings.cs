@@ -11,10 +11,6 @@ namespace AviaTrain.App_Code
     public class DB_Trainings
     {
 
-        public static string con_str_hosting = ConfigurationManager.ConnectionStrings["local_dbconn"].ConnectionString;
-        public static string con_str = ConfigurationManager.ConnectionStrings["dbconn_hosting"].ConnectionString;
-
-
         //return trn_id, stepid
         public static string push_Training_Info_Get_Ids(string name, string sector, string effective)
         {
@@ -23,7 +19,7 @@ namespace AviaTrain.App_Code
             try
             {
 
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                         @"  INSERT INTO TRN_TRAINING_DEF 
                             VALUES ( @NAME , @SECTOR , @EFFECTIVE  , @USERID , CONVERT(VARCHAR , GETUTCDATE(), 20 ),'DESIGN_STARTED' ,NULL,1)
@@ -60,7 +56,7 @@ namespace AviaTrain.App_Code
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                      @"UPDATE TRN_TRAINING_DEF 
                        SET    
@@ -113,7 +109,7 @@ namespace AviaTrain.App_Code
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(insert, connection))
                 {
                     connection.Open();
@@ -137,7 +133,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                         @" UPDATE TRN_ASSIGNMENT 
                             SET LASTSTEPID = CASE WHEN @LASTSTEPID = '0' THEN LASTSTEPID ELSE @LASTSTEPID END ,
@@ -172,7 +168,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                         @"  UPDATE TRN_STEP SET STEPTYPE = @STEP_TYPE , TEXTHTML = @TEXTHTML, FILEADRESS = @FILEADRESS 
                             WHERE TRN_ID = @TRN_ID AND STEP_ID = @STEP_ID  ", connection))
@@ -209,7 +205,7 @@ namespace AviaTrain.App_Code
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(insert, connection))
                 {
                     connection.Open();
@@ -252,7 +248,7 @@ namespace AviaTrain.App_Code
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(insert, connection))
                 {
                     connection.Open();
@@ -276,7 +272,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                      @"UPDATE TRN_STEP 
                              SET     STEPTYPE = CASE WHEN '' = @STEPTYPE THEN STEPTYPE ELSE @STEPTYPE END , 
@@ -324,7 +320,7 @@ namespace AviaTrain.App_Code
                     select = "SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = @TRN_ID and STEPTYPE='EXAM_STEP'  AND ISACTIVE=1  ORDER BY STEP_ID ASC";
 
 
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(select, connection))
                 {
                     connection.Open();
@@ -351,7 +347,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"      SELECT ROW_NUMBER() OVER (ORDER BY s.step_id) as 'ORDERBY', 
                                             S.STEP_ID, S.STEPTYPE , S.TEXTHTML , ISNULL(SQ.Q_ID ,'0') AS 'QID' , ISNULL(S.EXTRA,'0') AS EXAMID
@@ -388,7 +384,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT * FROM TRN_STEP WHERE STEP_ID = @STEPID", connection))
@@ -418,7 +414,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"
                                 SELECT TBL.ID, ISNULL(TBL.SECTOR,'') AS SECTOR , QUESTION, Answer FROM
@@ -468,7 +464,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" 
                                 SELECT	DEF.NAME AS 'Training' ,
@@ -521,7 +517,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" 
@@ -554,7 +550,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" 
@@ -584,7 +580,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" 
@@ -606,7 +602,7 @@ namespace AviaTrain.App_Code
                                     (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = TDEF.ID AND STEPTYPE = 'TRN' ORDER BY STEP_ID DESC) AS 'LASTSTEPID',
                                     (SELECT TOP 1 STEP_ID FROM TRN_STEP WHERE TRN_ID = TDEF.ID ORDER BY STEP_ID ASC) AS 'FIRSTSTEP'
                                 from TRN_TRAINING_DEF TDEF 
-                                JOIN USERS U ON U.EMPLOYEEID = TDEF.LAST_MODIFY
+                                LEFT JOIN USERS U ON U.EMPLOYEEID = TDEF.LAST_MODIFY
                                 ORDER BY LAST_MODIFY_DATE DESC
                                ", connection))
                     {
@@ -633,7 +629,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                     @"  SELECT  USERID FROM TRN_ASSIGNMENT WHERE ASSIGNID = @ASSIGN_ID ", connection))
                 {
@@ -657,7 +653,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
                                 SELECT 
                                 CASE 
@@ -696,7 +692,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" 
@@ -742,7 +738,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                  @" SELECT	TOP 150
 		                    DEF.NAME AS 'Training' ,
@@ -828,7 +824,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" SELECT ROW_NUMBER() OVER(ORDER BY STEP_ID) AS '#',  STEP_ID FROM TRN_STEP 
                                    WHERE TRN_ID = @TRNID AND ISACTIVE = 1  ", connection))
@@ -858,7 +854,7 @@ namespace AviaTrain.App_Code
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                      @"INSERT INTO TRN_TRAINING_DEF
                             SELECT @NAME, @SECTOR, @EFFECTIVE, @USERID, CONVERT(VARCHAR, GETUTCDATE(),20), 'DESIGN_STARTED',null,1 
@@ -885,7 +881,7 @@ namespace AviaTrain.App_Code
                         return false;
                     foreach (DataRow step in steps.Rows)
                     {
-                        using (SqlConnection connection2 = new SqlConnection(con_str))
+                        using (SqlConnection connection2 = new SqlConnection(Con_Str.current))
                         using (SqlCommand command2 = new SqlCommand(
                              @"DECLARE @NEWSTEPID INT = (SELECT MAX(STEP_ID) + 256 FROM TRN_STEP )
 

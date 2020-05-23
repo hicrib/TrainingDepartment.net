@@ -53,18 +53,18 @@
                                                 <asp:CheckBox ID="chk_OJT" Text="OJT" runat="server" />
                                             </td>
                                             <td style="width: 170px;">
-                                                <asp:CheckBox ID="chk_LvlAss" Text="Level Assessment" runat="server" />
+                                                <asp:CheckBox ID="chk_LvlAss" AutoPostBack="true" OnCheckedChanged="chk_Assess_CheckedChanged" Text="Level Assessment" runat="server" />
                                             </td>
                                             <td style="width: 170px;">
-                                                <asp:CheckBox ID="chk_RemAss" Text="Remedial Assessment" runat="server" />
+                                                <asp:CheckBox ID="chk_RemAss"  AutoPostBack="true" OnCheckedChanged="chk_Assess_CheckedChanged" Text="Remedial Assessment" runat="server" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="width: 170px;">
-                                                <asp:CheckBox ID="chk_PRELEVEL1" Text="Pre-Level1" runat="server" />
+                                                <asp:CheckBox ID="chk_PREOJT" Text="Pre-OJT" runat="server" />
                                             </td>
                                             <td style="width: 170px;">
-                                                <asp:CheckBox ID="chk_ProgAss" Text="Progress Assessment" runat="server" />
+                                                <asp:CheckBox ID="chk_ProgAss"  AutoPostBack="true" OnCheckedChanged="chk_Assess_CheckedChanged" Text="Progress Assessment" runat="server" />
                                             </td>
                                             <td style="width: 170px;">
                                                 <asp:CheckBox ID="chk_OST" Text="Over the shoulder" runat="server" />
@@ -75,9 +75,17 @@
                                                 <asp:CheckBox ID="chk_Sim" Text="Simulator" AutoPostBack="true" OnCheckedChanged="txt_timeon_act_TextChanged" runat="server" />
                                             </td>
                                             <td style="width: 170px;">
-                                                <asp:CheckBox ID="chk_CocAss" Text="Coc Assessment" runat="server" />
+                                                <asp:CheckBox ID="chk_CocAss"  AutoPostBack="true" OnCheckedChanged="chk_Assess_CheckedChanged" Text="Coc Assessment" Enabled="false" runat="server" />
                                             </td>
                                             <td style="width: 170px;"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="text-align: center;">
+                                                <asp:RadioButtonList ID="rad_passfail" runat="server" RepeatDirection="Horizontal" Visible="false">
+                                                    <asp:ListItem Value="1" Text="PASSED" Selected="True"></asp:ListItem>
+                                                    <asp:ListItem Value="0" Text="FAILED"></asp:ListItem>
+                                                </asp:RadioButtonList>
+                                            </td>
                                         </tr>
                                     </table>
                                 </td>
@@ -126,7 +134,7 @@
                         </table>
                     </td>
                     <td>
-                        <table style="padding: 5px; width:100%;">
+                        <table style="padding: 5px; width: 100%;">
                             <tr>
                                 <th style="width: 16%;"></th>
                                 <th style="width: 25%;">Time One</th>
@@ -149,9 +157,9 @@
                             <tr>
                                 <td style="font-weight: bold; text-align: center;">Actual : </td>
                                 <td style="text-align: center;">
-                                    <asp:TextBox ID="txt_timeon_act" TextMode="Time" runat="server" AutoPostBack="true" OnTextChanged="txt_timeon_act_TextChanged" ></asp:TextBox>
+                                    <asp:TextBox ID="txt_timeon_act" TextMode="Time" runat="server" AutoPostBack="true" OnTextChanged="txt_timeon_act_TextChanged"></asp:TextBox>
                                 </td>
-                                <td style="text-align: center; padding : 5px !important;">
+                                <td style="text-align: center; padding: 5px !important;">
                                     <asp:TextBox ID="txt_timeoff_act" TextMode="Time" runat="server" AutoPostBack="true" OnTextChanged="txt_timeon_act_TextChanged"></asp:TextBox>
                                 </td>
                                 <td>
@@ -161,11 +169,10 @@
                             </tr>
                             <tr style="border-top: 1px solid black;">
                                 <td colspan="2" style="text-align: center; padding: 5px !important;">Hours :
-                                        <asp:TextBox ID="txt_hours" TextMode="Time" runat="server"></asp:TextBox>
-                                    </td>
-                                <td colspan="2">
-                                    Total Hours :
-                                        <asp:TextBox ID="txt_totalhours" Width="70"  runat="server"></asp:TextBox>
+                                        <asp:TextBox ID="txt_hours" Enabled="false" TextMode="Time" runat="server"></asp:TextBox>
+                                </td>
+                                <td colspan="2">Total Hours :
+                                        <asp:TextBox ID="txt_totalhours" Width="70" runat="server"></asp:TextBox>
                                 </td>
                             </tr>
                         </table>

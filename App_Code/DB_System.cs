@@ -12,14 +12,11 @@ namespace AviaTrain.App_Code
 
     public static class DB_System
     {
-        public static string con_str_hosting = ConfigurationManager.ConnectionStrings["local_dbconn"].ConnectionString;
-        public static string con_str = ConfigurationManager.ConnectionStrings["dbconn_hosting"].ConnectionString;
-
         public static void log_pages(string employeeid, string page)
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"INSERT INTO LOG_PAGES VALUES (@EMPLOYEEID, @PAGE , convert(varchar, getutcdate(), 20) ) ", connection))
                 {
@@ -44,7 +41,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                  "SELECT [EMPLOYEEID] FROM dbo.[USERS] WHERE [EMPLOYEEID] = @EMPLOYEEID AND [PASSWORD] = @PASSWORD AND ISACTIVE=1", connection))
@@ -76,7 +73,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT * FROM USERS WHERE EMPLOYEEID=@EMPLOYEEID", connection))
@@ -105,7 +102,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" UPDATE USERS
                                     SET PASSWORD = CASE WHEN @PASSWORD = '' THEN PASSWORD ELSE @PASSWORD END,
@@ -150,7 +147,7 @@ namespace AviaTrain.App_Code
             //getting roles and privileges of the person first in a DataTable
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT 
@@ -219,7 +216,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" SELECT '-' AS CODE  
@@ -249,7 +246,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" SELECT '-' AS [CODE]   , '---' AS DESCRIPTION
                                     UNION  
@@ -279,7 +276,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" SELECT '-' AS [CODE]    , '-' AS SECT
@@ -312,7 +309,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" SELECT '-' AS [CODE]    
@@ -343,7 +340,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" IF NOT EXISTS (SELECT TOP 1 ROLEID FROM USER_ROLES WHERE EMPLOYEEID = @EMPLOYEEID AND ROLEID = @ROLEID)
                                 BEGIN
@@ -372,7 +369,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" DELETE FROM USER_ROLES WHERE EMPLOYEEID = @EMPLOYEEID AND ROLEID = @ROLEID ", connection))
                 {
@@ -401,7 +398,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"
@@ -430,7 +427,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT '-' AS [ID], ' --- ' AS [NAME]
@@ -466,7 +463,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT '-' AS [ID], ' --- ' AS [NAME]
@@ -502,7 +499,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"" +
                             (with_empty ?
@@ -535,7 +532,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"INSERT INTO USERS VALUES ( @EMPLOYEEID, @NAME, @SURNAME, @PASSWORD, @INITIAL ,1, @EMAIL, @PHOTO, @SIGNATURE) ", connection))
                 {
@@ -591,7 +588,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                              @"DECLARE @MER INT = (SELECT MER FROM MER_USER 
 					                                WHERE EMPLOYEEID=@EMPLOYEEID AND POSITION = @POSITION AND SECTOR=@SECTOR  AND PHASE =  @PHASE  )
@@ -628,12 +625,12 @@ namespace AviaTrain.App_Code
 
         public static string get_TOTALHOURS(string employeeid, string position, string sector, string phase)
         {
-            //todo : now, it's getting cumulative total_hours of the sector,  starting from ASSIST training, PRELEVEL1, OJT Levels
+            //todo : now, it's getting cumulative total_hours of the sector,  starting from ASSIST training, PREOJT, OJT Levels
 
             // gets the last report and take the total_hours field
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                              @"
                                 DECLARE @REPORTID INT = 
@@ -701,7 +698,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                            @"SELECT DISTINCT PAGE_NAME
                                 FROM ROLES_PAGES RP
@@ -733,7 +730,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"IF NOT EXISTS (SELECT TOP 1 * FROM USER_CERTIFICATES WHERE USERID = @USERID )
                                 BEGIN
@@ -782,7 +779,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                            @"SELECT TOP 1 * FROM USER_CERTIFICATES WHERE USERID = @USERID", connection))
                 {
@@ -814,7 +811,7 @@ namespace AviaTrain.App_Code
                 expires = "2099-01-01";
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"INSERT INTO NOTIFICATIONS_DEF
                             ( [TYPE], [TO], HEADER, [TEXT], FILE1, FILE2, FILE3, FILE4, ISACTIVE, [BY], BY_TIME,EFFECTIVE,EXPIRED )
@@ -858,7 +855,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"
                             SELECT COUNT(DISTINCT ID) FROM
@@ -918,7 +915,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                            @"SELECT
 	                              A.HEADER AS Title, 
@@ -985,7 +982,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                            @"SELECT * FROM NOTIFICATIONS_DEF WHERE ID = @NOTIFID", connection))
                 {
@@ -1011,7 +1008,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" IF NOT EXISTS (SELECT * FROM USER_NOTIFICATION  WHERE NOTIF_ID = @NOTIFID AND USERID=@USERID)
                             INSERT INTO USER_NOTIFICATION VALUES (@NOTIFID, @USERID, CONVERT(VARCHAR, GETUTCDATE(),20) ) ", connection))

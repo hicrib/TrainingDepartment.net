@@ -69,6 +69,15 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.CheckBox chk_Ass;
 
         /// <summary>
+        /// rad_passfail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList rad_passfail;
+
+        /// <summary>
         /// txt_date control.
         /// </summary>
         /// <remarks>
@@ -1023,12 +1032,12 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.Label lbl_viewmode;
 
         /// <summary>
-        /// lbl_STEPID control.
+        /// lbl_genid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_STEPID;
+        protected global::System.Web.UI.WebControls.Label lbl_genid;
     }
 }

@@ -7,8 +7,8 @@
     <title></title>
     <style>
         #main_div {
-            margin-left: 15%;
-            margin-top: 15%;
+            margin-left: 5%;
+            margin-top: 5%;
             border-collapse: collapse;
         }
 
@@ -35,7 +35,12 @@
 <body>
     <form id="form1" runat="server">
         <div id="main_div">
-            <div>
+            <div style="text-align:start;">
+                <asp:Image ImageUrl="~/images/trainingdepartment.png" runat="server" />
+                <br />
+                <br />
+                <br />
+                <br />
                 <table id="login_table">
                     <thead>
                         <tr>
@@ -51,7 +56,6 @@
                             <td>
                                 <asp:TextBox ID="username_txt" runat="server"  Height="35px" Width="192px"></asp:TextBox>
                             </td>
-
                         </tr>
                         <tr>
                             <td style="width: 100px; font-weight: bold;">

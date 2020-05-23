@@ -10,16 +10,12 @@ namespace AviaTrain.App_Code
 {
     public class DB_FileSys
     {
-        public static string con_str_hosting = ConfigurationManager.ConnectionStrings["local_dbconn"].ConnectionString;
-        public static string con_str = ConfigurationManager.ConnectionStrings["dbconn_hosting"].ConnectionString;
-
-
         public static DataRow get_UserMain(string user)
         {
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"
 IF NOT EXISTS (SELECT ID,[NAME] FROM USER_FILESYSTEM WHERE USERID=@USERID AND PARENT_ID IS NULL)
@@ -54,14 +50,19 @@ SELECT ID,[NAME] FROM USER_FILESYSTEM WHERE USERID=@USERID AND PARENT_ID IS NULL
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"
-                            SELECT UFS.ID, UFS.[NAME], ISNULL(UFS.FILEID,0) AS 'FILEID' ,
-                                    ISNULL(F.ADDRES,'') AS 'ADDRESS'
-                            FROM USER_FILESYSTEM UFS
-                            LEFT JOIN USER_FILES F ON F.ID = UFS.FILEID AND F.ISACTIVE = 1
-                            WHERE UFS.PARENT_ID = @PARENT AND UFS.ISACTIVE = 1", connection))
+                             SELECT UFS.ID, UFS.[NAME], ISNULL(UFS.FILEID,0) AS 'FILEID' ,
+                                     ISNULL(F.ADDRES,'') AS 'ADDRESS',
+		                             ISNULL(F.ISSUE_DATE, '' ) AS 'Issued',
+		                             ISNULL(F.EXPIRATION_DATE, '' ) AS 'Expires',
+		                             ISNULL(F.ROLE_SPECIFIC, '' ) AS 'Roles',
+		                             ISNULL(FT.TYPENAME,'') AS 'Type'
+                             FROM USER_FILESYSTEM UFS
+                             LEFT JOIN USER_FILES F ON F.ID = UFS.FILEID AND F.ISACTIVE = 1
+                             LEFT JOIN FILE_TYPES FT ON FT.ID = F.FILETYPE 
+                             WHERE UFS.PARENT_ID = @PARENT AND UFS.ISACTIVE = 1", connection))
                 {
                     connection.Open();
                     command.Parameters.AddWithValue("@PARENT", parentid);
@@ -89,7 +90,7 @@ SELECT ID,[NAME] FROM USER_FILESYSTEM WHERE USERID=@USERID AND PARENT_ID IS NULL
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"INSERT INTO USER_FILESYSTEM VALUES(@USERID,@NAME,NULL,@PARENTID, @CREATERID,CONVERT(varchar,GETUTCDATE(),20),1)", connection))
                 {
@@ -110,6 +111,31 @@ SELECT ID,[NAME] FROM USER_FILESYSTEM WHERE USERID=@USERID AND PARENT_ID IS NULL
 
         }
 
+        public static bool delete_File(string fs_id )
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                          @"UPDATE USER_FILESYSTEM SET ISACTIVE = 0 WHERE ID = @ID
+
+                            UPDATE USER_FILES SET ISACTIVE = 0
+                            WHERE ID = (SELECT FILEID FROM USER_FILESYSTEM WHERE ID = @ID )", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@ID", SqlDbType.Int).Value = fs_id;
+                    command.CommandType = CommandType.Text;
+
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return false;
+        }
+        
+
         public static bool upload_UserFile(string userid, string parentid,
                                                     string filetypeid, string filename, string fileaddress, 
                                                     string issuedate="", string expirationdate="", string rolespec="" )
@@ -117,7 +143,7 @@ SELECT ID,[NAME] FROM USER_FILESYSTEM WHERE USERID=@USERID AND PARENT_ID IS NULL
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                                         @"INSERT INTO USER_FILES
                                           SELECT    @FILETYPE , @FILENAME, @FILEADRES, 1, 
@@ -158,7 +184,7 @@ SELECT ID,[NAME] FROM USER_FILESYSTEM WHERE USERID=@USERID AND PARENT_ID IS NULL
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"INSERT INTO FILE_TYPES VALUES (@NAME , @ISSUE , @EXPIRE, @ROLESPEC) ", connection))
                 {
@@ -182,7 +208,7 @@ SELECT ID,[NAME] FROM USER_FILESYSTEM WHERE USERID=@USERID AND PARENT_ID IS NULL
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" SELECT   TYPENAME AS 'Name' , ISSUE_DATE as 'Issue Date' , 
                                         EXPIRATION_DATE as 'Expires', ROLE_SPECIFIC as 'Role Specific', ID

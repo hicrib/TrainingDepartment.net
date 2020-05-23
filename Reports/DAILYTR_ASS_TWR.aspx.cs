@@ -45,8 +45,6 @@ namespace AviaTrain.Reports
                             Response.Redirect("~/Pages/UserMain.aspx?Code=3&ID=" + reportid);
                             break;
                     }
-
-
                 }
                 else
                 {
@@ -79,15 +77,17 @@ namespace AviaTrain.Reports
             chk_OJT.Checked = form.Rows[0]["CHK_OJT"].ToString() == "True";
             chk_Ass.Checked = form.Rows[0]["CHK_ASS"].ToString() == "True";
 
+            if (chk_Ass.Checked)
+            {
+                rad_passfail.SelectedValue = form.Rows[0]["ASSESS_PASSED"].ToString();
+                rad_passfail.Visible = true;
+            }
+
             chk_noshow.Checked = form.Rows[0]["NOSHOW"].ToString() == "True";
             chk_notraining.Checked = form.Rows[0]["NOTRAINING"].ToString() == "True";
 
             string date = form.Rows[0]["DATE"].ToString();
             txt_date.Text = date;
-            //ddl_DAY.Items.Add(date.Split('.')[0]);
-            //ddl_MONTH.SelectedValue = date.Split('.')[1];
-            //ddl_YEAR.SelectedValue = date.Split('.')[2];
-
 
             ddl_positions.Items.Add("ASSIST");
             ddl_positions.SelectedValue = form.Rows[0]["POSITION"].ToString();
@@ -156,7 +156,6 @@ namespace AviaTrain.Reports
             // if not signed by trainee enable sign button
             if (mode == "trainee" && meta.Rows[0]["TRAINEE_SIGNED"].ToString() != "True")
             {
-
                 //let them sign , let them comment
                 btn_sign_trainee.Enabled = true;
 
@@ -171,19 +170,11 @@ namespace AviaTrain.Reports
                 lbl_viewmode.Text = "trainee";
             }
 
-
-
-
-
-
-
             //todo: disable and hide elements based on mode
         }
 
         protected void fill_Default_Page_Elements()
         {
-            //POSITION field fill
-
             ddl_positions.Items.Add("TWR-ASSIST");
 
             DataTable ojtis = DB_System.get_ALL_OJTI_LCE_EXAMINER();
@@ -206,158 +197,31 @@ namespace AviaTrain.Reports
                 ddl_trainees.DataValueField = "ID";
                 ddl_trainees.DataBind();
             }
+
+            Dictionary<string, string> direct_dict = (Dictionary<string, string>)Session["direct_dictionary"];
+            if (direct_dict != null && direct_dict.Count != 0)
+                fill_from_CreateReport(direct_dict);
         }
 
-
-        protected void UploadButton_Click(object sender, EventArgs e)
+        protected void fill_from_CreateReport(Dictionary<string, string> directed)
         {
-            if (file_prebrief_comment.HasFile)
-            {
-                try
-                {
-                    string filename = Utility.getRandomFileName();
-                    string newfilename = filename + "_" + file_prebrief_comment.PostedFile.FileName;
-                    string file_address = Server.MapPath("~/AzureBlobs/Uploads/") + filename + "_" + file_prebrief_comment.PostedFile.FileName;
-                    file_prebrief_comment.SaveAs(file_address);
+            lbl_genid.Text = directed["genid"];
 
-                    //will be pushed to db
-                    uploadedfilename.Text = newfilename;
+            ddl_trainees.SelectedValue = directed["traineeid"];
+            ddl_trainees.Enabled = false;
 
-                    //show the image , no need to read it from azure now
-                    img_file.Visible = true;
-                    img_file.ImageUrl = "~/AzureBlobs/Uploads/" + filename + "_" + file_prebrief_comment.PostedFile.FileName;
+            ddl_ojtis.SelectedValue = directed["ojtiid"];
+            ddl_ojtis.Enabled = false;
 
-                    if (!AzureCon.upload_ToBlob_fromFile(file_address))
-                    {
-                        //todo : what to do when error
-                        throw new Exception();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    statuslabel.Text = "Upload status: The file could not be uploaded. The following error occured: " + ex.Message;
-                }
-            }
-        }
-
-        protected void rad_prebrief_comment_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (rad_prebrief_comment.SelectedValue == "File")
-            {
-                file_prebrief_comment.Visible = true;
-                txt_prebrief_comment.Visible = false;
-                statuslabel.Visible = true;
-                UploadButton.Visible = true;
-            }
-            else
-            {
-                file_prebrief_comment.Visible = false;
-                txt_prebrief_comment.Visible = true;
-                statuslabel.Visible = false;
-                UploadButton.Visible = false;
-            }
+            //remove the ones not containing sector
+            List<ListItem> l = Utility.remove_sectors(ddl_positions.Items, directed["sector"]);
+            ddl_positions.Items.Clear();
+            foreach (ListItem item in l)
+                ddl_positions.Items.Add(item);
 
 
-        }
-
-        protected void btn_submit_Click(object sender, EventArgs e)
-        {
-            //update student comments and sign
-            if (lbl_viewmode.Text == "trainee")
-            {
-                if (lbl_trainee_signed.Text != "1")
-                {
-                    ClientMessage(lbl_pageresult, "Trainee must sign to submit the report", System.Drawing.Color.Red);
-                    return;
-                }
-
-                if (DB_Reports.update_TraineeSigned(lbl_reportnumber.Text, txt_studentcomments.Text, "2")) //signed, commented and reporttype:2
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=5&ID=" + lbl_reportnumber.Text);
-                }
-                else
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=0");
-                }
-            }
-
-            // in normal first submit mode : make all checks regarding page elements
-            bool all_good = Check_Page_Elements();
-            if (!all_good)
-                return;
-
-
-            // we insert everything in db 
-            string reportid = push_into_db();
-            if (String.IsNullOrWhiteSpace(reportid))
-            {
-                //todo : error message
-            }
-            else
-            {
-                SuccessWithCode("SUCCESS : REPORT CREATED !");
-            }
-
-        }
-
-        protected bool Check_Page_Elements()
-        {
-            if (ddl_trainees.SelectedValue == "-" || ddl_trainees.SelectedValue == "0")
-            {
-                ClientMessage(lbl_pageresult, "Choose the Trainee before signing!", System.Drawing.Color.Red);
-                return false;
-            }
-            if (!chk_OJT.Checked && !chk_Ass.Checked)
-            {
-                ClientMessage(lbl_pageresult, "Choose the type of training!", System.Drawing.Color.Red);
-                return false;
-            }
-            if (ddl_positions.SelectedValue == "-")
-            {
-                ClientMessage(lbl_pageresult, "Choose Position!", System.Drawing.Color.Red);
-                return false;
-            }
-            if (txt_date.Text == "")
-            {
-                ClientMessage(lbl_pageresult, "Choose Date", System.Drawing.Color.Red);
-                return false;
-            }
-            if (!chk_noshow.Checked && !chk_notraining.Checked)
-                if (txt_timeon_act.Text == "" || txt_timeoff_act.Text == "")
-                {
-                    ClientMessage(lbl_pageresult, "Choose Actual TIME ON/OFF!", System.Drawing.Color.Red);
-                    return false;
-                }
-            if (txt_timeon_sch.Text == "" || txt_timeoff_sch.Text == "")
-            {
-                ClientMessage(lbl_pageresult, "Choose Scheduled TIME ON/OFF!", System.Drawing.Color.Red);
-                return false;
-            }
-            if (!chk_noshow.Checked)
-                if ((!chk_comp_L.Checked && !chk_comp_M.Checked && !chk_comp_H.Checked)
-                || (!chk_den_L.Checked && !chk_den_M.Checked && !chk_den_H.Checked))
-                {
-                    ClientMessage(lbl_pageresult, "Choose Traffic Density and Complexity", System.Drawing.Color.Red);
-                    return false;
-                }
-            if (!chk_noshow.Checked && !chk_notraining.Checked)
-                if (txt_hours.Text == "")
-                {
-                    ClientMessage(lbl_pageresult, "Choose Hours", System.Drawing.Color.Red);
-                    return false;
-                }
-            if (txt_totalhours.Text == "")
-            {
-                ClientMessage(lbl_pageresult, "Choose Total Hours", System.Drawing.Color.Red);
-                return false;
-            }
-            if (lbl_ojti_signed.Text != "1")
-            {
-                ClientMessage(lbl_pageresult, "OJTI must sign to submit the report", System.Drawing.Color.Red);
-                return false;
-            }
-
-            return true;
+            txt_totalhours.Text = DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["sector"]);
+            txt_totalhours.Enabled = false;
         }
 
         protected string push_into_db()
@@ -368,6 +232,8 @@ namespace AviaTrain.Reports
             data.Add("OJTI_ID", ddl_ojtis.SelectedValue);
             data.Add("CHK_OJT", chk_OJT.Checked ? "1" : "0");
             data.Add("CHK_ASS", chk_Ass.Checked ? "1" : "0");
+
+            data.Add("ASSESS_PASSED", chk_Ass.Checked ? rad_passfail.SelectedValue : null);
 
             data.Add("NOSHOW", chk_noshow.Checked ? "1" : "0");
             data.Add("NOTRAINING", chk_notraining.Checked ? "1" : "0");
@@ -432,12 +298,172 @@ namespace AviaTrain.Reports
             data.Add("6A", Utility.GetSelectedRadioButtonValue(Utility.GetRadiobuttonsbyGroupname(evaluation_panel, "gr6A")));
             data.Add("6B", Utility.GetSelectedRadioButtonValue(Utility.GetRadiobuttonsbyGroupname(evaluation_panel, "gr6B")));
 
-            data.Add("STEPID", lbl_STEPID.Text);
+            if (lbl_genid.Text == "")
+            {
+                lbl_pageresult.Text = "genid empty?";
+                lbl_pageresult.Visible = true;
+                return "";
+            }
+            data.Add("genid", lbl_genid.Text);
 
             string reportid = DB_Reports.push_Training_Report("2", data);
             return reportid;
         }
 
+
+        protected void UploadButton_Click(object sender, EventArgs e)
+        {
+            if (file_prebrief_comment.HasFile)
+            {
+                try
+                {
+                    string filename = Utility.getRandomFileName();
+                    string newfilename = filename + "_" + file_prebrief_comment.PostedFile.FileName;
+                    string file_address = Server.MapPath("~/AzureBlobs/Uploads/") + filename + "_" + file_prebrief_comment.PostedFile.FileName;
+                    file_prebrief_comment.SaveAs(file_address);
+
+                    //will be pushed to db
+                    uploadedfilename.Text = newfilename;
+
+                    //show the image , no need to read it from azure now
+                    img_file.Visible = true;
+                    img_file.ImageUrl = "~/AzureBlobs/Uploads/" + filename + "_" + file_prebrief_comment.PostedFile.FileName;
+
+                    if (!AzureCon.upload_ToBlob_fromFile(file_address))
+                    {
+                        //todo : what to do when error
+                        throw new Exception();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    statuslabel.Text = "Upload status: The file could not be uploaded. The following error occured: " + ex.Message;
+                }
+            }
+        }
+
+        protected void rad_prebrief_comment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (rad_prebrief_comment.SelectedValue == "File")
+            {
+                file_prebrief_comment.Visible = true;
+                txt_prebrief_comment.Visible = false;
+                statuslabel.Visible = true;
+                UploadButton.Visible = true;
+            }
+            else
+            {
+                file_prebrief_comment.Visible = false;
+                txt_prebrief_comment.Visible = true;
+                statuslabel.Visible = false;
+                UploadButton.Visible = false;
+            }
+
+
+        }
+
+        protected bool Check_Page_Elements()
+        {
+            if (ddl_trainees.SelectedValue == "-" || ddl_trainees.SelectedValue == "0")
+            {
+                ClientMessage(lbl_pageresult, "Choose the Trainee before signing!", System.Drawing.Color.Red);
+                return false;
+            }
+            if (!chk_OJT.Checked && !chk_Ass.Checked)
+            {
+                ClientMessage(lbl_pageresult, "Choose the type of training!", System.Drawing.Color.Red);
+                return false;
+            }
+            if (ddl_positions.SelectedValue == "-")
+            {
+                ClientMessage(lbl_pageresult, "Choose Position!", System.Drawing.Color.Red);
+                return false;
+            }
+            if (txt_date.Text == "")
+            {
+                ClientMessage(lbl_pageresult, "Choose Date", System.Drawing.Color.Red);
+                return false;
+            }
+            if (!chk_noshow.Checked && !chk_notraining.Checked)
+                if (txt_timeon_act.Text == "" || txt_timeoff_act.Text == "")
+                {
+                    ClientMessage(lbl_pageresult, "Choose Actual TIME ON/OFF!", System.Drawing.Color.Red);
+                    return false;
+                }
+            if (txt_timeon_sch.Text == "" || txt_timeoff_sch.Text == "")
+            {
+                ClientMessage(lbl_pageresult, "Choose Scheduled TIME ON/OFF!", System.Drawing.Color.Red);
+                return false;
+            }
+            if (!chk_noshow.Checked)
+                if ((!chk_comp_L.Checked && !chk_comp_M.Checked && !chk_comp_H.Checked)
+                || (!chk_den_L.Checked && !chk_den_M.Checked && !chk_den_H.Checked))
+                {
+                    ClientMessage(lbl_pageresult, "Choose Traffic Density and Complexity", System.Drawing.Color.Red);
+                    return false;
+                }
+            if (!chk_noshow.Checked && !chk_notraining.Checked)
+                if (txt_hours.Text == "")
+                {
+                    ClientMessage(lbl_pageresult, "Choose Hours", System.Drawing.Color.Red);
+                    return false;
+                }
+            if (txt_totalhours.Text == "")
+            {
+                ClientMessage(lbl_pageresult, "Choose Total Hours", System.Drawing.Color.Red);
+                return false;
+            }
+            if (lbl_ojti_signed.Text != "1")
+            {
+                ClientMessage(lbl_pageresult, "OJTI must sign to submit the report", System.Drawing.Color.Red);
+                return false;
+            }
+
+            return true;
+        }
+
+        protected void btn_submit_Click(object sender, EventArgs e)
+        {
+            //update student comments and sign
+            if (lbl_viewmode.Text == "trainee")
+            {
+                if (lbl_trainee_signed.Text != "1")
+                {
+                    ClientMessage(lbl_pageresult, "Trainee must sign to submit the report", System.Drawing.Color.Red);
+                    return;
+                }
+
+                if (DB_Reports.update_TraineeSigned(lbl_reportnumber.Text, txt_studentcomments.Text, "2")) //signed, commented and reporttype:2
+                {
+                    Response.Redirect("~/Pages/UserMain.aspx?Code=5&ID=" + lbl_reportnumber.Text);
+                }
+                else
+                {
+                    Response.Redirect("~/Pages/UserMain.aspx?Code=0");
+                }
+            }
+
+            // in normal first submit mode : make all checks regarding page elements
+            bool all_good = Check_Page_Elements();
+            if (!all_good)
+                return;
+
+
+            // we insert everything in db 
+            string reportid = push_into_db();
+            if (String.IsNullOrWhiteSpace(reportid))
+            {
+                //todo : error message
+            }
+            else
+            {
+                SuccessWithCode("SUCCESS : REPORT CREATED !");
+            }
+
+        }
+
+        
+       
         private void DisableControls(System.Web.UI.Control control)
         {
             foreach (System.Web.UI.Control c in control.Controls)
@@ -507,14 +533,17 @@ namespace AviaTrain.Reports
                 txt_hours.Text = "";
                 txt_timeon_act.Enabled = false;
                 txt_timeoff_act.Enabled = false;
-                txt_hours.Enabled = false;
             }
             else
             {
                 txt_timeon_act.Enabled = true;
                 txt_timeoff_act.Enabled = true;
-                txt_hours.Enabled = true;
             }
+        }
+
+        protected void chk_Ass_CheckedChanged(object sender, EventArgs e)
+        {
+            rad_passfail.Visible = chk_Ass.Checked;
         }
     }
 }

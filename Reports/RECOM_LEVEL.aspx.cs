@@ -212,7 +212,7 @@ namespace AviaTrain.Reports
             //ddl_positions.SelectedValue = directed["position"] + "-" + directed["sector"];
             //ddl_positions.Enabled = false;
 
-            //todo: ojt-PRELEVEL1-assess etc can be filled here as well
+            //todo: ojt-PREOJT-assess etc can be filled here as well
         }
 
         

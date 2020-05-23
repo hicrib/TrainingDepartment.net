@@ -78,13 +78,13 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.CheckBox chk_RemAss;
 
         /// <summary>
-        /// chk_PRELEVEL1 control.
+        /// chk_PREOJT control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chk_PRELEVEL1;
+        protected global::System.Web.UI.WebControls.CheckBox chk_PREOJT;
 
         /// <summary>
         /// chk_ProgAss control.
@@ -121,6 +121,15 @@ namespace AviaTrain.Reports
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chk_CocAss;
+
+        /// <summary>
+        /// rad_passfail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList rad_passfail;
 
         /// <summary>
         /// txt_date control.

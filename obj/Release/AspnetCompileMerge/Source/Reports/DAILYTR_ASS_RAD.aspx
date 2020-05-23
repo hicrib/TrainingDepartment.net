@@ -53,7 +53,15 @@
                                                     <asp:CheckBox ID="chk_OJT" Text="OJT" runat="server" />
                                                 </td>
                                                 <td style="">
-                                                    <asp:CheckBox ID="chk_Ass" Text="Assessment" runat="server" />
+                                                    <asp:CheckBox ID="chk_Ass" Text="Assessment" AutoPostBack="true" OnCheckedChanged="chk_Ass_CheckedChanged" runat="server" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <asp:RadioButtonList ID="rad_passfail" runat="server" RepeatDirection="Horizontal" Visible="false" >
+                                                        <asp:ListItem Value="1"  Text="PASSED" Selected="True"></asp:ListItem>
+                                                        <asp:ListItem Value="0" Text="FAILED"  ></asp:ListItem>
+                                                    </asp:RadioButtonList>
                                                 </td>
                                             </tr>
                                         </table>
@@ -139,7 +147,7 @@
                             </tr>
                             <tr style="border-top: 1px solid black;">
                                 <td colspan="2" style="text-align: center; padding: 5px !important;">Hours :
-                                        <asp:TextBox ID="txt_hours" TextMode="Time" runat="server"></asp:TextBox>
+                                        <asp:TextBox ID="txt_hours" Enabled="false" TextMode="Time" runat="server"></asp:TextBox>
                                 </td>
                                 <td colspan="2">Total Hours :
                                         <asp:TextBox ID="txt_totalhours" Width="70" runat="server"></asp:TextBox>

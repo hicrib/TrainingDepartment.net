@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Profile;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -126,7 +127,7 @@ namespace AviaTrain.SysAdmin
                 return;
             }
 
-            bool res = DB_Reports.start_Training_Folder(ddl_all_trainees.SelectedValue, ddl_position.SelectedValue, ddl_sector.SelectedValue, ddl_steps.SelectedValue);
+            bool res = DB_Reports.start_Training_Folder_Migrate(ddl_all_trainees.SelectedValue, ddl_position.SelectedValue, ddl_sector.SelectedValue, ddl_steps.SelectedValue);
 
             if (res)
             {

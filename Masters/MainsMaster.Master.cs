@@ -27,6 +27,7 @@ namespace AviaTrain.Masters
         protected void btn_log_out_Click(object sender, ImageClickEventArgs e)
         {
             FormsAuthentication.SignOut();
+            Session.Clear();
             Response.Redirect("~/Pages/Login.aspx");
         }
 

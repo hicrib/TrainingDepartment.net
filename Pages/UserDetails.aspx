@@ -173,7 +173,9 @@
             max-width: 300px;
             padding: 0px;
             margin: 0px;
-            overflow: visible;
+            overflow : auto;
+            overflow-x: visible;
+            overflow-y: visible;
             height: 400px;
         }
 
@@ -236,14 +238,17 @@
             .foldername{
                 font-weight : bold;
                 font-size : x-large;
+                border : 2px solid black;
+                padding : 0px 50px 0px 50px;
             }
-            .grid_userfiles{width : 400px;
+            .grid_userfiles{width : 100%;
                             margin : 30px 0 0 50px;
                             margin : auto;
                             border : 2px solid #a52a2a;
             }
-            .grid_userfiles td{ padding : 3px 3px 3px 10px}
+            .grid_userfiles td{ padding : 3px 3px 3px 10px;}
             .grid_userfiles td:first-child {width : 40px;}
+            .grid_userfiles td:nth-child(2) {text-align:left !important;}
     </style>
     <script type="text/javascript">  
         function uploadcomplete() {
@@ -323,9 +328,9 @@
                                                 <Header>Email
                                         </Header>
                                                 <Content>
-                                                    <asp:TextBox ID="txt_email" runat="server" TextMode="Email"></asp:TextBox>
+                                                    <asp:TextBox ID="txt_email" runat="server" ></asp:TextBox>
                                                     <asp:Button ID="btn_update_email" runat="server" Text="Save" OnClick="btn_update_email_Click" />
-                                                    <asp:Image ID="img_email_result" runat="server" Visible="false" />
+                                                    <asp:Image ID="img_email_result" runat="server" style="display:inline;" Visible="false" />
                                                 </Content>
                                             </ajaxToolkit:AccordionPane>
                                             <ajaxToolkit:AccordionPane ID="pane_roles" runat="server" Visible="false">
@@ -519,12 +524,14 @@
                                                 <asp:Label ID="lbl_foldername" runat="server" CssClass="foldername" ></asp:Label>
                                                 <asp:GridView ID="grid_userfiles" runat="server" AutoGenerateColumns="false" BorderStyle="None" ShowHeader="false"
                                                     GridLines="Horizontal" AlternatingRowStyle-BackColor="#cccccc" CssClass="grid_userfiles"
-                                                    OnRowDataBound="grid_userfiles_RowDataBound" OnRowCommand="grid_userfiles_RowCommand">
+                                                    OnRowDataBound="grid_userfiles_RowDataBound" OnRowCommand="grid_userfiles_RowCommand"
+                                                    OnRowDeleting="grid_userfiles_RowDeleting">
                                                     <Columns>
                                                          <asp:TemplateField>
                                                             <ItemTemplate>
                                                                 <asp:ImageButton ID="btn_go"   runat="server"
-                                                                         ImageUrl='<%# show_url( Eval("FILEID").ToString() )%>'
+                                                                         ImageUrl='<%# go_url( Eval("FILEID").ToString() )%>'
+                                                                    Visible='<%# Eval("Issued").ToString()  != "Issued"  %>'
                                                                     CommandName="GO" CssClass="iconimg" />
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
@@ -532,6 +539,18 @@
                                                         <asp:BoundField DataField="NAME" /> 
                                                         <asp:BoundField DataField="FILEID" />
                                                         <asp:BoundField DataField="ADDRESS" />
+                                                        <asp:BoundField DataField="Issued" />
+                                                        <asp:BoundField DataField="Expires" />
+                                                        <asp:BoundField DataField="Roles" />
+                                                        <asp:BoundField DataField="Type" />
+                                                        <asp:TemplateField>
+                                                            <ItemTemplate>
+                                                                <asp:ImageButton ID="btn_delete"   runat="server"
+                                                                         ImageUrl="~/images/delete.png"
+                                                                    Visible='<%# show_delete( Eval("FILEID").ToString() , Eval("Issued").ToString() )%>'
+                                                                    CommandName="DEL" CssClass="iconimg" />
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
                                                     </Columns>
                                                 </asp:GridView>
                                             </asp:Panel>
@@ -545,7 +564,7 @@
                                         AutoSize="None" Height="300" Style="height: 100% !important;" RequireOpenedPane="false" SelectedIndex="-1">
                                         <Panes>
                                             <ajaxToolkit:AccordionPane ID="pane_acc_FDO" runat="server">
-                                                <Header>FDO
+                                                <Header>FDO & PreOJT
                                                 </Header>
                                                 <Content>
                                                     <asp:GridView ShowHeader="false" ID="grid_ACC_fdo" runat="server" CssClass="folder_grids"></asp:GridView>
@@ -588,7 +607,7 @@
                                         AutoSize="None" Height="300" Style="height: 100% !important;" RequireOpenedPane="false" SelectedIndex="-1">
                                         <Panes>
                                             <ajaxToolkit:AccordionPane ID="pane_app_FDO" runat="server">
-                                                <Header>FDO
+                                                <Header>FDO & PreOJT
                                                 </Header>
                                                 <Content>
                                                     <asp:GridView ShowHeader="false" ID="grid_APP_fdo" runat="server" CssClass="folder_grids"></asp:GridView>
@@ -631,7 +650,7 @@
                                         AutoSize="None" Height="300" Style="height: 100% !important;" RequireOpenedPane="false" SelectedIndex="-1">
                                         <Panes>
                                             <ajaxToolkit:AccordionPane ID="pane_TWR_ASSIST" runat="server">
-                                                <Header>Assist Training</Header>
+                                                <Header>PreOJT & Assist Training</Header>
                                                 <Content>
                                                     <asp:GridView ShowHeader="false" ID="grid_TWR_ASSIST" runat="server" CssClass="folder_grids"></asp:GridView>
                                                 </Content>

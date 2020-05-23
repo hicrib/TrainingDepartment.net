@@ -41,24 +41,19 @@ namespace AviaTrain.Pages
                     pane_roles.Visible = true;
                 }
 
-
                 fill_page();
-
             }
             else
             {
-                UserSession user = (UserSession)Session["usersession"];
-                if (user.employeeid == ddl_user.SelectedValue)
-                {
-                    UserSession uptodate = new UserSession(ddl_user.SelectedValue);
-                    Session["usersession"] = uptodate;
+                //UserSession user = (UserSession)Session["usersession"];
+                //if (user.employeeid == ddl_user.SelectedValue)
+                //{
+                //    UserSession uptodate = new UserSession(ddl_user.SelectedValue);
+                //    Session["usersession"] = uptodate;
 
-                    fill_page();
-                }
+                //    fill_page();
+                //}
             }
-
-
-
 
         }
         protected void fill_page()
@@ -102,7 +97,7 @@ namespace AviaTrain.Pages
                 return;
 
             //tower 
-            DataRow[] twr_assist = utf.Select("POSITION = 'TWR' AND SECTOR = 'ASSIST'");
+            DataRow[] twr_assist = utf.Select("POSITION = 'TWR' AND SECTOR IS null ");
             if (twr_assist.Length > 0)
             {
                 grid_TWR_ASSIST.DataSource = twr_assist.CopyToDataTable();
@@ -123,7 +118,7 @@ namespace AviaTrain.Pages
 
 
             //APP
-            DataRow[] app_fdo = utf.Select("POSITION = 'APP' AND PHASE = 'FDO'");
+            DataRow[] app_fdo = utf.Select("POSITION = 'APP' AND  (PHASE = 'FDO' or PHASE = 'PREOJT' )");
             if (app_fdo.Length > 0)
             {
                 grid_APP_fdo.DataSource = app_fdo.CopyToDataTable();
@@ -156,7 +151,7 @@ namespace AviaTrain.Pages
 
 
             //ACC
-            DataRow[] acc_fdo = utf.Select("POSITION = 'ACC' AND PHASE = 'FDO'");
+            DataRow[] acc_fdo = utf.Select("POSITION = 'ACC' AND ( PHASE = 'FDO' or  PHASE = 'PREOJT' ) ");
             if (acc_fdo.Length > 0)
             {
                 grid_ACC_fdo.DataSource = acc_fdo.CopyToDataTable();
@@ -213,8 +208,13 @@ namespace AviaTrain.Pages
             {
                 lbl_passchange.Style.Add("color", "red");
                 lbl_passchange.Text = "Password should match";
-                if (txt_pass1.Text.Length < 6)
-                    lbl_passchange.Text = "Minimum 6 characters";
+                lbl_passchange.Visible = true;
+                return;
+            }
+            if (txt_pass1.Text.Length < 6)
+            {
+                lbl_passchange.Text = "Minimum 6 characters";
+                lbl_passchange.Visible = true;
                 return;
             }
 
@@ -248,18 +248,16 @@ namespace AviaTrain.Pages
 
             if (AzureCon.upload_ToBlob_fromFile(fileNametoupload))
             {
-                UserSession user = (UserSession)Session["usersession"];
-
                 //write db
                 if (afu.ID == "fileupload_photo")
                 {
-                    if (DB_System.update_UserInfo(user.employeeid, photo: generatedFileName))
+                    if (DB_System.update_UserInfo(ddl_user.SelectedValue, photo: generatedFileName))
                         img_userphoto.ImageUrl = AzureCon.general_container_url + generatedFileName;
 
                 }
                 else if (afu.ID == "fileupload_signature")
                 {
-                    if (DB_System.update_UserInfo(user.employeeid, signature: generatedFileName))
+                    if (DB_System.update_UserInfo(ddl_user.SelectedValue, signature: generatedFileName))
                         img_signature.ImageUrl = AzureCon.general_container_url + generatedFileName;
                 }
                 //else if (afu.ID == "fileupload_cert_academy")
@@ -315,6 +313,10 @@ namespace AviaTrain.Pages
             gridtbl.Columns.Add("NAME");
             gridtbl.Columns.Add("FILEID");
             gridtbl.Columns.Add("ADDRESS");
+            gridtbl.Columns.Add("Issued");
+            gridtbl.Columns.Add("Expires");
+            gridtbl.Columns.Add("Roles");
+            gridtbl.Columns.Add("Type");
 
             lbl_foldername.Text = tree.SelectedNode.Text;
 
@@ -344,6 +346,10 @@ namespace AviaTrain.Pages
                     filerow["NAME"] = row["NAME"];
                     filerow["FILEID"] = row["FILEID"];
                     filerow["ADDRESS"] = row["ADDRESS"];
+                    filerow["Issued"] = row["Issued"];
+                    filerow["Expires"] = row["Expires"];
+                    filerow["Roles"] = row["Roles"];
+                    filerow["Type"] = row["Type"];
                     gridtbl.Rows.Add(filerow);
                 }
             }
@@ -351,19 +357,36 @@ namespace AviaTrain.Pages
             DataRow[] c_files = dt.Select("FILEID <> 0");
             if (c_files != null && c_files.Length > 0)
             {
+                //adding a header
+                DataRow headerrow = gridtbl.NewRow();
+                headerrow["ID"] = "HEADER";
+                headerrow["NAME"] = "NAME";
+                headerrow["FILEID"] = "HEADER";
+                headerrow["ADDRESS"] = "";
+                headerrow["Issued"] = "Issued";
+                headerrow["Expires"] = "Expires";
+                headerrow["Roles"] = "Roles";
+                headerrow["Type"] = "Type";
+                gridtbl.Rows.Add(headerrow);
+
+
                 foreach (DataRow row in c_files)
                 {
-                    TreeNode n = new TreeNode(row["NAME"].ToString(), row["ID"].ToString());
-                    n.NavigateUrl = AzureCon.general_container_url + row["ADDRESS"].ToString();
-                    n.Target = "_blank";
-                    n.ImageUrl = "~/images/view.png";
-                    tree.SelectedNode.ChildNodes.Add(n);
+                    //TreeNode n = new TreeNode(row["NAME"].ToString(), row["ID"].ToString());
+                    //n.NavigateUrl = AzureCon.general_container_url + row["ADDRESS"].ToString();
+                    //n.Target = "_blank";
+                    //n.ImageUrl = "~/images/view.png";
+                    //tree.SelectedNode.ChildNodes.Add(n);
 
                     DataRow filerow = gridtbl.NewRow();
                     filerow["ID"] = row["ID"];
                     filerow["NAME"] = row["NAME"];
                     filerow["FILEID"] = row["FILEID"];
                     filerow["ADDRESS"] = row["ADDRESS"];
+                    filerow["Issued"] = row["Issued"];
+                    filerow["Expires"] = row["Expires"];
+                    filerow["Roles"] = row["Roles"];
+                    filerow["Type"] = row["Type"];
                     gridtbl.Rows.Add(filerow);
                 }
             }
@@ -518,19 +541,54 @@ namespace AviaTrain.Pages
         {
             if (e.Row.Cells.Count > 3)
             {
-                // BUTTON , ID, [NAME], 'FILEID' , 'ADDRESS'
+                // BUTTON , ID, [NAME], 'FILEID' , 'ADDRESS', issued, expires, roles, type
                 e.Row.Cells[1].Visible = false;
                 e.Row.Cells[3].Visible = false;
                 e.Row.Cells[4].Visible = false;
+                e.Row.Cells[7].Visible = false; //roles
+
+                if (e.Row.Cells[1].Text == "HEADER")
+                {
+                    e.Row.Style.Add("font-weight", "bold");
+                    e.Row.Style.Add("font-size", "small");
+                    e.Row.Style.Add("text-align", "center");
+                    e.Row.Style.Add("background-color", "#a52a2a");
+                    e.Row.Style.Add("color", "white");
+                }
             }
         }
-        protected string show_url(string fileid)
+        protected string go_url(string fileid)
         {
             if (fileid == "" || fileid == "0")
                 return "~/images/folder.png";
 
+            if (fileid == "HEADER")
+                return "";
+
             return "~/images/view.png";
         }
+        protected bool show_go(string issued)
+        {
+            if (issued.ToLower() == "issued")
+                return false;
+
+            return true;
+        }
+        protected bool show_delete(string fileid, string issued)
+        {
+            if (issued == "Issued")
+                return false;
+
+            if (fileid == "" || fileid == "0")
+                return false;
+
+            UserSession user = (UserSession)Session["usersession"];
+            if (user.isAdmin)
+                return true;
+
+            return false;
+        }
+
         protected void grid_userfiles_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "GO")
@@ -559,6 +617,18 @@ namespace AviaTrain.Pages
                 }
 
             }
+            else if (e.CommandName == "DEL")
+            {
+                GridViewRow selectedRow = ((GridViewRow)(((ImageButton)e.CommandSource).NamingContainer));
+                string fs_id = selectedRow.Cells[1].Text;
+
+                if (DB_FileSys.delete_File(fs_id))
+                {
+                    grid_userfiles.DeleteRow(selectedRow.RowIndex);
+
+                }
+
+            }
         }
 
 
@@ -575,6 +645,9 @@ namespace AviaTrain.Pages
             fill_page();
         }
 
-
+        protected void grid_userfiles_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            tree_SelectedNodeChanged1(new object(), new EventArgs());
+        }
     }
 }

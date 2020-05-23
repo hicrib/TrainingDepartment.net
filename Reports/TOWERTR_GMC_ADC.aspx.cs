@@ -79,13 +79,21 @@ namespace AviaTrain.Reports
             ddl_ojtis.Items.Add(new ListItem(meta.Rows[0]["CREATER_NAME"].ToString(), meta.Rows[0]["CREATER"].ToString()));
 
             chk_OJT.Checked = form.Rows[0]["CHK_OJT"].ToString() == "True";
-            chk_PRELEVEL1.Checked = form.Rows[0]["CHK_PRELEVEL1"].ToString() == "True";
+            chk_PREOJT.Checked = form.Rows[0]["CHK_PREOJT"].ToString() == "True";
             chk_Sim.Checked = form.Rows[0]["CHK_SIM"].ToString() == "True";
             chk_LvlAss.Checked = form.Rows[0]["CHK_LVLASS"].ToString() == "True";
             chk_ProgAss.Checked = form.Rows[0]["CHK_PROGASS"].ToString() == "True";
             chk_CocAss.Checked = form.Rows[0]["CHK_COCASS"].ToString() == "True";
             chk_RemAss.Checked = form.Rows[0]["CHK_REMASS"].ToString() == "True";
             chk_OST.Checked = form.Rows[0]["CHK_OTS"].ToString() == "True";
+
+            if (chk_LvlAss.Checked || chk_RemAss.Checked || chk_ProgAss.Checked || chk_CocAss.Checked)
+            {
+                rad_passfail.SelectedValue = form.Rows[0]["ASESS_PASSED"].ToString();
+                rad_passfail.Visible = true;
+            }
+            else
+                rad_passfail.Visible = false;
 
             chk_noshow.Checked = form.Rows[0]["NOSHOW"].ToString() == "True";
             chk_notraining.Checked = form.Rows[0]["NOTRAINING"].ToString() == "True";
@@ -95,14 +103,8 @@ namespace AviaTrain.Reports
             //ddl_MONTH.SelectedValue = date.Split('.')[1];
             //ddl_YEAR.SelectedValue = date.Split('.')[2];
 
-            DataTable pozs = DB_System.get_Sectors("TWR");
-            if (pozs != null)
-            {
-                ddl_positions.DataSource = pozs;
-                ddl_positions.DataValueField = "CODE";
-                ddl_positions.DataBind();
-            }
-            ddl_positions.SelectedValue = form.Rows[0]["POSITION"].ToString();
+            
+            ddl_positions.Items.Add (form.Rows[0]["POSITION"].ToString());
 
             txt_timeon_sch.Text = form.Rows[0]["TIMEON_SCH"].ToString();
             txt_timeoff_sch.Text = form.Rows[0]["TIMEOFF_SCH"].ToString();
@@ -184,20 +186,14 @@ namespace AviaTrain.Reports
                 lbl_viewmode.Text = "trainee";
             }
 
-
-
-
-
-
-
             //todo: disable and hide elements based on mode
         }
 
         protected void fill_Default_Page_Elements()
         {
-            ddl_positions.DataSource = DB_System.get_Sectors_withpos("TWR");
-            ddl_positions.DataValueField = "CODE";
-            ddl_positions.DataBind();
+            ddl_positions.Items.Add("-");
+            ddl_positions.Items.Add("TWR-ADC");
+            ddl_positions.Items.Add("TWR-GMC");
 
             DataTable ojtis = DB_System.get_ALL_OJTI_LCE_EXAMINER();
             if (ojtis != null)
@@ -230,6 +226,10 @@ namespace AviaTrain.Reports
         {
             lbl_genid.Text = directed["genid"];
 
+
+            if (directed["phase"].Contains("LEVEL3PLUS"))
+                chk_LvlAss.Enabled = false;
+
             ddl_trainees.SelectedValue = directed["traineeid"];
             ddl_trainees.Enabled = false;
 
@@ -242,7 +242,7 @@ namespace AviaTrain.Reports
             txt_totalhours.Text = DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["sector"]);
             txt_totalhours.Enabled = false;
 
-            //todo: ojt-PRELEVEL1-assess etc can be filled here as well
+            //todo: ojt-PREOJT-assess etc can be filled here as well
         }
 
         protected string push_into_db()
@@ -252,13 +252,18 @@ namespace AviaTrain.Reports
             data.Add("TRAINEE_ID", ddl_trainees.SelectedValue);
             data.Add("OJTI_ID", ddl_ojtis.SelectedValue);
             data.Add("CHK_OJT", chk_OJT.Checked ? "1" : "0");
-            data.Add("CHK_PRELEVEL1", chk_PRELEVEL1.Checked ? "1" : "0");
+            data.Add("CHK_PREOJT", chk_PREOJT.Checked ? "1" : "0");
             data.Add("CHK_SIM", chk_Sim.Checked ? "1" : "0");
             data.Add("CHK_LVLASS", chk_LvlAss.Checked ? "1" : "0");
             data.Add("CHK_PROGASS", chk_ProgAss.Checked ? "1" : "0");
             data.Add("CHK_COCASS", chk_CocAss.Checked ? "1" : "0");
             data.Add("CHK_REMASS", chk_RemAss.Checked ? "1" : "0");
             data.Add("CHK_OTS", chk_OST.Checked ? "1" : "0");
+
+            if (chk_LvlAss.Checked || chk_RemAss.Checked || chk_ProgAss.Checked || chk_CocAss.Checked)
+                data.Add("ASESS_PASSED", rad_passfail.SelectedValue);
+            else
+                data.Add("ASESS_PASSED", null);
 
             data.Add("NOSHOW", chk_noshow.Checked ? "1" : "0");
             data.Add("NOTRAINING", chk_notraining.Checked ? "1" : "0");
@@ -410,7 +415,7 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose the Trainee before signing!", System.Drawing.Color.Red);
                 return false;
             }
-            if (!chk_OJT.Checked && !chk_PRELEVEL1.Checked && !chk_Sim.Checked &&
+            if (!chk_OJT.Checked && !chk_PREOJT.Checked && !chk_Sim.Checked &&
                 !chk_LvlAss.Checked && !chk_ProgAss.Checked && !chk_CocAss.Checked &&
                 !chk_RemAss.Checked && !chk_OST.Checked)
             {
@@ -580,13 +585,28 @@ namespace AviaTrain.Reports
                 txt_hours.Text = "";
                 txt_timeon_act.Enabled = false;
                 txt_timeoff_act.Enabled = false;
-                txt_hours.Enabled = false;
             }
             else
             {
                 txt_timeon_act.Enabled = true;
                 txt_timeoff_act.Enabled = true;
-                txt_hours.Enabled = true;
+            }
+        }
+
+        protected void chk_Assess_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox sent = (CheckBox)sender;
+
+            rad_passfail.Visible = sent.Checked;
+
+            if (!sent.Checked) //if unchecked, do nothing
+                return;
+
+            //if checked, uncheck the others
+            foreach (CheckBox c in new CheckBox[] { chk_LvlAss, chk_ProgAss, chk_RemAss, chk_CocAss })
+            {
+                if (c.ID != sent.ID)
+                    c.Checked = false;
             }
         }
     }

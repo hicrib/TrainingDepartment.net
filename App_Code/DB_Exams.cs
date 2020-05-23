@@ -10,12 +10,17 @@ using System.Web.UI.WebControls;
 
 namespace AviaTrain.App_Code
 {
+    public static class Con_Str
+    {
+        public static string local =  ConfigurationManager.ConnectionStrings["local_dbconn"].ConnectionString;
+        public static string test =  ConfigurationManager.ConnectionStrings["dbconn_hosting_test"].ConnectionString;
+        public static string prod =  ConfigurationManager.ConnectionStrings["dbconn_hosting_prod"].ConnectionString;
+        public static string current = test;
+        //public static string current = ConfigurationManager.ConnectionStrings["dbconn_hosting_prod"].ConnectionString;
+    }
+
     public static class DB_Exams
     {
-        public static string con_str_hosting = ConfigurationManager.ConnectionStrings["local_dbconn"].ConnectionString;
-        public static string con_str = ConfigurationManager.ConnectionStrings["dbconn_hosting"].ConnectionString;
-
-
         public static string push_Question_OPS(string sector, string op, string q, string answer, string a, string b, string c = null, string d = null)
         {
             UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
@@ -23,7 +28,7 @@ namespace AviaTrain.App_Code
             try
             {
 
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                         @"  INSERT INTO EXM_QUESTIONS VALUES ( @TYPE , @SECTOR , 1 ," + user.employeeid + @" , convert(varchar, getutcdate(), 20) )
                             DECLARE @Q_ID INT = ( SELECT SCOPE_IDENTITY() )
@@ -68,7 +73,7 @@ namespace AviaTrain.App_Code
             try
             {
 
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                         @"  INSERT INTO EXM_QUESTIONS VALUES ('FILL', @SECTOR ,1  ," + user.employeeid + @" , convert(varchar, getutcdate(), 20) )
                             DECLARE @Q_ID INT = (SELECT SCOPE_IDENTITY())
@@ -129,7 +134,7 @@ namespace AviaTrain.App_Code
             try
             {
 
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(insert, connection))
                 {
                     connection.Open();
@@ -187,7 +192,7 @@ namespace AviaTrain.App_Code
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(insert, connection))
                 {
                     connection.Open();
@@ -220,7 +225,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
                     INSERT INTO EXM_USER_ANSWERS
                         select ASS.ASSIGN_ID , EDEFQ.Q_ID, '','',''
@@ -251,7 +256,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
                      IF EXISTS (SELECT TOP 1 Q_ID  FROM  EXM_USER_ANSWERS  WHERE ASSIGN_ID = @ASSIGN_ID AND Q_ID = @Q_ID )
                         BEGIN
@@ -291,7 +296,7 @@ namespace AviaTrain.App_Code
             try
             {
 
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                         @" UPDATE EXM_QUESTIONS SET [BY] = @USERID , BY_TIME =convert(varchar, getutcdate(), 20)   WHERE ID= @QID
 
@@ -330,7 +335,7 @@ namespace AviaTrain.App_Code
             try
             {
 
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                         @"  UPDATE EXM_QUESTIONS SET [BY] = @USERID , BY_TIME =convert(varchar, getutcdate(), 20)   WHERE ID= @QID
 
@@ -391,7 +396,7 @@ namespace AviaTrain.App_Code
             // todo : find another good way to handle 
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
                                UPDATE EXM_EXAM_DEFINITION SET ISACTIVE=0 WHERE ID=@EXAMID  
                                 ", connection))
@@ -417,7 +422,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                     @" UPDATE EXM_EXAM_ASSIGNMENT 
                                         SET STATUS = CASE WHEN  @STATUS = '' THEN STATUS 
@@ -468,7 +473,7 @@ namespace AviaTrain.App_Code
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(update, connection))
                 {
                     connection.Open();
@@ -497,7 +502,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"
@@ -536,7 +541,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT TBL.ISACTIVE , TBL.ID, ISNULL(TBL.SECTOR,'') AS SECTOR , QUESTION , Answer 
@@ -605,7 +610,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" DECLARE @TYPE VARCHAR(10) = ( SELECT [TYPE] FROM EXM_QUESTIONS WHERE ID = @Q_ID )
@@ -649,7 +654,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT '0' as ID, ' --- ' as NAME
@@ -686,7 +691,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT '0' AS [ID], ' --- ' AS [NAME]
@@ -726,7 +731,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT EDQ.ORDERBY as 'Question' , EDQ.Q_ID , '0' as SOLVED
@@ -764,7 +769,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT * FROM 
@@ -823,7 +828,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT TOP " + howmany + @" * FROM (
@@ -878,7 +883,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
                        IF @EXAMID = 0
                         BEGIN
@@ -923,7 +928,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @"SELECT 
@@ -961,7 +966,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" 
@@ -1026,7 +1031,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                     @"  SELECT  TRAINEE_ID FROM EXM_EXAM_ASSIGNMENT WHERE ASSIGN_ID = @ASSIGN_ID ", connection))
                 {
@@ -1051,7 +1056,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
                                 SELECT 
                                 CASE 
@@ -1096,7 +1101,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 {
                     using (SqlCommand command = new SqlCommand(
                                 @" 
@@ -1133,7 +1138,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" 
                                   SELECT EDEF.NAME AS 'Exam Name' , 
@@ -1173,7 +1178,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
                                SELECT TOP 1 STATUS  FROM EXM_EXAM_ASSIGNMENT 
                                 WHERE EXAM_ID = @EXAMID and [STATUS] = 'ASSIGNED' AND ISNULL(USER_START,'') = '' AND  
@@ -1198,7 +1203,7 @@ namespace AviaTrain.App_Code
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(@"
                                SELECT STATUS  FROM EXM_EXAM_ASSIGNMENT WHERE ASSIGN_ID = @ASSIGNID  ", connection))
                 {
@@ -1231,7 +1236,7 @@ namespace AviaTrain.App_Code
             DataTable res = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(con_str))
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @" 
 SELECT 
