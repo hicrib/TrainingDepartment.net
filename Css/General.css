@@ -6,3 +6,47 @@
     width : 25px;
     height : 25px;
 }
+
+*[disabled=disabled] {
+    /* your style */
+    background-color: none !important;
+    opacity: 1 !important;
+    font-weight: bold !important;
+    color: black;
+    border : none !important;
+}
+select[disabled=disabled]{
+    -webkit-appearance : none  !important;
+    height : 30px;
+    text-align-last : center;
+    padding : 2px 10px 2px 10px !important;
+    border-radius : 3px !important;
+}
+input[type="text" i]:disabled {
+    padding: 2px 1px 2px 1px !important;
+    opacity: 1 !important;
+    color: black;
+    text-align: center !important;
+    border-radius: 3px !important;
+}
+input[type="time" ]:disabled {
+    padding: 2px 1px 2px 1px !important;
+    opacity: 1 !important;
+    color: black;
+    text-align: center !important;
+    border-radius: 3px !important;
+}
+input[type="date" i]:disabled {
+    padding: 2px 1px 2px 1px !important;
+    opacity: 1 !important;
+    color: black;
+    text-align: center !important;
+    border-radius: 3px !important;
+}
+
+input[type="checkbox" i]:disabled {
+    background-color: black !important;
+    opacity: 1 !important;
+    border-color: black !important;
+    color: black;
+}

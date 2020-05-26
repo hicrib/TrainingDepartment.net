@@ -63,7 +63,6 @@ namespace AviaTrain.Reports
 
             DataTable meta = li["meta"];
             DataTable form = li["form"];
-            lbl_viewmode.Text = "viewonly";
 
 
             ddl_trainee.Items.Add(new ListItem(meta.Rows[0]["TRAINEE_NAME"].ToString(), meta.Rows[0]["TRAINEE_ID"].ToString()));
@@ -179,12 +178,6 @@ namespace AviaTrain.Reports
             ddl_sectors.DataValueField = "CODE";
             ddl_sectors.DataBind();
 
-            //string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
-            //ddl_DAY_controller.SelectedValue = today.Split('.')[0];
-            //ddl_MONTH_controller.SelectedValue = Convert.ToInt32(today.Split('.')[1]).ToString();
-            //ddl_YEAR_controller.SelectedValue = today.Split('.')[2];
-
-            lbl_MER.Text = "( MER : " + DB_System.get_MER(ddl_trainee.SelectedValue, ddl_sectors.Text.Split('-')[0], ddl_sectors.Text.Split('-')[1], "") + ")";//ddl_level vardı burada
 
             Dictionary<string, string> direct_dict = (Dictionary<string, string>)Session["direct_dictionary"];
 
@@ -206,8 +199,29 @@ namespace AviaTrain.Reports
             ddl_sectors.SelectedValue = directed["position"] + "-" + directed["sector"];
             ddl_sectors.Enabled = false;
 
-            txt_totalhours.Text = DB_System.get_TOTALHOURS(directed["traineeid"], directed["position"], directed["sector"], directed["phase"]);
+            txt_totalhours.Text = DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["stepid"]);
             txt_totalhours.Enabled = false;
+
+            string user_mer = DB_Reports.get_MER_sector(ddl_trainee.SelectedValue, directed["sector"]);
+            string user_totalhours = DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["stepid"]); //this gets all sector hours
+
+            if (user_mer == "00:00")
+            {
+                lbl_MER.Text = "( MER : " + "UNDEFINED FOR USER" + ")";
+                chk_MER.Checked = false;
+                chk_MER.Enabled = false;
+            }
+            else
+                lbl_MER.Text = "( MER : " + user_mer + ")";
+
+
+            if (user_totalhours == "00:00" || Utility.isgreater_TimeFormat(user_mer, user_totalhours) > 0)
+            {
+                chk_MER.Checked = false;
+                chk_MER.Enabled = false;
+            }
+
+            txt_totalhours.Text = user_totalhours;
         }
 
         protected void btn_Submit_Click(object sender, EventArgs e)

@@ -139,6 +139,7 @@ namespace AviaTrain.App_Code
 
             return false;
         }
+      
 
         public static string getRandomFileName()
         {
@@ -298,7 +299,6 @@ namespace AviaTrain.App_Code
         }
         public static string add_TimeFormat(string first, string second)
         {
-            
             if (first == "")
                 first = "00:00";
             if (second == "")
@@ -309,15 +309,30 @@ namespace AviaTrain.App_Code
 
             int hours = Convert.ToInt32(first.Split(':')[0]) + Convert.ToInt32(second.Split(':')[0]);
             int minutes = Convert.ToInt32(first.Split(':')[1]) + Convert.ToInt32(second.Split(':')[1]);
-            if(minutes >=60)
+            if (minutes >= 60)
             {
                 hours++;
                 minutes -= 60;
             }
-            
-            return hours.ToString() + ":" + (minutes < 10 ? "0" : "") + minutes.ToString() ;
+
+            return hours.ToString() + ":" + (minutes < 10 ? "0" : "") + minutes.ToString();
         }
 
+        public static int isgreater_TimeFormat(string first, string second)
+        {
+            if (!check_TimeTextbox_format(first) || !check_TimeTextbox_format(second))
+                return 99;
+
+            int firstmin = Convert.ToInt32(first.Split(':')[0]) * 60  + Convert.ToInt32(first.Split(':')[1]);
+            int secondmin = Convert.ToInt32(second.Split(':')[0]) * 60 +  Convert.ToInt32(second.Split(':')[1]);
+
+            if (firstmin > secondmin)
+                return 1;
+            else if (firstmin == secondmin)
+                return 0;
+            // else if (firstmin < secondmin)
+            return -1;
+        }
         public static string subtract_TimeFormat(string earlier, string later)
         {
             if (earlier == "")
@@ -326,27 +341,23 @@ namespace AviaTrain.App_Code
                 later = "00:00";
 
             if (!check_TimeTextbox_format(earlier) || !check_TimeTextbox_format(later))
-                return null;
+                return "";
 
-            int hr_1 = Convert.ToInt32(earlier.Split(':')[0]);
-            int hr_2 = Convert.ToInt32(later.Split(':')[0]);
-
-            int min_1 = Convert.ToInt32(earlier.Split(':')[1]);
-            int min_2 = Convert.ToInt32(later.Split(':')[1]);
-
-            if (hr_1 > hr_2)
-                hr_2 += 24;
-
-            int hr = hr_2 - hr_1;
-
-            if (min_1 > min_2)
+            if (isgreater_TimeFormat(earlier, later) == 1)
             {
-                min_2 += 60;
-                hr -= 1;
+                string temp = later;
+                later = earlier;
+                earlier = temp;
             }
-            int min = min_2 - min_1;
 
-            return (hr < 10 ? "0" : "") + hr.ToString() + ":" + (min < 10 ? "0" : "") + (min.ToString());
+            int earliermin = Convert.ToInt32(earlier.Split(':')[0]) * 60 + Convert.ToInt32(earlier.Split(':')[1]);
+            int latermin = Convert.ToInt32(later.Split(':')[0]) * 60 + Convert.ToInt32(later.Split(':')[1]);
+
+            int res = latermin - earliermin;
+            int res_hr = res / 60;
+            int res_min = res % 60;
+          
+            return (res_hr < 10 ? "0" : "") + res_hr.ToString() + ":" + (res_min < 10 ? "0" : "") + (res_min.ToString());
         }
 
         public static string divide_TimeFormat(string time, int divide)
@@ -365,21 +376,7 @@ namespace AviaTrain.App_Code
 
         }
 
-        //public static string compare_TimeFormat(string first, string second)
-        //{
-        //    if (!check_TimeTextbox_format(first) || !check_TimeTextbox_format(second))
-        //        return null;
-
-        //    int hr_1 = Convert.ToInt32(first.Split(':')[0]);
-        //    int hr_2 = Convert.ToInt32(second.Split(':')[0]);
-
-        //    int min_1 = Convert.ToInt32(first.Split(':')[1]);
-        //    int min_2 = Convert.ToInt32(second.Split(':')[1]);
-
-
-        //}
-
-       public static string last_part(string aString , string delimiter)
+        public static string last_part(string aString, string delimiter)
         {
             string[] arr = aString.Split(new string[] { delimiter }, StringSplitOptions.None);
 

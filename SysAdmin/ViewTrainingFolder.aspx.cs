@@ -126,7 +126,12 @@ namespace AviaTrain.SysAdmin
                 e.Row.Cells[7].Visible = false;
                 e.Row.Cells[8].Visible = false;
 
-                if (e.Row.Cells[2].Text == "REPORT" || e.Row.Cells[2].Text.ToLower().Contains("assessment"))
+                
+
+                if (e.Row.Cells[2].Text == "REPORT" 
+                    || e.Row.Cells[2].Text.ToLower().Contains("assessment")
+                    || e.Row.Cells[2].Text.ToLower().Contains("recommended")
+                    )
                     e.Row.Cells[1].Text = "";
                 else
                     e.Row.Cells[0].Style.Add("opacity", "0");//todo burada findcontrols desek daha iyi. ornegi LEVELOBJECTIVES'de

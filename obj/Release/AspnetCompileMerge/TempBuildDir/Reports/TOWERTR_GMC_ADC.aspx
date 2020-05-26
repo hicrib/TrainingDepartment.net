@@ -58,12 +58,12 @@
                                                     <asp:CheckBox ID="chk_LvlAss"  AutoPostBack="true" OnCheckedChanged="chk_Assess_CheckedChanged"  Text="Level Assessment" runat="server" />
                                                 </td>
                                                 <td style="width: 170px;">
-                                                    <asp:CheckBox ID="chk_RemAss"  AutoPostBack="true" OnCheckedChanged="chk_Assess_CheckedChanged"  Text="Remedial Assessment" runat="server" />
+                                                    <asp:CheckBox ID="chk_RemAss" Enabled="false" AutoPostBack="true" OnCheckedChanged="chk_Assess_CheckedChanged"  Text="Remedial Assessment" runat="server" />
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style="width: 170px;">
-                                                    <asp:CheckBox ID="chk_PREOJT" Text="Pre-OJT" runat="server" />
+                                                    <asp:CheckBox ID="chk_PREOJT" Text="Pre-OJT" Enabled="false" runat="server" />
                                                 </td>
                                                 <td style="width: 170px;">
                                                     <asp:CheckBox ID="chk_ProgAss"  AutoPostBack="true" OnCheckedChanged="chk_Assess_CheckedChanged"  Text="Progress Assessment" runat="server" />
@@ -178,7 +178,7 @@
                             </tr>
                             <tr style="border-top: 1px solid black;">
                                 <td colspan="2" style="text-align: center; padding: 5px !important;">Hours :
-                                        <asp:TextBox ID="txt_hours" Enabled="false" TextMode="Time" runat="server"></asp:TextBox>
+                                        <asp:TextBox ID="txt_hours" Enabled="false" Width="70" style="background-color:none !important;" runat="server"></asp:TextBox>
                                 </td>
                                 <td colspan="2">Total Hours :
                                         <asp:TextBox ID="txt_totalhours" Width="70" runat="server"></asp:TextBox>
@@ -879,5 +879,7 @@
         <asp:Label ID="lbl_trainee_signed" runat="server" Visible="false"></asp:Label>
         <asp:Label ID="lbl_viewmode" runat="server" Visible="false" Text=""></asp:Label>
         <asp:Label ID="lbl_genid" runat="server" Visible="false" Text=""></asp:Label>
+        <asp:Label ID="lbl_stepid" runat="server" Visible="false" Text=""></asp:Label>
+        <asp:Label ID="lbl_phase" runat="server" Visible="false" Text=""></asp:Label>
     </asp:Panel>
 </asp:Content>

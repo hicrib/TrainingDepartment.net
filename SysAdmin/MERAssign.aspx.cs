@@ -79,11 +79,29 @@ namespace AviaTrain.SysAdmin
 
             TextBox txt_merr = (TextBox)sender;
 
+            if(!Utility.check_TimeTextbox_format(txt_merr.Text))
+            {
+                int conv ;
+                if(int.TryParse(txt_merr.Text, out conv))
+                {
+                    txt_merr.Text = conv.ToString() + ":00";
+                }
+                else
+                {
+                    lbl_pageresult.Text = "MER format  : hh:mm";
+                    lbl_pageresult.Visible = true;
+                    return;
+                }
+            }
+
            if(DB_Reports.update_MER(stepid,txt_merr.Text,ddl_trainee.SelectedValue,txt_comments.Text))
             {
                 currentRow.Cells[1].Text = txt_merr.Text;
                 currentRow.Style.Add("font-style", "italic");
                 currentRow.Style.Add("color", "#d36767");
+
+                lbl_pageresult.Text = "";
+                lbl_pageresult.Visible = false;
             }
 
         }

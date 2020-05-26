@@ -145,7 +145,8 @@
             <thead>
                 <tr>
                     <th>Recommendation for Level 
-                            <asp:DropDownList ID="ddl_Level" runat="server" Style="font-size: large; background-color: #0080ff; color: white; font-weight: bold; margin-left: 5px; border: none;">
+                            <asp:DropDownList ID="ddl_Level" runat="server"
+                                Style="font-size: x-large; background-color: #0080ff !important; color: white; font-weight: bold; margin-left: 5px; border: none; -webkit-appearance: none;">
                                 <asp:ListItem Value=""></asp:ListItem>
                                 <asp:ListItem Value="1"></asp:ListItem>
                                 <asp:ListItem Value="2"></asp:ListItem>
@@ -164,7 +165,7 @@
                                     <asp:Label ID="lbl_name" Text="NAME : " Width="150" runat="server"></asp:Label>
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddl_trainee" runat="server" Width="200"></asp:DropDownList></td>
+                                    <asp:DropDownList ID="ddl_trainee" style="-webkit-appearance:none; text-align-last:center;" runat="server" Width="200" Height="30"></asp:DropDownList></td>
                             </tr>
                         </table>
                 </tr>
@@ -184,7 +185,7 @@
                             <tr>
                                 <td>Recommending OJTI</td>
                                 <td>
-                                    <asp:DropDownList ID="ddl_ojtis" runat="server"></asp:DropDownList></td>
+                                    <asp:DropDownList ID="ddl_ojtis" style="-webkit-appearance:none; text-align-last:center; width:200px; height:30px;" Width="200" Height="30" runat="server"></asp:DropDownList></td>
                                 <td>Signature
                                 </td>
                                 <td>
@@ -203,14 +204,14 @@
                                 <td>Recommended on the following Sector
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddl_sectors" runat="server"></asp:DropDownList>
+                                    <asp:DropDownList ID="ddl_sectors" style="-webkit-appearance:none; text-align-last:center; width:200px; height:30px;"  runat="server"></asp:DropDownList>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Total hours on Sector
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="txt_totalhours" runat="server"></asp:TextBox>
+                                    <asp:TextBox ID="txt_totalhours" Enabled="false" style="font-size :large;" runat="server"></asp:TextBox>
                                 </td>
                             </tr>
                         </table>
@@ -277,8 +278,10 @@
                                 <td>
                                     <asp:Label ID="lbl_trainingdept" runat="server" Text="Training Department Approval - Initials and Signature"> </asp:Label>
                                 </td>
-                                <td>todo : WHO SIGNS HERE?
-                                         <asp:Label ID="lbl_departmentsigned" runat="server" Visible="false" Text="0"></asp:Label>
+                                <td>
+                                    <asp:Button ID="btn_departmentsign" runat="server" OnClick="btn_departmentsign_Click" Text="Sign" />
+                                    <asp:Image ID="img_departmentsign" Visible="false" runat="server" />
+                                    <asp:Label ID="lbl_departmentsigned" runat="server" Visible="false" Text="0"></asp:Label>
                                 </td>
                             </tr>
                         </table>
@@ -315,6 +318,7 @@
             <asp:Button ID="btn_submit" runat="server" CssClass="submit_button" Text="SUBMIT REPORT" OnClick="btn_submit_Click" />
         </div>
         <asp:Label ID="lbl_genid" runat="server" Visible="false" Text=""></asp:Label>
+        <asp:Label ID="lbl_stepid" runat="server" Visible="false" Text=""></asp:Label>
         <asp:Label ID="lbl_viewmode" runat="server" Visible="false" Text=""></asp:Label>
         <asp:Label ID="lbl_reportnumber" runat="server" Visible="false" Text=""></asp:Label>
 

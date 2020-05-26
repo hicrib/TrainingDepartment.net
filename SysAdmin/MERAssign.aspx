@@ -85,7 +85,7 @@
                         <Columns>
                             <asp:TemplateField HeaderText="MER">
                                 <ItemTemplate>
-                                    <asp:TextBox ID="txt_MER" Width="50" runat="server" AutoPostBack="true" OnTextChanged="txt_MER_TextChanged" TextMode="Number" />
+                                    <asp:TextBox ID="txt_MER" Width="50" runat="server" AutoPostBack="true" OnTextChanged="txt_MER_TextChanged" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>

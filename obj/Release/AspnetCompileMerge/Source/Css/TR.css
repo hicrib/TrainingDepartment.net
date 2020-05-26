@@ -2,7 +2,19 @@
 * {
     font-family: Arial !important;
 }
-
+*[disabled=disabled] {
+    /* your style */
+    background-color: white !important;
+    opacity: 1;
+    font-weight: bold;
+    color : black;
+}
+input[type="checkbox" i]:disabled {
+    background-color : black !important;
+    opacity : 1 !important;
+    border-color : black !important;
+    color: black;
+}
 
 .main_table {
     border-collapse: collapse;

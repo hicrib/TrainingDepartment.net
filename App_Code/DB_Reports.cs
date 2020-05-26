@@ -6,7 +6,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using System.EnterpriseServices.Internal;
 
 namespace AviaTrain.App_Code
 {
@@ -73,7 +72,7 @@ namespace AviaTrain.App_Code
                 }
 
                 //todo : there is no rollback of usertrainingfolder when this fails. Rest is rolledback
-                if (!update_totalhours(data["TRAINEE_ID"], data["POSITION"], data["TOTAL_HOURS"], "REPORT:" + reportid))
+                if (!update_totalhours(data["TRAINEE_ID"], data["stepid"], data["TOTAL_HOURS"], "REPORT:" + reportid))
                 {
                     rollback_push_report(reportid);
                     return "";
@@ -85,13 +84,13 @@ namespace AviaTrain.App_Code
                 {
                     //no rollback, report is valid but next step&complete should be manual
 
-                    
+
                     if (reporttype == "1" || reporttype == "2")  //it's assist
                     {
                         complete_Step(data["genid"]);
 
                         //twr assist doesnt create next step, app-acc creates next step
-                        if(data["POSITION"] != "TWR-ASSIST")
+                        if (data["POSITION"] != "TWR-ASSIST")
                             create_NEXT_STEP(data["genid"], data["TRAINEE_ID"]);
 
                     }
@@ -126,7 +125,7 @@ namespace AviaTrain.App_Code
                 using (SqlCommand command = new SqlCommand(
                       @"DECLARE @COMPLETEDSTEP INT = ( SELECT STEPID FROM USER_TRAINING_FOLDER WHERE GENID= @GENID)
 
-                        DECLARE @NEWSTEP INT = (SELECT TOP 1 ID FROM TRAINING_TREE_STEPS WHERE ID > @STEPID ORDER BY ID ASC)
+                        DECLARE @NEWSTEP INT = (SELECT TOP 1 ID FROM TRAINING_TREE_STEPS WHERE ID > @COMPLETEDSTEP ORDER BY ID ASC)
 
                         INSERT INTO USER_TRAINING_FOLDER
                         SELECT TTS.ID , @USERID, CONVERT(varchar,GETUTCDATE(),20) , 'ONGOING',NULL,NULL,NULL 
@@ -259,7 +258,7 @@ namespace AviaTrain.App_Code
                     {
                         string debug = exRollback.Message + "___" + e.Message;
                     }
-
+                    return "";
                 }
 
                 return reportid;
@@ -332,6 +331,8 @@ SELECT @ID
                         string debug = exRollback.Message + "___" + e.Message;
                     }
 
+                    return "";
+
                 }
 
                 return reportid;
@@ -400,6 +401,7 @@ SELECT @ID
                     {
                         string debug = exRollback.Message + "___" + e.Message;
                     }
+                    return "";
 
                 }
 
@@ -471,7 +473,7 @@ SELECT @ID
                     {
                         string debug = exRollback.Message + "___" + e.Message;
                     }
-
+                    return "";
                 }
 
                 return reportid;
@@ -576,8 +578,11 @@ SELECT @ID
                 return "";
             }
 
+
+
+            string status = data["DEPARTMENT_SIGNED"] == "1" ? "RECOMMENDED_FOR_LEVEL" : "RECOMMENDED_PENDING_SIGN";
             //reaching here means everything went fine
-            if (!push_UserTrainingFolder(reportid, data["genid"], status: "RECOMMENDED_FOR_LEVEL"))
+            if (!push_UserTrainingFolder(reportid, data["genid"], status: status))
                 return "";
 
             return reportid;
@@ -1286,28 +1291,35 @@ SELECT @ID
             if (type == "3")
                 rpt_tablename = "REPORT_DAILYTR_ASS_RAD";
             else if (type == "4")
-                rpt_tablename = "REPORT_TOWEETR_GMC_ADC";
+                rpt_tablename = "REPORT_TOWERTR_GMC_ADC";
+            else if (type == "5")
+                rpt_tablename = "REPORT_RECOM_LEVEL";
+
+            string updatetbl = "";
+            if (Convert.ToInt32(type) <= 4)
+                updatetbl = "UPDATE " + rpt_tablename + " SET STUDENT_COMMENTS = @STUDENTCOMMENT WHERE ID = @REPORTID ";
+            else if (type == "5")
+                updatetbl = "UPDATE REPORT_RECOM_LEVEL SET TRAINEE_SIGNED = 1 WHERE ID=@REPORTID)";
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                         @" UPDATE REPORTS_META SET TRAINEE_SIGNED = 1 , STATUS = 'TRAINEESIGNED' WHERE ID = @REPORTID ;"
+                            + updatetbl, connection))
                 {
-                    using (SqlCommand command = new SqlCommand(
-                                @" UPDATE REPORTS_META SET TRAINEE_SIGNED = 1 , STATUS = 'TRAINEESIGNED' WHERE ID = @REPORTID ;
-                                        UPDATE " + rpt_tablename + " SET STUDENT_COMMENTS = @STUDENTCOMMENT WHERE ID = @REPORTID ", connection))
-                    {
-                        connection.Open();
-                        command.Parameters.Add("@REPORTID", SqlDbType.Int).Value = reportid;
+                    connection.Open();
+                    command.Parameters.Add("@REPORTID", SqlDbType.Int).Value = reportid;
+                    if (type != "5")
                         command.Parameters.Add("@STUDENTCOMMENT", SqlDbType.NVarChar).Value = studentcomment;
 
-                        command.CommandType = CommandType.Text;
-                        int rows = command.ExecuteNonQuery();
+                    command.CommandType = CommandType.Text;
+                    int rows = command.ExecuteNonQuery();
 
-                        if (rows == 0)
-                            return false;
+                    if (rows == 0)
+                        return false;
 
-                        return true;
-                    }
+                    return true;
                 }
             }
             catch (Exception e)
@@ -1325,9 +1337,10 @@ SELECT @ID
             if (whosigns == "trainee")
                 update = @"UPDATE REPORTS_META SET TRAINEE_SIGNED = 1 , STATUS = 'TRAINEESIGNED' WHERE ID = @REPORTID ;
                            UPDATE  REPORT_RECOM_LEVEL SET TRAINEE_SIGNED = 1 WHERE ID = @REPORTID";
-            else if (whosigns == "department")
-                update = @"UPDATE REPORTS_META SET TRAINEE_SIGNED = 1 , STATUS = 'TRAINEESIGNED' WHERE ID = @REPORTID ;
-                           UPDATE  REPORT_RECOM_LEVEL SET DEPARTMENT_SIGNED = 1 , DEPARTMENT_EMPLOYEEID = " + signerid + " WHERE ID = @REPORTID";
+            else if (whosigns == "TRN_DEPARTMENT_SIGNER")
+                update = @"UPDATE REPORTS_META SET  STATUS = 'DEPARTMENTSIGNED' WHERE ID = @REPORTID ;
+                           UPDATE  REPORT_RECOM_LEVEL SET DEPARTMENT_SIGNED = 1 , DEPARTMENT_EMPLOYEEID = " + signerid + @" WHERE ID = @REPORTID  ; 
+                           UPDATE USER_TRAINING_FOLDER SET STATUS = 'RECOMMENDED_FOR_LEVEL' WHERE REPORTID = @REPORTID ";
 
             try
             {
@@ -1600,7 +1613,7 @@ SELECT @ID
                 using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                             @"  SELECT TTS.DESCRIPTION , UTF.STATUS , UTF.CREATED_TIME, ISNULL(UTF.REPORTID,'') AS [Rpt.Num.] , ISNULL(UTF.FILENAME,'') AS [FileName]
-		                                , UTF.GENID, TTS.PHASE , TTS.[NAME]
+		                                , UTF.GENID, TTS.PHASE , TTS.[NAME] , UTF.STEPID
                                         FROM USER_TRAINING_FOLDER UTF
                                         JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
                                         WHERE UTF.EMPLOYEEID = @EMPLOYEEID 
@@ -1730,7 +1743,11 @@ SELECT @ID
                               @" 
                                 SELECT TOP 1 UTF.GENID FROM USER_TRAINING_FOLDER UTF
                                 JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID 
-                                WHERE UTF.EMPLOYEEID = @EMPLOYEEID AND TTS.POSITION = @POSITION AND TTS.SECTOR = @SECTOR", connection))
+                                WHERE UTF.EMPLOYEEID = @EMPLOYEEID 
+                                        AND TTS.POSITION = @POSITION
+                                        AND 1 = CASE WHEN @SECTOR = 'ASSIST' AND TTS.PHASE = @SECTOR THEN 1
+			                                         WHEN TTS.SECTOR = @SECTOR THEN 1
+			 ELSE 0 END", connection))
                     {
                         connection.Open();
                         command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
@@ -1753,7 +1770,7 @@ SELECT @ID
         }
 
 
-        public static bool start_FDO(string employeeid, string position)
+        public static string start_FDO(string employeeid, string position)
         {
             try
             {
@@ -1782,17 +1799,18 @@ SELECT @ID
                     command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
                     command.CommandType = CommandType.Text;
 
-                    return command.ExecuteNonQuery() > 0;
+                    command.ExecuteNonQuery();
+                    return "";
                 }
             }
             catch (Exception e)
             {
                 string mes = e.Message;
             }
-            return false;
+            return "fdo";
         }
 
-        public static bool start_PREOJT(string employeeid, string position, string status = "MIGRATION")
+        public static string start_PREOJT(string employeeid, string position, string status = "MIGRATION")
         {
             try
             {
@@ -1822,16 +1840,17 @@ SELECT @ID
                     command.Parameters.Add("@STATUS", SqlDbType.NVarChar).Value = status;
                     command.CommandType = CommandType.Text;
 
-                    return command.ExecuteNonQuery() > 0;
+                    command.ExecuteNonQuery();
+                    return "";
                 }
             }
             catch (Exception e)
             {
                 string mes = e.Message;
             }
-            return false;
+            return "preojt";
         }
-        public static bool start_POSITION_ASSIST(string employeeid, string position, string status = "MIGRATION")
+        public static string start_POSITION_ASSIST(string employeeid, string position, string status = "MIGRATION")
         {
             try
             {
@@ -1861,17 +1880,18 @@ SELECT @ID
                     command.Parameters.Add("@STATUS", SqlDbType.NVarChar).Value = status;
                     command.CommandType = CommandType.Text;
 
-                    return command.ExecuteNonQuery() > 0;
+                    command.ExecuteNonQuery();
+                    return "";
                 }
             }
             catch (Exception e)
             {
                 string mes = e.Message;
             }
-            return false;
+            return "posassist";
         }
 
-        public static bool start_SECTOR_MIGRATION(string employeeid, string position, string sector, string startstepid)
+        public static string start_SECTOR_MIGRATION(string employeeid, string position, string sector, string startstepid)
         {
             try
             {
@@ -1892,17 +1912,17 @@ SELECT @ID
                     command.CommandType = CommandType.Text;
 
                     command.ExecuteNonQuery();
+                    return "";
                 }
             }
             catch (Exception e)
             {
                 string em = e.Message;
-                return false;
             }
-            return true;
+            return "stepmigration";
         }
 
-        public static bool start_ONGOING_STEP(string employeeid, string stepid)
+        public static string start_ONGOING_STEP(string employeeid, string stepid)
         {
             try
             {
@@ -1918,57 +1938,58 @@ SELECT @ID
                     command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
                     command.CommandType = CommandType.Text;
 
-                    return command.ExecuteNonQuery() > 0;
+                    command.ExecuteNonQuery();
+                    return "";
                 }
             }
             catch (Exception e)
             {
                 string err = e.Message;
-                return false;
             }
+            return "ongoing";
 
         }
 
-        public static bool start_Training_Folder_Migrate(string employeeid, string position, string sector, string startstepid)
+        public static string start_Training_Folder_Migrate(string employeeid, string position, string sector, string startstepid)
         {
-            bool ok = false;
+            string ok = "";
 
             if (position == "TWR")
             {
                 if (sector == "ASSIST") //exceptional case : TWR_ASSIST
                 {
                     //tower doesnt have FDO
-                    ok = start_PREOJT(employeeid, position, "MIGRATION")
-                      && start_POSITION_ASSIST(employeeid, position, "ONGOING");
+                    ok = start_PREOJT(employeeid, position, "MIGRATION") +
+                         start_POSITION_ASSIST(employeeid, position, "ONGOING");
                 }
                 else
                 {
                     ok = start_PREOJT(employeeid, position, "MIGRATION")
-                      && start_POSITION_ASSIST(employeeid, position, "MIGRATION")
-                      && start_SECTOR_MIGRATION(employeeid, position, sector, startstepid)
-                      && start_ONGOING_STEP(employeeid, startstepid);
+                     + start_POSITION_ASSIST(employeeid, position, "MIGRATION")
+                     + start_SECTOR_MIGRATION(employeeid, position, sector, startstepid)
+                     + start_ONGOING_STEP(employeeid, startstepid);
                 }
             }
             else
             {
                 ok = start_FDO(employeeid, position)
-                  && start_POSITION_ASSIST(employeeid, position)
-                  && start_PREOJT(employeeid, position)
-                  && start_SECTOR_MIGRATION(employeeid, position, sector, startstepid)
-                  && start_ONGOING_STEP(employeeid, startstepid);
+                 + start_POSITION_ASSIST(employeeid, position)
+                 + start_PREOJT(employeeid, position)
+                 + start_SECTOR_MIGRATION(employeeid, position, sector, startstepid)
+                 + start_ONGOING_STEP(employeeid, startstepid);
             }
 
             return ok;
         }
 
-        public static bool update_totalhours(string userid, string sector, string totalhours, string lastupdate, string extra = "")
+        public static bool update_totalhours(string userid, string stepid, string totalhours, string lastupdate, string extra = "")
         {
             try
             {
                 //insert all steps before chosen step in the sector  as MIGRATION
                 using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
-                      @"IF EXISTS (SELECT TOP 1 TOTALHOURS FROM USER_TOTALHOURS WHERE USERID= @USERID AND SECTOR = @SECTOR)
+                      @"IF EXISTS (SELECT TOP 1 TOTALHOURS FROM USER_TOTALHOURS WHERE USERID= @USERID AND STEPID = @STEPID)
                         BEGIN
 		                        UPDATE USER_TOTALHOURS 
 		                        SET TOTALHOURS = @TOTALHOURS ,
@@ -1976,15 +1997,15 @@ SELECT @ID
 			                        LASTUPDATE_TIME = CONVERT(VARCHAR, GETUTCDATE(), 20 ),
 			                        EXTRA = CASE WHEN @EXTRA = '' THEN EXTRA ELSE @EXTRA END,
                                     [BY] = @BY
-		                        WHERE USERID=@USERID AND SECTOR =@SECTOR
+		                        WHERE USERID=@USERID AND STEPID =@STEPID
                         END
                         ELSE
 	                        INSERT INTO USER_TOTALHOURS 
-	                        VALUES (@USERID, @SECTOR, @TOTALHOURS , @LASTUPDATE, CONVERT(VARCHAR, GETUTCDATE(),20), @EXTRA, @BY)", connection))
+	                        VALUES (@USERID, @STEPID, @TOTALHOURS , @LASTUPDATE, CONVERT(VARCHAR, GETUTCDATE(),20), @EXTRA, @BY)", connection))
                 {
                     connection.Open();
                     command.Parameters.Add("@USERID", SqlDbType.Int).Value = userid;
-                    command.Parameters.Add("@SECTOR", SqlDbType.VarChar).Value = sector;
+                    command.Parameters.Add("@STEPID", SqlDbType.VarChar).Value = stepid;
                     command.Parameters.Add("@TOTALHOURS", SqlDbType.VarChar).Value = totalhours;
                     command.Parameters.Add("@LASTUPDATE", SqlDbType.VarChar).Value = lastupdate;
                     command.Parameters.Add("@EXTRA", SqlDbType.NVarChar).Value = extra;
@@ -2043,24 +2064,109 @@ SELECT @ID
             return null;
         }
 
-        public static string get_TOTALHOURS(string trainee, string sector)
+        public static string get_TOTALHOURS(string trainee, string stepid)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
-                             @"  SELECT TOTALHOURS FROM USER_TOTALHOURS WHERE USERID = @TRAINEE AND SECTOR = @SECTOR
+                             @" SELECT TOTALHOURS  FROM USER_TOTALHOURS UTH
+                                WHERE UTH.STEPID IN
+	                                (	
+		                                SELECT TTS.ID FROM TRAINING_TREE_STEPS TTS
+		                                JOIN ( SELECT * FROM TRAINING_TREE_STEPS WHERE ID = @STEPID ) AS CURR
+		                                    ON TTS.POSITION = CURR.POSITION AND 
+                                               1 = CASE WHEN ISNULL(CURR.SECTOR,'' ) = '' AND CURR.NAME = TTS.NAME THEN 1
+				                                        WHEN CURR.SECTOR = TTS.SECTOR THEN 1
+				                                        ELSE 0 END
+	                                ) 
+                                    AND UTH.USERID = @USERID
                                     ", connection))
                 {
-                    command.Parameters.Add("@TRAINEE", SqlDbType.Int).Value = trainee;
-                    command.Parameters.Add("@SECTOR", SqlDbType.VarChar).Value = sector;
-
                     connection.Open();
-                    string result = Convert.ToString(command.ExecuteScalar());
-                    if (String.IsNullOrWhiteSpace(result))
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = trainee;
+                    command.Parameters.Add("@STEPID", SqlDbType.VarChar).Value = stepid;
+
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    DataTable res = new DataTable();
+                    da.Fill(res);
+
+                    if (res == null || res.Rows.Count == 0)
+                        return "00:00";
+
+                    string total = "00:00";
+                    foreach (DataRow item in res.Rows)
+                        total = Utility.add_TimeFormat(total, item["TOTALHOURS"].ToString());
+
+                    return total;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return "00:00";
+        }
+
+        public static string get_MER_sector(string employeeid, string sector)
+        {
+            //for sector it returns MER to complete LEVEL3PLUS of the sector, if none LEVEL3
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+              @"DECLARE @LEVEL3PLUS INT = ( SELECT STEPID FROM TRAINING_TREE_STEPS 
+							WHERE SECTOR = @SECTOR AND PHASE = 'OJT_LEVEL3PLUS')
+                DECLARE @MER_LEVEL3PLUS VARCHAR(10) = ( SELECT ISNULL(MER,'') FROM MER_USER 
+										                WHERE STEPID = @LEVEL3PLUS AND EMPLOYEEID = @EMPLOYEEID )
+
+                IF @MER_LEVEL3PLUS = ''
+                BEGIN
+	                DECLARE @LEVEL3 INT = ( SELECT STEPID FROM TRAINING_TREE_STEPS 
+							                WHERE SECTOR = @SECTOR AND PHASE = 'OJT_LEVEL3')
+	                SELECT ISNULL(MER,'') FROM MER_USER WHERE STEPID = @LEVEL3 AND EMPLOYEEID = @EMPLOYEEID 
+                END
+                ELSE
+	                SELECT @MER_LEVEL3PLUS
+				", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+
+                    command.CommandType = CommandType.Text;
+
+                    return Convert.ToString(command.ExecuteScalar() as object);
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return "";
+        }
+        public static string get_MER_step(string employeeid, string stepid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                             @"SELECT MER FROM MER_USER  WHERE STEPID = @STEPID AND EMPLOYEEID = @EMPLOYEEID
+				", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+
+                    command.CommandType = CommandType.Text;
+
+                    string res = Convert.ToString(command.ExecuteScalar() as object);
+                    if (String.IsNullOrEmpty(res))
                         return "00:00";
                     else
-                        return result;
+                        return res;
                 }
             }
             catch (Exception e)
@@ -2070,58 +2176,13 @@ SELECT @ID
             return "";
         }
 
-        public static string get_MER(string stepid, string employeeid = "")
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(Con_Str.current))
-                using (SqlCommand command = new SqlCommand(
-                             @"DECLARE @MER INT = (  SELECT UM.MER FROM TRAINING_TREE_STEPS TTS
-					                                  JOIN MER_USER UM ON UM.POSITION = TTS.POSITION 
-											                                AND ISNULL(UM.SECTOR,'') = ISNULL(TTS.SECTOR,'')
-											                                AND TTS.PHASE = UM.PHASE
-					                                  WHERE TTS.ID = @STEPID AND UM.EMPLOYEEID = @EMPLOYEEID
-					                                )
-
-                                IF ISNULL(@MER,0) = 0
-                                BEGIN
-		                                SELECT MD.MER FROM TRAINING_TREE_STEPS TTS
-		                                JOIN MER_DEFAULT MD ON MD.POSITION = TTS.POSITION 
-								                                AND ISNULL(MD.SECTOR,'') = ISNULL(TTS.SECTOR,'')
-								                                AND TTS.PHASE = MD.PHASE
-		                                WHERE TTS.ID = @STEPID
-                                END
-                                ELSE 
-                                        SELECT @MER", connection))
-                {
-                    connection.Open();
-                    command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
-                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid == "" ? "0" : employeeid;
-
-                    command.CommandType = CommandType.Text;
-
-                    string result = Convert.ToString(command.ExecuteScalar() as object);
-                    if (result == "")
-                        return null;
-                    else
-                        return result;
-
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-            }
-            return null;
-        }
-
         public static DataTable get_MERs(string employeeid, string position = "", string sector = "", string stepid = "")
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
-                            @"  SELECT ISNULL(MU.MER,'0') AS 'Current' , 
+                            @"  SELECT ISNULL(MU.MER,'00:00') AS 'Current' , 
                                      TTS.POSITION , TTS.SECTOR, TTS.DESCRIPTION , 
                                      TTS.ID
                                  FROM TRAINING_TREE_STEPS TTS
@@ -2176,7 +2237,7 @@ SELECT @ID
                     connection.Open();
                     command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
                     command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
-                    command.Parameters.Add("@MER", SqlDbType.Int).Value = MER;
+                    command.Parameters.Add("@MER", SqlDbType.VarChar).Value = MER;
                     command.Parameters.Add("@ADMINID", SqlDbType.Int).Value = user.employeeid;
                     command.Parameters.Add("@COMMENTS", SqlDbType.VarChar).Value = comments;
 
@@ -2255,6 +2316,81 @@ SELECT @ID
                 string err = e.Message;
             }
             return null;
+        }
+
+        public static DataTable get_Level_Objectives(string employeeid, string sector, string phase)
+        {
+            //string position = row["POSITION"].ToString();
+            //string sector = row["SECTOR"].ToString();
+            //string phase = row["PHASE"].ToString();
+
+            if (sector == "")
+                sector = phase; // TWR ASSIST HAS TO BE HANDLED
+
+            string type = "";
+            if (sector == "GMC")
+                type = "TWR_GMC";
+            else if (sector == "ADC")
+                type = "TWR_ADC";
+            else if (sector == "ASSIST")
+                type = "TWR_ASSIST";
+            else if (new string[6] { "AR", "BR", "KR", "NR", "SR", "CR" }.Contains(sector))
+                type = "AREA_APPROACH";
+
+            string level = "";
+            if (phase.Contains("LEVEL1"))
+                level = "1";
+            else if (phase.Contains("LEVEL2"))
+                level = "2";
+            else if (phase.Contains("LEVEL3"))
+                level = "3";
+            else if (sector == "ASSIST" && phase == "ASSIST") //TWR ASSIST
+                level = "0";
+
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                 @" SELECT DEF.ID, DEF.CATEGORY , DEF.HEADER, DEF.OBJECTIVE ,
+	                     ISNULL(US.INITIAL,'') as 'By' , F.ID as 'FORMID'
+                 FROM LEVEL_OBJECTIVES_FORM F
+                 JOIN LEVEL_OBJECTIVES_DEF DEF ON DEF.FORMID = F.ID
+                 LEFT JOIN LEVEL_OBJECTIVES_USER U ON U.OBJECTIVEID = DEF.ID AND U.USERID = @USERID
+                 LEFT JOIN USERS US ON US.EMPLOYEEID = U.SIGNEDBY
+                 WHERE F.TYPE = @TYPE AND F.LEVELNUM = @LEVEL AND F.ISACTIVE = 1 AND DEF.ISACTIVE = 1", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = employeeid;
+                    command.Parameters.Add("@TYPE", SqlDbType.VarChar).Value = type;
+                    command.Parameters.Add("@LEVEL", SqlDbType.VarChar).Value = level;
+                    command.CommandType = CommandType.Text;
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    DataTable res = new DataTable();
+                    da.Fill(res);
+
+                    if (res != null || res.Rows.Count > 0)
+                        return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return null;
+        }
+        public static bool is_LevelObjectives_completed(string userid, string sector, string phase)
+        {
+            DataTable objectives = get_Level_Objectives(userid, sector, phase);
+            if (objectives == null || objectives.Rows.Count == 0)
+                return true; // todo : no objectives to sign or error? does it matter, because we call this func only when there should be objectives
+
+            DataRow[] res = objectives.Select("BY = '' ");
+            if (res == null || res.Length == 0)
+                return true;
+
+            return false;
         }
 
         public static DataTable get_ONGOING_step(string employeeid, string sector)
@@ -2345,6 +2481,37 @@ SELECT @ID
 
                     if (command.ExecuteNonQuery() > 0)
                         return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string me = e.Message;
+            }
+            return false;
+        }
+
+
+        public static bool is_RECOMMENDED_forLevel(string employeeid, string stepid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                    @"  IF EXISTS ( SELECT STATUS FROM USER_TRAINING_FOLDER 
+			                        WHERE EMPLOYEEID = @EMPLOYEEID AND STEPID = @STEPID
+			                        AND STATUS = 'RECOMMENDED_FOR_LEVEL' )
+	                        SELECT '1'
+                        ELSE
+	                        SELECT '0'
+                     ", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+                    command.Parameters.Add("@STEPID", SqlDbType.Int).Value = stepid;
+
+                    command.CommandType = CommandType.Text;
+
+                    return Convert.ToString(command.ExecuteScalar()) == "1";
                 }
             }
             catch (Exception e)

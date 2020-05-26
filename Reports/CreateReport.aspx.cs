@@ -111,17 +111,35 @@ namespace AviaTrain.Reports
 
             if (e.Row.RowType == DataControlRowType.DataRow || e.Row.RowType == DataControlRowType.Header)
             {
+                if (e.Row.Cells[5].Text == "0")
+                    e.Row.Cells[5].Text = "";
+
+                if (e.Row.Cells[3].Text != "ONGOING" && e.Row.Cells[3].Text != "COMPLETED" && e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    e.Row.Cells[2].Text = "";
+                    e.Row.Style.Add("font-size", "small");
+                    e.Row.Cells[0].Style.Add("border", "none");
+                    e.Row.Cells[1].Style.Add("border", "none");
+                    e.Row.Cells[2].Style.Add("border", "none");
+                }
+                else
+                    e.Row.Style.Add("font-weight", "bold");
+
                 //if status isn't ongoing, dont show the create button
-                if (e.Row.Cells[3].Text != "ONGOING")
+                if (e.Row.Cells[3].Text != "ONGOING" && e.Row.RowType == DataControlRowType.DataRow)
                 {
                     e.Row.Cells[0].Enabled = false; //disable the Create buttons is not ONGOING STEPS (finished, migration etc (todo: else?)
                     e.Row.Cells[0].CssClass = "hidden-cell";
                     e.Row.Cells[1].Enabled = false; //disable the Create buttons is not ONGOING STEPS (finished, migration etc (todo: else?)
                     e.Row.Cells[1].CssClass = "hidden-cell";
+                    e.Row.Cells[0].Style.Add("border", "none");
+                    e.Row.Cells[1].Style.Add("border", "none");
                 }
                 else
                 {
                     e.Row.Cells[0].Attributes["src"] = "../Images/create.png";
+                    e.Row.Cells[0].Style.Add("text-align", "center");
+                    e.Row.Cells[1].Style.Add("text-align", "center");
                 }
 
                 if(ddl_sectors.SelectedItem.Text.ToLower().Contains("assist")) // no recommend for assist
@@ -132,10 +150,11 @@ namespace AviaTrain.Reports
 
 
                 //hide 
+                e.Row.Cells[6].Visible = false; //the filename
                 e.Row.Cells[7].Visible = false; //the genid
                 e.Row.Cells[8].Visible = false; // PHASE  : PREOJT, OJT_LEVEL1 , ASSIST etc...
                 e.Row.Cells[9].Visible = false; //NAME  : APP_BR_ASSIST , TWR_GMC_LEVEL3PLUS etc...
-
+                e.Row.Cells[10].Visible = false;
 
 
                 //e.Row.Cells[0].Attributes["style"] = "cursor:pointer";
@@ -151,10 +170,12 @@ namespace AviaTrain.Reports
             string genid = selectedRow.Cells[7].Text; //  genid
             string phase = selectedRow.Cells[8].Text; // PHASE  : PREOJT, OJT_LEVEL1 , ASSIST etc...
             string name = selectedRow.Cells[9].Text; //NAME  : APP_BR_ASSIST , TWR_GMC_LEVEL3PLUS etc...
+            string stepid = selectedRow.Cells[10].Text; //stepid
 
 
             Dictionary<string, string> direct_dictionary = new Dictionary<string, string>();
             direct_dictionary.Add("genid", genid);
+            direct_dictionary.Add("stepid", stepid);
             direct_dictionary.Add("traineeid", ddl_trainees.SelectedValue);
             direct_dictionary.Add("sector", ddl_sectors.SelectedValue);
             direct_dictionary.Add("position", ddl_positions.SelectedValue);

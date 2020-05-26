@@ -25,24 +25,22 @@ namespace AviaTrain.Reports
 
                     string relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid);
 
-                    //todo: Check if trainee will sign
-                    switch (relation)
+                    if(relation != "nobody")
                     {
-                        case "trainee":
-                            fill_View_Mode_as(reportid, "trainee");
-                            break;
-                        case "sysadmin":
-                            fill_View_Mode_as(reportid, "sysadmin");
-                            break;
-                        case "creater_ojti":
-                            fill_View_Mode_as(reportid, "creater_ojti");
-                            break;
-                        default:
-                            Response.Redirect("~/Pages/UserMain.aspx?Code=3&ID=" + reportid);
-                            break;
+                        fill_View_Mode_as(reportid, relation); //it can be creater_ojti / trainee
                     }
-
-
+                    else if(user.isAdmin)
+                    {
+                            fill_View_Mode_as(reportid, "sysadmin");
+                    }
+                    else if (user.has_ROLENAME("TRN_DEPARTMENT_SIGNER"))
+                    {
+                        fill_View_Mode_as(reportid, "TRN_DEPARTMENT_SIGNER");
+                    }
+                    else
+                    {
+                        RedirectWithCode("UNAUTHORIZED");
+                    }
                 }
                 else
                 {
@@ -63,13 +61,12 @@ namespace AviaTrain.Reports
 
             DataTable meta = li["meta"];
             DataTable form = li["form"];
-            lbl_viewmode.Text = "viewonly";
 
 
             ddl_trainee.Items.Add(new ListItem(meta.Rows[0]["TRAINEE_NAME"].ToString(), meta.Rows[0]["TRAINEE_ID"].ToString()));
             ddl_ojtis.Items.Add(new ListItem(meta.Rows[0]["CREATER_NAME"].ToString(), meta.Rows[0]["CREATER"].ToString()));
 
-            
+            ddl_Level.SelectedValue = form.Rows[0]["LEVEL"].ToString();
 
             //bring trainee sing if signed
             if (meta.Rows[0]["TRAINEE_SIGNED"].ToString() == "True")
@@ -85,30 +82,39 @@ namespace AviaTrain.Reports
             chk_reading.Checked = form.Rows[0]["READING_SIGNED"].ToString() == "True";
 
             if (meta.Rows[0]["OJTI_SIGNED"].ToString() == "True")
-                btn_ojtisign_Click(new object(), new EventArgs());
+            {
+                img_ojtisign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_ojtis.SelectedValue)["SIGNATURE"].ToString();
+                img_ojtisign.Visible = true;
+                btn_ojtisign.Visible = false;
+                lbl_ojtisigned.Text = "1";
+            }
+            //bring trainee sing if signed
+            if (meta.Rows[0]["TRAINEE_SIGNED"].ToString() == "True")
+            {
+                img_traineesign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_trainee.SelectedValue)["SIGNATURE"].ToString();
+                img_traineesign.Visible = true;
+                btn_traineesign.Visible = false;
+                lbl_traineesigned.Text = "1";
+            }
+            if (form.Rows[0]["DEPARTMENT_SIGNED"].ToString() == "True")
+            {
+                img_departmentsign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(form.Rows[0]["DEPARTMENT_EMPLOYEEID"].ToString())["SIGNATURE"].ToString();
+                img_departmentsign.Visible = true;
+                btn_departmentsign.Visible = false;
+                lbl_departmentsigned.Text = "1";
+            }
+
 
             txt_date.Text = form.Rows[0]["DATE"].ToString();
-            //ddl_DAY.Items.Add(date.Split('.')[0]);
-            //ddl_MONTH.SelectedValue = date.Split('.')[1];
-            //ddl_YEAR.SelectedValue = date.Split('.')[2];
-
             txt_comments.Text = form.Rows[0]["COMMENTS"].ToString();
 
             //disable everything
             DisableControls(pnl_wrapper);
             btn_submit.Visible = false;
 
-            //bring ojti sign but check just in case
-            if (meta.Rows[0]["OJTI_SIGNED"].ToString() == "True")
-            {
-                btn_ojtisign_Click(new object(), new EventArgs());
-            }
+         
 
-            //bring trainee sing if signed
-            if (meta.Rows[0]["TRAINEE_SIGNED"].ToString() == "True")
-            {
-                btn_traineesign_Click(new object(), new EventArgs());
-            }
+           
 
 
             // if not signed by trainee enable sign button
@@ -124,24 +130,22 @@ namespace AviaTrain.Reports
                 //change mode to allow update in reports table when submit button clicked
                 lbl_viewmode.Text = "trainee";
             }
-            if (mode == "department" && meta.Rows[0]["DEPARTMENT_SIGNED"].ToString() != "True")
+            if (mode == "TRN_DEPARTMENT_SIGNER" && form.Rows[0]["DEPARTMENT_SIGNED"].ToString() != "True")
             {
-                //TODO : departMENT SIGN BUTTON AND FUNCTION
-                //btn_DEPARTMENTSIGN.Enabled = true;
+                btn_departmentsign.Visible = true;
+                btn_departmentsign.Enabled = true;
 
-                //let them submit
                 btn_submit.Visible = true;
                 btn_submit.Enabled = true;
 
                 //change mode to allow update in reports table when submit button clicked
-                lbl_viewmode.Text = "department";
+                lbl_viewmode.Text = "TRN_DEPARTMENT_SIGNER";
             }
 
-            //todo: disable and hide elements based on mode
         }
 
 
-        protected void Fill_Default_Page_Elements() 
+        protected void Fill_Default_Page_Elements()
         {
             DataTable trainees = DB_System.get_ALL_trainees();
             if (trainees != null)
@@ -174,7 +178,6 @@ namespace AviaTrain.Reports
             //ddl_MONTH.SelectedValue = Convert.ToInt32(today.Split('.')[1]).ToString();
             //ddl_YEAR.SelectedValue = today.Split('.')[2];
 
-            lbl_MER.Text = "( MER : " + DB_System.get_MER(ddl_trainee.SelectedValue, ddl_sectors.Text.Split('-')[0], ddl_sectors.Text.Split('-')[1], ddl_Level.SelectedValue) + ")";
 
             Dictionary<string, string> direct_dict = (Dictionary<string, string>)Session["direct_dictionary"];
 
@@ -185,6 +188,7 @@ namespace AviaTrain.Reports
         protected void fill_from_CreateReport(Dictionary<string, string> directed)
         {
             lbl_genid.Text = directed["genid"];
+            lbl_stepid.Text = directed["stepid"];
 
             ddl_trainee.SelectedValue = directed["traineeid"];
             ddl_trainee.Enabled = false;
@@ -195,7 +199,13 @@ namespace AviaTrain.Reports
             ddl_sectors.SelectedValue = directed["position"] + "-" + directed["sector"];
             ddl_sectors.Enabled = false;
 
-            
+            UserSession user = (UserSession)Session["usersession"];
+            if (user.employeeid != ddl_trainee.SelectedValue)
+                btn_traineesign.Enabled = false;
+
+            btn_departmentsign.Enabled = user.has_ROLENAME("TRN_DEPARTMENT_SIGNER");
+
+
             string name = directed["name"];
             if (name.Contains("LEVEL3"))
                 ddl_Level.SelectedValue = "3";
@@ -206,16 +216,41 @@ namespace AviaTrain.Reports
             ddl_Level.Enabled = false;
 
 
-            txt_totalhours.Text = DB_System.get_TOTALHOURS(directed["traineeid"], directed["position"], directed["sector"], directed["phase"]);
-            txt_totalhours.Enabled = false;
+            string user_mer = DB_Reports.get_MER_step(ddl_trainee.SelectedValue, directed["stepid"]);
+            string user_totalhours = DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["stepid"]);
 
+            if(user_mer == "00:00")
+            {
+                lbl_MER.Text = "( MER : " + "UNDEFINED FOR USER" + ")";
+                chk_MER.Checked = false;
+                chk_MER.Enabled = false;
+            }
+            else
+                lbl_MER.Text = "( MER : " + user_mer + ")";
+
+
+            if (user_totalhours == "00:00" || Utility.isgreater_TimeFormat(user_mer, user_totalhours) > 0 )
+            {
+                chk_MER.Checked = false;
+                chk_MER.Enabled = false;   
+            }
+               
+            txt_totalhours.Text = user_totalhours;
+
+
+
+            if(!DB_Reports.is_LevelObjectives_completed(ddl_trainee.SelectedValue, directed["sector"],directed["phase"]))
+            {
+                chk_objectives.Checked = false;
+                chk_objectives.Enabled = false;
+            }
             //ddl_positions.SelectedValue = directed["position"] + "-" + directed["sector"];
             //ddl_positions.Enabled = false;
 
             //todo: ojt-PREOJT-assess etc can be filled here as well
         }
 
-        
+
 
 
         protected void btn_submit_Click(object sender, EventArgs e)
@@ -229,17 +264,13 @@ namespace AviaTrain.Reports
                     return;
                 }
 
-                if (DB_Reports.update_Sign_RECOM_LEVEL(lbl_reportnumber.Text, "trainee" , "")) 
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=5&ID=" + lbl_reportnumber.Text);
-                }
+                if (DB_Reports.update_Sign_RECOM_LEVEL(lbl_reportnumber.Text, "trainee", ""))
+                    SuccessWithCode("SUCCESS! Report Signed.");
                 else
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=0");
-                }
+                    RedirectWithCode("Error: Try Again Later.");
             }
 
-            if (lbl_viewmode.Text == "department")
+            if (lbl_viewmode.Text == "TRN_DEPARTMENT_SIGNER")
             {
                 if (lbl_departmentsigned.Text != "1")
                 {
@@ -247,14 +278,10 @@ namespace AviaTrain.Reports
                     return;
                 }
 
-                if (DB_Reports.update_Sign_RECOM_LEVEL(lbl_reportnumber.Text, "department", ((UserSession)Session["usersession"]).employeeid  )) 
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=5&ID=" + lbl_reportnumber.Text);
-                }
+                if (DB_Reports.update_Sign_RECOM_LEVEL(lbl_reportnumber.Text, "TRN_DEPARTMENT_SIGNER", ((UserSession)Session["usersession"]).employeeid))
+                    SuccessWithCode("SUCCESS! Report Signed.");
                 else
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=0");
-                }
+                    RedirectWithCode("Error: Try Again Later.");
             }
 
             // in normal first submit mode : make all checks regarding page elements
@@ -289,14 +316,14 @@ namespace AviaTrain.Reports
                 ClientMessage(lbl_pageresult, "Choose the Trainee before signing!", System.Drawing.Color.Red);
                 return false;
             }
-            
+
             if (ddl_sectors.SelectedValue == "-")
             {
                 ClientMessage(lbl_pageresult, "Choose Position!", System.Drawing.Color.Red);
                 return false;
             }
-            
-            if (txt_totalhours.Text == "" || txt_totalhours.Text == "0" )
+
+            if (txt_totalhours.Text == "" || txt_totalhours.Text == "00:00")
             {
                 ClientMessage(lbl_pageresult, "Choose Total Hours", System.Drawing.Color.Red);
                 return false;
@@ -307,13 +334,13 @@ namespace AviaTrain.Reports
                 return false;
             }
 
-            if(!(chk_folder.Checked && chk_MER.Checked && chk_objectives.Checked && chk_reading.Checked))
+            if (!(chk_folder.Checked && chk_MER.Checked && chk_objectives.Checked && chk_reading.Checked))
             {
                 ClientMessage(lbl_pageresult, "All requirements must be met and confirmed", System.Drawing.Color.Red);
                 return false;
             }
 
-            if ( txt_date.Text == "")
+            if (txt_date.Text == "")
             {
                 ClientMessage(lbl_pageresult, "Date must be entered", System.Drawing.Color.Red);
                 return false;
@@ -324,29 +351,30 @@ namespace AviaTrain.Reports
             return true;
         }
 
-        protected string  push_into_db()
+        protected string push_into_db()
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
 
             data.Add("TRAINEE_ID", ddl_trainee.SelectedValue);
             data.Add("POSITION", ddl_sectors.SelectedValue.Split('-')[0]);
             data.Add("SECTOR", ddl_sectors.SelectedValue.Split('-')[1]);
-            data.Add("PHASE",  "OJT" );
-            data.Add("LEVEL",  ddl_Level.SelectedValue );
+            data.Add("PHASE", "OJT");
+            data.Add("LEVEL", ddl_Level.SelectedValue);
             data.Add("OJTI_ID", ddl_ojtis.SelectedValue);
             data.Add("OJTI_SIGNED", lbl_ojtisigned.Text);
             data.Add("TOTAL_HOURS", txt_totalhours.Text);
-            data.Add("MER_MET", "1");
+            data.Add("MER_MET", "1");// no submit unless this is checked
             data.Add("READING_SIGNED", "1");
             data.Add("OBJECTIVES_SIGNED", "1");
             data.Add("FOLDER_COMPLETE", "1");
             data.Add("TRAINEE_SIGNED", lbl_traineesigned.Text);
             data.Add("DATE", txt_date.Text);
-            data.Add("DEPARTMENT_SIGNED",  lbl_departmentsigned.Text);
-            data.Add("DEPARTMENT_EMPLOYEEID", lbl_departmentsigned.Text == "1" ? ((UserSession)Session["usersession"]).employeeid : ""      );
+            data.Add("DEPARTMENT_SIGNED", lbl_departmentsigned.Text);
+            data.Add("DEPARTMENT_EMPLOYEEID", lbl_departmentsigned.Text == "1" ? ((UserSession)Session["usersession"]).employeeid : "");
             data.Add("COMMENTS", txt_comments.Text);
 
             data.Add("genid", lbl_genid.Text);
+            data.Add("stepid", lbl_stepid.Text);
 
             string reportid = DB_Reports.push_RECOM_LEVEL(data);
             return reportid;
@@ -392,5 +420,13 @@ namespace AviaTrain.Reports
             lbl_traineesigned.Text = "1";
         }
 
+        protected void btn_departmentsign_Click(object sender, EventArgs e)
+        {
+            UserSession user = (UserSession)Session["usersession"];
+            img_departmentsign.ImageUrl = AzureCon.general_container_url + user.signature;
+            img_departmentsign.Visible = true;
+            btn_departmentsign.Visible = false;
+            lbl_departmentsigned.Text = "1";
+        }
     }
 }

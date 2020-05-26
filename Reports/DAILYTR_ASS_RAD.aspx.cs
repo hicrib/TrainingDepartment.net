@@ -19,42 +19,31 @@ namespace AviaTrain.Reports
             if (!IsPostBack)
             {
                 string reportid = Convert.ToString(Request.QueryString["ReportID"]);
+
+                UserSession user = (UserSession)Session["usersession"];
                 if (!string.IsNullOrWhiteSpace(reportid))
-                {
-                    UserSession user = (UserSession)Session["usersession"];
-
-                    string relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid);
-
-                    if (user.isAdmin)
-                        relation = "sysadmin";
-                    // Check if trainee will sign OR there is privilege to view
-                    switch (relation)
-                    {
-                        case "trainee":
-                            fill_View_Mode_as(reportid, "trainee");
-                            break;
-                        case "sysadmin":
-                            fill_View_Mode_as(reportid, "sysadmin");
-                            break;
-                        case "creater_ojti":
-                            fill_View_Mode_as(reportid, "creater_ojti");
-                            break;
-                        default:
-                            Response.Redirect("~/Pages/UserMain.aspx?Code=3&ID=" + reportid);
-                            break;
-                    }
-                }
+                    fill_View_Mode_as(reportid);
                 else
-                {
                     fill_Default_Page_Elements(); //normal mode, filling form
-                }
+
 
                 Page.Form.Attributes.Add("enctype", "multipart/form-data");
             }
         }
 
-        protected void fill_View_Mode_as(string reportid, string mode)
+        protected void fill_View_Mode_as(string reportid)
         {
+            UserSession user = (UserSession)Session["usersession"];
+            string relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid); //creater_ojti / trainee , nobody
+
+            if (user.isAdmin)
+                relation = "sysadmin";
+
+            if (relation == "nobody")
+                RedirectWithCode("UNAUTHORIZED!");
+
+            lbl_viewmode.Text = relation;
+
             //todo: first fill all elements
             Dictionary<string, DataTable> li = DB_Reports.pull_DAILYTR_ASS_RAD(reportid);
 
@@ -66,7 +55,6 @@ namespace AviaTrain.Reports
             DataTable meta = li["meta"];
             DataTable form = li["form"];
             DataTable skills = li["skills"];
-            lbl_viewmode.Text = "viewonly";
 
 
             ddl_trainees.Items.Add(new ListItem(meta.Rows[0]["TRAINEE_NAME"].ToString(), meta.Rows[0]["TRAINEE_ID"].ToString()));
@@ -86,9 +74,6 @@ namespace AviaTrain.Reports
 
             string date = form.Rows[0]["DATE"].ToString();
             txt_date.Text = date;
-            //ddl_DAY.Items.Add(date.Split('.')[0]);
-            //ddl_MONTH.SelectedValue = date.Split('.')[1];
-            //ddl_YEAR.SelectedValue = date.Split('.')[2];
 
             ddl_positions.Items.Add(new ListItem(form.Rows[0]["POSITION_EXTRA"].ToString(), form.Rows[0]["POSITION"].ToString()));
             //ddl_positions.SelectedValue = form.Rows[0]["POSITION"].ToString();
@@ -142,7 +127,10 @@ namespace AviaTrain.Reports
             //bring ojti sign but check just in case
             if (meta.Rows[0]["OJTI_SIGNED"].ToString() == "True")
             {
-                btn_sign_ojti_Click(new object(), new EventArgs());
+                img_ojtisign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_ojtis.SelectedValue)["SIGNATURE"].ToString();
+                img_ojtisign.Visible = true;
+                btn_sign_ojti.Visible = false;
+                lbl_ojti_signed.Text = "1";
             }
 
             //bring trainee sing if signed
@@ -156,20 +144,17 @@ namespace AviaTrain.Reports
 
 
             // if not signed by trainee enable sign button
-            if (mode == "trainee" && meta.Rows[0]["TRAINEE_SIGNED"].ToString() != "True")
+            if (relation == "trainee" && meta.Rows[0]["TRAINEE_SIGNED"].ToString() != "True")
             {
                 //let them sign , let them comment
+                btn_sign_trainee.Visible = true;
                 btn_sign_trainee.Enabled = true;
 
-                if (txt_studentcomments.Text == "")
-                    txt_studentcomments.Enabled = true;
+                txt_studentcomments.Enabled = true;
 
                 //let them submit
                 btn_submit.Visible = true;
                 btn_submit.Enabled = true;
-
-                //change mode to allow update in reports table when submit button clicked
-                lbl_viewmode.Text = "trainee";
             }
 
             //todo: disable and hide elements based on mode
@@ -216,6 +201,7 @@ namespace AviaTrain.Reports
         protected void fill_from_CreateReport(Dictionary<string, string> directed)
         {
             lbl_genid.Text = directed["genid"];
+            lbl_stepid.Text = directed["stepid"];
 
             ddl_trainees.SelectedValue = directed["traineeid"];
             ddl_trainees.Enabled = false;
@@ -230,7 +216,7 @@ namespace AviaTrain.Reports
                 ddl_positions.Items.Add(item);
 
 
-            txt_totalhours.Text = DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["sector"]);
+            txt_totalhours.Text = DB_Reports.get_TOTALHOURS(directed["traineeid"], directed["stepid"]);
             txt_totalhours.Enabled = false;
         }
 
@@ -333,6 +319,7 @@ namespace AviaTrain.Reports
                 return "";
             }
             data.Add("genid", lbl_genid.Text);
+            data.Add("stepid", lbl_stepid.Text);
 
             string reportid = DB_Reports.push_Training_Report("3", data);
             return reportid;
@@ -548,6 +535,12 @@ namespace AviaTrain.Reports
         {
             if (txt_timeon_act.Text == "" || txt_timeoff_act.Text == "")
                 return;
+
+            if (Utility.isgreater_TimeFormat(txt_timeon_act.Text, txt_timeoff_act.Text) == 1)
+            {
+                txt_hours.Text = "";
+                return;
+            }
 
             txt_hours.Text = Utility.subtract_TimeFormat(txt_timeon_act.Text, txt_timeoff_act.Text);
         }

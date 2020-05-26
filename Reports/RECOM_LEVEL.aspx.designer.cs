@@ -222,6 +222,24 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.Label lbl_trainingdept;
 
         /// <summary>
+        /// btn_departmentsign control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_departmentsign;
+
+        /// <summary>
+        /// img_departmentsign control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image img_departmentsign;
+
+        /// <summary>
         /// lbl_departmentsigned control.
         /// </summary>
         /// <remarks>
@@ -274,6 +292,15 @@ namespace AviaTrain.Reports
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbl_genid;
+
+        /// <summary>
+        /// lbl_stepid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_stepid;
 
         /// <summary>
         /// lbl_viewmode control.

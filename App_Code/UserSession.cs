@@ -64,5 +64,20 @@ namespace AviaTrain.App_Code
         
         }
 
+        public bool has_ROLENAME(string rolename)
+        {
+            try
+            {
+                DataRow[] o = role_priv.Select("ROLENAME = '" + rolename + "'");
+                if (o.Length > 0)
+                    return true;
+            }
+            catch (Exception)
+            {
+            }
+
+            return false;
+        }
+
     }
 }

@@ -132,7 +132,7 @@ namespace AviaTrain.Reports
             lbl_pageresult.Text = "";
             pnl_grid.Visible = true;
 
-            DataTable dt = DB_Reports.get_Level_Objectives(ddl_trainee.SelectedValue, row);
+            DataTable dt = DB_Reports.get_Level_Objectives(ddl_trainee.SelectedValue, row["SECTOR"].ToString(), row["PHASE"].ToString());
             DataTable copy = dt.Copy();
 
             string categ = "";

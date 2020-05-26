@@ -584,111 +584,111 @@ namespace AviaTrain.App_Code
 
 
 
-        public static string get_MER(string employeeid, string position, string sector, string phase)
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(Con_Str.current))
-                using (SqlCommand command = new SqlCommand(
-                             @"DECLARE @MER INT = (SELECT MER FROM MER_USER 
-					                                WHERE EMPLOYEEID=@EMPLOYEEID AND POSITION = @POSITION AND SECTOR=@SECTOR  AND PHASE =  @PHASE  )
+        //public static string get_MER(string employeeid, string position, string sector, string phase)
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection connection = new SqlConnection(Con_Str.current))
+        //        using (SqlCommand command = new SqlCommand(
+        //                     @"DECLARE @MER INT = (SELECT MER FROM MER_USER 
+					   //                             WHERE EMPLOYEEID=@EMPLOYEEID AND POSITION = @POSITION AND SECTOR=@SECTOR  AND PHASE =  @PHASE  )
 
-                                IF @MER = NULL
-                                BEGIN
-                                SET @MER = ( SELECT MER FROM MER_DEFAULT WHERE POSITION = @POSITION AND SECTOR=@SECTOR AND PHASE = @PHASE )
-                                END
+        //                        IF @MER = NULL
+        //                        BEGIN
+        //                        SET @MER = ( SELECT MER FROM MER_DEFAULT WHERE POSITION = @POSITION AND SECTOR=@SECTOR AND PHASE = @PHASE )
+        //                        END
 
-                                SELECT ISNULL(@MER,0)", connection))
-                {
-                    connection.Open();
-                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
-                    command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
-                    command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
-                    command.Parameters.Add("@PHASE", SqlDbType.NVarChar).Value = phase;
-                    command.CommandType = CommandType.Text;
+        //                        SELECT ISNULL(@MER,0)", connection))
+        //        {
+        //            connection.Open();
+        //            command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+        //            command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
+        //            command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
+        //            command.Parameters.Add("@PHASE", SqlDbType.NVarChar).Value = phase;
+        //            command.CommandType = CommandType.Text;
 
-                    string result = Convert.ToString(command.ExecuteScalar());
-                    if (String.IsNullOrWhiteSpace(result))
-                        return null;
-                    else
-                        return result;
+        //            string result = Convert.ToString(command.ExecuteScalar());
+        //            if (String.IsNullOrWhiteSpace(result))
+        //                return null;
+        //            else
+        //                return result;
 
-                }
+        //        }
 
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return e.Message;
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        string err = e.Message;
+        //        return e.Message;
+        //    }
+        //}
 
-        public static string get_TOTALHOURS(string employeeid, string position, string sector, string phase)
-        {
-            //todo : now, it's getting cumulative total_hours of the sector,  starting from ASSIST training, PREOJT, OJT Levels
+        //public static string get_TOTALHOURS(string employeeid, string position, string sector, string phase)
+        //{
+        //    //todo : now, it's getting cumulative total_hours of the sector,  starting from ASSIST training, PREOJT, OJT Levels
 
-            // gets the last report and take the total_hours field
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(Con_Str.current))
-                using (SqlCommand command = new SqlCommand(
-                             @"
-                                DECLARE @REPORTID INT = 
-                                (
-	                                SELECT MAX(UTF.REPORTID)
-	                                 FROM USER_TRAINING_FOLDER UTF
-	                                 JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
-	                                 WHERE UTF.EMPLOYEEID = @EMPLOYEEID
-		                                   AND TTS.POSITION = @POSITION 
-		                                   AND ( TTS.SECTOR = @SECTOR OR ISNULL(TTS.SECTOR, '') = '' )
-		                                   AND UTF.STATUS = 'REPORT'
-		                                   AND (LEFT(UTF.STATUS, 5 ) != 'RECOM')
-                                )
+        //    // gets the last report and take the total_hours field
+        //    try
+        //    {
+        //        using (SqlConnection connection = new SqlConnection(Con_Str.current))
+        //        using (SqlCommand command = new SqlCommand(
+        //                     @"
+        //                        DECLARE @REPORTID INT = 
+        //                        (
+	       //                         SELECT MAX(UTF.REPORTID)
+	       //                          FROM USER_TRAINING_FOLDER UTF
+	       //                          JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
+	       //                          WHERE UTF.EMPLOYEEID = @EMPLOYEEID
+		      //                             AND TTS.POSITION = @POSITION 
+		      //                             AND ( TTS.SECTOR = @SECTOR OR ISNULL(TTS.SECTOR, '') = '' )
+		      //                             AND UTF.STATUS = 'REPORT'
+		      //                             AND (LEFT(UTF.STATUS, 5 ) != 'RECOM')
+        //                        )
 
-                                DECLARE @REPORTTYPE INT = (SELECT [TYPE] FROM REPORTS_META WHERE ID = @REPORTID )
+        //                        DECLARE @REPORTTYPE INT = (SELECT [TYPE] FROM REPORTS_META WHERE ID = @REPORTID )
 
-                                IF @REPORTTYPE = 1 
-                                BEGIN 
-	                                SELECT TOTAL_HOURS FROM REPORT_TR_ARE_APP_RAD WHERE ID = @REPORTID
-                                END
-                                ELSE IF @REPORTTYPE = 2
-                                BEGIN
-	                                SELECT TOTAL_HOURS FROM REPORT_DAILYTR_ASS_TWR WHERE ID = @REPORTID
-                                END
-                                ELSE IF @REPORTTYPE = 3
-                                BEGIN
-	                                SELECT TOTAL_HOURS FROM REPORT_DAILYTR_ASS_RAD WHERE ID = @REPORTID
-                                END
-                                ELSE IF @REPORTTYPE = 4
-                                BEGIN
-	                                SELECT TOTAL_HOURS FROM REPORT_TOWERTR_GMC_ADC WHERE ID = @REPORTID
-                                END
-                                            ", connection))
-                {
-                    connection.Open();
-                    command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
-                    command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
-                    command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
-                    command.CommandType = CommandType.Text;
+        //                        IF @REPORTTYPE = 1 
+        //                        BEGIN 
+	       //                         SELECT TOTAL_HOURS FROM REPORT_TR_ARE_APP_RAD WHERE ID = @REPORTID
+        //                        END
+        //                        ELSE IF @REPORTTYPE = 2
+        //                        BEGIN
+	       //                         SELECT TOTAL_HOURS FROM REPORT_DAILYTR_ASS_TWR WHERE ID = @REPORTID
+        //                        END
+        //                        ELSE IF @REPORTTYPE = 3
+        //                        BEGIN
+	       //                         SELECT TOTAL_HOURS FROM REPORT_DAILYTR_ASS_RAD WHERE ID = @REPORTID
+        //                        END
+        //                        ELSE IF @REPORTTYPE = 4
+        //                        BEGIN
+	       //                         SELECT TOTAL_HOURS FROM REPORT_TOWERTR_GMC_ADC WHERE ID = @REPORTID
+        //                        END
+        //                                    ", connection))
+        //        {
+        //            connection.Open();
+        //            command.Parameters.Add("@EMPLOYEEID", SqlDbType.Int).Value = employeeid;
+        //            command.Parameters.Add("@POSITION", SqlDbType.NVarChar).Value = position;
+        //            command.Parameters.Add("@SECTOR", SqlDbType.NVarChar).Value = sector;
+        //            command.CommandType = CommandType.Text;
 
-                    string result = Convert.ToString(command.ExecuteScalar());
-                    if (String.IsNullOrWhiteSpace(result))
-                        return null;
-                    else
-                        return result;
+        //            string result = Convert.ToString(command.ExecuteScalar());
+        //            if (String.IsNullOrWhiteSpace(result))
+        //                return null;
+        //            else
+        //                return result;
 
-                }
+        //        }
 
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-                return e.Message;
-            }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        string err = e.Message;
+        //        return e.Message;
+        //    }
 
 
-            return "0";
-        }
+        //    return "0";
+        //}
 
 
 

@@ -127,12 +127,11 @@ namespace AviaTrain.SysAdmin
                 return;
             }
 
-            bool res = DB_Reports.start_Training_Folder_Migrate(ddl_all_trainees.SelectedValue, ddl_position.SelectedValue, ddl_sector.SelectedValue, ddl_steps.SelectedValue);
+            string res = DB_Reports.start_Training_Folder_Migrate(ddl_all_trainees.SelectedValue, ddl_position.SelectedValue, ddl_sector.SelectedValue, ddl_steps.SelectedValue);
 
-            if (res)
+            if (res == "")
             {
-                res = DB_Reports.update_totalhours(ddl_all_trainees.SelectedValue, ddl_sector.SelectedValue, txt_totalhours.Text, "MIGRATION");
-                if (res)
+                if (DB_Reports.update_totalhours(ddl_all_trainees.SelectedValue, ddl_steps.SelectedValue, txt_totalhours.Text, "MIGRATION"))
                 {
                     lbl_createresult.Text = "SUCCESS : Training Folder is created.";
                     lbl_createresult.Visible = true;
