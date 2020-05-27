@@ -40,9 +40,11 @@ namespace AviaTrain.Pages
 
                 string notifid = selectedRow.Cells[3].Text;
                 //view notif 
-                DataRow notification = DB_System.get_notification(notifid);
-                if (notification == null)
+                DataTable tbl= DB_System.get_notification(notifid);
+                if (tbl == null || tbl.Rows.Count == 0)
                     return;
+
+                DataRow notification = tbl.Rows[0];
 
                 pnl_show_notification.Visible = true;
                 lbl_header.Text = notification["HEADER"].ToString();

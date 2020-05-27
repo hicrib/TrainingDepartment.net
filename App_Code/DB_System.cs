@@ -849,6 +849,61 @@ namespace AviaTrain.App_Code
             return false;
         }
 
+        public static bool update_notification(string notifid, string header , string message , List<string> files , string effective = "", string expires = "", bool isactive = true)
+        {
+            if (effective == "")
+                effective = "2000-01-01";
+            if (expires == "")
+                expires = "2099-01-01";
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                            @"  UPDATE NOTIFICATIONS_DEF
+                                SET
+	                                 HEADER =@HEADER  ,
+	                                 [TEXT] =@TEXT , 
+	                                 FILE1 =@FILE1 , 
+	                                 FILE2 = @FILE2,
+	                                 FILE3 = @FILE3, 
+	                                 FILE4 = @FILE4, 
+	                                 [BY] = @BY, 
+	                                 BY_TIME = CONVERT(varchar,GETUTCDATE(),20),
+	                                 EFFECTIVE = @EFFECTIVE,
+	                                 EXPIRED =@EXPIRED,
+	                                 ISACTIVE = @ISACTIVE
+                                WHERE ID=@NOTIFID", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@NOTIFID", SqlDbType.Int).Value = notifid;
+                    command.Parameters.Add("@HEADER", SqlDbType.NVarChar).Value = header;
+                    command.Parameters.Add("@TEXT", SqlDbType.NVarChar).Value = message;
+                    command.Parameters.Add("@FILE1", SqlDbType.NVarChar).Value = files.ElementAt(0);
+                    command.Parameters.Add("@FILE2", SqlDbType.NVarChar).Value = files.ElementAt(1);
+                    command.Parameters.Add("@FILE3", SqlDbType.NVarChar).Value = files.ElementAt(2);
+                    command.Parameters.Add("@FILE4", SqlDbType.NVarChar).Value = files.ElementAt(3);
+
+                    UserSession user = (UserSession)System.Web.HttpContext.Current.Session["usersession"];
+                    command.Parameters.Add("@BY", SqlDbType.Int).Value = user.employeeid;
+
+                    command.Parameters.Add("@EFFECTIVE", SqlDbType.NVarChar).Value = effective;
+                    command.Parameters.Add("@EXPIRED", SqlDbType.NVarChar).Value = expires;
+                    command.Parameters.Add("@ISACTIVE", SqlDbType.Bit).Value = isactive;
+
+
+                    command.CommandType = CommandType.Text;
+
+                    if (command.ExecuteNonQuery() > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
 
         //returns the number of unseen notification
         public static int has_new_user_notification(string employeeid)
@@ -977,14 +1032,18 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-        public static DataRow get_notification(string notifid)
+        public static DataTable get_notification(string notifid = "0" , bool isactive = true)
         {
             DataTable res = new DataTable();
             try
             {
                 using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
-                           @"SELECT * FROM NOTIFICATIONS_DEF WHERE ID = @NOTIFID", connection))
+                           @"SELECT * FROM NOTIFICATIONS_DEF 
+                             WHERE ID = CASE WHEN @NOTIFID = '0' THEN ID ELSE @NOTIFID END "
+	                             + (isactive ?  " AND ISACTIVE = 1 " : "" )
+                                 + " ORDER BY ID DESC"
+                            , connection))
                 {
                     connection.Open();
                     command.Parameters.Add(@"NOTIFID", SqlDbType.Int).Value = notifid;
@@ -994,7 +1053,7 @@ namespace AviaTrain.App_Code
                     if (res == null || res.Rows.Count == 0)
                         return null;
 
-                    return res.Rows[0];
+                    return res;
                 }
             }
             catch (Exception e)

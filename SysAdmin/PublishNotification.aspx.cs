@@ -17,7 +17,10 @@ namespace AviaTrain.SysAdmin
             if (!IsPostBack)
             {
                 Write_Page_Header_Low("PUBLISH NOTIFICATION");
-
+                Session["file1"] = null;
+                Session["file2"] = null;
+                Session["file3"] = null;
+                Session["file4"] = null;
             }
         }
 

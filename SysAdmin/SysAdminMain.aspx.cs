@@ -111,5 +111,10 @@ namespace AviaTrain.SysAdmin
         {
             Response.Redirect("~/SysAdmin/FileTypeDefinition.aspx");
         }
+
+        protected void btn_edit_notification_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/SysAdmin/EditNotification.aspx");
+        }
     }
 }

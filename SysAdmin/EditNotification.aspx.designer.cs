@@ -11,178 +11,187 @@ namespace AviaTrain.SysAdmin
 {
 
 
-    public partial class SysAdminMain
+    public partial class EditNotification
     {
 
         /// <summary>
-        /// btn_createuser control.
+        /// uppanel_evaluation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_createuser;
+        protected global::System.Web.UI.UpdatePanel uppanel_evaluation;
 
         /// <summary>
-        /// btn_edit_roles control.
+        /// grid_notifications control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_edit_roles;
+        protected global::System.Web.UI.WebControls.GridView grid_notifications;
 
         /// <summary>
-        /// btn_view_userdetails control.
+        /// lbl_notifid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_view_userdetails;
+        protected global::System.Web.UI.WebControls.Label lbl_notifid;
 
         /// <summary>
-        /// btn_publishnotification control.
+        /// ddl_type control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_publishnotification;
+        protected global::System.Web.UI.WebControls.DropDownList ddl_type;
 
         /// <summary>
-        /// btn_filetypes control.
+        /// ddl_generic control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_filetypes;
+        protected global::System.Web.UI.WebControls.DropDownList ddl_generic;
 
         /// <summary>
-        /// btn_edit_notification control.
+        /// txt_effective control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_edit_notification;
+        protected global::System.Web.UI.WebControls.TextBox txt_effective;
 
         /// <summary>
-        /// btn_create_questions control.
+        /// txt_expires control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_questions;
+        protected global::System.Web.UI.WebControls.TextBox txt_expires;
 
         /// <summary>
-        /// btn_edit_questions control.
+        /// chk_active control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_edit_questions;
+        protected global::System.Web.UI.WebControls.CheckBox chk_active;
 
         /// <summary>
-        /// btn_create_exam control.
+        /// txt_header control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_exam;
+        protected global::System.Web.UI.WebControls.TextBox txt_header;
 
         /// <summary>
-        /// btn_delete_exam control.
+        /// txt_message control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_delete_exam;
+        protected global::System.Web.UI.WebControls.TextBox txt_message;
 
         /// <summary>
-        /// btn_assign_exam control.
+        /// lnk_file1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_assign_exam;
+        protected global::System.Web.UI.WebControls.LinkButton lnk_file1;
 
         /// <summary>
-        /// btn_view_exam_result control.
+        /// del_file1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_view_exam_result;
+        protected global::System.Web.UI.WebControls.ImageButton del_file1;
 
         /// <summary>
-        /// btn_create_training control.
+        /// lnk_file2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_training;
+        protected global::System.Web.UI.WebControls.LinkButton lnk_file2;
 
         /// <summary>
-        /// btn_view_trainingdesigns control.
+        /// del_file2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_view_trainingdesigns;
+        protected global::System.Web.UI.WebControls.ImageButton del_file2;
 
         /// <summary>
-        /// btn_assign_training control.
+        /// lnk_file3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_assign_training;
+        protected global::System.Web.UI.WebControls.LinkButton lnk_file3;
 
         /// <summary>
-        /// btn_view_training_results control.
+        /// del_file3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_view_training_results;
+        protected global::System.Web.UI.WebControls.ImageButton del_file3;
 
         /// <summary>
-        /// btn_create_TrainingFolder control.
+        /// lnk_file4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_create_TrainingFolder;
+        protected global::System.Web.UI.WebControls.LinkButton lnk_file4;
 
         /// <summary>
-        /// btn_defaultMER control.
+        /// del_file4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_defaultMER;
+        protected global::System.Web.UI.WebControls.ImageButton del_file4;
 
         /// <summary>
-        /// btn_View_Trainee_Folder control.
+        /// lbl_pageresult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_View_Trainee_Folder;
+        protected global::System.Web.UI.WebControls.Label lbl_pageresult;
+
+        /// <summary>
+        /// btn_publish control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_publish;
     }
 }

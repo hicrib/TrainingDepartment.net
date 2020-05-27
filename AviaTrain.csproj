@@ -1216,6 +1216,7 @@
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="SysAdmin\CreateTrainingFolder.aspx" />
     <Content Include="SysAdmin\CreateUser.aspx" />
+    <Content Include="SysAdmin\EditNotification.aspx" />
     <Content Include="SysAdmin\EditRoles.aspx" />
     <Content Include="SysAdmin\FileTypeDefinition.aspx" />
     <Content Include="SysAdmin\MERAssign.aspx" />
@@ -1532,6 +1533,13 @@
     </Compile>
     <Compile Include="SysAdmin\CreateUser.aspx.designer.cs">
       <DependentUpon>CreateUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SysAdmin\EditNotification.aspx.cs">
+      <DependentUpon>EditNotification.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SysAdmin\EditNotification.aspx.designer.cs">
+      <DependentUpon>EditNotification.aspx</DependentUpon>
     </Compile>
     <Compile Include="SysAdmin\EditRoles.aspx.cs">
       <DependentUpon>EditRoles.aspx</DependentUpon>
