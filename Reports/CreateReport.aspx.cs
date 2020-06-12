@@ -105,16 +105,13 @@ namespace AviaTrain.Reports
 
         protected void grid_folder_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            //todo : here we can show the report in RptNum columns. Also maybe filename
-
-
 
             if (e.Row.RowType == DataControlRowType.DataRow || e.Row.RowType == DataControlRowType.Header)
             {
                 if (e.Row.Cells[5].Text == "0")
                     e.Row.Cells[5].Text = "";
 
-                if (e.Row.Cells[3].Text != "ONGOING" && e.Row.Cells[3].Text != "COMPLETED" && e.Row.RowType == DataControlRowType.DataRow)
+                if (e.Row.Cells[3].Text != "ONGOING" && e.Row.Cells[3].Text != "COMPLETED" && e.Row.Cells[3].Text != "MIGRATION" && e.Row.RowType == DataControlRowType.DataRow)
                 {
                     e.Row.Cells[2].Text = "";
                     e.Row.Style.Add("font-size", "small");
@@ -142,7 +139,8 @@ namespace AviaTrain.Reports
                     e.Row.Cells[1].Style.Add("text-align", "center");
                 }
 
-                if(ddl_sectors.SelectedItem.Text.ToLower().Contains("assist")) // no recommend for assist
+                // no recommend for assist
+                if (ddl_sectors.SelectedItem.Text.ToLower().Contains("assist") || e.Row.Cells[2].Text.ToLower().Contains("assist")) 
                 {
                     e.Row.Cells[1].Enabled = false; //disable the Create buttons is not ONGOING STEPS (finished, migration etc (todo: else?)
                     e.Row.Cells[1].CssClass = "hidden-cell";
@@ -211,7 +209,10 @@ namespace AviaTrain.Reports
             {
                 
                 if (Recommendable(direct_dictionary))
+                {
+
                     Response.Redirect("~/Reports/RECOM_LEVEL.aspx?Code=GENID");
+                }
                 else
                     lbl_findresult.Text = "User can't be recommended"; //todo: give some reason
             }

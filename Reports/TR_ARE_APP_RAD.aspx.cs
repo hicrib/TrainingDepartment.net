@@ -37,10 +37,15 @@ namespace AviaTrain.Reports
         protected void fill_View_Mode_as(string reportid)
         {
             UserSession user = (UserSession)Session["usersession"];
-            string relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid); //creater_ojti / trainee , nobody
+
+            string relation = "";
 
             if (user.isAdmin)
                 relation = "sysadmin";
+            else if (user.isOJTI || user.isExaminer || user.isLCE)
+                relation = "instructor";
+            else
+                relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid); //creater_ojti / trainee , nobody
 
             if (relation == "nobody")
                 RedirectWithCode("UNAUTHORIZED!");

@@ -10,7 +10,7 @@
             padding: 0px;
         }
 
-        /*FOLLOWING ARE FOR MULTIVIEW ACC-APP-TOWER*/
+        /*FOLLOWING ARE FOR MULTIVIEW */
         .tabs {
             position: relative;
             margin-top: 3px;

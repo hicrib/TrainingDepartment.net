@@ -9,23 +9,37 @@ using System.Web.UI.WebControls;
 
 namespace AviaTrain.Pages
 {
-    public partial class InstructorMain : MasterPage
+    public partial class InstructorsMain : MasterPage
     {
         protected new void Page_Load(object sender, EventArgs e)
         {
+
             if (!IsPostBack)
             {
-                Fill_OJTI_Reports_Grid();
-
+                //rollere gore menu itemları kaldır
                 UserSession user = (UserSession)Session["usersession"];
-                if (user.has_ROLENAME("TRN_DEPARTMENT_SIGNER"))
+                if (!user.has_ROLENAME("TRN_DEPARTMENT_SIGNER"))
                 {
-
+                    jobsMenu.Items.Remove(jobsMenu.FindItem("2"));
                 }
+
+                Fill_OJTI_Reports_Grid();
             }
         }
 
+        protected void jobsMenu_MenuItemClick(object sender, MenuEventArgs e)
+        {
+            int index = Int32.Parse(e.Item.Value);
+            if (index == 1) //my training
+                Response.Redirect("~/Pages/TraineeMain.aspx");
+            else if (index == 0)
+                Fill_OJTI_Reports_Grid();
+            else if (index == 2) //department
+                Fill_Grid_Department();
 
+
+            multiview1.ActiveViewIndex = index;
+        }
         protected void grid_ojti_reports_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             grid_ojti_reports.PageIndex = e.NewPageIndex;
@@ -39,8 +53,7 @@ namespace AviaTrain.Pages
             dt = DB_Reports.get_myCreatedReports(user.employeeid);
             if (dt == null || dt.Rows.Count == 0)
             {
-                ojtireports_tbl.Visible = false;
-                return;
+                grid_ojti_reports.Visible = false;
             }
 
             grid_ojti_reports.DataSource = dt;
@@ -55,8 +68,10 @@ namespace AviaTrain.Pages
         {
             GridViewRow SelectedRow = grid_ojti_reports.SelectedRow;
             string id = SelectedRow.Cells[1].Text;
-            Response.Redirect("~/Reports/ShowReport.aspx?ID=" + id);
+            string url = "/Reports/ShowReport.aspx?ID=" + id;
 
+            String js = "window.open('" + url + "', '_blank');";
+            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Open " + url, js, true);
         }
 
         public SortDirection direction
@@ -97,29 +112,42 @@ namespace AviaTrain.Pages
             grid_ojti_reports.DataBind();
         }
 
-        protected void btn_create_report_Click(object sender, EventArgs e)
+
+        protected void Fill_Grid_Department()
         {
-            Response.Redirect("~/Reports/CreateReport.aspx");
+            grid_department.DataSource = DB_Reports.get_Department_Reports();
+            grid_department.DataBind();
         }
 
-        protected void btn_my_training_Click(object sender, EventArgs e)
+        protected void grid_department_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect("~/Pages/TraineeMain.aspx");
+            GridViewRow SelectedRow = grid_department.SelectedRow;
+            string id = SelectedRow.Cells[1].Text;
+            string url = "/Reports/ShowReport.aspx?ID=" + id;
+
+            String js = "window.open('" + url + "', '_blank');";
+            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Open " + url, js, true);
         }
 
-        protected void btn_create_trainingfolde_Click(object sender, EventArgs e)
+        protected void grid_department_Sorting(object sender, GridViewSortEventArgs e)
         {
-            Response.Redirect("~/SysAdmin/CreateTrainingFolder.aspx");
-        }
+            string sortingDirection = string.Empty;
+            if (direction == SortDirection.Ascending)
+            {
+                direction = SortDirection.Descending;
+                sortingDirection = "Desc";
+            }
+            else
+            {
+                direction = SortDirection.Ascending;
+                sortingDirection = "Asc";
+            }
 
-        protected void btn_levelobjectives_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("~/Reports/LevelObjectives.aspx");
-        }
-
-        protected void btn_viewtrainingfolder_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("~/SysAdmin/ViewTrainingFolder.aspx");
+            DataView sortedView = new DataView(DB_Reports.get_Department_Reports ());
+            sortedView.Sort = e.SortExpression + " " + sortingDirection;
+            Session["SortedView"] = sortedView;
+            grid_department.DataSource = sortedView;
+            grid_department.DataBind();
         }
     }
 }

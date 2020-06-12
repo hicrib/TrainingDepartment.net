@@ -68,6 +68,14 @@
                 <asp:Button ID="btn_edit_notification" runat="server" CssClass="admin_buttons" Text="Edit Notification" OnClick="btn_edit_notification_Click" />
             </td>
         </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                 <asp:Button ID="btn_view_usernotif" runat="server" CssClass="admin_buttons" Text="View User Notif." OnClick="btn_view_usernotif_Click" />
+            </td>
+        </tr>
     </table>
 
     <br />

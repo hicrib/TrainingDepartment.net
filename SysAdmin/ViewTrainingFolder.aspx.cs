@@ -122,9 +122,11 @@ namespace AviaTrain.SysAdmin
         {
             if(e.Row.Cells.Count > 5)
             {
+                e.Row.Cells[5].Visible = false;
                 e.Row.Cells[6].Visible = false;
                 e.Row.Cells[7].Visible = false;
                 e.Row.Cells[8].Visible = false;
+                e.Row.Cells[9].Visible = false;
 
                 
 
@@ -136,7 +138,15 @@ namespace AviaTrain.SysAdmin
                 else
                     e.Row.Cells[0].Style.Add("opacity", "0");//todo burada findcontrols desek daha iyi. ornegi LEVELOBJECTIVES'de
 
-                if (e.Row.Cells[2].Text == "ONGOING")
+
+
+                if (e.Row.Cells[2].Text != "ONGOING" && e.Row.Cells[2].Text != "COMPLETED" && e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    e.Row.Style.Add("font-size", "small");
+                    e.Row.Cells[0].Style.Add("border", "none");
+                    e.Row.Cells[1].Style.Add("border", "none");
+                }
+                else
                     e.Row.Style.Add("font-weight", "bold");
 
                 if (e.Row.Cells[4].Text == "0")
@@ -150,9 +160,11 @@ namespace AviaTrain.SysAdmin
             {
                 GridViewRow selectedRow = grid_folder.Rows[Convert.ToInt32(e.CommandArgument)];
                 string reportid = selectedRow.Cells[4].Text.ToString().Trim();
-                Response.Redirect("~/Reports/ShowReport.aspx?ID=" + reportid);
+                string url = "/Reports/ShowReport.aspx?ID=" + reportid;
+                
 
-                //Response.Write("<script>window.open ('/Reports/ShowReport.aspx?ID=" + reportid + "','_blank');</script>");
+                String js = "window.open('"+url+"', '_blank');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Open " + url, js, true);
             }
            
         }

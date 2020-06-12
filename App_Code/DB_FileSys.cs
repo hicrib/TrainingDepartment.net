@@ -149,7 +149,8 @@ SELECT ID,[NAME] FROM USER_FILESYSTEM WHERE USERID=@USERID AND PARENT_ID IS NULL
                                           SELECT    @FILETYPE , @FILENAME, @FILEADRES, 1, 
 	                                                CASE WHEN @ISSUE = '' THEN NULL ELSE @ISSUE END,
 	                                                CASE WHEN @EXPIRES = '' THEN NULL ELSE @EXPIRES END,
-	                                                CASE WHEN @ROLSPEC = '' THEN NULL ELSE @ROLSPEC END
+	                                                CASE WHEN @ROLSPEC = '' THEN NULL ELSE @ROLSPEC END,
+                                                    @USERID
 
                                         DECLARE @FILEID INT = (SELECT SCOPE_IDENTITY())
 
@@ -228,6 +229,33 @@ SELECT ID,[NAME] FROM USER_FILESYSTEM WHERE USERID=@USERID AND PARENT_ID IS NULL
             catch (Exception e)
             {
                 string err = e.Message;
+            }
+            return null;
+        }
+
+
+        public static DataTable get_user_filetype(string userid, string typeid)
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                            @"select F.* FROM  USER_FILES F 
+                            WHERE F.FILETYPE = @TYPE AND F.USERID = @USERID AND F.ISACTIVE = 1", connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@TYPE", SqlDbType.Int).Value = typeid;
+                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = userid;
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+
+                    return res;
+                }
+            }
+            catch (Exception)
+            {
             }
             return null;
         }

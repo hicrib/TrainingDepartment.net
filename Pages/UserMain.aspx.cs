@@ -28,8 +28,8 @@ namespace AviaTrain.Pages
                 Response.Redirect("~/Exams/Exam_MainAdmin.aspx");
             if (user.isOnlyTrainee)
                 Response.Redirect("~/Pages/TraineeMain.aspx");
-            if (user.isOJTI || user.isLCE )
-                Response.Redirect("~/Pages/InstructorMain.aspx");
+            if (user.isOJTI || user.isLCE || user.isExaminer)
+                Response.Redirect("~/Pages/InstructorsMain.aspx");
 
             if (user.isAdmin)
                 Response.Redirect("~/SysAdmin/SysAdminMain.aspx");

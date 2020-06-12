@@ -84,8 +84,7 @@ namespace AviaTrain.App_Code
                 {
                     //no rollback, report is valid but next step&complete should be manual
 
-
-                    if (reporttype == "1" || reporttype == "2")  //it's assist
+                    if (reporttype == "3" || reporttype == "2")  //it's assist
                     {
                         complete_Step(data["genid"]);
 
@@ -94,7 +93,7 @@ namespace AviaTrain.App_Code
                             create_NEXT_STEP(data["genid"], data["TRAINEE_ID"]);
 
                     }
-                    else if (reporttype == "3" || reporttype == "4") //GMC/ADC,  APP, ACC LEVELS
+                    else if (reporttype == "1" || reporttype == "4") //GMC/ADC,  APP, ACC LEVELS
                     {
                         //if it's a Remedial, Progress Assessment -> don't complete the step
                         if (data.ContainsKey("CHK_LVLASS") && data["CHK_LVLASS"] == "1")
@@ -580,7 +579,7 @@ SELECT @ID
 
 
 
-            string status = data["DEPARTMENT_SIGNED"] == "1" ? "RECOMMENDED_FOR_LEVEL" : "RECOMMENDED_PENDING_SIGN";
+            string status = data["DEPARTMENT_SIGNED"] == "1" ? "RECOMMENDED_FOR_LEVEL" : "PENDING_APPROVAL";
             //reaching here means everything went fine
             if (!push_UserTrainingFolder(reportid, data["genid"], status: status))
                 return "";
@@ -2077,7 +2076,7 @@ SELECT @ID
 		                                JOIN ( SELECT * FROM TRAINING_TREE_STEPS WHERE ID = @STEPID ) AS CURR
 		                                    ON TTS.POSITION = CURR.POSITION AND 
                                                1 = CASE WHEN ISNULL(CURR.SECTOR,'' ) = '' AND CURR.NAME = TTS.NAME THEN 1
-				                                        WHEN CURR.SECTOR = TTS.SECTOR THEN 1
+				                                        WHEN CURR.SECTOR = TTS.SECTOR AND TTS.PHASE <> 'OJT_ASSIST' THEN 1
 				                                        ELSE 0 END
 	                                ) 
                                     AND UTH.USERID = @USERID
@@ -2255,68 +2254,70 @@ SELECT @ID
         }
 
 
-        public static DataTable get_Level_Objectives(string employeeid, DataRow row)
-        {
-            string position = row["POSITION"].ToString();
-            string sector = row["SECTOR"].ToString();
-            string phase = row["PHASE"].ToString();
+        //public static DataTable get_Level_Objectives(string employeeid, DataRow row)
+        //{
+        //    string position = row["POSITION"].ToString();
+        //    string sector = row["SECTOR"].ToString();
+        //    string phase = row["PHASE"].ToString();
 
-            if (sector == "")
-                sector = phase; // TWR ASSIST HAS TO BE HANDLED
+        //    if (sector == "")
+        //        sector = phase; // TWR ASSIST HAS TO BE HANDLED
 
-            string type = "";
-            if (sector == "GMC")
-                type = "TWR_GMC";
-            else if (sector == "ADC")
-                type = "TWR_ADC";
-            else if (sector == "ASSIST")
-                type = "TWR_ASSIST";
-            else if (new string[6] { "AR", "BR", "KR", "NR", "SR", "CR" }.Contains(sector))
-                type = "AREA_APPROACH";
+        //    string type = "";
+        //    if (sector == "GMC")
+        //        type = "TWR_GMC";
+        //    else if (sector == "ADC")
+        //        type = "TWR_ADC";
+        //    else if (sector == "ASSIST")
+        //        type = "TWR_ASSIST";
+        //    else if (new string[3] { "NR", "SR", "CR" }.Contains(sector))
+        //        type = "ACC_" + sector;
+        //    else if (new string[3] { "AR", "BR", "KR" }.Contains(sector))
+        //        type = "APP_" + sector;
 
-            string level = "";
-            if (phase.Contains("LEVEL1"))
-                level = "1";
-            else if (phase.Contains("LEVEL2"))
-                level = "2";
-            else if (phase.Contains("LEVEL3"))
-                level = "3";
-            else if (sector == "ASSIST" && phase == "ASSIST") //TWR ASSIST
-                level = "0";
+        //    string level = "";
+        //    if (phase.Contains("LEVEL1"))
+        //        level = "1";
+        //    else if (phase.Contains("LEVEL2"))
+        //        level = "2";
+        //    else if (phase.Contains("LEVEL3"))
+        //        level = "3";
+        //    else if (sector == "ASSIST" && phase == "ASSIST") //TWR ASSIST
+        //        level = "0";
 
 
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(Con_Str.current))
-                using (SqlCommand command = new SqlCommand(
-                 @" SELECT DEF.ID, DEF.CATEGORY , DEF.HEADER, DEF.OBJECTIVE ,
-	                     ISNULL(US.INITIAL,'') as 'By' , F.ID as 'FORMID'
-                 FROM LEVEL_OBJECTIVES_FORM F
-                 JOIN LEVEL_OBJECTIVES_DEF DEF ON DEF.FORMID = F.ID
-                 LEFT JOIN LEVEL_OBJECTIVES_USER U ON U.OBJECTIVEID = DEF.ID AND U.USERID = @USERID
-                 LEFT JOIN USERS US ON US.EMPLOYEEID = U.SIGNEDBY
-                 WHERE F.TYPE = @TYPE AND F.LEVELNUM = @LEVEL AND F.ISACTIVE = 1 AND DEF.ISACTIVE = 1", connection))
-                {
-                    connection.Open();
-                    command.Parameters.Add("@USERID", SqlDbType.Int).Value = employeeid;
-                    command.Parameters.Add("@TYPE", SqlDbType.VarChar).Value = type;
-                    command.Parameters.Add("@LEVEL", SqlDbType.VarChar).Value = level;
-                    command.CommandType = CommandType.Text;
+        //    try
+        //    {
+        //        using (SqlConnection connection = new SqlConnection(Con_Str.current))
+        //        using (SqlCommand command = new SqlCommand(
+        //         @" SELECT DEF.ID, DEF.CATEGORY , DEF.HEADER, DEF.OBJECTIVE ,
+	       //              ISNULL(US.INITIAL,'') as 'By' , F.ID as 'FORMID'
+        //         FROM LEVEL_OBJECTIVES_FORM F
+        //         JOIN LEVEL_OBJECTIVES_DEF DEF ON DEF.FORMID = F.ID
+        //         LEFT JOIN LEVEL_OBJECTIVES_USER U ON U.OBJECTIVEID = DEF.ID AND U.USERID = @USERID
+        //         LEFT JOIN USERS US ON US.EMPLOYEEID = U.SIGNEDBY
+        //         WHERE F.TYPE = @TYPE AND F.LEVELNUM = @LEVEL AND F.ISACTIVE = 1 AND DEF.ISACTIVE = 1", connection))
+        //        {
+        //            connection.Open();
+        //            command.Parameters.Add("@USERID", SqlDbType.Int).Value = employeeid;
+        //            command.Parameters.Add("@TYPE", SqlDbType.VarChar).Value = type;
+        //            command.Parameters.Add("@LEVEL", SqlDbType.VarChar).Value = level;
+        //            command.CommandType = CommandType.Text;
 
-                    SqlDataAdapter da = new SqlDataAdapter(command);
-                    DataTable res = new DataTable();
-                    da.Fill(res);
+        //            SqlDataAdapter da = new SqlDataAdapter(command);
+        //            DataTable res = new DataTable();
+        //            da.Fill(res);
 
-                    if (res != null || res.Rows.Count > 0)
-                        return res;
-                }
-            }
-            catch (Exception e)
-            {
-                string err = e.Message;
-            }
-            return null;
-        }
+        //            if (res != null || res.Rows.Count > 0)
+        //                return res;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        string err = e.Message;
+        //    }
+        //    return null;
+        //}
 
         public static DataTable get_Level_Objectives(string employeeid, string sector, string phase)
         {
@@ -2334,9 +2335,11 @@ SELECT @ID
                 type = "TWR_ADC";
             else if (sector == "ASSIST")
                 type = "TWR_ASSIST";
-            else if (new string[6] { "AR", "BR", "KR", "NR", "SR", "CR" }.Contains(sector))
-                type = "AREA_APPROACH";
-
+            else if (new string[3] {  "NR", "SR", "CR" }.Contains(sector))
+                type = "ACC_" + sector;
+            else if (new string[3] { "AR", "BR", "KR" }.Contains(sector))
+                type = "APP_" + sector;
+            
             string level = "";
             if (phase.Contains("LEVEL1"))
                 level = "1";
@@ -2519,6 +2522,41 @@ SELECT @ID
                 string me = e.Message;
             }
             return false;
+        }
+
+        public static DataTable get_Department_Reports()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                            @" SELECT 
+	                                META.ID,
+	                                CASE WHEN META.[TYPE] = 5 THEN 'LEVEL' WHEN META.[TYPE] = '6' THEN 'CERTIFICATION' END AS 'RECOMMENDED',
+	                                META.[STATUS],
+	                                (SELECT INITIAL + '-' + FIRSTNAME + ' ' + SURNAME FROM USERS WHERE EMPLOYEEID = META.TRAINEE_ID) AS 'TRAINEE',
+	                                (SELECT INITIAL + '-' + FIRSTNAME + ' ' + SURNAME FROM USERS WHERE EMPLOYEEID = META.CREATER) AS 'CREATER',
+	                                META.CREATE_TIME
+                                FROM REPORTS_META META
+                                LEFT JOIN REPORT_RECOM_LEVEL LEV ON LEV.ID = META.ID
+                                LEFT JOIN REPORT_RECOM_CERTIF CER ON CER.ID = META.ID
+                                WHERE META.[TYPE] IN (5,6)  ", connection))
+                {
+                    connection.Open();
+
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    DataTable res = new DataTable();
+                    da.Fill(res);
+
+                    if (res != null || res.Rows.Count > 0)
+                        return res;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return new DataTable();
         }
     }
 }

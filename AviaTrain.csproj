@@ -222,6 +222,7 @@
     <Content Include="Pages\DownloadExcel.aspx" />
     <Content Include="Pages\ErrorPage.aspx" />
     <Content Include="Exams\Exam_MainAdmin.aspx" />
+    <Content Include="Pages\InstructorsMain.aspx" />
     <Content Include="Pages\TraineeMain.aspx" />
     <Content Include="Exams\Unusual\index.htm" />
     <Content Include="Exams\Unusual\introduction.htm" />
@@ -1221,6 +1222,7 @@
     <Content Include="SysAdmin\FileTypeDefinition.aspx" />
     <Content Include="SysAdmin\MERAssign.aspx" />
     <Content Include="SysAdmin\PublishNotification.aspx" />
+    <Content Include="SysAdmin\ViewNotifications.aspx" />
     <Content Include="SysAdmin\__CreateUser.aspx" />
     <Content Include="SysAdmin\SysAdminMain.aspx" />
     <Content Include="SysAdmin\ViewTrainingFolder.aspx" />
@@ -1319,6 +1321,13 @@
     </Compile>
     <Compile Include="Exams\Exam_MainAdmin.aspx.designer.cs">
       <DependentUpon>Exam_MainAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\InstructorsMain.aspx.cs">
+      <DependentUpon>InstructorsMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\InstructorsMain.aspx.designer.cs">
+      <DependentUpon>InstructorsMain.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\TraineeMain.aspx.cs">
       <DependentUpon>TraineeMain.aspx</DependentUpon>
@@ -1569,6 +1578,13 @@
     <Compile Include="SysAdmin\PublishNotification.aspx.designer.cs">
       <DependentUpon>PublishNotification.aspx</DependentUpon>
     </Compile>
+    <Compile Include="SysAdmin\ViewNotifications.aspx.cs">
+      <DependentUpon>ViewNotifications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SysAdmin\ViewNotifications.aspx.designer.cs">
+      <DependentUpon>ViewNotifications.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SysAdmin\__CreateUser.aspx.cs">
       <DependentUpon>__CreateUser.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1657,8 +1673,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="App_Themes\Theme1\" />
-    <Folder Include="AzureBlobs\Downloads\" />
-    <Folder Include="AzureBlobs\Uploads\" />
+    <Folder Include="AzureBlobs\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\5_03bombwarning - Copy %282%29\docs\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\5_03bombwarning - Copy %282%29\images\" />
     <Folder Include="Exams\Unusual\unus_emerg_sits_standalone\5_03bombwarning - Copy %282%29\swf\" />

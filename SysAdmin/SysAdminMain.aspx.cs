@@ -116,5 +116,10 @@ namespace AviaTrain.SysAdmin
         {
             Response.Redirect("~/SysAdmin/EditNotification.aspx");
         }
+
+        protected void btn_view_usernotif_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/SysAdmin/ViewNotifications.aspx");
+        }
     }
 }

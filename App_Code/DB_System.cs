@@ -195,11 +195,11 @@ namespace AviaTrain.App_Code
             dt.Rows.Add(new object[] { "CRH", "ACC-CRH" });
             dt.Rows.Add(new object[] { "CRL", "ACC-CRL" });
             dt.Rows.Add(new object[] { "CRX", "ACC-CRX" });
-           
+
             dt.Rows.Add(new object[] { "ARN", "APP-ARN" });
             dt.Rows.Add(new object[] { "ARS", "APP-ARS" });
             dt.Rows.Add(new object[] { "ARX", "APP-ARX" });
-            
+
             dt.Rows.Add(new object[] { "BRN", "APP-BRN" });
             dt.Rows.Add(new object[] { "BRS", "APP-BRS" });
             dt.Rows.Add(new object[] { "BRX", "APP-BRX" });
@@ -591,7 +591,7 @@ namespace AviaTrain.App_Code
         //        using (SqlConnection connection = new SqlConnection(Con_Str.current))
         //        using (SqlCommand command = new SqlCommand(
         //                     @"DECLARE @MER INT = (SELECT MER FROM MER_USER 
-					   //                             WHERE EMPLOYEEID=@EMPLOYEEID AND POSITION = @POSITION AND SECTOR=@SECTOR  AND PHASE =  @PHASE  )
+        //                             WHERE EMPLOYEEID=@EMPLOYEEID AND POSITION = @POSITION AND SECTOR=@SECTOR  AND PHASE =  @PHASE  )
 
         //                        IF @MER = NULL
         //                        BEGIN
@@ -635,33 +635,33 @@ namespace AviaTrain.App_Code
         //                     @"
         //                        DECLARE @REPORTID INT = 
         //                        (
-	       //                         SELECT MAX(UTF.REPORTID)
-	       //                          FROM USER_TRAINING_FOLDER UTF
-	       //                          JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
-	       //                          WHERE UTF.EMPLOYEEID = @EMPLOYEEID
-		      //                             AND TTS.POSITION = @POSITION 
-		      //                             AND ( TTS.SECTOR = @SECTOR OR ISNULL(TTS.SECTOR, '') = '' )
-		      //                             AND UTF.STATUS = 'REPORT'
-		      //                             AND (LEFT(UTF.STATUS, 5 ) != 'RECOM')
+        //                         SELECT MAX(UTF.REPORTID)
+        //                          FROM USER_TRAINING_FOLDER UTF
+        //                          JOIN TRAINING_TREE_STEPS TTS ON TTS.ID = UTF.STEPID
+        //                          WHERE UTF.EMPLOYEEID = @EMPLOYEEID
+        //                             AND TTS.POSITION = @POSITION 
+        //                             AND ( TTS.SECTOR = @SECTOR OR ISNULL(TTS.SECTOR, '') = '' )
+        //                             AND UTF.STATUS = 'REPORT'
+        //                             AND (LEFT(UTF.STATUS, 5 ) != 'RECOM')
         //                        )
 
         //                        DECLARE @REPORTTYPE INT = (SELECT [TYPE] FROM REPORTS_META WHERE ID = @REPORTID )
 
         //                        IF @REPORTTYPE = 1 
         //                        BEGIN 
-	       //                         SELECT TOTAL_HOURS FROM REPORT_TR_ARE_APP_RAD WHERE ID = @REPORTID
+        //                         SELECT TOTAL_HOURS FROM REPORT_TR_ARE_APP_RAD WHERE ID = @REPORTID
         //                        END
         //                        ELSE IF @REPORTTYPE = 2
         //                        BEGIN
-	       //                         SELECT TOTAL_HOURS FROM REPORT_DAILYTR_ASS_TWR WHERE ID = @REPORTID
+        //                         SELECT TOTAL_HOURS FROM REPORT_DAILYTR_ASS_TWR WHERE ID = @REPORTID
         //                        END
         //                        ELSE IF @REPORTTYPE = 3
         //                        BEGIN
-	       //                         SELECT TOTAL_HOURS FROM REPORT_DAILYTR_ASS_RAD WHERE ID = @REPORTID
+        //                         SELECT TOTAL_HOURS FROM REPORT_DAILYTR_ASS_RAD WHERE ID = @REPORTID
         //                        END
         //                        ELSE IF @REPORTTYPE = 4
         //                        BEGIN
-	       //                         SELECT TOTAL_HOURS FROM REPORT_TOWERTR_GMC_ADC WHERE ID = @REPORTID
+        //                         SELECT TOTAL_HOURS FROM REPORT_TOWERTR_GMC_ADC WHERE ID = @REPORTID
         //                        END
         //                                    ", connection))
         //        {
@@ -849,7 +849,7 @@ namespace AviaTrain.App_Code
             return false;
         }
 
-        public static bool update_notification(string notifid, string header , string message , List<string> files , string effective = "", string expires = "", bool isactive = true)
+        public static bool update_notification(string notifid, string header, string message, List<string> files, string effective = "", string expires = "", bool isactive = true)
         {
             if (effective == "")
                 effective = "2000-01-01";
@@ -965,6 +965,38 @@ namespace AviaTrain.App_Code
             return 0;
         }
 
+        public static DataTable get_usernotification_views(string notifid = "0", string userid = "0")
+        {
+            DataTable res = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                          @"SELECT DEF.ID, DEF.HEADER AS 'Header', 
+                                ISNULL(U.INITIAL + '-' + U.FIRSTNAME + ' ' + U.SURNAME ,'') AS 'User', 
+                                ISNULL(SEEN_TIME,'') AS 'Seen' ,
+                                DEF.EFFECTIVE AS 'Effective',
+                                DEF.EXPIRED AS 'Expired'
+                            FROM NOTIFICATIONS_DEF DEF 
+                            LEFT JOIN  USER_NOTIFICATION UN ON DEF.ID = UN.NOTIF_ID AND UN.USERID = CASE WHEN @USERID = '0' THEN UN.USERID ELSE @USERID END
+                            LEFT JOIN USERS U ON U.EMPLOYEEID = UN.USERID
+                            WHERE  DEF.ID = CASE WHEN @NOTIF_ID = '0' THEN DEF.ID ELSE @NOTIF_ID END
+                            ORDER BY DEF.HEADER asc, 'User' asc, 'Seen' desc"
+                            , connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add(@"NOTIF_ID", SqlDbType.Int).Value = notifid;
+                    command.Parameters.Add(@"USERID", SqlDbType.Int).Value = userid;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    da.Fill(res);
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+            return res;
+        }
         public static DataTable get_user_notifications(string employeeid)
         {
             DataTable res = new DataTable();
@@ -1032,7 +1064,7 @@ namespace AviaTrain.App_Code
             return null;
         }
 
-        public static DataTable get_notification(string notifid = "0" , bool isactive = true)
+        public static DataTable get_notification(string notifid = "0", bool isactive = true)
         {
             DataTable res = new DataTable();
             try
@@ -1041,7 +1073,7 @@ namespace AviaTrain.App_Code
                 using (SqlCommand command = new SqlCommand(
                            @"SELECT * FROM NOTIFICATIONS_DEF 
                              WHERE ID = CASE WHEN @NOTIFID = '0' THEN ID ELSE @NOTIFID END "
-	                             + (isactive ?  " AND ISACTIVE = 1 " : "" )
+                                 + (isactive ? " AND ISACTIVE = 1 " : "")
                                  + " ORDER BY ID DESC"
                             , connection))
                 {

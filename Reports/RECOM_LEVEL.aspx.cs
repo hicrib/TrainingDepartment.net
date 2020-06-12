@@ -21,26 +21,7 @@ namespace AviaTrain.Reports
                 string reportid = Convert.ToString(Request.QueryString["ReportID"]);
                 if (!string.IsNullOrWhiteSpace(reportid))
                 {
-                    UserSession user = (UserSession)Session["usersession"];
-
-                    string relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid);
-
-                    if(relation != "nobody")
-                    {
-                        fill_View_Mode_as(reportid, relation); //it can be creater_ojti / trainee
-                    }
-                    else if(user.isAdmin)
-                    {
-                            fill_View_Mode_as(reportid, "sysadmin");
-                    }
-                    else if (user.has_ROLENAME("TRN_DEPARTMENT_SIGNER"))
-                    {
-                        fill_View_Mode_as(reportid, "TRN_DEPARTMENT_SIGNER");
-                    }
-                    else
-                    {
-                        RedirectWithCode("UNAUTHORIZED");
-                    }
+                    fill_View_Mode_as(reportid);
                 }
                 else
                 {
@@ -49,8 +30,30 @@ namespace AviaTrain.Reports
             }
         }
 
-        protected void fill_View_Mode_as(string reportid, string mode)
+        protected void fill_View_Mode_as(string reportid)
         {
+            UserSession user = (UserSession)Session["usersession"];
+
+            string relation = "";
+
+            if (user.isAdmin)
+                relation = "sysadmin";
+            else if (user.has_ROLENAME("TRN_DEPARTMENT_SIGNER"))
+                relation = "TRN_DEPARTMENT_SIGNER";
+            else if (user.isOJTI || user.isExaminer || user.isLCE)
+                relation = "instructor";
+            else
+                relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid); //creater_ojti / trainee , nobody
+
+            if (relation == "nobody")
+                RedirectWithCode("UNAUTHORIZED!");
+
+            if (ddl_trainee.SelectedValue == user.employeeid)
+                relation = "trainee"; //we will force it for department member's own training (or ojti's)
+
+            lbl_viewmode.Text = relation;
+
+
             //todo: first fill all elements
             Dictionary<string, DataTable> li = DB_Reports.pull_RECOM_LEVEL(reportid);
 
@@ -67,10 +70,6 @@ namespace AviaTrain.Reports
             ddl_ojtis.Items.Add(new ListItem(meta.Rows[0]["CREATER_NAME"].ToString(), meta.Rows[0]["CREATER"].ToString()));
 
             ddl_Level.SelectedValue = form.Rows[0]["LEVEL"].ToString();
-
-            //bring trainee sing if signed
-            if (meta.Rows[0]["TRAINEE_SIGNED"].ToString() == "True")
-                btn_traineesign_Click(new object(), new EventArgs());
 
             ddl_sectors.Items.Add(form.Rows[0]["POSITION"].ToString() + "-" + form.Rows[0]["SECTOR"].ToString());
 
@@ -118,7 +117,7 @@ namespace AviaTrain.Reports
 
 
             // if not signed by trainee enable sign button
-            if (mode == "trainee" && meta.Rows[0]["TRAINEE_SIGNED"].ToString() != "True")
+            if (relation == "trainee" && meta.Rows[0]["TRAINEE_SIGNED"].ToString() != "True")
             {
                 //let them sign , let them comment
                 btn_traineesign.Enabled = true;
@@ -126,20 +125,14 @@ namespace AviaTrain.Reports
                 //let them submit
                 btn_submit.Visible = true;
                 btn_submit.Enabled = true;
-
-                //change mode to allow update in reports table when submit button clicked
-                lbl_viewmode.Text = "trainee";
             }
-            if (mode == "TRN_DEPARTMENT_SIGNER" && form.Rows[0]["DEPARTMENT_SIGNED"].ToString() != "True")
+            if (relation == "TRN_DEPARTMENT_SIGNER" && form.Rows[0]["DEPARTMENT_SIGNED"].ToString() != "True")
             {
                 btn_departmentsign.Visible = true;
                 btn_departmentsign.Enabled = true;
 
                 btn_submit.Visible = true;
                 btn_submit.Enabled = true;
-
-                //change mode to allow update in reports table when submit button clicked
-                lbl_viewmode.Text = "TRN_DEPARTMENT_SIGNER";
             }
 
         }
@@ -272,6 +265,12 @@ namespace AviaTrain.Reports
 
             if (lbl_viewmode.Text == "TRN_DEPARTMENT_SIGNER")
             {
+                if (lbl_traineesigned.Text != "1")
+                {
+                    ClientMessage(lbl_pageresult, "Trainee must sign in 24 hours", System.Drawing.Color.Red);
+                    return;
+                }
+
                 if (lbl_departmentsigned.Text != "1")
                 {
                     ClientMessage(lbl_pageresult, "Training Department must sign to submit the report", System.Drawing.Color.Red);
