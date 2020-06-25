@@ -99,6 +99,7 @@
                     <asp:MenuItem Text="My Training" Value="1"></asp:MenuItem>
                     <asp:MenuItem Text="Training Department" Value="2"></asp:MenuItem>
                     <asp:MenuItem Text="System" Value="3"></asp:MenuItem>
+                    <asp:MenuItem Text="Statistics" Value="4"></asp:MenuItem>
                 </Items>
             </asp:Menu>
             <div class="tabcontents">
@@ -145,9 +146,13 @@
 
                     </asp:View>
 
-
-
                     <asp:View ID="view_system" runat="server"></asp:View>
+
+
+                    <asp:View ID="view_stats" runat="server">
+                        <asp:LinkButton ID="lnk_trnhours" runat="server" Text="Training Hrs." PostBackUrl="~/Statistics/Stat_TrnHours.aspx" CssClass="instructorButton" />
+                        <asp:LinkButton ID="lnk_workhours" runat="server" Text="Working Hrs." PostBackUrl="~/Statistics/Stat_WorkHours.aspx" CssClass="instructorButton" />
+                    </asp:View>
                 </asp:MultiView>
             </div>
         </ContentTemplate>

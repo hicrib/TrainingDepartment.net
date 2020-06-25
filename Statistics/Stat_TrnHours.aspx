@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" EnableEventValidation="false" AutoEventWireup="true" CodeBehind="ViewTrainingResults.aspx.cs" Inherits="AviaTrain.Trainings.ViewTrainingResults" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masters/ExamsMaster.Master" AutoEventWireup="true" CodeBehind="Stat_TrnHours.aspx.cs" Inherits="AviaTrain.Statistics.Stat_TrnHours" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script>
@@ -18,7 +18,7 @@
             width: 1000px;
             border-collapse: collapse;
             padding: 10px;
-            margin: 0px;
+            margin: 3px;
             border: 3px solid #a52a2a;
         }
 
@@ -78,10 +78,12 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
     <asp:UpdatePanel runat="server" ID="update_panel" UpdateMode="Always" ChildrenAsTriggers="true">
         <Triggers>
         </Triggers>
         <ContentTemplate>
+
             <table class="exam_results_tbl">
                 <tr>
                     <td>
@@ -94,30 +96,26 @@
                                 <td colspan="5" style="height: 10px;"></td>
                             </tr>
                             <tr>
-                                <td>Training </td>
-                                <td>Trainee</td>
-                                <td>Status</td>
-                                <td colspan="2">Last Action<br />
-                                    Between Dates</td>
+                                <td>Trainee </td>
+                                <td>Unit</td>
+                                <td>Sector</td>
+                                <td colspan="2">Between Dates</td>
                             </tr>
 
                             <tr>
                                 <td>
-                                    <asp:DropDownList ID="filter_training" runat="server"></asp:DropDownList>
-                                </td>
-                                <td>
                                     <asp:DropDownList ID="filter_trainee" runat="server"></asp:DropDownList>
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="filter_status" runat="server">
-                                        <asp:ListItem Value="ALL"></asp:ListItem>
-                                        <asp:ListItem Value="ASSIGNED"></asp:ListItem>
-                                        <asp:ListItem Value="USER_STARTED"></asp:ListItem>
-                                        <asp:ListItem Value="FINISHED"></asp:ListItem>
-                                        <asp:ListItem Value="PASSED"></asp:ListItem>
-                                        <asp:ListItem Value="FAILED"></asp:ListItem>
-                                        <asp:ListItem Value="NOSHOW"></asp:ListItem>
+                                    <asp:DropDownList ID="filter_unit" runat="server" AutoPostBack="true" OnSelectedIndexChanged="filter_unit_SelectedIndexChanged">
+                                        <asp:ListItem Value="-" Text="-"></asp:ListItem>
+                                        <asp:ListItem Value="TWR"></asp:ListItem>
+                                        <asp:ListItem Value="ACC"></asp:ListItem>
+                                        <asp:ListItem Value="APP"></asp:ListItem>
                                     </asp:DropDownList>
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="filter_sector" runat="server"></asp:DropDownList>
                                 </td>
                                 <td>
                                     <asp:TextBox TextMode="Date" ID="filter_start" runat="server"></asp:TextBox>
@@ -125,17 +123,6 @@
                                 <td>
                                     <asp:TextBox TextMode="Date" ID="filter_finish" runat="server"></asp:TextBox>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Only Active Trainings
-                                    <asp:CheckBox ID="chk_active_training" OnCheckedChanged="chk_active_training_CheckedChanged" AutoPostBack="true" runat="server" Checked="true" />
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td>Only Active Trainees
-                                    <asp:CheckBox ID="chk_active_trainee" OnCheckedChanged="chk_active_trainee_CheckedChanged" AutoPostBack="true" runat="server" Checked="true" />
-                                </td>
-                                <td></td>
                             </tr>
                             <tr>
                                 <td colspan="5" style="height: 10px;"></td>
@@ -159,29 +146,31 @@
                     </td>
                 </tr>
             </table>
-            <br />
-            <br />
 
             <table class="exam_results_tbl">
                 <tr>
-                    <th>RESULTS
+                    <th><asp:Label ID="lbl_gridname" runat="server" ></asp:Label>
                     </th>
                 </tr>
                 <tr>
                     <td>
-                        <asp:GridView ID="grid_results" runat="server" CssClass="grid_results" OnRowDataBound="grid_results_RowDataBound"
-                            AllowPaging="true" AllowSorting="true" OnSelectedIndexChanged="grid_results_SelectedIndexChanged"
-                            OnPageIndexChanging="grid_results_PageIndexChanging" PageSize="30"
-                            OnSorting="grid_results_Sorting">
-                            <PagerSettings Mode="NumericFirstLast" PageButtonCount="10" FirstPageText="First" LastPageText="Last" />
+                        <asp:GridView ID="grid_trnhours" runat="server" CssClass="grid_results">
+                            <%--AllowPaging="true" AllowSorting="true"--%>
+                            <%--OnSelectedIndexChanged="grid_trnhours_SelectedIndexChanged" OnSorting="grid_trnhours_Sorting"--%>
+                            <%--<PagerSettings Mode="NumericFirstLast" PageButtonCount="10" FirstPageText="First" LastPageText="Last" />--%>
+                            <Columns>
+                                <%--<asp:CommandField ShowSelectButton="True" ControlStyle-CssClass="iconimg" ButtonType="Image" SelectImageUrl="~/Images/view.png" SelectText="View" />--%>
+                            </Columns>
                         </asp:GridView>
                     </td>
                 </tr>
             </table>
-
-
-
         </ContentTemplate>
     </asp:UpdatePanel>
+
+
+
+
+
 
 </asp:Content>

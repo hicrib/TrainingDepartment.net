@@ -1215,6 +1215,8 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="Statistics\Stat_TrnHours.aspx" />
+    <Content Include="Statistics\Stat_WorkHours.aspx" />
     <Content Include="SysAdmin\CreateTrainingFolder.aspx" />
     <Content Include="SysAdmin\CreateUser.aspx" />
     <Content Include="SysAdmin\EditNotification.aspx" />
@@ -1244,6 +1246,7 @@
     <Compile Include="App_Code\DB_FileSys.cs" />
     <Compile Include="App_Code\DB_Reports.cs" />
     <Compile Include="App_Code\DB_ScheduledTasks.cs" />
+    <Compile Include="App_Code\DB_Stats.cs" />
     <Compile Include="App_Code\DB_System.cs" />
     <Compile Include="App_Code\DB_Exams.cs" />
     <Content Include="App_Code\Printables.cs" />
@@ -1528,6 +1531,20 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Statistics\Stat_TrnHours.aspx.cs">
+      <DependentUpon>Stat_TrnHours.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Statistics\Stat_TrnHours.aspx.designer.cs">
+      <DependentUpon>Stat_TrnHours.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Statistics\Stat_WorkHours.aspx.cs">
+      <DependentUpon>Stat_WorkHours.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Statistics\Stat_WorkHours.aspx.designer.cs">
+      <DependentUpon>Stat_WorkHours.aspx</DependentUpon>
     </Compile>
     <Compile Include="SysAdmin\CreateTrainingFolder.aspx.cs">
       <DependentUpon>CreateTrainingFolder.aspx</DependentUpon>
