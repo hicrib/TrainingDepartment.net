@@ -147,7 +147,7 @@
                             </tr>
                             <tr style="border-top: 1px solid black;">
                                 <td colspan="2" style="text-align: center; padding: 5px !important;">Hours :
-                                        <asp:TextBox ID="txt_hours" Enabled="false" Width="70" runat="server"></asp:TextBox>
+                                        <asp:TextBox ID="txt_hours" Enabled="false" Width="70"  runat="server"></asp:TextBox>
                                 </td>
                                 <td colspan="2">Total Hours :
                                         <asp:TextBox ID="txt_totalhours" Width="70" runat="server"></asp:TextBox>

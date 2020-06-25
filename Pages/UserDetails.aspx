@@ -506,7 +506,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3">
-                                                            <asp:FileUpload ID="uploadnewfile" runat="server" accept=".png,.jpg,.jpeg,.gif" />
+                                                            <asp:FileUpload ID="uploadnewfile" runat="server"  />
                                                             <asp:Button runat="server" ID="btn_uploadnewfile" Text="Upload" OnClick="btn_uploadnewfile_Click" />
                                                             <asp:Label ID="cloudfilename" runat="server" Visible="false"></asp:Label>
                                                             <asp:TextBox ID="txt_newfilename" Enabled="false" Visible="false" runat="server"></asp:TextBox>

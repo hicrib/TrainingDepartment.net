@@ -612,13 +612,12 @@ namespace AviaTrain.Reports
             if (txt_timeon_act.Text == "" || txt_timeoff_act.Text == "")
                 return;
 
+            string off = txt_timeoff_act.Text;
             if (Utility.isgreater_TimeFormat(txt_timeon_act.Text, txt_timeoff_act.Text) == 1)
-            {
-                txt_hours.Text = "";
-                return;
-            }
+                off = Utility.add_TimeFormat("24:00", txt_timeoff_act.Text);
 
-            txt_hours.Text = Utility.subtract_TimeFormat(txt_timeon_act.Text, txt_timeoff_act.Text);
+            txt_hours.Text = Utility.subtract_TimeFormat(txt_timeon_act.Text, off);
+
 
             if (chk_Sim.Checked)
                 txt_hours.Text = Utility.divide_TimeFormat(txt_hours.Text, 2);

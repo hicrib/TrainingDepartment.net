@@ -34,9 +34,11 @@ namespace AviaTrain.Reports
         {
             UserSession user = (UserSession)Session["usersession"];
 
-            string relation = "";
+            string relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid);
 
-            if (user.isAdmin)
+            if (relation == "trainee")
+                relation = "trainee";
+            else if (user.isAdmin)
                 relation = "sysadmin";
             else if (user.has_ROLENAME("TRN_DEPARTMENT_SIGNER"))
                 relation = "TRN_DEPARTMENT_SIGNER";

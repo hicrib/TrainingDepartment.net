@@ -190,7 +190,7 @@
                                 </td>
                                 <td>
                                     <asp:Button ID="btn_ojtisign" runat="server" OnClick="btn_ojtisign_Click" Text="Sign" />
-                                    <asp:Image ID="img_ojtisign" Visible="false" runat="server" />
+                                    <asp:Image ID="img_ojtisign" Visible="false" runat="server" style="max-width:150px; max-height:50px;" />
                                     <asp:Label ID="lbl_ojtisigned" runat="server" Visible="false" Text="0"></asp:Label>
                                 </td>
                             </tr>
@@ -268,7 +268,7 @@
                                 </td>
                                 <td>
                                     <asp:Button ID="btn_traineesign" runat="server" OnClick="btn_traineesign_Click" Text="Sign" />
-                                    <asp:Image ID="img_traineesign" Visible="false" runat="server" />
+                                    <asp:Image ID="img_traineesign" Visible="false" runat="server" style="max-width:150px; max-height:50px;" />
                                     <asp:Label ID="lbl_traineesigned" runat="server" Visible="false" Text="0"></asp:Label>
                                 </td>
 
@@ -280,7 +280,7 @@
                                 </td>
                                 <td>
                                     <asp:Button ID="btn_departmentsign" runat="server" OnClick="btn_departmentsign_Click" Text="Sign" />
-                                    <asp:Image ID="img_departmentsign" Visible="false" runat="server" />
+                                    <asp:Image ID="img_departmentsign" Visible="false" runat="server" style="max-width:150px; max-height:50px;" />
                                     <asp:Label ID="lbl_departmentsigned" runat="server" Visible="false" Text="0"></asp:Label>
                                 </td>
                             </tr>

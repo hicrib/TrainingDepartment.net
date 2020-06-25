@@ -129,7 +129,13 @@ namespace AviaTrain.App_Code
                         INSERT INTO USER_TRAINING_FOLDER
                         SELECT TTS.ID , @USERID, CONVERT(varchar,GETUTCDATE(),20) , 'ONGOING',NULL,NULL,NULL 
                         FROM TRAINING_TREE_STEPS  TTS
-                        WHERE TTS.ID = @NEWSTEP", connection))
+                        WHERE TTS.ID = @NEWSTEP
+
+                        INSERT INTO USER_TOTALHOURS
+                        SELECT USERID, @NEWSTEP, TOTALHOURS, 'StepCreated',CONVERT(varchar,GETUTCDATE(),20), '',0  FROM USER_TOTALHOURS WHERE USERID=@USERID AND STEPID=@COMPLETEDSTEP
+
+
+", connection))
                 {
                     connection.Open();
 
@@ -2069,7 +2075,7 @@ SELECT @ID
             {
                 using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
-                             @" SELECT TOTALHOURS  FROM USER_TOTALHOURS UTH
+                             @" SELECT top 1 max(TOTALHOURS) AS 'TOTALHOURS' FROM USER_TOTALHOURS UTH
                                 WHERE UTH.STEPID IN
 	                                (	
 		                                SELECT TTS.ID FROM TRAINING_TREE_STEPS TTS
@@ -2082,6 +2088,13 @@ SELECT @ID
                                     AND UTH.USERID = @USERID
                                     ", connection))
                 {
+                    // todo : it should change to a better solution but this should work
+                    ///IMPORTANT
+                    /// normally, we calculated total hours by selecting all ojtlevels and adding them below
+                    /// now we are selecting max with the same step-selection
+                    /// if sector is null: check stepname : for twr assist
+                    /// if sector is not null but not OJT , check name for BR-AR-CR-SB-NR ASSISTS (THEY DONT COMBINE WTIH OJT LEVELS)
+                    /// if sector is not null, and it is OJT LEVELS, select all the steps, get the max
                     connection.Open();
                     command.Parameters.Add("@USERID", SqlDbType.Int).Value = trainee;
                     command.Parameters.Add("@STEPID", SqlDbType.VarChar).Value = stepid;
@@ -2094,7 +2107,7 @@ SELECT @ID
                     if (res == null || res.Rows.Count == 0)
                         return "00:00";
 
-                    string total = "00:00";
+                    string total = "00:00"; // we are keeping this because there is one row anyways
                     foreach (DataRow item in res.Rows)
                         total = Utility.add_TimeFormat(total, item["TOTALHOURS"].ToString());
 

@@ -8,7 +8,7 @@
             border-collapse: collapse;
         }
 
-        #main_lvlass_tbl {
+        .main_lvlass_tbl {
             margin-top: 30px;
             margin-left: 30px;
             width: 800px;
@@ -16,7 +16,7 @@
             border: 3px solid black;
         }
 
-            #main_lvlass_tbl th {
+            .main_lvlass_tbl th {
                 background-color: #0080ff;
                 font-weight: bold;
                 font-size: x-large;
@@ -27,34 +27,34 @@
                 border-bottom: 1px solid black;
             }
 
-            #main_lvlass_tbl td {
+            .main_lvlass_tbl td {
                 border: 1px solid black;
                 height: 30px;
             }
 
-        #name_tbl {
+        .name_tbl {
             width: 100%;
         }
 
-            #name_tbl td:first-child {
+            .name_tbl td:first-child {
                 font-weight: bold;
                 font-size: medium;
                 padding: 5px;
                 border-right: none;
             }
 
-            #name_tbl td:last-child {
+            .name_tbl td:last-child {
                 font-weight: bold;
                 font-size: medium;
                 padding: 5px;
                 border-left: none;
             }
 
-        #ojtis_row {
+        .ojtis_row {
             width: 100%;
         }
 
-            #ojtis_row td {
+            .ojtis_row td {
                 border-collapse: collapse;
                 min-width: 200px;
                 border-left: 1px solid black;
@@ -74,18 +74,18 @@
                 font-weight: bold;
             }
 
-        #requirements_tbl {
+        .requirements_tbl {
             width: 100%;
         }
 
-            #requirements_tbl td:first-child {
+            .requirements_tbl td:first-child {
                 min-width: 600px;
                 padding: 5px;
                 font-size: medium;
                 font-weight: bold;
             }
 
-            #requirements_tbl td:last-child {
+            .requirements_tbl td:last-child {
                 min-width: 200px;
                 vertical-align: middle;
                 text-align: center;
@@ -95,15 +95,18 @@
             height: 20px;
             width: 20px;
         }
-
-        #trainee_sign_date_tbl td {
+        .trainee_sign_date_tbl{
+            width : 100%;
+        }
+        .trainee_sign_date_tbl td {
+            
             min-width: 130px;
             font-size: medium;
             font-weight: bold;
             padding: 5px;
         }
 
-        #review_header_row td {
+        .review_header_row td {
             font-size: medium;
             font-weight: bold;
             padding: 5px;
@@ -111,47 +114,47 @@
             width: 100%;
         }
 
-            #review_header_row td:first-child {
+            .review_header_row td:first-child {
                 min-width: 300px;
                 border-right: none;
                 text-align: center;
                 font-size: large !important;
             }
 
-            #review_header_row td:nth-child(2) {
+            .review_header_row td:nth-child(2) {
                 min-width: 200px;
                 text-align: left;
                 border-left: none;
             }
 
-            #review_header_row td:nth-child(3) {
+            .review_header_row td:nth-child(3) {
                 min-width: 50px;
                 border-right: none !important;
             }
 
-            #review_header_row td:last-child {
+            .review_header_row td:last-child {
                 min-width: 250px !important;
                 padding: 5px;
                 border-left: none !important;
                 border-right: none;
             }
 
-        #team_members_tbl {
+        .team_members_tbl {
             width: 100%;
         }
 
-            #team_members_tbl td {
+            .team_members_tbl td {
                 font-size: medium;
                 font-weight: bold;
                 padding: 5px;
                 border-collapse: collapse;
             }
 
-                #team_members_tbl td:nth-child(2n+1) {
+                .team_members_tbl td:nth-child(2n+1) {
                     min-width: 150px;
                 }
 
-                #team_members_tbl td:nth-child(2n) {
+                .team_members_tbl td:nth-child(2n) {
                     min-width: 250px;
                 }
 
@@ -188,7 +191,7 @@
             <ContentTemplate>
                 <div>
 
-                    <table id="main_lvlass_tbl">
+                    <table class="main_lvlass_tbl">
                         <thead>
                             <tr>
                                 <th>Recommendation for Certification
@@ -198,7 +201,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <table id="name_tbl">
+                                    <table class="name_tbl">
                                         <tr>
                                             <td>
                                                 <asp:Label ID="lbl_name" Text="NAME : " Width="150" runat="server"></asp:Label>
@@ -220,7 +223,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <table id="ojtis_row">
+                                    <table class="ojtis_row">
                                         <tr>
                                             <td>Recommending OJTI</td>
                                             <td>
@@ -261,7 +264,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <table id="requirements_tbl">
+                                    <table class="requirements_tbl">
                                         <tr>
                                             <td>Minimum Experience Required (MER) met</td>
                                             <asp:Label ID="lbl_MER" runat="server" Text=""></asp:Label>
@@ -292,13 +295,11 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <table id="trainee_sign_date_tbl">
+                                    <table class="trainee_sign_date_tbl">
                                         <tr>
                                             <td>
-                                                <asp:Label ID="lbl_controller" runat="server" Text="Controller/Trainee Sign"></asp:Label></td>
-                                            <td></td>
-                                            <td>
-                                                <asp:Label ID="lbl_controller_sign" runat="server" Text="Signature"></asp:Label></td>
+                                                <asp:Label ID="lbl_controller" runat="server" Text="Controller/Trainee Sign"></asp:Label>
+                                            </td>
                                             <td>
                                                 <asp:Button ID="btn_sign_controller" runat="server" Text="Sign" OnClick="btn_sign_controller_Click" />
                                                 <asp:Image ID="img_sign_controller" runat="server" Visible="false" />
@@ -319,7 +320,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <table id="review_header_row">
+                                    <table class="review_header_row">
                                         <tr>
                                             <td>
                                                 <asp:Label ID="lbl_reviewteam" runat="server" Text="Review Team Approval"></asp:Label>
@@ -406,7 +407,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <table id="team_members_tbl">
+                                    <table class="team_members_tbl">
                                         <tr>
                                             <td>
                                                 <asp:Label ID="lbl_member1" runat="server" Text="Team Member :"></asp:Label>
