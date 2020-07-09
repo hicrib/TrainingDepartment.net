@@ -267,12 +267,6 @@ namespace AviaTrain.Reports
 
             if (lbl_viewmode.Text == "TRN_DEPARTMENT_SIGNER")
             {
-                if (lbl_traineesigned.Text != "1")
-                {
-                    ClientMessage(lbl_pageresult, "Trainee must sign in 24 hours", System.Drawing.Color.Red);
-                    return;
-                }
-
                 if (lbl_departmentsigned.Text != "1")
                 {
                     ClientMessage(lbl_pageresult, "Training Department must sign to submit the report", System.Drawing.Color.Red);

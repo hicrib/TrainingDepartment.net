@@ -1372,6 +1372,54 @@ SELECT @ID
             return false;
         }
 
+        public static bool update_Sign_RECOM_CERTIF(string reportid, string whosigns, string signerid)
+        {
+            string update = "";
+
+            if (whosigns == "trainee")
+                update = @"UPDATE REPORTS_META SET TRAINEE_SIGNED = 1 , STATUS = 'TRAINEESIGNED' WHERE ID = @REPORTID ;
+                           UPDATE  REPORT_RECOM_CERTIF SET TRAINEE_SIGNED = 1 WHERE ID = @REPORTID";
+            else if (whosigns == "MEMBER1")
+                update = @"UPDATE REPORTS_META SET  STATUS = 'MEMBER1SIGNED' WHERE ID = @REPORTID ;
+                           UPDATE  REPORT_RECOM_CERTIF SET MEMBER1_SIGNED_SIGNED = 1 , MEMBER1_ID = " + signerid + @" , MEMBER1_SIGN_DATE = CONVERT(VARCHAR, GETUTCDATE(),20)  WHERE ID = @REPORTID  ; ";
+            else if (whosigns == "MEMBER2")
+                update = @"UPDATE REPORTS_META SET  STATUS = 'MEMBER2SIGNED' WHERE ID = @REPORTID ;
+                           UPDATE  REPORT_RECOM_CERTIF SET MEMBER2_SIGNED_SIGNED = 1 , MEMBER2_ID = " + signerid + @" , MEMBER2_SIGN_DATE = CONVERT(VARCHAR, GETUTCDATE(),20)  WHERE ID = @REPORTID  ; ";
+            else if (whosigns == "MEMBER3")
+                update = @"UPDATE REPORTS_META SET  STATUS = 'MEMBER3SIGNED' WHERE ID = @REPORTID ;
+                           UPDATE  REPORT_RECOM_CERTIF SET MEMBER3_SIGNED_SIGNED = 1 , MEMBER3_ID = " + signerid + @" , MEMBER3_SIGN_DATE = CONVERT(VARCHAR, GETUTCDATE(),20)  WHERE ID = @REPORTID  ; 
+                        UPDATE USER_TRAINING_FOLDER SET STATUS = 'DEPARTMENTSIGN_COMPLETE' WHERE REPORTID = @REPORTID";
+
+            //REVIEW TEAM APPROVAL DURUMUNDA ASAGISI : 
+            // UPDATE USER_TRAINING_FOLDER SET STATUS = 'RECOMMENDED_FOR_CERTIF' WHERE REPORTID = @REPORTID ";
+
+
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(update, connection))
+                {
+                    connection.Open();
+                    command.Parameters.Add("@REPORTID", SqlDbType.Int).Value = reportid;
+                    command.CommandType = CommandType.Text;
+                    int rows = command.ExecuteNonQuery();
+
+                    if (rows == 0)
+                        return false;
+
+                    return true;
+                }
+
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            return false;
+        }
+
 
 
 

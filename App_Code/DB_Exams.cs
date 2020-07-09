@@ -460,13 +460,15 @@ namespace AviaTrain.App_Code
         public static bool delete_question_unless_assigned(string qid, bool undelete = false)
         {
 
-            string update = @"  declare @exist INT= (SELECT top 1 Q_ID  FROM EXM_EXAM_DEF_QUESTIONS where Q_ID = @QID)
-                        declare @exist2  INT= (SELECT top 1 Q_ID  FROM TRN_STEP_QUESTIONS where Q_ID = @QID)
+            //string update = @"  declare @exist INT= (SELECT top 1 Q_ID  FROM EXM_EXAM_DEF_QUESTIONS where Q_ID = @QID)
+            //            declare @exist2  INT= (SELECT top 1 Q_ID  FROM TRN_STEP_QUESTIONS where Q_ID = @QID)
 
-                        IF ISNULL(@exist,'') = '' AND ISNULL(@exist2, '') = ''
-                        BEGIN
-		                        UPDATE EXM_QUESTIONS SET ISACTIVE=0 WHERE ID= @QID
-                        END";
+            //            IF ISNULL(@exist,'') = '' AND ISNULL(@exist2, '') = ''
+            //            BEGIN
+		          //              UPDATE EXM_QUESTIONS SET ISACTIVE=0 WHERE ID= @QID
+            //            END";
+
+            string update = @" UPDATE EXM_QUESTIONS SET ISACTIVE=0 WHERE ID= @QID ";
 
             if (undelete)
                 update = " UPDATE EXM_QUESTIONS SET ISACTIVE=1 WHERE ID= @QID";

@@ -27,19 +27,25 @@ namespace AviaTrain.Pages
 
                 Write_Page_Header_Low("USER DETAILS");
 
-                ddl_user.DataSource = DB_System.get_ALL_trainees();
+                ddl_user.DataSource = DB_System.get_ALL_Users(with_empty: true ,isactive: false);
                 ddl_user.DataTextField = "NAME";
                 ddl_user.DataValueField = "ID";
                 ddl_user.DataBind();
 
                 UserSession user = (UserSession)Session["usersession"];
-                ddl_user.SelectedValue = user.employeeid;
+                
 
                 if (user.isAdmin)
                 {
                     panel_selectuser.Visible = true;
                     pane_roles.Visible = true;
                 }
+                else
+                {
+                    lbl_userid.Text = user.employeeid;
+                    ddl_user.SelectedValue = user.employeeid;
+                }
+                    
 
                 fill_page();
             }
@@ -68,7 +74,7 @@ namespace AviaTrain.Pages
 
             lbl_initial.Text = u.initial;
             lbl_Name.Text = u.name_surname;
-            lbl_email.Text = u.email;
+            
             lbl_userid.Text = u.employeeid;
 
             list_roles.DataSource = u.role_priv;
@@ -246,55 +252,24 @@ namespace AviaTrain.Pages
             AjaxFileUpload afu = (AjaxFileUpload)sender;
             afu.SaveAs(fileNametoupload);
 
+            UserSession user = (UserSession)Session["usersession"];
+
             if (AzureCon.upload_ToBlob_fromFile(fileNametoupload))
             {
                 //write db
                 if (afu.ID == "fileupload_photo")
                 {
-                    if (DB_System.update_UserInfo(ddl_user.SelectedValue, photo: generatedFileName))
+                    
+                    if (DB_System.update_UserInfo((!user.isAdmin ? user.employeeid : ddl_user.SelectedValue) , photo: generatedFileName))
                         img_userphoto.ImageUrl = AzureCon.general_container_url + generatedFileName;
 
                 }
                 else if (afu.ID == "fileupload_signature")
                 {
-                    if (DB_System.update_UserInfo(ddl_user.SelectedValue, signature: generatedFileName))
+                    if (DB_System.update_UserInfo((!user.isAdmin ? user.employeeid : ddl_user.SelectedValue), signature: generatedFileName))
                         img_signature.ImageUrl = AzureCon.general_container_url + generatedFileName;
                 }
-                //else if (afu.ID == "fileupload_cert_academy")
-                //{
-                //    if (DB_System.update_User_Certificates(user.employeeid, academy: generatedFileName))
-                //        img_cert_academy.ImageUrl = AzureCon.general_container_url + generatedFileName;
-                //}
-                //else if (afu.ID == "fileupload_ojtcourse")
-                //{
-                //    if (DB_System.update_User_Certificates(user.employeeid, ojtcourse: generatedFileName))
-                //        img_ojtcourse.ImageUrl = AzureCon.general_container_url + generatedFileName;
-                //}
-                //else if (afu.ID == "fileupload_supcourse")
-                //{
-                //    if (DB_System.update_User_Certificates(user.employeeid, supcourse: generatedFileName))
-                //        img_supcourse.ImageUrl = AzureCon.general_container_url + generatedFileName;
-                //}
-                //else if (afu.ID == "fileupload_ECT")
-                //{
-                //    if (DB_System.update_User_Certificates(user.employeeid, ECT: generatedFileName))
-                //        img_ECT.ImageUrl = AzureCon.general_container_url + generatedFileName;
-                //}
-                //else if (afu.ID == "fileupload_trnCert_1")
-                //{
-                //    if (DB_System.update_User_Certificates(user.employeeid, training: generatedFileName))
-                //        img_trnCert_1.ImageUrl = AzureCon.general_container_url + generatedFileName;
-                //}
-                //else if (afu.ID == "fileupload_equiptest")
-                //{
-                //    if (DB_System.update_User_Certificates(user.employeeid, equiptest: generatedFileName))
-                //        img_equiptest.ImageUrl = AzureCon.general_container_url + generatedFileName;
-                //}
-                //else if (afu.ID == "fileupload_OJTPermit")
-                //{
-                //    if (DB_System.update_User_Certificates(user.employeeid, ojtpermit: generatedFileName))
-                //        img_OJTPermit.ImageUrl = AzureCon.general_container_url + generatedFileName;
-                //}
+              
             }
         }
 
@@ -648,6 +623,66 @@ namespace AviaTrain.Pages
         protected void grid_userfiles_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             tree_SelectedNodeChanged1(new object(), new EventArgs());
+        }
+
+
+
+        protected void btn_userphoto_Click(object sender, EventArgs e)
+        {
+            if (file_userphoto.HasFile)
+            {
+                try
+                {
+                    string filename = Utility.getRandomFileName();
+                    string newfilename = filename + file_userphoto.PostedFile.FileName;
+                    string file_address = Server.MapPath("~/AzureBlobs/Uploads/") + newfilename;
+                    file_userphoto.SaveAs(file_address);
+
+                
+                    UserSession user = (UserSession)Session["usersession"];
+
+                    if (AzureCon.upload_ToBlob_fromFile(file_address))
+                    {
+                        //write db
+                        if (DB_System.update_UserInfo((!user.isAdmin ? user.employeeid : ddl_user.SelectedValue), photo: newfilename))
+                        {
+                            img_userphoto.ImageUrl = AzureCon.general_container_url + newfilename;
+                            ((Image)(Page.Master.FindControl("img_userphoto"))).ImageUrl = AzureCon.general_container_url + newfilename;
+                        }                    }
+                }
+                catch (Exception ex)
+                {
+                  
+                }
+            }
+        }
+
+        protected void btn_signature_Click(object sender, EventArgs e)
+        {
+            if (file_signature.HasFile)
+            {
+                try
+                {
+                    string filename = Utility.getRandomFileName();
+                    string newfilename = filename + file_signature.PostedFile.FileName;
+                    string file_address = Server.MapPath("~/AzureBlobs/Uploads/") + newfilename;
+                    file_signature.SaveAs(file_address);
+
+
+                    UserSession user = (UserSession)Session["usersession"];
+
+                    if (AzureCon.upload_ToBlob_fromFile(file_address))
+                    {
+                        //write db
+                        if (DB_System.update_UserInfo((!user.isAdmin ? user.employeeid : ddl_user.SelectedValue), signature: newfilename))
+                            img_signature.ImageUrl = AzureCon.general_container_url + newfilename;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
         }
     }
 }

@@ -121,5 +121,10 @@ namespace AviaTrain.SysAdmin
         {
             Response.Redirect("~/SysAdmin/ViewNotifications.aspx");
         }
+
+        protected void btn_traininghours_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Statistics/Stat_TrnHours.aspx");
+        }
     }
 }

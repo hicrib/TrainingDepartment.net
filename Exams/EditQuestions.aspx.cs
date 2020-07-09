@@ -47,6 +47,9 @@ namespace AviaTrain.Exams
 
         protected void grid_questions_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            if (e.CommandName != "EDIT_Q")
+                return;
+
             //new question will be edited. Clean 
             lbl_page_result.Text = "";
             lbl_page_result.Visible = false;
@@ -229,7 +232,13 @@ namespace AviaTrain.Exams
             IdHiddenField = (HiddenField)chk_qActive.Parent.FindControl("QID_hiddenfield");
 
             //deletes or undeletes
-            bool deleted = DB_Exams.delete_question_unless_assigned(IdHiddenField.Value, undelete: ((CheckBox)sender).Checked);
+            bool ok = DB_Exams.delete_question_unless_assigned(IdHiddenField.Value, undelete: ((CheckBox)sender).Checked);
+
+            if(!ok)
+            {
+                ((CheckBox)sender).Checked = !((CheckBox)sender).Checked;
+                ((CheckBox)sender).Enabled = false;
+            }
         }
 
        

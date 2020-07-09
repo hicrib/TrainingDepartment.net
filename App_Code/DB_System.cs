@@ -503,7 +503,7 @@ namespace AviaTrain.App_Code
                 using (SqlCommand command = new SqlCommand(
                             @"" +
                             (with_empty ?
-                            @"SELECT '-' AS [ID], ' --- ' AS [NAME]
+                            @"SELECT '0' AS [ID], ' --- ' AS [NAME]
                             UNION" : "") +
                          @" SELECT EMPLOYEEID AS ID ,  INITIAL + ' - ' + FIRSTNAME +' '+ SURNAME AS [NAME] 
                             FROM USERS " + (isactive ? " WHERE ISACTIVE = 1 " : " ") +

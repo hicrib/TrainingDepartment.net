@@ -173,7 +173,7 @@
             max-width: 300px;
             padding: 0px;
             margin: 0px;
-            overflow : auto;
+            overflow: auto;
             overflow-x: visible;
             overflow-y: visible;
             height: 400px;
@@ -230,25 +230,56 @@
                 height: 30px;
             }
 
-            .gridwrapper{
-                text-align:center;
-                width:99%;
-                
+        .gridwrapper {
+            text-align: center;
+            width: 99%;
+        }
+
+        .foldername {
+            font-weight: bold;
+            font-size: x-large;
+            border: 2px solid black;
+            padding: 0px 50px 0px 50px;
+        }
+
+        .grid_userfiles {
+            width: 100%;
+            margin: 30px 0 0 50px;
+            margin: auto;
+            border: 2px solid #a52a2a;
+        }
+
+            .grid_userfiles td {
+                padding: 3px 3px 3px 10px;
             }
-            .foldername{
-                font-weight : bold;
-                font-size : x-large;
-                border : 2px solid black;
-                padding : 0px 50px 0px 50px;
+
+                .grid_userfiles td:first-child {
+                    width: 40px;
+                }
+
+                .grid_userfiles td:nth-child(2) {
+                    text-align: left !important;
+                }
+
+        .tbl_userinfo {
+            width: 99%;
+        }
+
+            .tbl_userinfo td {
+                padding: 5px;
             }
-            .grid_userfiles{width : 100%;
-                            margin : 30px 0 0 50px;
-                            margin : auto;
-                            border : 2px solid #a52a2a;
-            }
-            .grid_userfiles td{ padding : 3px 3px 3px 10px;}
-            .grid_userfiles td:first-child {width : 40px;}
-            .grid_userfiles td:nth-child(2) {text-align:left !important;}
+
+                .tbl_userinfo td:first-child {
+                    font-weight: bold;
+                }
+
+        .changebtn {
+            min-height: 20px;
+            font-weight: bold;
+            background: indianred;
+            color: white;
+            width: 200px;
+        }
     </style>
     <script type="text/javascript">  
         function uploadcomplete() {
@@ -265,6 +296,8 @@
         <Triggers>
             <asp:PostBackTrigger ControlID="btn_hidden_refresh" />
             <asp:PostBackTrigger ControlID="btn_uploadnewfile" />
+            <asp:PostBackTrigger ControlID="btn_userphoto" />
+            <asp:PostBackTrigger ControlID="btn_signature" />
         </Triggers>
         <ContentTemplate>
             <asp:Panel ID="panel_selectuser" runat="server" Visible="false">
@@ -292,147 +325,122 @@
                         <div class="tabcontents">
                             <asp:MultiView ID="multiview1" ActiveViewIndex="0" runat="server">
                                 <asp:View ID="view1" runat="server">
-                                    <ajaxToolkit:Accordion ID="Accordion1" runat="server" HeaderCssClass="headerCssClass" ContentCssClass="contentCssClass"
-                                        HeaderSelectedCssClass="headerSelectedCss" FadeTransitions="false" TransitionDuration="100"
-                                        AutoSize="Fill" Height="400" Style="height: 100% !important;" SelectedIndex="0">
-                                        <Panes>
-                                            <ajaxToolkit:AccordionPane ID="AccordionPane11" runat="server">
-                                                <Header>Info
-                                        </Header>
-                                                <Content>
-                                                    UserID :
-                                        <asp:Label ID="lbl_userid" runat="server"></asp:Label>
-                                                    <br />
-                                                    Name :
-                                        <asp:Label ID="lbl_Name" runat="server"></asp:Label>
-                                                    <br />
-                                                    Initial :
-                                        <asp:Label ID="lbl_initial" runat="server"></asp:Label>
-                                                    <br />
-                                                    Email :
-                                        <asp:Label ID="lbl_email" runat="server"></asp:Label>
-                                                </Content>
-                                            </ajaxToolkit:AccordionPane>
-                                            <ajaxToolkit:AccordionPane ID="AccordionPane9" runat="server">
-                                                <Header>Password Change
-                                        </Header>
-                                                <Content>
-                                                    <asp:TextBox ID="txt_pass1" runat="server" TextMode="Password"></asp:TextBox>
-                                                    <asp:TextBox ID="txt_pass2" runat="server" TextMode="Password" PlaceHolder="Confirm"></asp:TextBox>
-                                                    <asp:Button ID="btn_changepassword" runat="server" Text="Change!" OnClick="btn_changepassword_Click" />
-                                                    <br />
-                                                    <asp:Label ID="lbl_passchange" runat="server" Style="font-size: small;"></asp:Label>
-                                                </Content>
-                                            </ajaxToolkit:AccordionPane>
-                                            <ajaxToolkit:AccordionPane ID="AccordionPane10" runat="server">
-                                                <Header>Email
-                                        </Header>
-                                                <Content>
-                                                    <asp:TextBox ID="txt_email" runat="server" ></asp:TextBox>
-                                                    <asp:Button ID="btn_update_email" runat="server" Text="Save" OnClick="btn_update_email_Click" />
-                                                    <asp:Image ID="img_email_result" runat="server" style="display:inline;" Visible="false" />
-                                                </Content>
-                                            </ajaxToolkit:AccordionPane>
-                                            <ajaxToolkit:AccordionPane ID="pane_roles" runat="server" Visible="false">
-                                                <Header>User Roles
-                                        </Header>
-                                                <Content>
+
+                                    <table class="tbl_userinfo">
+                                        <tr>
+                                            <td>UserID :</td>
+                                            <td>
+                                                <asp:Label ID="lbl_userid" runat="server"></asp:Label></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name :</td>
+                                            <td>
+                                                <asp:Label ID="lbl_Name" runat="server"></asp:Label></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Initial :</td>
+                                            <td>
+                                                <asp:Label ID="lbl_initial" runat="server"></asp:Label></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Password :  </td>
+                                            <td>
+                                                <asp:TextBox ID="txt_pass1" runat="server" TextMode="Password"></asp:TextBox></td>
+                                            <td>
+                                                <asp:TextBox ID="txt_pass2" runat="server" TextMode="Password" PlaceHolder="Confirm New Password"></asp:TextBox></td>
+                                            <td>
+                                                <asp:Button ID="btn_changepassword" runat="server" CssClass="changebtn" Text="Change Password" OnClick="btn_changepassword_Click" />
+                                                <br />
+                                                <asp:Label ID="lbl_passchange" runat="server" Style="font-size: small;"></asp:Label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Email :</td>
+                                            <td>
+                                                <asp:TextBox ID="txt_email" runat="server"></asp:TextBox></td>
+                                            <td>
+                                                <asp:Image ID="img_email_result" runat="server" Style="display: inline;" Visible="false" /></td>
+                                            <td>
+                                                <asp:Button ID="btn_update_email" runat="server" CssClass="changebtn" Text="Save E-mail" OnClick="btn_update_email_Click" /></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>User photo :</td>
+                                            <td>
+                                                <asp:Image ID="img_userphoto" runat="server" Style="max-height: 60px; max-width: 60px;" /></td>
+                                            <td>
+
+                                                <asp:FileUpload ID="file_userphoto" runat="server" />
+
+
+                                                <%--           <ajaxToolkit:AjaxFileUpload ID="fileupload_photo" runat="server"
+                                                    AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="2000"
+                                                    MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
+                                                    OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />--%>
+                                            </td>
+                                            <td>
+                                                <asp:Button runat="server" ID="btn_userphoto" CssClass="changebtn" Text="Change Photo" OnClick="btn_userphoto_Click" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>User Signature</td>
+                                            <td>
+                                                <asp:Image ID="img_signature" runat="server" Style="max-height: 60px; max-width: 60px;" /></td>
+                                            <td>
+                                                <asp:FileUpload ID="file_signature" runat="server" />
+
+
+                                                <%--                                 <ajaxToolkit:AjaxFileUpload ID="fileupload_signature" runat="server"
+                                                    AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
+                                                    MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
+                                                    OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />--%>
+                                            </td>
+                                            <td>
+                                                <asp:Button runat="server" ID="btn_signature" CssClass="changebtn" Text="Change Signature" OnClick="btn_signature_Click" /></td>
+                                        </tr>
+                                    </table>
+
+
+
+                                    <br />
+
+
+                                    <br />
+
+
+                                    <br />
+
+
+
+
+
+
+
+
+
+
+
+                                    <asp:Panel runat="server" ID="pane_roles" Visible="false">
+                                        User Roles
                                                     <asp:ListBox ID="list_roles" runat="server" Enabled="false" CssClass="list_roles"></asp:ListBox>
-                                                </Content>
-                                            </ajaxToolkit:AccordionPane>
-                                            <ajaxToolkit:AccordionPane ID="pane_userphoto" runat="server">
-                                                <Header>User photo 
-                                        </Header>
-                                                <Content>
-                                                    <asp:Image ID="img_userphoto" runat="server" />
-                                                    <ajaxToolkit:AjaxFileUpload ID="fileupload_photo" runat="server"
-                                                        AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="2000"
-                                                        MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
-                                                        OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
-                                                </Content>
-                                            </ajaxToolkit:AccordionPane>
-                                            <ajaxToolkit:AccordionPane ID="AccordionPane2" runat="server">
-                                                <Header>User Signature</Header>
-                                                <Content>
-                                                    <asp:Image ID="img_signature" runat="server" />
-                                                    <ajaxToolkit:AjaxFileUpload ID="fileupload_signature" runat="server"
-                                                        AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
-                                                        MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
-                                                        OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
-                                                </Content>
-                                            </ajaxToolkit:AccordionPane>
-                                            <%--<ajaxToolkit:AccordionPane ID="AccordionPane1" runat="server">
-                                    <Header>Certificate 1 - Academy</Header>
-                                    <Content>
-                                        <asp:Image ID="img_cert_academy" runat="server" />
-                                        <ajaxToolkit:AjaxFileUpload ID="fileupload_cert_academy" runat="server"
-                                            AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
-                                            MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
-                                            OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
-                                    </Content>
-                                </ajaxToolkit:AccordionPane>
-                                <ajaxToolkit:AccordionPane ID="AccordionPane3" runat="server">
-                                    <Header>Certificate 2 - OJT Course</Header>
-                                    <Content>
-                                        <asp:Image ID="img_ojtcourse" runat="server" />
-                                        <ajaxToolkit:AjaxFileUpload ID="fileupload_ojtcourse" runat="server"
-                                            AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
-                                            MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
-                                            OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
-                                    </Content>
-                                </ajaxToolkit:AccordionPane>
-                                <ajaxToolkit:AccordionPane ID="AccordionPane4" runat="server">
-                                    <Header>Sup. Course Certificate</Header>
-                                    <Content>
-                                        <asp:Image ID="img_supcourse" runat="server" />
-                                        <ajaxToolkit:AjaxFileUpload ID="fileupload_supcourse" runat="server"
-                                            AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
-                                            MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
-                                            OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
-                                    </Content>
-                                </ajaxToolkit:AccordionPane>
-                                <ajaxToolkit:AccordionPane ID="AccordionPane5" runat="server">
-                                    <Header>ECT Certificate</Header>
-                                    <Content>
-                                        <asp:Image ID="img_ECT" runat="server" />
-                                        <ajaxToolkit:AjaxFileUpload ID="fileupload_ECT" runat="server"
-                                            AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
-                                            MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
-                                            OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
-                                    </Content>
-                                </ajaxToolkit:AccordionPane>
-                                <ajaxToolkit:AccordionPane ID="AccordionPane6" runat="server">
-                                    <Header>Training Certificate 1</Header>
-                                    <Content>
-                                        <asp:Image ID="img_trnCert_1" runat="server" />
-                                        <ajaxToolkit:AjaxFileUpload ID="fileupload_trnCert_1" runat="server"
-                                            AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
-                                            MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
-                                            OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
-                                    </Content>
-                                </ajaxToolkit:AccordionPane>
-                                <ajaxToolkit:AccordionPane ID="AccordionPane7" runat="server">
-                                    <Header>Equipment Test</Header>
-                                    <Content>
-                                        <asp:Image ID="img_equiptest" runat="server" />
-                                        <ajaxToolkit:AjaxFileUpload ID="fileupload_equiptest" runat="server"
-                                            AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
-                                            MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
-                                            OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
-                                    </Content>
-                                </ajaxToolkit:AccordionPane>
-                                <ajaxToolkit:AccordionPane ID="AccordionPane8" runat="server">
-                                    <Header>OJT Permit</Header>
-                                    <Content>
-                                        <asp:Image ID="img_OJTPermit" runat="server" />
-                                        <ajaxToolkit:AjaxFileUpload ID="fileupload_OJTPermit" runat="server"
-                                            AllowedFileTypes="jpg,jpeg,png" CssClass="ajaxfileuploadCss" MaxFileSize="1000"
-                                            MaximumNumberOfFiles="1" OnUploadComplete="fileupload_photo_UploadComplete"
-                                            OnClientUploadComplete="uploadcomplete" OnClientUploadError="uploaderror" />
-                                    </Content>
-                                </ajaxToolkit:AccordionPane>--%>
-                                        </Panes>
-                                    </ajaxToolkit:Accordion>
+
+                                    </asp:Panel>
+
+                                    <br />
+
+
+
+
+
+
+
+
+
                                 </asp:View>
 
                                 <asp:View ID="view_files" runat="server">
@@ -458,11 +466,11 @@
 
 
                                         <asp:Panel ID="pnl_viewfolder" runat="server" Style="display: inline-block; float: right; width: 70%">
-                                           
+
                                             <asp:Panel ID="pnl_createfolder" runat="server" Visible="false">
                                                 <asp:TextBox ID="txt_newfoldername" runat="server"></asp:TextBox>
                                                 <asp:Button ID="btn_newFolder" runat="server" Text="Create Folder" OnClick="btn_newFolder_Click"
-                                                    Style="width: 100px; height: 30px; background-color: #a52a2a; font-weight: bold; color: white;"/>
+                                                    Style="width: 100px; height: 30px; background-color: #a52a2a; font-weight: bold; color: white;" />
                                                 <br />
                                             </asp:Panel>
 
@@ -506,7 +514,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3">
-                                                            <asp:FileUpload ID="uploadnewfile" runat="server"  />
+                                                            <asp:FileUpload ID="uploadnewfile" runat="server" />
                                                             <asp:Button runat="server" ID="btn_uploadnewfile" Text="Upload" OnClick="btn_uploadnewfile_Click" />
                                                             <asp:Label ID="cloudfilename" runat="server" Visible="false"></asp:Label>
                                                             <asp:TextBox ID="txt_newfilename" Enabled="false" Visible="false" runat="server"></asp:TextBox>
@@ -521,22 +529,22 @@
 
 
                                             <asp:Panel ID="pnl_showcontent" runat="server" CssClass="gridwrapper">
-                                                <asp:Label ID="lbl_foldername" runat="server" CssClass="foldername" ></asp:Label>
+                                                <asp:Label ID="lbl_foldername" runat="server" CssClass="foldername"></asp:Label>
                                                 <asp:GridView ID="grid_userfiles" runat="server" AutoGenerateColumns="false" BorderStyle="None" ShowHeader="false"
                                                     GridLines="Horizontal" AlternatingRowStyle-BackColor="#cccccc" CssClass="grid_userfiles"
                                                     OnRowDataBound="grid_userfiles_RowDataBound" OnRowCommand="grid_userfiles_RowCommand"
                                                     OnRowDeleting="grid_userfiles_RowDeleting">
                                                     <Columns>
-                                                         <asp:TemplateField>
+                                                        <asp:TemplateField>
                                                             <ItemTemplate>
-                                                                <asp:ImageButton ID="btn_go"   runat="server"
-                                                                         ImageUrl='<%# go_url( Eval("FILEID").ToString() )%>'
+                                                                <asp:ImageButton ID="btn_go" runat="server"
+                                                                    ImageUrl='<%# go_url( Eval("FILEID").ToString() )%>'
                                                                     Visible='<%# Eval("Issued").ToString()  != "Issued"  %>'
                                                                     CommandName="GO" CssClass="iconimg" />
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:BoundField DataField="ID" />
-                                                        <asp:BoundField DataField="NAME" /> 
+                                                        <asp:BoundField DataField="NAME" />
                                                         <asp:BoundField DataField="FILEID" />
                                                         <asp:BoundField DataField="ADDRESS" />
                                                         <asp:BoundField DataField="Issued" />
@@ -545,8 +553,8 @@
                                                         <asp:BoundField DataField="Type" />
                                                         <asp:TemplateField>
                                                             <ItemTemplate>
-                                                                <asp:ImageButton ID="btn_delete"   runat="server"
-                                                                         ImageUrl="~/images/delete.png"
+                                                                <asp:ImageButton ID="btn_delete" runat="server"
+                                                                    ImageUrl="~/images/delete.png"
                                                                     Visible='<%# show_delete( Eval("FILEID").ToString() , Eval("Issued").ToString() )%>'
                                                                     CommandName="DEL" CssClass="iconimg" />
                                                             </ItemTemplate>

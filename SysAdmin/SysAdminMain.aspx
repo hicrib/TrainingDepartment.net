@@ -151,6 +151,25 @@
         </tr>
     </table>
 
+        <br />
+    <br />
+
+     <table class="admin_actions_tbl">
+        <tr>
+            <th colspan="3">STATISTICS
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <asp:Button ID="btn_traininghours" runat="server" CssClass="admin_buttons" OnClick="btn_traininghours_Click" Text="Training Hours" />
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
+
 
 
 

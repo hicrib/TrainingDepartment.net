@@ -34,10 +34,14 @@ namespace AviaTrain.Reports
         {
             UserSession user = (UserSession)Session["usersession"];
 
-            string relation = "";
+            string relation = DB_Reports.get_Relation_to_Report(reportid, user.employeeid);
 
-            if (user.isAdmin)
+            if (relation == "trainee")
+                relation = "trainee";
+            else if (user.isAdmin)
                 relation = "sysadmin";
+            else if (user.has_ROLENAME("TRN_DEPARTMENT_SIGNER"))
+                relation = "TRN_DEPARTMENT_SIGNER";
             else if (user.isOJTI || user.isExaminer || user.isLCE)
                 relation = "instructor";
             else
@@ -45,6 +49,9 @@ namespace AviaTrain.Reports
 
             if (relation == "nobody")
                 RedirectWithCode("UNAUTHORIZED!");
+
+            if (ddl_trainee.SelectedValue == user.employeeid)
+                relation = "trainee"; //we will force it for department member's own training (or ojti's)
 
             lbl_viewmode.Text = relation;
 
@@ -67,7 +74,12 @@ namespace AviaTrain.Reports
 
             //bring trainee sing if signed
             if (meta.Rows[0]["TRAINEE_SIGNED"].ToString() == "True")
-                btn_sign_controller_Click(new object(), new EventArgs());
+            {
+                img_sign_controller.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_trainee.SelectedValue)["SIGNATURE"].ToString();
+                img_sign_controller.Visible = true;
+                btn_sign_controller.Visible = false;
+                lbl_recom_trainee_signed.Text = "1";
+            }
 
             ddl_sectors.Items.Add(form.Rows[0]["POSITION"].ToString() + "-" + form.Rows[0]["SECTOR"].ToString());
 
@@ -93,14 +105,13 @@ namespace AviaTrain.Reports
             //bring ojti sign but check just in case
             if (meta.Rows[0]["OJTI_SIGNED"].ToString() == "True")
             {
-                btn_ojtisign_Click(new object(), new EventArgs());
+                img_ojtisign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_ojtis.SelectedValue)["SIGNATURE"].ToString();
+                img_ojtisign.Visible = true;
+                btn_ojtisign.Visible = false;
+                lbl_recom_ojti_signed.Text = "1";
             }
 
-            //bring trainee sing if signed
-            if (meta.Rows[0]["TRAINEE_SIGNED"].ToString() == "True")
-            {
-                btn_sign_controller_Click(new object(), new EventArgs());
-            }
+
 
 
             //if not signed by trainee enable sign button
@@ -116,17 +127,69 @@ namespace AviaTrain.Reports
                 // change mode to allow update in reports table when submit button clicked
                 lbl_viewmode.Text = "trainee";
             }
-            if (relation == "department" && meta.Rows[0]["DEPARTMENT_SIGNED"].ToString() != "True")
+            if (relation == "TRN_DEPARTMENT_SIGNER" && meta.Rows[0]["DEPARTMENT_SIGNED"].ToString() != "True")
             {
-                //TODO: departMENT SIGN BUTTON AND FUNCTION
-                //btn_DEPARTMENTSIGN.Enabled = true;
+                // 3 department signs required
+
+                if (meta.Rows[0]["MEMBER1_ID"].ToString() != "")
+                {
+                    DataRow r = DB_System.getUserInfo(meta.Rows[0]["MEMBER1_ID"].ToString());
+                    ddl_member1.Items.Add( new ListItem(r["INITIAL"].ToString() , meta.Rows[0]["MEMBER1_ID"].ToString()));
+                    img_member1_sign.ImageUrl = AzureCon.general_container_url + r["SIGNATURE"].ToString();
+                    lbl_member1_signed.Text = "1";
+                    btn_member1.Visible = false;
+
+                }
+                else //hide others
+                {
+                    ddl_member1.Items.Add(new ListItem(user.initial, user.employeeid));
+                    btn_member1.Enabled = true;
+                    btn_member2.Enabled = false;
+                    btn_member3.Enabled = false;
+                    lbl_memberwho.Text = "1";
+                }
+
+
+                if (meta.Rows[0]["MEMBER2_ID"].ToString() != "")
+                {
+                    DataRow r = DB_System.getUserInfo(meta.Rows[0]["MEMBER2_ID"].ToString());
+                    ddl_member2.Items.Add(new ListItem(r["INITIAL"].ToString(), meta.Rows[0]["MEMBER2_ID"].ToString()));
+                    img_member2_sign.ImageUrl = AzureCon.general_container_url + r["SIGNATURE"].ToString();
+                    lbl_member2_signed.Text = "1";
+                    btn_member2.Visible = false;
+                }
+                else //hide others
+                {
+                    ddl_member2.Items.Add(new ListItem(user.initial, user.employeeid));
+                    btn_member2.Enabled = true;
+                    btn_member1.Enabled = false;
+                    btn_member3.Enabled = false;
+                    lbl_memberwho.Text = "2";
+                }
+
+                if (meta.Rows[0]["MEMBER3_ID"].ToString() != "")
+                {
+                    DataRow r = DB_System.getUserInfo(meta.Rows[0]["MEMBER3_ID"].ToString());
+                    ddl_member3.Items.Add(new ListItem(r["INITIAL"].ToString(), meta.Rows[0]["MEMBER3_ID"].ToString()));
+                    img_member3_sign.ImageUrl = AzureCon.general_container_url + r["SIGNATURE"].ToString();
+                    lbl_member3_signed.Text = "1";
+                    btn_member3.Visible = false;
+                }
+                else //hide others
+                {
+                    ddl_member3.Items.Add(new ListItem(user.initial, user.employeeid));
+                    btn_member3.Enabled = true;
+                    btn_member1.Enabled = false;
+                    btn_member2.Enabled = false;
+                    lbl_memberwho.Text = "3";
+                }
 
                 //let them submit
                 btn_Submit.Visible = true;
                 btn_Submit.Enabled = true;
 
                 //change mode to allow update in reports table when submit button clicked
-                lbl_viewmode.Text = "department";
+                lbl_viewmode.Text = "TRN_DEPARTMENT_SIGNER";
             }
 
             //todo: disable and hide elements based on mode
@@ -223,38 +286,37 @@ namespace AviaTrain.Reports
             //update student comments and sign
             if (lbl_viewmode.Text == "trainee")
             {
-                //if (lbl_controller_sign.Text != "1")
-                //{
-                //    ClientMessage(lbl_pageresult, "Trainee must sign to submit the report", System.Drawing.Color.Red);
-                //    return;
-                //}
-
-                if (DB_Reports.update_Sign_RECOM_LEVEL(lbl_reportnumber.Text, "trainee", ""))
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=5&ID=" + lbl_reportnumber.Text);
-                }
+                if (DB_Reports.update_Sign_RECOM_CERTIF(lbl_reportnumber.Text, "trainee", ""))
+                    SuccessWithCode("SUCCESS : REPORT SIGNED !");
                 else
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=0");
-                }
-            }
-            else if (lbl_viewmode.Text == "reviewteam")
-            {
-
-                //todo: implement
-
-                if (DB_Reports.update_Sign_RECOM_LEVEL(lbl_reportnumber.Text, "department", ((UserSession)Session["usersession"]).employeeid))
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=5&ID=" + lbl_reportnumber.Text);
-                }
-                else
-                {
-                    Response.Redirect("~/Pages/UserMain.aspx?Code=0");
-                }
+                    RedirectWithCode("Error: Try Again Later.");
             }
             else if (lbl_viewmode.Text == "reviewteam")
             {
                 //todo: implement
+
+                //if (DB_Reports.update_Sign_RECOM_LEVEL(lbl_reportnumber.Text, "department", ((UserSession)Session["usersession"]).employeeid))
+                //    Response.Redirect("~/Pages/UserMain.aspx?Code=5&ID=" + lbl_reportnumber.Text);
+                //else
+                //    Response.Redirect("~/Pages/UserMain.aspx?Code=0");
+            }
+            else if (lbl_viewmode.Text == "TRN_DEPARTMENT_SIGNER")
+            {
+                //todo: implement
+                bool done = false;
+                if(lbl_membersigned.Text != "1")
+                {
+                    ClientMessage(lbl_pageresult, "DEPARTMENT MEMBER SHOULD SIGN BEFORE SUBMITTING", System.Drawing.Color.Red);
+                    return;
+                }
+
+                if (lbl_memberwho.Text == "1")
+                    done = DB_Reports.update_Sign_RECOM_CERTIF(lbl_reportnumber.Text, "MEMBER1", ddl_member1.SelectedValue);
+                else if (lbl_memberwho.Text == "2")
+                    done = DB_Reports.update_Sign_RECOM_CERTIF(lbl_reportnumber.Text, "MEMBER2", ddl_member2.SelectedValue);
+                else if (lbl_memberwho.Text == "3")
+                   done = DB_Reports.update_Sign_RECOM_CERTIF(lbl_reportnumber.Text, "MEMBER3", ddl_member3.SelectedValue);
+
             }
 
 
@@ -430,10 +492,11 @@ namespace AviaTrain.Reports
                 return;
             }
 
-            img_member1_sign.ImageUrl = "~/Signatures/sign_id_" + ddl_member1.SelectedValue + ".jpeg";
+            img_member1_sign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_member1.SelectedValue)["SIGNATURE"].ToString();
             img_member1_sign.Visible = true;
             btn_member1.Visible = false;
             lbl_member1_signed.Text = "1";
+            lbl_membersigned.Text = "1";
         }
 
         protected void btn_member2_Click(object sender, EventArgs e)
@@ -444,10 +507,11 @@ namespace AviaTrain.Reports
                 return;
             }
 
-            img_member2_sign.ImageUrl = "~/Signatures/sign_id_" + ddl_member2.SelectedValue + ".jpeg";
+            img_member2_sign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_member2.SelectedValue)["SIGNATURE"].ToString();
             img_member2_sign.Visible = true;
             btn_member2.Visible = false;
             lbl_member2_signed.Text = "1";
+            lbl_membersigned.Text = "1";
 
         }
 
@@ -459,10 +523,11 @@ namespace AviaTrain.Reports
                 return;
             }
 
-            img_member3_sign.ImageUrl = "~/Signatures/sign_id_" + ddl_member3.SelectedValue + ".jpeg";
+            img_member3_sign.ImageUrl = AzureCon.general_container_url + DB_System.getUserInfo(ddl_member3.SelectedValue)["SIGNATURE"].ToString();
             img_member3_sign.Visible = true;
             btn_member3.Visible = false;
             lbl_member3_signed.Text = "1";
+            lbl_membersigned.Text = "1";
         }
     }
 }

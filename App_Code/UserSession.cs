@@ -53,7 +53,7 @@ namespace AviaTrain.App_Code
 
             notif = DB_System.has_new_user_notification(employeeid);
 
-            if (isAdmin || isLCE || isOJTI || isExaminer)
+            if (isAdmin || isLCE || isOJTI || isExaminer || isExamAdmin)
                 isOnlyTrainee = false;
 
             if (role_priv == null || role_priv.Rows.Count == 0)

@@ -343,6 +343,7 @@ namespace AviaTrain.App_Code
             if (!check_TimeTextbox_format(earlier) || !check_TimeTextbox_format(later))
                 return "";
 
+            //swap if earlier, grater
             if (isgreater_TimeFormat(earlier, later) == 1)
             {
                 string temp = later;

@@ -19,9 +19,10 @@ namespace AviaTrain.Pages
                 //rollere gore menu itemları kaldır
                 UserSession user = (UserSession)Session["usersession"];
                 if (!user.has_ROLENAME("TRN_DEPARTMENT_SIGNER"))
-                {
                     jobsMenu.Items.Remove(jobsMenu.FindItem("2"));
-                }
+
+                if(!user.isExamAdmin)
+                    jobsMenu.Items.Remove(jobsMenu.FindItem("5"));
 
                 Fill_OJTI_Reports_Grid();
             }

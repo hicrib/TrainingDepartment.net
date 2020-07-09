@@ -138,17 +138,27 @@ namespace AviaTrain.Statistics
                 DataRow[] results = dt.Select("INITIAL = '"+ row["INITIAL"].ToString() + "' AND POSITION = '"+ row["POSITION"].ToString() + "' ");
                 foreach (DataRow sec_row in results)
                 {
-                    sched_total = Utility.add_TimeFormat(sched_total, sec_row["HOURS"].ToString());
-
                     if (sec_row["NOTRAINING"].ToString() == "False" && sec_row["NOSHOW"].ToString() == "False")
+                    {
                         actual = Utility.add_TimeFormat(actual, sec_row["HOURS"].ToString());
+                        sched_total = Utility.add_TimeFormat(sched_total, sec_row["HOURS"].ToString());
+                    }
                     else
                     {
+
+                        string off = sec_row["TIMEOFF_SCH"].ToString();
+                        if (Utility.isgreater_TimeFormat(sec_row["TIMEON_SCH"].ToString(), sec_row["TIMEOFF_SCH"].ToString()) == 1)
+                            off = Utility.add_TimeFormat("24:00", sec_row["TIMEOFF_SCH"].ToString());
+
+                        string sched = Utility.subtract_TimeFormat(sec_row["TIMEON_SCH"].ToString(), off);
+
+                        sched_total = Utility.add_TimeFormat(sched_total, sched);
+
                         if (sec_row["NOTRAINING"].ToString() == "True")
-                            notrn_total = Utility.add_TimeFormat(notrn_total, sec_row["HOURS"].ToString());
+                            notrn_total = Utility.add_TimeFormat(notrn_total, sched);
 
                         if (sec_row["NOSHOW"].ToString() == "True")
-                            noshow_total = Utility.add_TimeFormat(noshow_total, sec_row["HOURS"].ToString());
+                            noshow_total = Utility.add_TimeFormat(noshow_total, sched);
                     }
                 }
 

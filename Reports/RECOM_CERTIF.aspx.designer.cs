@@ -249,31 +249,13 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.Label lbl_review_date;
 
         /// <summary>
-        /// ddl_DAY_review control.
+        /// txt_review_date control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddl_DAY_review;
-
-        /// <summary>
-        /// ddl_MONTH_review control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddl_MONTH_review;
-
-        /// <summary>
-        /// ddl_YEAR_review control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddl_YEAR_review;
+        protected global::System.Web.UI.WebControls.TextBox txt_review_date;
 
         /// <summary>
         /// lbl_member1 control.
@@ -517,5 +499,23 @@ namespace AviaTrain.Reports
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbl_reportnumber;
+
+        /// <summary>
+        /// lbl_memberwho control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_memberwho;
+
+        /// <summary>
+        /// lbl_membersigned control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_membersigned;
     }
 }

@@ -333,73 +333,7 @@
                                                 <asp:Label ID="lbl_review_date" runat="server" Text="Date :"></asp:Label>
                                             </td>
                                             <td>
-                                                <asp:DropDownList ID="ddl_DAY_review" runat="server">
-                                                    <asp:ListItem Value="1"></asp:ListItem>
-                                                    <asp:ListItem Value="2"></asp:ListItem>
-                                                    <asp:ListItem Value="3"></asp:ListItem>
-                                                    <asp:ListItem Value="4"></asp:ListItem>
-                                                    <asp:ListItem Value="5"></asp:ListItem>
-                                                    <asp:ListItem Value="6"></asp:ListItem>
-                                                    <asp:ListItem Value="7"></asp:ListItem>
-                                                    <asp:ListItem Value="8"></asp:ListItem>
-                                                    <asp:ListItem Value="9"></asp:ListItem>
-                                                    <asp:ListItem Value="10"></asp:ListItem>
-                                                    <asp:ListItem Value="11"></asp:ListItem>
-                                                    <asp:ListItem Value="12"></asp:ListItem>
-                                                    <asp:ListItem Value="13"></asp:ListItem>
-                                                    <asp:ListItem Value="14"></asp:ListItem>
-                                                    <asp:ListItem Value="15"></asp:ListItem>
-                                                    <asp:ListItem Value="16"></asp:ListItem>
-                                                    <asp:ListItem Value="17"></asp:ListItem>
-                                                    <asp:ListItem Value="18"></asp:ListItem>
-                                                    <asp:ListItem Value="19"></asp:ListItem>
-                                                    <asp:ListItem Value="20"></asp:ListItem>
-                                                    <asp:ListItem Value="21"></asp:ListItem>
-                                                    <asp:ListItem Value="22"></asp:ListItem>
-                                                    <asp:ListItem Value="23"></asp:ListItem>
-                                                    <asp:ListItem Value="24"></asp:ListItem>
-                                                    <asp:ListItem Value="25"></asp:ListItem>
-                                                    <asp:ListItem Value="26"></asp:ListItem>
-                                                    <asp:ListItem Value="27"></asp:ListItem>
-                                                    <asp:ListItem Value="28"></asp:ListItem>
-                                                    <asp:ListItem Value="29"></asp:ListItem>
-                                                    <asp:ListItem Value="30"></asp:ListItem>
-                                                    <asp:ListItem Value="31"></asp:ListItem>
-                                                </asp:DropDownList>
-                                                <asp:DropDownList ID="ddl_MONTH_review" runat="server">
-                                                    <asp:ListItem Text="JANUARY" Value="1"></asp:ListItem>
-                                                    <asp:ListItem Text="FEBRUARY" Value="2"></asp:ListItem>
-                                                    <asp:ListItem Text="MARCH" Value="3"></asp:ListItem>
-                                                    <asp:ListItem Text="APRIL" Value="4"></asp:ListItem>
-                                                    <asp:ListItem Text="MAY" Value="5"></asp:ListItem>
-                                                    <asp:ListItem Text="JUNE" Value="6"></asp:ListItem>
-                                                    <asp:ListItem Text="JULY" Value="7"></asp:ListItem>
-                                                    <asp:ListItem Text="AUGUST" Value="8"></asp:ListItem>
-                                                    <asp:ListItem Text="SEPTEMBER" Value="9"></asp:ListItem>
-                                                    <asp:ListItem Text="OCTOBER" Value="10"></asp:ListItem>
-                                                    <asp:ListItem Text="NOVEMBER" Value="11"></asp:ListItem>
-                                                    <asp:ListItem Text="DECEMBER" Value="12"></asp:ListItem>
-                                                </asp:DropDownList>
-                                                <asp:DropDownList ID="ddl_YEAR_review" runat="server">
-                                                    <asp:ListItem Value="2012"></asp:ListItem>
-                                                    <asp:ListItem Value="2013"></asp:ListItem>
-                                                    <asp:ListItem Value="2014"></asp:ListItem>
-                                                    <asp:ListItem Value="2015"></asp:ListItem>
-                                                    <asp:ListItem Value="2016"></asp:ListItem>
-                                                    <asp:ListItem Value="2017"></asp:ListItem>
-                                                    <asp:ListItem Value="2018"></asp:ListItem>
-                                                    <asp:ListItem Value="2019"></asp:ListItem>
-                                                    <asp:ListItem Value="2020"></asp:ListItem>
-                                                    <asp:ListItem Value="2021"></asp:ListItem>
-                                                    <asp:ListItem Value="2022"></asp:ListItem>
-                                                    <asp:ListItem Value="2023"></asp:ListItem>
-                                                    <asp:ListItem Value="2024"></asp:ListItem>
-                                                    <asp:ListItem Value="2025"></asp:ListItem>
-                                                    <asp:ListItem Value="2026"></asp:ListItem>
-                                                    <asp:ListItem Value="2027"></asp:ListItem>
-                                                    <asp:ListItem Value="2028"></asp:ListItem>
-                                                    <asp:ListItem Value="2029"></asp:ListItem>
-                                                </asp:DropDownList>
+                                                  <asp:TextBox ID="txt_review_date" runat="server" TextMode="Date"></asp:TextBox>
                                             </td>
                                         </tr>
                                     </table>
@@ -498,6 +432,8 @@
                     <asp:Label ID="lbl_genid" runat="server" Visible="false" Text=""></asp:Label>
                     <asp:Label ID="lbl_viewmode" runat="server" Visible="false" Text=""></asp:Label>
                     <asp:Label ID="lbl_reportnumber" runat="server" Visible="false" Text=""></asp:Label>
+                    <asp:Label ID="lbl_memberwho" runat="server" Visible="false" Text=""></asp:Label>
+                    <asp:Label ID="lbl_membersigned" runat="server" Visible="false" Text="0"></asp:Label>
 
                 </div>
             </ContentTemplate>

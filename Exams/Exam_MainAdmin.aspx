@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
     <style>
-        .admin_actions_tbl {
+        .examadmin_tbl {
             width: 1000px;
             border-collapse: collapse;
             padding: 10px;
@@ -11,7 +11,7 @@
             border: 3px solid #a52a2a;
         }
 
-            .admin_actions_tbl th {
+            .examadmin_tbl th {
                 text-align: center;
                 font-size: large;
                 font-weight: bold;
@@ -19,7 +19,7 @@
                 background-color: #a52a2a;
             }
 
-            .admin_actions_tbl td {
+            .examadmin_tbl td {
                 padding: 5px;
                 min-height: 25px;
                 width: 200px;
@@ -41,7 +41,7 @@
 
 
 
-    <table class="admin_actions_tbl">
+    <table class="examadmin_tbl">
         <tr>
             <th colspan="4">EXAMS FUNCTIONS
             </th>

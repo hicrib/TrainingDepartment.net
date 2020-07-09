@@ -52,5 +52,10 @@ namespace AviaTrain.Masters
         {
             Response.Redirect("~/Pages/UserNotifications.aspx");
         }
+
+        protected void btn_checkin_Click(object sender, ImageClickEventArgs e)
+        {
+            Response.Redirect("~/Pages/PositionLog.aspx");
+        }
     }
 }

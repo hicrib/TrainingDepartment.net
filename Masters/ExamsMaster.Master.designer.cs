@@ -123,6 +123,15 @@ namespace AviaTrain.Masters
         protected global::System.Web.UI.WebControls.ImageButton btn_mainpage;
 
         /// <summary>
+        /// btn_checkin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton btn_checkin;
+
+        /// <summary>
         /// btn_notifications control.
         /// </summary>
         /// <remarks>

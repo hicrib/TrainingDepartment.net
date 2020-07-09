@@ -78,24 +78,6 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.WebControls.View view1;
 
         /// <summary>
-        /// Accordion1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.Accordion Accordion1;
-
-        /// <summary>
-        /// AccordionPane11 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.AccordionPane AccordionPane11;
-
-        /// <summary>
         /// lbl_userid control.
         /// </summary>
         /// <remarks>
@@ -121,24 +103,6 @@ namespace AviaTrain.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbl_initial;
-
-        /// <summary>
-        /// lbl_email control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_email;
-
-        /// <summary>
-        /// AccordionPane9 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.AccordionPane AccordionPane9;
 
         /// <summary>
         /// txt_pass1 control.
@@ -177,15 +141,6 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.WebControls.Label lbl_passchange;
 
         /// <summary>
-        /// AccordionPane10 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.AccordionPane AccordionPane10;
-
-        /// <summary>
         /// txt_email control.
         /// </summary>
         /// <remarks>
@@ -193,15 +148,6 @@ namespace AviaTrain.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txt_email;
-
-        /// <summary>
-        /// btn_update_email control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_update_email;
 
         /// <summary>
         /// img_email_result control.
@@ -213,31 +159,13 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.WebControls.Image img_email_result;
 
         /// <summary>
-        /// pane_roles control.
+        /// btn_update_email control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.AccordionPane pane_roles;
-
-        /// <summary>
-        /// list_roles control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox list_roles;
-
-        /// <summary>
-        /// pane_userphoto control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.AccordionPane pane_userphoto;
+        protected global::System.Web.UI.WebControls.Button btn_update_email;
 
         /// <summary>
         /// img_userphoto control.
@@ -249,22 +177,22 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.WebControls.Image img_userphoto;
 
         /// <summary>
-        /// fileupload_photo control.
+        /// file_userphoto control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.AjaxFileUpload fileupload_photo;
+        protected global::System.Web.UI.WebControls.FileUpload file_userphoto;
 
         /// <summary>
-        /// AccordionPane2 control.
+        /// btn_userphoto control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.AccordionPane AccordionPane2;
+        protected global::System.Web.UI.WebControls.Button btn_userphoto;
 
         /// <summary>
         /// img_signature control.
@@ -276,13 +204,40 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.WebControls.Image img_signature;
 
         /// <summary>
-        /// fileupload_signature control.
+        /// file_signature control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.AjaxFileUpload fileupload_signature;
+        protected global::System.Web.UI.WebControls.FileUpload file_signature;
+
+        /// <summary>
+        /// btn_signature control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_signature;
+
+        /// <summary>
+        /// pane_roles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pane_roles;
+
+        /// <summary>
+        /// list_roles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListBox list_roles;
 
         /// <summary>
         /// view_files control.
