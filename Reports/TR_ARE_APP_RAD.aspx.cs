@@ -280,7 +280,7 @@ namespace AviaTrain.Reports
             data.Add("CHK_OTS", chk_OST.Checked ? "1" : "0");
 
             if (chk_LvlAss.Checked || chk_RemAss.Checked || chk_ProgAss.Checked || chk_CocAss.Checked)
-                data.Add("ASSESS_PASSED", ( rad_passfail.SelectedValue == "0" ? "FAIL_" : "PASSED_") + lbl_phase.Text  );
+                data.Add("ASSESS_PASSED", ( rad_passfail.SelectedValue == "0" ? "FAILED_" : "PASSED_") + lbl_phase.Text  );
             else
                 data.Add("ASSESS_PASSED", null);
 

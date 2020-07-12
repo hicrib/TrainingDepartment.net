@@ -87,6 +87,7 @@
                                                         <asp:ListItem Value="1"  Text="PASSED" Selected="True"></asp:ListItem>
                                                         <asp:ListItem Value="0" Text="FAILED"  ></asp:ListItem>
                                                     </asp:RadioButtonList>
+                                                     <asp:Label ID="lbl_phase" style="font-size:small;" runat="server" Visible="false" Text=""></asp:Label>
                                                 </td>
                                             </tr>
                                         </table>
@@ -880,6 +881,6 @@
         <asp:Label ID="lbl_viewmode" runat="server" Visible="false" Text=""></asp:Label>
         <asp:Label ID="lbl_genid" runat="server" Visible="false" Text=""></asp:Label>
         <asp:Label ID="lbl_stepid" runat="server" Visible="false" Text=""></asp:Label>
-        <asp:Label ID="lbl_phase" runat="server" Visible="false" Text=""></asp:Label>
+       
     </asp:Panel>
 </asp:Content>

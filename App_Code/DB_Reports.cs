@@ -319,7 +319,7 @@ SELECT @ID
                     command.Parameters.Add("@STUDENT_COMMENTS", SqlDbType.NVarChar).Value = data["STUDENT_COMMENTS"];
                     command.Parameters.Add("@TIMEON_ACT", SqlDbType.NVarChar).Value = data["TIMEON_ACT"];
                     command.Parameters.Add("@TIMEOFF_ACT", SqlDbType.NVarChar).Value = data["TIMEOFF_ACT"];
-                    command.Parameters.Add("@ASSESS_PASSED", SqlDbType.Bit).Value = data["ASSESS_PASSED"] == null ? (object)DBNull.Value : data["ASSESS_PASSED"] == "1";
+                    command.Parameters.Add("@ASSESS_PASSED", SqlDbType.Bit).Value = data["ASSESS_PASSED"] == null ? (object)DBNull.Value : data["ASSESS_PASSED"] ;
 
 
                     reportid = Convert.ToString(command.ExecuteScalar() as object);
