@@ -153,5 +153,21 @@ namespace AviaTrain.Exams
             string url = "ViewUserExamDetails.aspx?AsID=" + assignid;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "key", "open('" + url + "') ;", true);
         }
+
+        protected void filter_passed_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(filter_passed.SelectedValue == "ALL" || 
+                filter_passed.SelectedValue == "NOSHOW" ||
+                filter_passed.SelectedValue == "UNFINISHED")
+            {
+                filter_grd_start.Enabled = false;
+                filter_grd_finish.Enabled = false;
+            }
+            else
+            {
+                filter_grd_start.Enabled = true;
+                filter_grd_finish.Enabled = true;
+            }
+        }
     }
 }

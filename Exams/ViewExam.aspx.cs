@@ -167,12 +167,12 @@ namespace AviaTrain.Exams
             //q_html += "<input type = 'text' id='blank1' value='' disabled> ";
             q_html += @"<select id='ans_blank1'>";
             if (q_def["FILL1_ANS1"].ToString() != "")
-                q_html += @" <option value='" + q_def["FILL1_ANS1"].ToString() + @"' > " + q_def["FILL1_ANS1"].ToString() +@" </ option >";
+                q_html += @" <option value='" + q_def["FILL1_ANS1"].ToString() + @"' > " + q_def["FILL1_ANS1"].ToString() +@" </option >";
             if (q_def["FILL1_ANS2"].ToString() != "")                                                                        
-                q_html += @" <option value='" + q_def["FILL1_ANS2"].ToString() + @"' >" + q_def["FILL1_ANS2"].ToString() + @" </ option >";
+                q_html += @" <option value='" + q_def["FILL1_ANS2"].ToString() + @"' >" + q_def["FILL1_ANS2"].ToString() + @" </option >";
             if (q_def["FILL1_ANS3"].ToString() != "")                                                                        
-                q_html += @" <option value='" + q_def["FILL1_ANS3"].ToString() + @"' >" + q_def["FILL1_ANS3"].ToString() + @" </ option >";
-            q_html += "</ select > ";
+                q_html += @" <option value='" + q_def["FILL1_ANS3"].ToString() + @"' >" + q_def["FILL1_ANS3"].ToString() + @" </option >";
+            q_html += "</select > ";
 
 
             //if there is text 2
@@ -185,12 +185,12 @@ namespace AviaTrain.Exams
                 //q_html += @"<input type = 'text' id='blank2' value='' disabled> ";
                 q_html += @"<select id='ans_blank2'>";
                 if (q_def["FILL2_ANS1"].ToString() != "")
-                    q_html += @" <option value='" + q_def["FILL2_ANS1"].ToString() + @"' >" + q_def["FILL2_ANS1"].ToString() + " @</ option >";
+                    q_html += @" <option value='" + q_def["FILL2_ANS1"].ToString() + @"' >" + q_def["FILL2_ANS1"].ToString() + @"</option >";
                 if (q_def["FILL2_ANS2"].ToString() != "")
-                    q_html += @" <option value='" + q_def["FILL2_ANS2"].ToString() + @"' > " + q_def["FILL2_ANS2"].ToString() + @"</ option >";
+                    q_html += @" <option value='" + q_def["FILL2_ANS2"].ToString() + @"' > " + q_def["FILL2_ANS2"].ToString() + @"</option >";
                 if (q_def["FILL2_ANS3"].ToString() != "")
-                    q_html += @" <option value='" + q_def["FILL2_ANS3"].ToString() + @"' >" + q_def["FILL2_ANS3"].ToString() + @" </ option >";
-                q_html += "</ select > ";
+                    q_html += @" <option value='" + q_def["FILL2_ANS3"].ToString() + @"' >" + q_def["FILL2_ANS3"].ToString() + @"</option >";
+                q_html += "</select > ";
             }
 
 
@@ -204,12 +204,12 @@ namespace AviaTrain.Exams
                 //q_html += "<input type = 'text' id='blank3' value='' disabled> ";
                 q_html += @"<select id='ans_blank3'>";
                 if (q_def["FILL3_ANS1"].ToString() != "")
-                    q_html += @" <option value='" + q_def["FILL3_ANS1"].ToString() + @"' >" + q_def["FILL3_ANS1"].ToString() + @"</ option >";
+                    q_html += @" <option value='" + q_def["FILL3_ANS1"].ToString() + @"' >" + q_def["FILL3_ANS1"].ToString() + @"</option >";
                 if (q_def["FILL3_ANS2"].ToString() != "")
-                    q_html += @" <option value='" + q_def["FILL3_ANS2"].ToString() + @"' > " + q_def["FILL3_ANS2"].ToString() + @"</ option >";
+                    q_html += @" <option value='" + q_def["FILL3_ANS2"].ToString() + @"' > " + q_def["FILL3_ANS2"].ToString() + @"</option >";
                 if (q_def["FILL3_ANS3"].ToString() != "")
-                    q_html += @" <option value='" + q_def["FILL3_ANS3"].ToString() + @"' >" + q_def["FILL3_ANS3"].ToString() + @"</ option >";
-                q_html += "</ select > ";
+                    q_html += @" <option value='" + q_def["FILL3_ANS3"].ToString() + @"' >" + q_def["FILL3_ANS3"].ToString() + @"</option >";
+                q_html += "</select > ";
             }
 
             //if there is text 4
