@@ -83,6 +83,8 @@ namespace AviaTrain.Reports
             {
                 rad_passfail.SelectedValue = form.Rows[0]["ASSESS_PASSED"].ToString();
                 rad_passfail.Visible = true;
+                lbl_phase.Visible = true;
+                lbl_phase.Text = form.Rows[0]["ASSESS_PASSED"].ToString().Replace("PASSED_", "").Replace("FAILED_", "");
             }
             else
                 rad_passfail.Visible = false;
@@ -227,7 +229,7 @@ namespace AviaTrain.Reports
         {
             lbl_genid.Text = directed["genid"];
             lbl_stepid.Text = directed["stepid"];
-            lbl_phase.Text = directed["phase"]; //OJT_LEVEL1 etc
+            lbl_phase.Text = directed["phase"].Replace("OJT_",""); //OJT_LEVEL1 etc
 
             ddl_trainees.SelectedValue = directed["traineeid"];
             ddl_trainees.Enabled = false;
@@ -278,7 +280,7 @@ namespace AviaTrain.Reports
             data.Add("CHK_OTS", chk_OST.Checked ? "1" : "0");
 
             if (chk_LvlAss.Checked || chk_RemAss.Checked || chk_ProgAss.Checked || chk_CocAss.Checked)
-                data.Add("ASSESS_PASSED", rad_passfail.SelectedValue);
+                data.Add("ASSESS_PASSED", ( rad_passfail.SelectedValue == "0" ? "FAIL_" : "PASSED_") + lbl_phase.Text  );
             else
                 data.Add("ASSESS_PASSED", null);
 
@@ -498,10 +500,10 @@ namespace AviaTrain.Reports
                 if (pos.Length == 3)
                     pos = pos.Substring(0, 2);
 
-                string phase = lbl_phase.Text.Replace("OJT_", "");
-                if (phase != "LEVEL3PLUS")
+              
+                if (lbl_phase.Text != "LEVEL3PLUS")
                 {
-                    if (!DB_Reports.is_LevelObjectives_completed(ddl_trainees.SelectedValue, pos, phase))
+                    if (!DB_Reports.is_LevelObjectives_completed(ddl_trainees.SelectedValue, pos, lbl_phase.Text))
                     {
                         ClientMessage(lbl_pageresult, "LeveL Objectives must be signed first!", System.Drawing.Color.Red);
                         return false;
@@ -645,6 +647,7 @@ namespace AviaTrain.Reports
             CheckBox sent = (CheckBox)sender;
 
             rad_passfail.Visible = sent.Checked;
+            lbl_phase.Visible = sent.Checked;
 
             if (!sent.Checked) //if unchecked, do nothing
                 return;
