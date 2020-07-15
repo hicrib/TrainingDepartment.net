@@ -69,6 +69,15 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.WebControls.DropDownList ddl_sector;
 
         /// <summary>
+        /// txt_dateon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_dateon;
+
+        /// <summary>
         /// txt_timeon control.
         /// </summary>
         /// <remarks>
@@ -159,12 +168,84 @@ namespace AviaTrain.Pages
         protected global::System.Web.UI.WebControls.GridView grid_log;
 
         /// <summary>
-        /// view_havealook control.
+        /// view_CoB control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View view_havealook;
+        protected global::System.Web.UI.WebControls.View view_CoB;
+
+        /// <summary>
+        /// ddl_CoBposition control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddl_CoBposition;
+
+        /// <summary>
+        /// ddl_CoBsector control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddl_CoBsector;
+
+        /// <summary>
+        /// txt_CoBdate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_CoBdate;
+
+        /// <summary>
+        /// txt_CoBtime control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_CoBtime;
+
+        /// <summary>
+        /// lbl_CoBresult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_CoBresult;
+
+        /// <summary>
+        /// btn_CoB control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_CoB;
+
+        /// <summary>
+        /// lbl_cobid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_cobid;
+
+        /// <summary>
+        /// grid_COB control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid_COB;
     }
 }

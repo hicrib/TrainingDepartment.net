@@ -30,6 +30,7 @@
         .login_tbl {
             width: 600px;
             border: 1px solid #a52a2a;
+            margin: 3px 0px 3px 0px;
         }
 
             .login_tbl td:first-child {
@@ -65,15 +66,16 @@
         .gridlog {
             float: right;
             width: 100%;
-            padding : 3px;
-            background-color : white;
-            font-size : small;
-            font-weight : bold;
-            border : 2px solid black ; 
+            padding: 5px;
+            background-color: white;
+            font-size: small;
+            font-weight: bold;
+            border: 2px solid black;
         }
-        .gridlog td {
-            text-align : center;
-        }
+
+            .gridlog td {
+                text-align: center;
+            }
     </style>
 </asp:Content>
 
@@ -87,14 +89,14 @@
                 OnMenuItemClick="menu_logs_MenuItemClick">
                 <Items>
                     <asp:MenuItem Text="Login" Value="0" Selected="true"></asp:MenuItem>
-                    <asp:MenuItem Text="Have A Look" Value="1"></asp:MenuItem>
+                    <asp:MenuItem Text="CoB" Value="1"></asp:MenuItem>
                 </Items>
             </asp:Menu>
             <div class="tabcontents">
                 <asp:MultiView ID="multiview1" ActiveViewIndex="0" runat="server">
                     <asp:View ID="view_positionlogin" runat="server">
 
-                        <table style="width: 1000px;">
+                        <table style="width: 1000px; margin-left: 0px !important;">
                             <tr>
                                 <td>
                                     <table class="login_tbl">
@@ -112,11 +114,13 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Time On : </td>
+                                            <td>Time : </td>
+                                            <td>
+                                                <asp:TextBox ID="txt_dateon" runat="server" TextMode="Date"></asp:TextBox>
+                                            </td>
                                             <td>
                                                 <asp:TextBox ID="txt_timeon" runat="server" TextMode="Time"></asp:TextBox>
                                             </td>
-                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td></td>
@@ -189,19 +193,59 @@
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="vertical-align : top;">
+                                <td style="vertical-align: top;">
                                     <asp:GridView ID="grid_log" runat="server" OnRowDataBound="grid_log_RowDataBound" CssClass="gridlog" Visible="false"></asp:GridView>
                                 </td>
                             </tr>
                         </table>
-
-
-
                     </asp:View>
 
+                    <asp:View ID="view_CoB" runat="server">
+                        <table style="width: 1000px; margin-left: 0px !important;">
+                            <tr>
+                                <td>
+                                    <table class="login_tbl">
+                                        <tr>
+                                            <td>Position :  </td>
+                                            <td>
+                                                <asp:DropDownList ID="ddl_CoBposition" runat="server" CssClass="dropdown" OnSelectedIndexChanged="ddl_CoBposition_SelectedIndexChanged" AutoPostBack="true">
+                                                    <asp:ListItem Value="-" Text="---"></asp:ListItem>
+                                                    <asp:ListItem Value="TWR" Text="Tower"></asp:ListItem>
+                                                    <asp:ListItem Value="ACC" Text="ACC"></asp:ListItem>
+                                                    <asp:ListItem Value="APP" Text="APP"></asp:ListItem>
+                                                </asp:DropDownList></td>
+                                            <td>
+                                                <asp:DropDownList ID="ddl_CoBsector" CssClass="dropdown" OnSelectedIndexChanged="ddl_CoBsector_SelectedIndexChanged" AutoPostBack="true" runat="server"></asp:DropDownList>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CoB Time : </td>
+                                            <td>
+                                                <asp:TextBox ID="txt_CoBdate" runat="server" TextMode="Date"></asp:TextBox>
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="txt_CoBtime" runat="server" TextMode="Time"></asp:TextBox></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="height: 30px;"></td>
+                                        </tr>
+                                        <tr>
 
-
-                    <asp:View ID="view_havealook" runat="server">
+                                            <td colspan="2" style="text-align: center;">
+                                                <asp:Label ID="lbl_CoBresult" CssClass="errorbox" runat="server" Visible="false"></asp:Label>
+                                            </td>
+                                            <td>
+                                                <asp:Button ID="btn_CoB" CssClass="submitbtn" runat="server" OnClick="btn_CoB_Click" Text="CoB" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="vertical-align: top;">
+                                    <asp:Label ID="lbl_cobid" runat="server" Visible="false"></asp:Label>
+                                    <asp:GridView ID="grid_COB" runat="server" OnRowDataBound="grid_COB_RowDataBound" CssClass="gridlog" Visible="false"></asp:GridView>
+                                </td>
+                            </tr>
+                        </table>
                     </asp:View>
                 </asp:MultiView>
             </div>

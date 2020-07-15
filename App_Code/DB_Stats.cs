@@ -109,21 +109,19 @@ ORDER BY INITIAL
 		                        , @POSITION 
 		                        , @SECTOR
 		                        , @CONTROLLER
-		                        , @DATEON 
-		                        , @TIMEON 
-		                        , NULL
-		                        , @TRAINEE 
+                                , @TRAINEE 
+		                        , @ON_DATETIME
 		                        , NULL
 		                        , NULL
-		                         )", connection)) // NULLS : tımeoff, cob, duration (those make sense in an update clause)
+		                        , NULL
+		                         )", connection)) // NULLS : OFF_DATETIME, CoB_BY, DURATION (those make sense in an update clause)
                 {
                     connection.Open();
                     command.Parameters.Add("@POSITION", SqlDbType.VarChar).Value = position;
                     command.Parameters.Add("@SECTOR", SqlDbType.VarChar).Value = sector;
                     command.Parameters.Add("@CONTROLLER", SqlDbType.Int).Value = userid;
-                    command.Parameters.Add("@DATEON", SqlDbType.VarChar).Value = date;
-                    command.Parameters.Add("@TIMEON", SqlDbType.VarChar).Value = timeon;
                     command.Parameters.Add("@TRAINEE", SqlDbType.Int).Value = trainee == "" ? (object)DBNull.Value : trainee;
+                    command.Parameters.Add("@ON_DATETIME", SqlDbType.VarChar).Value = date + " " + timeon;
                     command.CommandType = CommandType.Text;
 
                     return command.ExecuteNonQuery() > 0;
@@ -138,6 +136,32 @@ ORDER BY INITIAL
             return false;
         }
 
+        public static bool CoB_positionlog(string id,  string userid, string date, string time)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Con_Str.current))
+                using (SqlCommand command = new SqlCommand(
+                    @" UPDATE POSITION_LOG SET OFF_DATETIME = @CoB_TIME , CoB_BY = @CoB_BY WHERE ID = @ID ", connection)) 
+                    // NULLS : tımeoff, duration, CoB_BY, CoB_TIME (those make sense in an update clause)
+                {
+                    connection.Open();
+                    command.Parameters.Add("@ID", SqlDbType.VarChar).Value = id;
+                    command.Parameters.Add("@CoB_TIME", SqlDbType.VarChar).Value = date + " " + time;
+                    command.Parameters.Add("@CoB_BY", SqlDbType.Int).Value = userid;
+                    command.CommandType = CommandType.Text;
+
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (Exception e)
+            {
+                string err = e.Message;
+            }
+
+            //something went wrong
+            return false;
+        }
         public static DataTable get_positionlog_page(string position, string sector)
         {
             DataTable res = new DataTable();
@@ -146,8 +170,12 @@ ORDER BY INITIAL
                 using (SqlConnection connection = new SqlConnection(Con_Str.current))
                 using (SqlCommand command = new SqlCommand(
                     @"  SELECT * FROM (
-                            SELECT TOP 10 ID, DATEON , TIMEON , U.INITIAL AS 'CONTROLLER' , 
-                            CASE WHEN ISNULL(TRAINEE,'') = '' THEN '' ELSE (SELECT INITIAL FROM USERS WHERE EMPLOYEEID = TRAINEE) END AS 'TRAINEE'
+                            SELECT TOP 10 
+                                    ID, ON_DATETIME as 'Time' , U.INITIAL AS 'Controller' , 
+                                    CASE WHEN ISNULL(TRAINEE,'') = '' THEN '' 
+                                    ELSE (SELECT INITIAL FROM USERS WHERE EMPLOYEEID = TRAINEE) END AS 'Trainee',
+                                    OFF_DATETIME as 'CoB Time',
+                                    (SELECT INITIAL FROM USERS WHERE EMPLOYEEID = CoB_BY ) AS 'CoB'
                             FROM POSITION_LOG L
                             JOIN USERS U ON U.EMPLOYEEID = L.CONTROLLER
                             WHERE POSITION = @POSITION AND SECTOR = @SECTOR 
