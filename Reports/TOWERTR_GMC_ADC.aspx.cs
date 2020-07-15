@@ -78,7 +78,7 @@ namespace AviaTrain.Reports
             {
                 rad_passfail.SelectedValue = form.Rows[0]["ASSESS_PASSED"].ToString();
                 rad_passfail.Visible = true;
-                lbl_phase.Visible = true;
+              
                 lbl_phase.Text = form.Rows[0]["ASSESS_PASSED"].ToString().Replace("PASSED_", "").Replace("FAILED_", "");
             }
             else
@@ -609,10 +609,8 @@ namespace AviaTrain.Reports
         protected void chk_Assess_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox sent = (CheckBox)sender;
-
             rad_passfail.Visible = sent.Checked;
-            lbl_phase.Visible = sent.Checked;
-
+           
             if (!sent.Checked) //if unchecked, do nothing
                 return;
 

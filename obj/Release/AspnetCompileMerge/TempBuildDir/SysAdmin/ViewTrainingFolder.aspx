@@ -45,6 +45,10 @@
             font-weight : bold;
             width : 100%;
         }
+
+        .errorbox{
+
+        }
     </style>
 </asp:Content>
 
@@ -85,12 +89,16 @@
                             </td>
                             <td colspan="4"></td>
                         </tr>
+                        <tr>
+                            <td colspan="5">
+                                <asp:Label ID="lbl_pageresult" CssClass="errorbox" runat="server" Visible="false"></asp:Label>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                <asp:GridView ID="grid_folder" AllowPaging="true"  CssClass="grid_folder" runat="server" Visible="false"
-                    OnPageIndexChanging="grid_folder_PageIndexChanging" PageSize="20" OnRowCommand="grid_folder_RowCommand"
+                <asp:GridView ID="grid_folder"  CssClass="grid_folder" runat="server" Visible="false" 
+                     OnRowCommand="grid_folder_RowCommand"
                      OnRowDataBound="grid_folder_RowDataBound">
-                    <PagerSettings Mode="NumericFirstLast" PageButtonCount="20" FirstPageText="First" LastPageText="Last" />
                     <Columns>
                         <asp:ButtonField CommandName="GO"  ButtonType="Image" ControlStyle-CssClass="imgicon" ImageUrl="~/Images/view.png"  />
                     </Columns>

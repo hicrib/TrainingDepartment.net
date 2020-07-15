@@ -59,8 +59,12 @@ namespace AviaTrain.SysAdmin
             if (dt == null || dt.Rows.Count == 0)
             {
                 grid_folder.Visible = false;
+                lbl_pageresult.Visible = true;
+                lbl_pageresult.Text = "User doesn't have Training Folder for this sector";
                 return;
             }
+            lbl_pageresult.Visible = false;
+
             grid_folder.Visible = true;
             grid_folder.DataSource = dt;
             grid_folder.DataBind();
@@ -81,42 +85,42 @@ namespace AviaTrain.SysAdmin
             Fill_Folder_Grid();
         }
 
-        public SortDirection direction
-        {
-            get
-            {
-                if (ViewState["directionState"] == null)
-                {
-                    ViewState["directionState"] = SortDirection.Ascending;
-                }
-                return (SortDirection)ViewState["directionState"];
-            }
-            set
-            {
-                ViewState["directionState"] = value;
-            }
-        }
-        protected void grid_folder_Sorting(object sender, GridViewSortEventArgs e)
-        {
-            string sortingDirection = string.Empty;
-            if (direction == SortDirection.Ascending)
-            {
-                direction = SortDirection.Descending;
-                sortingDirection = "Desc";
+        //public SortDirection direction
+        //{
+        //    get
+        //    {
+        //        if (ViewState["directionState"] == null)
+        //        {
+        //            ViewState["directionState"] = SortDirection.Ascending;
+        //        }
+        //        return (SortDirection)ViewState["directionState"];
+        //    }
+        //    set
+        //    {
+        //        ViewState["directionState"] = value;
+        //    }
+        //}
+        //protected void grid_folder_Sorting(object sender, GridViewSortEventArgs e)
+        //{
+        //    string sortingDirection = string.Empty;
+        //    if (direction == SortDirection.Ascending)
+        //    {
+        //        direction = SortDirection.Descending;
+        //        sortingDirection = "Desc";
 
-            }
-            else
-            {
-                direction = SortDirection.Ascending;
-                sortingDirection = "Asc";
-            }
+        //    }
+        //    else
+        //    {
+        //        direction = SortDirection.Ascending;
+        //        sortingDirection = "Asc";
+        //    }
             
-            DataView sortedView = new DataView(DB_Reports.get_Training_Folder(ddl_trainees.SelectedValue, ddl_positions.SelectedValue, ddl_sector.SelectedValue));
-            sortedView.Sort = e.SortExpression + " " + sortingDirection;
-            Session["SortedView"] = sortedView;
-            grid_folder.DataSource = sortedView;
-            grid_folder.DataBind();
-        }
+        //    DataView sortedView = new DataView(DB_Reports.get_Training_Folder(ddl_trainees.SelectedValue, ddl_positions.SelectedValue, ddl_sector.SelectedValue));
+        //    sortedView.Sort = e.SortExpression + " " + sortingDirection;
+        //    Session["SortedView"] = sortedView;
+        //    grid_folder.DataSource = sortedView;
+        //    grid_folder.DataBind();
+        //}
 
         protected void grid_folder_RowDataBound(object sender, GridViewRowEventArgs e)
         {

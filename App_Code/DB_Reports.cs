@@ -64,7 +64,9 @@ namespace AviaTrain.App_Code
                     return "";
                 }
 
-                string result = data["ASSESS_PASSED"] == null ? "REPORT" : (data["ASSESS_PASSED"] == "1" ? "Assessment Passed" : "Asessment Failed");
+                
+
+                string result = data["ASSESS_PASSED"] == null ? "REPORT" : ( data["ASSESS_PASSED"].Contains("PASSED")  ? "Assessment Passed" : "Assessment Failed");
                 if (!push_UserTrainingFolder(reportid, data["genid"], status: result))
                 {
                     rollback_push_report(reportid);
@@ -80,7 +82,7 @@ namespace AviaTrain.App_Code
 
                 //if it was an assessment, do everything here
                 //if failed, nothing to do
-                if (data["ASSESS_PASSED"] == "1")
+                if (data["ASSESS_PASSED"].Contains("PASSED"))
                 {
                     //no rollback, report is valid but next step&complete should be manual
 

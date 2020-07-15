@@ -123,15 +123,6 @@ namespace AviaTrain.Reports
         protected global::System.Web.UI.WebControls.CheckBox chk_CocAss;
 
         /// <summary>
-        /// rad_passfail control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rad_passfail;
-
-        /// <summary>
         /// lbl_phase control.
         /// </summary>
         /// <remarks>
@@ -139,6 +130,15 @@ namespace AviaTrain.Reports
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbl_phase;
+
+        /// <summary>
+        /// rad_passfail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList rad_passfail;
 
         /// <summary>
         /// txt_date control.

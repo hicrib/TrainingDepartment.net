@@ -138,20 +138,21 @@
                                     <asp:DropDownList ID="filter_trainee" runat="server"></asp:DropDownList>
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="filter_passed" runat="server">
+                                    <asp:DropDownList ID="filter_passed" runat="server" AutoPostBack="true" OnSelectedIndexChanged="filter_passed_SelectedIndexChanged">
                                         <asp:ListItem Value="ALL"></asp:ListItem>
                                         <asp:ListItem Value="PASSED"></asp:ListItem>
                                         <asp:ListItem Value="FAILED"></asp:ListItem>
                                         <asp:ListItem Value="NOSHOW"></asp:ListItem>
+                                        <asp:ListItem Value="UNFINISHED"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="filter_grd_start" Width="30" Style="" runat="server" Text="0" TextMode="Number"></asp:TextBox>
+                                    <asp:TextBox ID="filter_grd_start" Width="30" Style="" runat="server" Text="0" Enabled="false" TextMode="Number"></asp:TextBox>
                                     <span style="float: right;"></span>
                                 </td>
                                 <td>
 
-                                    <asp:TextBox ID="filter_grd_finish" Width="40" Style="float: left;" Text="100" runat="server" TextMode="Number"></asp:TextBox>
+                                    <asp:TextBox ID="filter_grd_finish" Width="40" Style="float: left;" Text="100" Enabled="false" runat="server" TextMode="Number"></asp:TextBox>
                                 </td>
                             </tr>
                             <tr>
