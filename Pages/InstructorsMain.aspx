@@ -34,6 +34,7 @@
             width: 993px;
             height: 93%;
             background-color: #e1e1e1;
+            min-height: 50px;
         }
         /*FINISHED :   FOR MULTIVIEW ACC-APP-TOWER*/
 
@@ -93,14 +94,13 @@
             margin: 0px;
             border: 3px solid #a52a2a;
         }
+
             .examadmin_tbl td {
                 padding: 5px;
                 height: 33px;
                 width: 200px;
-                text-align : center;
+                text-align: center;
             }
-
-       
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -167,8 +167,10 @@
 
 
                     <asp:View ID="view_stats" runat="server">
-                        <asp:LinkButton ID="lnk_trnhours" runat="server" Text="Training Hrs." PostBackUrl="~/Statistics/Stat_TrnHours.aspx" CssClass="instructorButton" />
-                        <asp:LinkButton ID="lnk_workhours" runat="server" Text="Working Hrs." PostBackUrl="~/Statistics/Stat_WorkHours.aspx" CssClass="instructorButton" />
+                        <div style="margin: 20px 0px 20px 0px;">
+                            <asp:LinkButton ID="lnk_trnhours" runat="server" Text="Training Hrs." PostBackUrl="~/Statistics/Stat_TrnHours.aspx" CssClass="instructorButton" />
+                            <asp:LinkButton ID="lnk_workhours" runat="server" Text="Working Hrs." PostBackUrl="~/Statistics/Stat_WorkHours.aspx" CssClass="instructorButton" />
+                        </div>
                     </asp:View>
 
                     <asp:View ID="view_examadmin" runat="server">
@@ -178,18 +180,18 @@
                                     <asp:LinkButton ID="btn_create_questions" runat="server" PostBackUrl="~/Exams/CreateQuestions.aspx" CssClass="instructorButton" Text="Create/Delete Questions" />
                                 </td>
                                 <td>
-                                    <asp:LinkButton ID="btn_create_exam" runat="server" PostBackUrl="~/Exams/CreateExam.aspx" CssClass="instructorButton" Text="Create Exam" />                               
+                                    <asp:LinkButton ID="btn_create_exam" runat="server" PostBackUrl="~/Exams/CreateExam.aspx" CssClass="instructorButton" Text="Create Exam" />
                                 </td>
                                 <td rowspan="2">
                                     <asp:LinkButton ID="btn_assign_exam" runat="server" PostBackUrl="~/Exams/AssignExam.aspx" CssClass="instructorButton" Text="Assign Exam to Trainee" />
-                                </td >
+                                </td>
                                 <td rowspan="2">
                                     <asp:LinkButton ID="btn_view_exam_result" runat="server" PostBackUrl="~/Exams/ViewExamResults.aspx" CssClass="instructorButton" Text="View Exam Results" />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                         <asp:LinkButton ID="btn_delete_exam" runat="server" PostBackUrl="~/Exams/DeleteExam.aspx" CssClass="instructorButton" Text="Delete Exam" />
+                                    <asp:LinkButton ID="btn_delete_exam" runat="server" PostBackUrl="~/Exams/DeleteExam.aspx" CssClass="instructorButton" Text="Delete Exam" />
                                 </td>
                             </tr>
                         </table>

@@ -75,6 +75,14 @@ namespace AviaTrain.Reports
                 btn_createFolder.Visible = false;
                 return;
             }
+            UserSession u = (UserSession)Session["usersession"];
+            if(ddl_trainees.SelectedValue == u.employeeid )
+            {
+                lbl_findresult.Text = "You can't create report for your own training";
+                lbl_findresult.Visible = true;
+                btn_createFolder.Visible = false;
+                return;
+            }
 
             //TODO : bring the folder 
             DataTable folder = DB_Reports.get_Training_Folder(ddl_trainees.SelectedValue, ddl_positions.SelectedValue, ddl_sectors.SelectedValue);
